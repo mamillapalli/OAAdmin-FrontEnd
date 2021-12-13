@@ -1,0 +1,130 @@
+<div class="card-header border-0 pt-5">
+  <h3 class="card-title align-items-start flex-column">
+    <span class="card-label fw-bolder fs-3 mb-1">Admin Dashboard</span>
+  </h3>
+  <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+       title="Click to add a user">
+    <a class="btn btn-sm btn-light-primary" (click)="newAdmin()">
+      <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+      New Corporate
+    </a>
+  </div>
+</div>
+<ng-container>
+  <div class="card-body py-3">
+    <div class="table-responsive" style="width: 100%;">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" style="width: 100%;"
+             class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4 ">
+        <thead>
+        <tr class="fw-bolder text-muted">
+          <th class="w-25px">
+            <div class="form-check form-check-sm form-check-custom form-check-solid">
+              <input class="form-check-input" type="checkbox" value="1" data-kt-check="true" data-kt-check-target=".widget-9-check"/>
+            </div>
+          </th>
+          <th class="min-w-150px">Admin Id</th>
+          <th class="min-w-140px">Admin Name</th>
+          <th class="min-w-140px">Type</th>
+          <th class="min-w-120px">Status</th>
+          <th class="min-w-100px text-end">Actions</th>
+        </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+        <tr *ngFor="let post of posts"
+            [ngStyle]="{ 'color': getColor(post) }">
+          <td>
+            <div
+              class="
+                form-check form-check-sm form-check-custom form-check-solid
+              "
+            >
+              <input
+                class="form-check-input widget-9-check"
+                type="checkbox"
+                value="1"
+              />
+            </div>
+          </td>
+          <td>
+          <span class="label label-lg label-light-warning label-inline">
+                {{post.userId}}
+              </span>
+          </td>
+          <td>
+            <span class="label label-lg label-light-warning label-inline">{{post.firstName}} </span>
+            <span class="label label-lg label-light-warning label-inline"> {{post.lastName}}</span>
+          </td>
+          <td class="text-end">
+            <div class="d-flex flex-column w-100 me-2">
+              <div class="d-flex flex-stack mb-2" *ngFor="let roles of post.roles">
+              <span class="label label-lg label-light-warning label-inline"
+              >{{roles.name.toLowerCase()}}</span
+              >
+              </div>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="d-flex flex-column w-100 me-2">
+              <div class="d-flex flex-stack mb-2" >
+              <span class="label label-lg label-light-warning label-inline"
+              >{{post.transactionStatus.toLowerCase()}}</span
+              >
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="d-flex justify-content-end flex-shrink-0">
+              <a (click)="open(post,'edit')" *ngIf="this.authToken.aRoles === 'SUPER_ADMIN'"
+                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span
+                  [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
+                  class="svg-icon svg-icon-3"
+                ></span>
+              </a>
+              <a *ngIf="this.authToken.aRoles === 'SUPER_ADMIN'"
+                 (click)="open(post,'view')"
+                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen019.svg'"
+                      class="svg-icon svg-icon-3"></span>
+              </a>
+              <a (click)="openDelete(content, post)"
+                 *ngIf="post.transactionStatus === 'MASTER' || post.transactionStatus === 'PENDING'"
+                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+              >
+                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                      class="svg-icon svg-icon-3"></span>
+              </a>
+              <a (click)="open(post,'auth')"
+                 *ngIf="post.transactionStatus === 'PENDING'"
+                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'" class="svg-icon svg-icon-2"></span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</ng-container>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure to delete this?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('yes')">Yes</button>
+  </div>
+</ng-template>

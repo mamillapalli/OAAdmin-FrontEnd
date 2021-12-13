@@ -1,0 +1,98 @@
+<div class="pb-10 pb-lg-15">
+  <h2 class="fw-bolder text-dark">Business Info Details</h2>
+</div>
+<div [formGroup]="form">
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="form-label"> VAT Registration Number </label>
+        <input
+          type="text"
+          class="form-control form-control-lg form-control-solid"
+          name="vatRegistrationNumber"
+          formControlName="vatRegistrationNumber"
+          placeholder="VAT Registration Number"
+        />
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <label class="form-label"> Tax Registration Number </label
+      ><input
+      type="text"
+      class="form-control form-control-lg form-control-solid"
+      name="taxRegistrationNumber"
+      formControlName="taxRegistrationNumber"
+      placeholder="Tax Registration Number"
+    />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="form-label"> Director Name </label>
+        <input
+          type="text"
+          class="form-control form-control-lg form-control-solid"
+          name="directorName"
+          formControlName="directorName"
+          placeholder="Director Name"
+        />
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <label class="form-label"> Director Details </label
+      ><input
+      type="text"
+      class="form-control form-control-lg form-control-solid"
+      name="directorDetails"
+      formControlName="directorDetails"
+      placeholder="Director Details"
+    />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="form-label"> Sponsor Name </label>
+        <input
+          type="text"
+          class="form-control form-control-lg form-control-solid"
+          name="sponsorName"
+          formControlName="sponsorName"
+          placeholder="Sponsor Name"
+        />
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <label class="form-label"> Sponsor Details </label
+      ><input
+      type="text"
+      class="form-control form-control-lg form-control-solid"
+      name="sponsorDetails"
+      formControlName="sponsorDetails"
+      placeholder="Sponsor Details"
+    />
+    </div>
+    <div class="fv-row">
+      <div class="d-flex flex-stack">
+        <div class="me-5">
+          <label class="fs-6 fw-bold form-label"
+          >Active State</label>
+        </div>
+        <label class="form-check form-switch form-check-custom form-check-solid"
+        >
+      <span class="form-check-label fw-bold text-gray-400"
+      >Enabled</span>
+          <input
+            class="form-check-input"
+            name="status"
+            formControlName="status"
+            type="checkbox"
+          /><span class="form-check-label fw-bold text-gray-400"
+        >Disabled</span
+        ></label
+        >
+      </div>
+    </div>
+  </div>
+</div>

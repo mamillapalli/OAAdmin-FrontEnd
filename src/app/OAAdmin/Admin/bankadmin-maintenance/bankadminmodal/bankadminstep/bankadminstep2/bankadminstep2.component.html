@@ -1,0 +1,120 @@
+<div class="pb-10 pb-lg-15">
+  <h2 class="fw-bolder text-dark">Business Info Details</h2>
+</div>
+<div [formGroup]="form">
+  <div class="d-flex flex-column mb-7 fv-row">
+    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+      <span class="required">Effective Date</span>
+      <i class="fas fa-exclamation-circle ms-2 fs-7" ngbTooltip="Specify a card holder's name"></i>
+    </label>
+    <div class="input-group">
+      <input id="effectiveDate" formControlName="effectiveDate" class="form-control" name="effectiveDate"
+             ngbDatepicker #effectiveDate="ngbDatepicker" (click)="effectiveDate.toggle()" [placement]="placement"
+             [(ngModel)]="user.effectiveDate">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary calendar bi bi-calendar" (click)="effectiveDate.toggle()" type="button"></button>
+      </div>
+    </div>
+    <div *ngIf="
+         form.get('effectiveDate')?.hasError('required') &&
+         form.get('effectiveDate')?.touched"
+         class="fv-plugins-message-container invalid-feedback"> Effective Date is required </div>
+  </div>
+  <div class="d-flex flex-column mb-7 fv-row">
+    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+      <span class="required">Expiry Date</span>
+      <i class="fas fa-exclamation-circle ms-2 fs-7" ngbTooltip="Specify a Expiry Date"></i>
+    </label>
+    <div class="input-group">
+      <input id="expiryDate" formControlName="expiryDate" class="form-control" placeholder="yyyy-mm-dd" name="expiryDate"
+             ngbDatepicker #expiryDate="ngbDatepicker" (click)="expiryDate.toggle()" [placement]="placement" [(ngModel)]="user.expiryDate">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary calendar bi bi-calendar" (click)="expiryDate.toggle()" type="button"></button>
+      </div>
+    </div>
+    <div *ngIf="
+         form.get('expiryDate')?.hasError('required') &&
+         form.get('expiryDate')?.touched
+         " class="fv-plugins-message-container invalid-feedback"> Expiry Date is required </div>
+  </div>
+  <div class="d-flex flex-column mb-7 fv-row">
+      <div class="d-flex flex-stack">
+        <div class="me-5">
+          <label class="fs-6 fw-bold form-label"
+          >Active State</label>
+        </div>
+        <label class="form-check form-switch form-check-custom form-check-solid"
+        >
+      <span class="form-check-label fw-bold text-gray-400"
+      >Enabled</span>
+          <input
+            class="form-check-input"
+            name="status"
+            formControlName="status"
+            type="checkbox"
+          /><span class="form-check-label fw-bold text-gray-400"
+        >Disabled</span
+        ></label
+        >
+      </div>
+    </div>
+    <div class="d-flex flex-column mb-8 fv-row">
+      <!--begin::Label-->
+      <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+        <span class="required">Tags</span>
+        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target priorty"></i>
+      </label>
+      <!--end::Label-->
+<!--      <ng-select-->
+<!--        [items]="roles"-->
+<!--        bindLabel="name"-->
+<!--        formControlName="roles"-->
+<!--        placeholder="Select Category"-->
+<!--        appendTo="body"-->
+<!--        [multiple]="true"-->
+<!--        [(ngModel)]="selected">-->
+<!--      </ng-select>-->
+<!--      <ng-select-->
+<!--        [items]="roles"-->
+<!--        bindLabel="name"-->
+<!--        placeholder="Select Category"-->
+<!--        appendTo="body"-->
+<!--        [multiple]="true"-->
+<!--        formControlName="roles"-->
+<!--        [(ngModel)]="selected">-->
+<!--      </ng-select>-->
+    </div>
+
+  <div class="d-flex flex-column mb-7 fv-row">
+      <ng-multiselect-dropdown
+        [settings]="dropdownSettings"
+        [data]="dropdownList"
+        formControlName="roles"
+      >
+      </ng-multiselect-dropdown>
+    </div>
+
+
+  <!--  <div class="mb-0 fv-row">-->
+  <!--    <label class="d-flex align-items-center form-label mb-5">Select role <i class="fas fa-exclamation-circle ms-2 fs-7" ngbTooltip="Monthly billing will be based on your account plan"></i>-->
+  <!--    </label>-->
+  <!--    <div class="mb-0">-->
+  <!--      <label class="d-flex flex-stack mb-5 cursor-pointer">-->
+  <!--        <span class="d-flex align-items-center me-2">-->
+  <!--          <span class="symbol symbol-50px me-6">-->
+  <!--            <span class="symbol-label">-->
+  <!--              <span [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'" class="svg-icon svg-icon-1 svg-icon-gray-600"></span>-->
+  <!--            </span>-->
+  <!--          </span>-->
+  <!--          <span class="d-flex flex-column">-->
+  <!--            <span class="fw-bolder text-gray-800 text-hover-primary fs-5 required">Super Admin</span>-->
+  <!--            <span class="fs-6 fw-bold text-gray-400">Access All Servers</span>-->
+  <!--          </span>-->
+  <!--        </span>-->
+  <!--        <span class="form-check form-check-custom form-check-solid">-->
+  <!--          <input class="form-check-input" formControlName="rolesName" type="radio" value="1" checked="true" />-->
+  <!--        </span>-->
+  <!--      </label>-->
+  <!--    </div>-->
+  <!--  </div>-->
+</div>

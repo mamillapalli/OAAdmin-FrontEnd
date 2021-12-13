@@ -1,0 +1,119 @@
+<form [formGroup]="form" autocomplete="off">
+  <ng-container formArrayName="customers">
+    <div class="d-flex flex-stack py-4 border-bottom border-gray-300 border-bottom-dashed">
+      <!--begin::Details-->
+      <div class="d-flex align-items-center">
+        <!--begin::Avatar-->
+        <div class="card-body py-3">
+
+          <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+               title="Click to add a RM user">
+            <a class="btn btn-sm btn-light-primary" (click)="openCustomerDialog()">
+              <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+              New RM
+            </a>
+          </div>
+
+          <div class="table-responsive">
+            <!-- begin::Table -->
+            <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+                       class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+
+              <!-- ID Column -->
+              <ng-container matColumnDef="customerId" class="min-w-150px">
+                <mat-header-cell *matHeaderCellDef mat-sort-header class="min-w-150px">Customer Id</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.customerId}} </mat-cell>
+              </ng-container>
+
+              <!-- Progress Column -->
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Customer Name</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="emailAddress">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Email Address </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{row.emailAddress}}
+                </mat-cell>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="effectiveDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Effective Date</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.effectiveDate | date: 'MM/dd/yyyy'}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="expiryDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Expiry Date</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.expiryDate | date: 'MM/dd/yyyy'}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Status</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{ row.status }} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="actions" class="d-flex justify-content-end flex-shrink-0">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Actions</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+        <span>
+          <a title="modify" (click)="openRMDialog(element,'edit')"
+             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span
+                  [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
+                  class="svg-icon svg-icon-3"
+                ></span>
+              </a>
+        </span>
+                  <span>
+          <a title="view" (click)="openRMDialog(element,'view')"
+             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen019.svg'"
+                      class="svg-icon svg-icon-3"></span>
+              </a>
+        </span>
+                  <span>
+          <a title="Authorize" (click)="openRMDialog(element,'auth')"
+             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'" class="svg-icon svg-icon-2"></span>
+              </a>
+        </span>
+                  <span>
+            <a title="Delete"
+               *ngIf="element.transactionStatus === 'MASTER' || element.transactionStatus === 'PENDING'"
+               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+            >
+                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                      class="svg-icon svg-icon-3"></span>
+              </a>
+          </span>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;"
+                       [style.background-color]="row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'">
+              </mat-row>
+            </mat-table>
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+            </mat-paginator>
+            <!-- end::Table -->
+          </div>
+          <!-- end::Table container -->
+        </div>
+        <!--end::Details-->
+      </div>
+      <!--  &lt;!&ndash;end::Details&ndash;&gt;-->
+      <!--  &lt;!&ndash;begin::Access menu&ndash;&gt;-->
+      <!--  <div class="ms-2 w-100px">-->
+      <!--    <select class="form-select form-select-solid form-select-sm" data-control="select2" data-hide-search="true">-->
+      <!--      <option value="1">Guest</option>-->
+      <!--      <option value="2">Owner</option>-->
+      <!--      <option value="3" selected="selected">Can Edit</option>-->
+      <!--    </select>-->
+      <!--  </div>-->
+      <!--  &lt;!&ndash;end::Access menu&ndash;&gt;-->
+    </div>
+  </ng-container>
+</form>

@@ -1,0 +1,79 @@
+<div class="pb-10 pb-lg-12">
+  <h2 class="fw-bolder text-dark">RM Information</h2>
+</div>
+<div [formGroup]="form">
+  <div class="fv-row mb-10">
+    <label class="form-label required">RM Id</label
+    ><input
+    name="rmId"
+    class="form-control form-control-lg form-control-solid"
+    formControlName="rmId" placeholder="RM Id"
+  />
+    <div
+      class="fv-plugins-message-container invalid-feedback"
+      *ngIf="
+        form.get('rmId')?.hasError('required') &&
+        form.get('rmId')?.touched
+      "
+    >
+      Relationship manager is required
+    </div>
+  </div>
+  <div class="fv-row mb-10">
+    <label class="form-label required">First Name</label>
+    <input
+      type="text"
+      class="form-control form-control-lg form-control-solid"
+      name="firstName"
+      formControlName="firstName"
+      placeholder=" First Name "
+    />
+    <div
+      class="fv-plugins-message-container invalid-feedback"
+      *ngIf="
+        form.get('firstName')?.hasError('required') &&
+        form.get('firstName')?.touched
+      "
+    >
+      First Name is required
+    </div>
+  </div>
+
+  <div class="fv-row mb-10">
+    <label class="form-label required">Last Name</label>
+    <input
+      type="text"
+      class="form-control form-control-lg form-control-solid"
+      name="lastName"
+      formControlName="lastName"
+      placeholder=" Last Name "
+    />
+    <div
+      class="fv-plugins-message-container invalid-feedback"
+      *ngIf="
+        form.get('lastName')?.hasError('required') &&
+        form.get('lastName')?.touched
+      "
+    >
+      Last Name is required
+    </div>
+  </div>
+  <div class="fv-row mb-0">
+    <label class="fs-6 fw-bold form-label required">Email Address</label
+    ><input
+    name="emailAddress"
+    class="form-control form-control-lg form-control-solid"
+    formControlName="emailAddress"
+  />
+    <div
+      class="fv-plugins-message-container invalid-feedback"
+      *ngIf="
+        form.get('emailAddress')?.hasError('required') &&
+        form.get('emailAddress')?.touched
+      "
+    >
+      Email Address is required
+    </div>
+  </div>
+</div>
+

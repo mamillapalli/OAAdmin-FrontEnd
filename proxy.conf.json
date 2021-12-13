@@ -1,0 +1,14 @@
+{
+  "/oapf": {
+    "target": "http://localhost:8765",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/oaadmin": {
+    "target": "http://localhost:8765",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

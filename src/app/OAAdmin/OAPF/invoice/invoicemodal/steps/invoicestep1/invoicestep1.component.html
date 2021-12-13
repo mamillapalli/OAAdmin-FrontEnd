@@ -1,0 +1,326 @@
+<div class="pb-15 pb-lg-8">
+  <h3 class="fw-bolder text-dark">Invoice Info</h3>
+</div>
+<div [formGroup]="form">
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Invoice Number</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Invoice Number" name="invoiceNumber" [class.is-invalid]="isControlInvalid('invoiceNumber')"
+             [class.is-valid]="isControlValid('invoiceNumber')" formControlName="invoiceNumber"/>
+    </div>
+    <div class="col-lg-3">
+      <label>SBR Reference Number</label>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <button
+            class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5 btn rounded-pill border-0 ml-n5"
+            type="button"
+            (click)="openSBRDialog(SBRContent)">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+        <input type="text" class="form-control form-control-solid" id="sbrReferenceId" name="sbrReferenceId"
+               placeholder="SBR Reference Number" formControlName="sbrReferenceId"
+               [class.is-invalid]="isControlInvalid('sbrReferenceId')"
+               [class.is-valid]="isControlValid('sbrReferenceId')">
+      </div>
+
+      <!--      <div class="input-group">-->
+      <!--        <input class="form-control form-control-lg form-control-solid  border-end-0 border" type="sbrReferenceId"-->
+      <!--               placeholder="SBR Reference Number" id="sbrReferenceId" formControlName="sbrReferenceId"-->
+      <!--               [class.is-invalid]="isControlInvalid('sbrReferenceId')"-->
+      <!--               [class.is-valid]="isControlValid('sbrReferenceId')">-->
+      <!--        <span class="input-group-append">-->
+      <!--                      <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5"-->
+      <!--                              type="button">-->
+      <!--                          <i class="fa fa-search"></i>-->
+      <!--                      </button>-->
+      <!--                  </span>-->
+      <!--      </div>-->
+      <!--      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"-->
+      <!--             placeholder="SBR Reference Numbe" name="sbrReferenceId" [class.is-invalid]="isControlInvalid('sbrReferenceId')"-->
+      <!--             [class.is-valid]="isControlValid('sbrReferenceId')" formControlName="sbrReferenceId"/>-->
+    </div>
+    <div class="col-lg-3">
+      <label>Agreement Number</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Agreement Number" name="agreementId" [class.is-invalid]="isControlInvalid('agreementId')"
+             [class.is-valid]="isControlValid('agreementId')" formControlName="agreementId"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Anchor Id</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Anchor Id" name="anchorId" [class.is-invalid]="isControlInvalid('anchorId')"
+             [class.is-valid]="isControlValid('anchorId')" formControlName="anchorId"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>CounterParty Id</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="CounterParty Id" name="counterPartyId" [class.is-invalid]="isControlInvalid('counterPartyId')"
+             [class.is-valid]="isControlValid('counterPartyId')" formControlName="counterPartyId"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Document Type</label>
+      <select
+        class="form-control form-control-lg form-control-solid selected"
+        name="documentType"
+        formControlName="documentType" [class.is-invalid]="isControlInvalid('documentType')"
+        [class.is-valid]="isControlValid('documentType')"
+      >
+        <option value="INVOICE">Invoice</option>
+      </select>
+    </div>
+    <div class="col-lg-3">
+      <label>Document Number</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="documentNumber" name="documentNumber" [class.is-invalid]="isControlInvalid('documentNumber')"
+             [class.is-valid]="isControlValid('documentNumber')" formControlName="documentNumber"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Currency & Amount</label>
+      <div class="row fv-row">
+        <div class="col-4">
+          <select
+            class="form-control form-control-lg form-control-solid"
+            name="currency"
+            formControlName="currency" [class.is-invalid]="isControlInvalid('currency')"
+            [class.is-valid]="isControlValid('currency')">
+            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+          </select>
+        </div>
+        <div class="col-8">
+          <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+                 placeholder="Amount" name="amount" [class.is-invalid]="isControlInvalid('amount')"
+                 [class.is-valid]="isControlValid('amount')" formControlName="amount"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pb-5 pb-lg-8">
+    <h4 class="fw-bolder text-dark">Business Info</h4>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Issue Date</label>
+      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Issue Date" name="date" [class.is-invalid]="isControlInvalid('date')"
+             [class.is-valid]="isControlValid('date')" formControlName="date"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Value Date</label>
+      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="valueDate" name="valueDate" [class.is-invalid]="isControlInvalid('valueDate')"
+             [class.is-valid]="isControlValid('valueDate')" formControlName="valueDate"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Due Date</label>
+      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="dueDate" name="dueDate" [class.is-invalid]="isControlInvalid('dueDate')"
+             [class.is-valid]="isControlValid('dueDate')" formControlName="dueDate"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Agreed Payment Date</label>
+      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="agreedPaymentDate" name="agreedPaymentDate"
+             [class.is-invalid]="isControlInvalid('agreedPaymentDate')"
+             [class.is-valid]="isControlValid('agreedPaymentDate')" formControlName="agreedPaymentDate"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Port Of Loading</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="portOfLoading" name="portOfLoading" [class.is-invalid]="isControlInvalid('portOfLoading')"
+             [class.is-valid]="isControlValid('portOfLoading')" formControlName="portOfLoading"/>
+      <div class="feedback" *ngIf="!isControlTouched('portOfLoading')">
+        Please enter <b>Port Of Loading</b>
+      </div>
+      <div class="valid-feedback" *ngIf="isControlValid('portOfLoading')">
+        Port Of Loading was entered correct
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <label>SBR Reference Number</label>
+      <input type="portOfDischarge" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="portOfDischarge" name="portOfDischarge"
+             [class.is-invalid]="isControlInvalid('portOfDischarge')"
+             [class.is-valid]="isControlValid('portOfDischarge')" formControlName="portOfDischarge"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Shipment Corporation</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="shipmentCorporation" name="shipmentCorporation"
+             [class.is-invalid]="isControlInvalid('shipmentCorporation')"
+             [class.is-valid]="isControlValid('shipmentCorporation')" formControlName="shipmentCorporation"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Real Beneficiary</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="realBeneficiary" name="realBeneficiary"
+             [class.is-invalid]="isControlInvalid('realBeneficiary')"
+             [class.is-valid]="isControlValid('realBeneficiary')" formControlName="realBeneficiary"/>
+    </div>
+  </div>
+  <!--  <div class="row">-->
+  <!--    <div class="col-3">-->
+  <!--      <div class="form-group">-->
+  <!--        <label class="form-label required">Invoice Number</label>-->
+  <!--        <input type="text" class="form-control form-control-lg form-control-solid" name="invoiceNumber"-->
+  <!--               formControlName="invoiceNumber" placeholder="Invoice Number"/>-->
+  <!--        <div class="fv-plugins-message-container invalid-feedback"-->
+  <!--             *ngIf="form.get('invoiceNumber')?.hasError('required') && form.get('invoiceNumber')?.touched">-->
+  <!--          Invoice Number is required-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="col-3">-->
+  <!--      <label class="form-label required">SBR Reference Number</label>-->
+  <!--      <input type="text" class="form-control form-control-lg form-control-solid" name="sbrReferenceId"-->
+  <!--             formControlName="sbrReferenceId" placeholder="SBR Reference Number"/>-->
+  <!--      <div class="fv-plugins-message-container invalid-feedback"-->
+  <!--           *ngIf="form.get('sbrReferenceId')?.hasError('required') && form.get('sbrReferenceId')?.touched">-->
+  <!--        SBR Reference Number is required-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="col-3">-->
+  <!--      <div class="form-group">-->
+  <!--        <label class="form-label required">Agreement Number</label>-->
+  <!--        <input type="text" class="form-control form-control-lg form-control-solid" name="agreementId"-->
+  <!--               formControlName="agreementId" placeholder="Agreement Number"/>-->
+  <!--        <div class="fv-plugins-message-container invalid-feedback"-->
+  <!--             *ngIf="form.get('agreementId')?.hasError('required') && form.get('agreementId')?.touched">-->
+  <!--          Agreement Number is required-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="col-3">-->
+  <!--      <label class="form-label required">Anchor Id</label>-->
+  <!--      <input type="text" class="form-control form-control-lg form-control-solid" name="anchorId"-->
+  <!--             formControlName="anchorId" placeholder="Anchor Id"/>-->
+  <!--      <div class="fv-plugins-message-container invalid-feedback"-->
+  <!--           *ngIf="form.get('anchorId')?.hasError('required') && form.get('anchorId')?.touched">-->
+  <!--        Anchor Id is required-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--  <div class="row">-->
+  <!--    <div class="col-3">-->
+  <!--      <div class="form-group">-->
+  <!--        <label class="form-label required">CounterParty Id</label>-->
+  <!--        <input type="text" class="form-control form-control-lg form-control-solid" name="counterPartyId"-->
+  <!--               formControlName="counterPartyId" placeholder="CounterParty Id"/>-->
+  <!--        <div class="fv-plugins-message-container invalid-feedback"-->
+  <!--             *ngIf="form.get('counterPartyId')?.hasError('required') && form.get('counterPartyId')?.touched">-->
+  <!--          CounterParty Id is required-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="col-3">-->
+  <!--      <div class="form-group">-->
+  <!--        <label class="form-label required">Document Type</label>-->
+  <!--        <select class="form-select form-select-solid form-select-lg fw-bold" name="documentType">-->
+  <!--          <option value="">Select a Document Type...</option>-->
+  <!--          <option value="INVOICE">Invoice</option>-->
+  <!--        </select>-->
+  <!--        <div class="fv-plugins-message-container invalid-feedback"-->
+  <!--             *ngIf="form.get('documentType')?.hasError('required') && form.get('documentType')?.touched">-->
+  <!--          Agreement Number is required-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="col-3">-->
+  <!--      <label class="required fs-6 fw-bold form-label mb-2"-->
+  <!--      >Currency & Amount</label-->
+  <!--      >-->
+  <!--      <div class="row fv-row">-->
+  <!--        <div class="col-4">-->
+  <!--          <select name="currency" id="currency" formControlName="currency" class="form-select form-select-solid">-->
+  <!--            <option value="{{currency.code}}" *ngFor="let currency of currencyList">{{currency.code}}</option>-->
+  <!--          </select>-->
+  <!--          <div-->
+  <!--            class="fv-plugins-message-container invalid-feedback"-->
+  <!--            *ngIf="-->
+  <!--              form.get('currency')?.hasError('required') &&-->
+  <!--              form.get('currency')?.touched-->
+  <!--            "-->
+  <!--          >-->
+  <!--            Currency is Required-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--        <div class="col-6">-->
+  <!--          <input type="number" class="form-control form-control-lg form-control-solid" name="amount"-->
+  <!--                 formControlName="amount" placeholder="Amount"/>-->
+  <!--          <div class="fv-plugins-message-container invalid-feedback"-->
+  <!--               *ngIf="form.get('amount')?.hasError('required') && form.get('amount')?.touched">-->
+  <!--            SBR Reference Number is required-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="col-3">-->
+  <!--      <label class="form-label required">Date</label>-->
+  <!--      <input type="text" class="form-control form-control-lg form-control-solid" name="date"-->
+  <!--             formControlName="date" placeholder="Transaction Date"/>-->
+  <!--      <div class="fv-plugins-message-container invalid-feedback"-->
+  <!--           *ngIf="form.get('date')?.hasError('required') && form.get('date')?.touched">-->
+  <!--        Transaction Date is required-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+</div>
+<ng-template #SBRContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">SBR Information</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+                 class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+        </mat-form-field>
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="sbrId" class="min-w-150px">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">SBR</mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.sbrId}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="anchorCustomer" class="min-w-150px">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Anchor Customer
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.anchorCustomer['customerId']}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="counterParty" class="min-w-150px">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Anchor Customer
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.counterParty['customerId']}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="agreement" class="min-w-150px">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Agreement No
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.agreement['contractReferenceNumber']}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row (click)="c(row)" *matRowDef="let row; let index = dataIndex; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+      <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+      </mat-paginator>
+      <!-- end::Table -->
+    </div>
+  </div>
+</ng-template>
+

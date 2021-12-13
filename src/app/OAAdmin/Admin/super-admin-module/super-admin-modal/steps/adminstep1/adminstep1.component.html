@@ -1,0 +1,73 @@
+<div class="pb-10 pb-lg-15">
+  <h2 class="fw-bolder d-flex align-items-center text-dark">
+    Choose Admin Type
+    <i
+      class="fas fa-exclamation-circle ms-2 fs-7"
+      ngbTooltip="Admin created based on your selected Admin type"
+    ></i>
+  </h2>
+</div>
+
+<div class="fv-row" [formGroup]="form">
+  <div class="row">
+    <div class="col-lg-6">
+      <input
+        formControlName="accountType"
+        name="accountType"
+        type="radio"
+        class="btn-check"
+        id="kt_create_account_form_account_type_personal"
+        value="personal"
+      />
+      <label
+        class="
+          btn btn-outline btn-outline-dashed btn-outline-default
+          p-7
+          d-flex
+          align-items-center
+          mb-10
+        "
+        for="kt_create_account_form_account_type_personal"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/communication/com005.svg'"
+          class="svg-icon svg-icon-3x me-5"
+        ></span>
+        <span class="d-block fw-bold text-start">
+          <span class="text-dark fw-bolder d-block fs-4 mb-2"
+            >Super Admin Type Account</span>
+        </span>
+      </label>
+    </div>
+
+    <div class="col-lg-6">
+      <input
+        formControlName="accountType"
+        name="accountType"
+        type="radio"
+        class="btn-check"
+        id="kt_create_account_form_account_type_corporate"
+        value="corporate"
+      />
+      <label
+        class="
+          btn btn-outline btn-outline-dashed btn-outline-default
+          p-7
+          d-flex
+          align-items-center
+        "
+        for="kt_create_account_form_account_type_corporate"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/finance/fin006.svg'"
+          class="svg-icon svg-icon-3x me-5"
+        ></span>
+
+        <span class="d-block fw-bold text-start">
+          <span class="text-dark fw-bolder d-block fs-4 mb-2"
+            >Bank Admin Type Account</span>
+        </span>
+      </label>
+    </div>
+  </div>
+</div>

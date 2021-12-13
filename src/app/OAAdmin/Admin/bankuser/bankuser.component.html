@@ -1,0 +1,130 @@
+<div class="card-header border-0 pt-5">
+  <h3 class="card-title align-items-start flex-column">
+    <span class="card-label fw-bolder fs-3 mb-1">Bank User Dashboard</span>
+  </h3>
+  <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+       title="Click to add a user">
+    <a class="btn btn-sm btn-light-primary" (click)="newBankUser()">
+      <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+      New Bank User
+    </a>
+  </div>
+</div>
+<!-- end::Header -->
+<!-- begin::Body -->
+<div class="card-body py-3">
+  <!-- begin::Table container -->
+  <ng-container *ngIf="isLoading">
+    <div class="overlay-layer">
+      <div class="spinner spinner-lg spinner-primary"></div>
+    </div>
+  </ng-container>
+  <div class="table-responsive">
+    <!-- begin::Table -->
+    <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+               class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="userId" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="min-w-150px"> User Id </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.userId}} </mat-cell>
+      </ng-container>
+
+      <!-- Progress Column -->
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.firstName}}  {{row.lastName}}</mat-cell>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="effectiveDate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Effective Date </mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.effectiveDate |date:'MM/dd/yyyy'}}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="expiryDate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Expiry Date </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.expiryDate | date: 'MM/dd/yyyy'}} </mat-cell>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="emailAddress">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Email Address </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.emailAddress}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.status}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="transactionStatus">
+        <mat-header-cell  *matHeaderCellDef mat-sort-header> Transaction Status </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.transactionStatus.toLowerCase()}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions" class="d-flex justify-content-end flex-shrink-0">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+        <span>
+          <a (click)="openBankUserDialog(element,'edit')"
+             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span
+                  [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
+                  class="svg-icon svg-icon-3"
+                ></span>
+              </a>
+        </span>
+          <span>
+          <a (click)="openBankUserDialog(element,'view')"
+             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen019.svg'"
+                      class="svg-icon svg-icon-3"></span>
+              </a>
+        </span>
+          <span>
+          <a (click)="openBankUserDialog(element,'auth')"
+             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'" class="svg-icon svg-icon-2"></span>
+              </a>
+        </span>
+          <span>
+            <a (click)="openDelete(content, element)"
+               *ngIf="element.transactionStatus === 'MASTER' || element.transactionStatus === 'PENDING'"
+               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+            >
+                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                      class="svg-icon svg-icon-3"></span>
+              </a>
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;" [style.background-color] = "row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'">
+      </mat-row>
+    </mat-table>
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+    </mat-paginator>
+    <!-- end::Table -->
+  </div>
+  <!-- end::Table container -->
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure to delete this?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('yes')">Yes</button>
+  </div>
+</ng-template>
+<!-- begin::Body -->

@@ -1,0 +1,109 @@
+<div class="pb-10 pb-lg-12">
+  <h2 class="fw-bolder text-dark">Customer Information</h2>
+</div>
+<div [formGroup]="form">
+  <div class="fv-row mb-10">
+    <label class="form-label required"> Customer Id </label
+    ><input
+    name="customerId"
+    class="form-control form-control-lg form-control-solid"
+    formControlName="customerId" placeholder="Customer Id"
+  />
+    <div
+      class="fv-plugins-message-container invalid-feedback"
+      *ngIf="
+        form.get('customerId')?.hasError('required') &&
+        form.get('customerId')?.touched
+      "
+    >
+      UserId is required
+    </div>
+  </div>
+  <div class="fv-row mb-10">
+    <label class="form-label required"> Name </label
+    ><input
+    name="name"
+    class="form-control form-control-lg form-control-solid"
+    formControlName="name" placeholder="Name"
+  />
+    <div
+      class="fv-plugins-message-container invalid-feedback"
+      *ngIf="
+        form.get('name')?.hasError('required') &&
+        form.get('name')?.touched
+      "
+    >
+      UserId is required
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="form-label"> Address Line 1 </label>
+        <input
+          type="text"
+          class="form-control form-control-lg form-control-solid"
+          name="addressLine1"
+          formControlName="addressLine1"
+          placeholder="addressLine1"
+        />
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <label class="form-label"> Address Line 2 </label
+      ><input
+      type="text"
+      class="form-control form-control-lg form-control-solid"
+      name="addressLine2"
+      formControlName="addressLine2"
+      placeholder="Address Line 2"
+    />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="form-label"> Address Line 3 </label>
+        <input
+          type="text"
+          class="form-control form-control-lg form-control-solid"
+          name="addressLine3"
+          formControlName="addressLine3"
+          placeholder="addressLine3"
+        />
+      </div>
+    </div>
+    <div class="col-xl-3">
+      <label class="form-label"> PO Box </label
+      ><input
+      type="text"
+      class="form-control form-control-lg form-control-solid"
+      name="poBox"
+      formControlName="poBox"
+      placeholder="PO Box"
+    />
+    </div>
+    <div class="col-xl-3">
+      <label class="form-label"> Country </label>
+      <select name="country" class="form-select form-select-lg form-select-solid" formControlName="country">
+        <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="fv-row mb-0">
+    <label class="fs-6 fw-bold form-label required"> Email Address </label
+    ><input
+    name="emailAddress"
+    class="form-control form-control-lg form-control-solid"
+    formControlName="emailAddress"
+  />
+    <div class="fv-plugins-message-container invalid-feedback"
+      *ngIf="form.get('emailAddress')?.hasError('required') && form.get('emailAddress')?.touched">
+      Email Address is required
+    </div>
+    <div class="fv-plugins-message-container invalid-feedback"
+      *ngIf="form.get('emailAddress')?.hasError('email') && form.get('emailAddress')?.touched">
+      Wrong email format
+    </div>
+  </div>
+</div>

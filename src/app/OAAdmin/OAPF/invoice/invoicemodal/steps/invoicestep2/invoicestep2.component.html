@@ -1,0 +1,111 @@
+<div class="pb-15 pb-lg-8">
+  <h3 class="fw-bolder text-dark">Finance Info</h3>
+</div>
+<div [formGroup]="form">
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Financing Rate</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="financingRate" name="financingRate" [class.is-invalid]="isControlInvalid('financingRate')"
+             [class.is-valid]="isControlValid('financingRate')" formControlName="financingRate"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Financing Interest Amount</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="financingInterestAmount" name="financingInterestAmount"
+             [class.is-invalid]="isControlInvalid('financingInterestAmount')"
+             [class.is-valid]="isControlValid('financingInterestAmount')" formControlName="financingInterestAmount"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Rebate Amount</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="rebateAmount" name="rebateAmount" [class.is-invalid]="isControlInvalid('rebateAmount')"
+             [class.is-valid]="isControlValid('rebateAmount')" formControlName="rebateAmount"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Net Financing Interest Amount</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="netFinancingInterestAmount" name="netFinancingInterestAmount"
+             [class.is-invalid]="isControlInvalid('netFinancingInterestAmount')"
+             [class.is-valid]="isControlValid('netFinancingInterestAmount')"
+             formControlName="netFinancingInterestAmount"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Finance Id</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="financeId" name="financeId" [class.is-invalid]="isControlInvalid('financeId')"
+             [class.is-valid]="isControlValid('financeId')" formControlName="financeId"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Finance Value Date</label>
+      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="financeValueDate" name="financeValueDate"
+             [class.is-invalid]="isControlInvalid('financeValueDate')"
+             [class.is-valid]="isControlValid('financeValueDate')" formControlName="financeValueDate"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Finance DueDate</label>
+      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="financeDueDate" name="financeDueDate" [class.is-invalid]="isControlInvalid('financeDueDate')"
+             [class.is-valid]="isControlValid('financeDueDate')" formControlName="financeDueDate"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Financing Amount</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="financingAmount" name="financingAmount"
+             [class.is-invalid]="isControlInvalid('financingAmount')"
+             [class.is-valid]="isControlValid('financingAmount')" formControlName="financingAmount"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Financing Balance</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="financingBalance" name="financingBalance"
+             [class.is-invalid]="isControlInvalid('financingBalance')"
+             [class.is-valid]="isControlValid('financingBalance')" formControlName="financingBalance"/>
+    </div>
+  </div>
+  <div class="pb-5 pb-lg-8">
+    <h4 class="fw-bolder text-dark">Payment Info</h4>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Paid By</label>
+      <select
+        class="form-control form-control-lg form-control-solid"
+        name="paidBy" [class.is-invalid]="isControlInvalid('paidBy')" [class.is-valid]="isControlValid('paidBy')"
+        formControlName="paidBy">
+        <option value="BUYER">Buyer</option>
+      </select>
+    </div>
+    <div class="col-lg-3">
+      <label>Payment Date</label>
+      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="paymentDate" name="paymentDate" [class.is-invalid]="isControlInvalid('paymentDate')"
+             [class.is-valid]="isControlValid('paymentDate')" formControlName="paymentDate"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Payment Amount</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="paymentAmount" name="paymentAmount" [class.is-invalid]="isControlInvalid('paymentAmount')"
+             [class.is-valid]="isControlValid('paymentAmount')" formControlName="paymentAmount"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Principal Paid</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="principalPaid" name="principalPaid" [class.is-invalid]="isControlInvalid('principalPaid')"
+             [class.is-valid]="isControlValid('principalPaid')" formControlName="principalPaid"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Interest Paid</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="interestPaid" name="interestPaid" [class.is-invalid]="isControlInvalid('interestPaid')"
+             [class.is-valid]="isControlValid('interestPaid')" formControlName="interestPaid"/>
+    </div>
+  </div>
+</div>
