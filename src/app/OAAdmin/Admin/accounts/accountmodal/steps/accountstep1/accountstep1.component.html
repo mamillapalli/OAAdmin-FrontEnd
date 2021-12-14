@@ -1,0 +1,65 @@
+<div class="pb-10 pb-lg-12">
+  <h2 class="fw-bolder text-dark">Accounts Information</h2>
+</div>
+<div [formGroup]="form">
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="form-label required">Account Id</label>
+        <input
+          type="text"
+          class="form-control form-control-lg form-control-solid"
+          name="accountId" autocomplete="off"
+          placeholder="accountId" [class.is-invalid]="isControlInvalid('accountId')"
+          [class.is-valid]="isControlValid('accountId')" formControlName="accountId"
+        />
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <label class="form-label required">Name</label
+      ><input
+      type="text"
+      class="form-control form-control-lg form-control-solid"
+      name="name" autocomplete="off"
+      placeholder="Name" [class.is-invalid]="isControlInvalid('name')"
+      [class.is-valid]="isControlValid('name')" formControlName="name"
+    />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="form-label required">type</label>
+        <input
+          type="text"
+          class="form-control form-control-lg form-control-solid"
+          name="type" autocomplete="off"
+          placeholder="type" [class.is-invalid]="isControlInvalid('type')"
+          [class.is-valid]="isControlValid('type')" formControlName="type"
+        />
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <label class="form-label">Description</label
+      ><textarea
+      class="form-control form-control-lg form-control-solid"
+      name="description" autocomplete="off"
+      formControlName="description"
+      placeholder="Description"></textarea>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="form-label required">Currency</label>
+        <select
+          class="form-control form-control-lg form-control-solid"
+          name="currency"
+          formControlName="currency" [class.is-invalid]="isControlInvalid('currency')"
+          [class.is-valid]="isControlValid('currency')">
+          <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

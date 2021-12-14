@@ -12,16 +12,16 @@ const API_USERS_URL = `${environment.apiUrl}`;
   providedIn: 'root'
 })
 
-export class invoiceService {
+export class oaadminService {
 
-  //baseURL = '/oapf/api'
-  //oapfURL = 'http://localhost:8765/oapf'
-  private authToken: AuthModel | undefined;
   protected _isLoading$ = new BehaviorSubject<boolean>(false);
   protected _errorMessage = new BehaviorSubject<string>('');
-  constructor(private http: HttpClient,private authService: AuthService) { }
+  private authToken: AuthModel | any;
 
-  getInvoice(data: any , id: any, methodType: any): Observable<any> {
+  constructor(private http: HttpClient, private authService: AuthService) {
+  }
+
+  getAccounts(data: any , id: any, methodType: any): Observable<any> {
     this._isLoading$.next(true);
     this._errorMessage.next('');
     this.authToken = this.authService.getAuthFromLocalStorage();
@@ -30,8 +30,8 @@ export class invoiceService {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*'
     });
-    if(methodType === 'id') {
-      return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
+    if(methodType === 'filter') {
+      return this.http.get<any>('/oaadmin/api/v1/accounts?'+data.value.filterBy+'='+data.value.filterValue,  {headers: httpHeaders}).pipe(
         catchError(err => {
           this._errorMessage.next(err);
           console.error(err);
@@ -41,7 +41,7 @@ export class invoiceService {
       );
     }
     else {
-      return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
+      return this.http.get<any>('/oaadmin/api/v1/accounts', {headers: httpHeaders}).pipe(
         catchError(err => {
           this._errorMessage.next(err);
           console.error(err);
@@ -51,7 +51,7 @@ export class invoiceService {
       );
     }
   }
-  //create method
+
   dataItem(data: any, mode: any): Observable<any> {
     this._isLoading$.next(true);
     this._errorMessage.next('');
@@ -63,11 +63,12 @@ export class invoiceService {
       'Access-Control-Allow-Origin': '*'
 
     });
-    const id =  data.invoiceNumber;
+
     const dataPost = JSON.stringify(data);
-    console.log(dataPost)
+    console.log("Data Posting to Server")
+
     if(mode === 'new') {
-      return this.http.post<any>('/oapf/api/v1/invoices', dataPost, {
+      return this.http.post<any>('/oaadmin/api/v1/accounts', dataPost, {
         headers: httpHeaders
       }).pipe(
         catchError(err => {
@@ -78,7 +79,7 @@ export class invoiceService {
         finalize(() => this._isLoading$.next(false))
       );
     } else if(mode === 'edit') {
-      return this.http.put<any>('/oapf/api/v1/invoices' , dataPost , {
+      return this.http.put<any>('/oaadmin/api/v1/accounts' , dataPost , {
         headers: httpHeaders
       }).pipe(
         catchError(err => {
@@ -89,7 +90,7 @@ export class invoiceService {
         finalize(() => this._isLoading$.next(false))
       );
     } else if(mode === 'auth') {
-      return this.http.put<any>('/oapf/api/v1/invoices/authorise', dataPost , {
+      return this.http.put<any>('/oaadmin/api/v1/accounts/authorise', dataPost , {
         headers: httpHeaders
       }).pipe(
         catchError(err => {
@@ -100,7 +101,7 @@ export class invoiceService {
         finalize(() => this._isLoading$.next(false))
       );
     } else if(mode === 'delete') {
-      return this.http.delete<any>('/oapf/api/v1/invoices/'+ id  , {
+      return this.http.post <any>('oaadmin/api/v1/accounts/', dataPost ,{
         headers: httpHeaders
       }).pipe(
         catchError(err => {
@@ -121,53 +122,6 @@ export class invoiceService {
         finalize(() => this._isLoading$.next(false))
       );
     }
-  }
-
-  get isLoading$() {
-    return this._isLoading$.asObservable();
-  }
-
-// Error handling
-  errorHandle(error: { error: { message: string; }; status: any; message: any; }) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    console.log(errorMessage);
-    return throwError(errorMessage);
-  }
-
-
-  loadSBR(): Observable<Customer> {
-    this.authToken = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${this.authToken?.jwt}`,
-    });
-    return this.http.get<any>('/oaadmin/api/v1/sbrs/master',{headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      )
-  }
-
-  upload(file: File): Observable<HttpEvent<any>> {
-    this.authToken = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${this.authToken?.jwt}`,
-    });
-    const formData: FormData = new FormData();
-    formData.append('file', file);
-    formData.append('docType', 'Invoice');
-    console.log(formData)
-    return this.http.post<any>('/oapf/api/v1/invoices/uploadFile', formData, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      )
   }
 
 }

@@ -1,35 +1,31 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {Corporateadmin} from "../../Model/corporateadmin";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
-import {FormControl} from "@angular/forms";
-import {HttpClient, HttpEvent, HttpEventType, HttpHeaders, HttpResponse} from "@angular/common/http";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Subscription, throwError} from "rxjs";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AuthService} from "../../../modules/auth";
 import {NotificationService} from "../../shared/notification.service";
-import {CustomerService} from "../../shared/customer.service";
-import {DatePipe} from "@angular/common";
-import {RmmodalComponent} from "../../Admin/rm/rmmodal/rmmodal.component";
-import {catchError, retry} from "rxjs/operators";
-import {Observable, Subscription, throwError} from "rxjs";
-import {environment} from "../../../../environments/environment";
 import {invoiceService} from "../../shared/OAPF/invoice.service";
-import {InvoicemodalComponent} from "./invoicemodal/invoicemodal.component";
+import {oaadminService} from "../../shared/OAAdmin/oaadmin.service";
+import {DatePipe} from "@angular/common";
+import {InvoicemodalComponent} from "../../OAPF/invoice/invoicemodal/invoicemodal.component";
+import {catchError, retry} from "rxjs/operators";
 import Swal from "sweetalert2";
-
-const API_USERS_URL = `${environment.apiUrl}`;
+import {AccountmodalComponent} from "./accountmodal/accountmodal.component";
 
 @Component({
-  selector: 'app-invoice',
-  templateUrl: './invoice.component.html',
-  styleUrls: ['./invoice.component.scss']
+  selector: 'app-accounts',
+  templateUrl: './accounts.component.html',
+  styleUrls: ['./accounts.component.scss']
 })
-export class InvoiceComponent implements OnInit, OnDestroy {
+export class AccountsComponent implements OnInit {
 
   dataSource: any = new MatTableDataSource<Corporateadmin>();
-  displayedColumns: string[] = ['invoiceNumber', 'sbrReferenceId', 'agreementId', 'currency', 'amount', 'dueDate', 'status',
-    'actions'];
+  displayedColumns: string[] = ['accountId', 'name', 'type', 'currency', 'actions'];
   authToken: any;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
@@ -49,23 +45,28 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   };
 
   private subscriptions: Subscription[] = [];
-
+  formdata: FormGroup
 
   constructor(public http: HttpClient,
               public authService: AuthService,
               public modalService: NgbModal,
               public notifyService: NotificationService,
               public invoiceServices: invoiceService,
-              private datePipe: DatePipe) {
+              public oaadminService: oaadminService) {
   }
 
   ngOnInit(): void {
-    this.getInvoices();
+    //this.getAccounts();
+    this.formdata = new FormGroup({
+      filterBy: new FormControl("", [Validators.required]),
+      filterValue: new FormControl("", [Validators.required])
+    });
+    this.getFilterValue();
   }
 
-  public getInvoices() {
+  public getAccounts() {
     console.log('Get Invoices')
-    const sb = this.invoiceServices.getInvoice('', '', 'all').subscribe((res) => {
+    const sb = this.oaadminService.getAccounts('', '', 'all').subscribe((res) => {
       this.dataSource.data = res;
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
@@ -82,69 +83,57 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     return filterFunction;
   }
 
-  newInvoices() {
+  newAccounts() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
     this.modalOption.windowClass = 'my-class'
-    const modalRef = this.modalService.open(InvoicemodalComponent, this.modalOption);
+    const modalRef = this.modalService.open(AccountmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
       console.log('newBankAdmin is ' + result);
     }, (reason) => {
-      this.getInvoices();
+      //this.getAccounts();
+      this.getFilterValue();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
-  openInvoiceDialog(element: any, mode: any) {
-    console.log(element)
+  openAccountDialog(element: any, mode: any) {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
     this.modalOption.windowClass = 'my-class'
-    const modalRef = this.modalService.open(InvoicemodalComponent, this.modalOption);
+    const modalRef = this.modalService.open(AccountmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {
-      this.getInvoices();
+      // this.getAccounts();
+      this.getFilterValue();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
-  openInvoiceDelete(content: any, element: any) {
+  openAccountDelete(content: any, element: any) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
         this.deleteModal(element);
       }
     }, (reason) => {
-      this.getInvoices();
+      //this.getAccounts();
+      this.getFilterValue();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
   private deleteModal(data: any) {
-    this.invoiceServices.dataItem(data, 'delete').subscribe(res => {
+    this.oaadminService.dataItem(data, 'delete').subscribe(res => {
     }, (error: { message: any }) => {
       this.notifyService.showError(error, 'Delete Customer')
       console.error('There was an error!', error);
       return;
     });
-  }
-
-  deleteInvoice(userId: any) {
-    console.log(userId)
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.delete<any>(API_USERS_URL + '/api/v1/rms/' + userId, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
   }
 
   private getDismissReason(reason: any): string {
@@ -203,10 +192,12 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
-        this.getInvoices();
+        //this.getAccounts();
+        this.getFilterValue();
       }
     }, (reason) => {
-      this.getInvoices();
+      //this.getAccounts();
+      this.getFilterValue();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -217,6 +208,8 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   currentFile: File;
   message: any;
   fileInfos: any;
+  filterBy: any;
+  filterValue: any;
 
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
@@ -238,9 +231,10 @@ export class InvoiceComponent implements OnInit, OnDestroy {
                 title: 'Invoices uploaded successfully',
                 icon: 'success'
               }).then((result) => {
-                if(result.value){
-                    this.modalService.dismissAll();
-                    this.getInvoices();
+                if (result.value) {
+                  this.modalService.dismissAll();
+                  //this.getAccounts();
+                  this.getFilterValue();
                 }
               });
             } else {
@@ -252,8 +246,6 @@ export class InvoiceComponent implements OnInit, OnDestroy {
           },
           (err: any) => {
             console.log(err);
-            this.progress = 0;
-
             if (err.error && err.error.message) {
               this.message = err.error.message;
             } else {
@@ -262,10 +254,44 @@ export class InvoiceComponent implements OnInit, OnDestroy {
             //this.currentFile = undefined;
           });
       }
-
       this.selectedFiles = undefined;
     }
   }
 
+  openFilter(content: any) {
+    const modalRef = this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+      if (result === 'yes') {
+        console.log(result)
+      }
+    }, (reason) => {
+      this.getFilterValue();
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
 
+  getFilterValue() {
+    if (this.formdata.valid) {
+      const sb = this.oaadminService.getAccounts(this.formdata, '', 'filter').subscribe((res) => {
+        this.dataSource.data = res;
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.filterPredicate = this.createFilter();
+      });
+      this.subscriptions.push(sb);
+    } else {
+      const sb = this.oaadminService.getAccounts(this.formdata, '', 'all').subscribe((res) => {
+        this.dataSource.data = res;
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.filterPredicate = this.createFilter();
+      });
+      this.subscriptions.push(sb);
+    }
+  }
+
+  reset() {
+    this.formdata.reset();
+    this.getFilterValue();
+  }
 }

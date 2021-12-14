@@ -2,13 +2,69 @@
   <h3 class="card-title align-items-start flex-column">
     <span class="card-label fw-bolder fs-3 mb-1">Invoices Dashboard</span>
   </h3>
-  <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
-       title="Click to add a Invoice">
-    <a class="btn btn-sm btn-light-primary" (click)="newInvoices()">
-      <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
-      New Invoice
+  <!--  <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"-->
+  <!--       title="Click to add a Invoice">-->
+  <!--    <a class="btn btn-sm btn-light-primary" (click)="newInvoices()">-->
+  <!--      <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>-->
+  <!--      New Invoice-->
+  <!--    </a>-->
+  <!--  </div>-->
+  <!--  <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"-->
+  <!--       title="Click to add a Invoice">-->
+  <!--    <a class="btn btn-sm btn-light-primary" (click)="uploadInvoice(cUploadInvoices)">-->
+  <!--      <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>-->
+  <!--      Upload Invoices-->
+  <!--    </a>-->
+  <!--  </div>-->
+  <!-- begin::Actions  -->
+  <div class="d-flex align-items-center py-1">
+    <!-- begin::Wrapper  -->
+    <div class="me-4">
+      <!-- begin::Menu  -->
+      <a
+        class="
+          btn btn-sm btn-flex btn-light btn-active-primary
+          fw-bolder
+          cursor-pointer
+        "
+        data-kt-menu-trigger="click"
+        data-kt-menu-placement="bottom-end"
+        data-kt-menu-flip="top-end"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/general/gen031.svg'"
+          class="svg-icon svg-icon-5 svg-icon-gray-500 me-1"
+        ></span>
+        Filter
+      </a>
+
+      <!-- end::Menu  -->
+    </div>
+    <!-- end::Wrapper  -->
+
+    <!-- begin::Button  -->
+    <a
+      class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder cursor-pointer"
+      data-bs-toggle="modal"
+      data-bs-target="#kt_modal_create_app"
+      (click)="newInvoices()"
+      style="margin-right: 16px"
+    >
+      Create Invoice
     </a>
+
+    <a
+      class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder cursor-pointer"
+      data-bs-toggle="modal"
+      data-bs-target="#kt_modal_create_app"
+      (click)="uploadInvoice(cUploadInvoices)"
+      style="margin-right: 16px"
+    >
+      Upload Invoice
+    </a>
+    <!-- end::Button  -->
   </div>
+  <!-- end::Actions  -->
 </div>
 <!-- end::Header -->
 <!-- begin::Body -->
@@ -36,12 +92,12 @@
         <mat-cell *matCellDef="let row"> {{row.invoiceNumber}} </mat-cell>
       </ng-container>
 
-<!--      &lt;!&ndash; Progress Column &ndash;&gt;-->
-<!--      <ng-container matColumnDef="invoiceNumber">-->
-<!--        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> First Name-->
-<!--        </mat-header-cell>-->
-<!--        <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.invoiceNumber}} </mat-cell>-->
-<!--      </ng-container>-->
+      <!--      &lt;!&ndash; Progress Column &ndash;&gt;-->
+      <!--      <ng-container matColumnDef="invoiceNumber">-->
+      <!--        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> First Name-->
+      <!--        </mat-header-cell>-->
+      <!--        <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.invoiceNumber}} </mat-cell>-->
+      <!--      </ng-container>-->
 
       <ng-container matColumnDef="sbrReferenceId">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">SBR No</mat-header-cell>
@@ -50,7 +106,8 @@
 
       <!-- Name Column -->
       <ng-container matColumnDef="agreementId">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Agreement No</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Agreement No
+        </mat-header-cell>
         <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.agreementId}}
         </mat-cell>
       </ng-container>
@@ -67,7 +124,8 @@
       </ng-container>
 
       <ng-container matColumnDef="dueDate">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Due Date</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Due Date
+        </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{ row.dueDate | date: 'MM/dd/YYY' }} </mat-cell>
       </ng-container>
 
@@ -76,18 +134,18 @@
         <mat-cell *matCellDef="let row"> {{ row.status }} </mat-cell>
       </ng-container>
 
-<!--      <ng-container matColumnDef="transactionStatus">-->
-<!--        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">TransactionStatus</mat-header-cell>-->
-<!--        <mat-cell *matCellDef="let row"> {{ row.transactionStatus }} </mat-cell>-->
-<!--      </ng-container>-->
-
+      <!--      <ng-container matColumnDef="transactionStatus">-->
+      <!--        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">TransactionStatus</mat-header-cell>-->
+      <!--        <mat-cell *matCellDef="let row"> {{ row.transactionStatus }} </mat-cell>-->
+      <!--      </ng-container>-->
 
 
       <ng-container matColumnDef="actions" class="d-flex justify-content-end flex-shrink-0">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions
+        </mat-header-cell>
         <mat-cell *matCellDef="let element">
         <span>
-          <a title="modify" (click)="openRMDialog(element,'edit')"
+          <a title="modify" (click)="openInvoiceDialog(element,'edit')"
              class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                 <span
                   [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
@@ -96,20 +154,20 @@
               </a>
         </span>
           <span>
-          <a title="view" (click)="openRMDialog(element,'view')"
+          <a title="view" (click)="openInvoiceDialog(element,'view')"
              class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                 <span [inlineSVG]="'./assets/media/icons/duotune/general/gen019.svg'"
                       class="svg-icon svg-icon-3"></span>
               </a>
         </span>
           <span>
-          <a title="Authorize" (click)="openRMDialog(element,'auth')"
+          <a title="Authorize" (click)="openInvoiceDialog(element,'auth')"
              class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                 <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'" class="svg-icon svg-icon-2"></span>
               </a>
         </span>
           <span>
-            <a title="Delete" (click)="openRMDelete(deleteContent, element)"
+            <a title="Delete" (click)="openInvoiceDelete(deleteContent, element)"
                *ngIf="element.transactionStatus === 'MASTER' || element.transactionStatus === 'PENDING'"
                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
             >
@@ -121,7 +179,8 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;" [style.background-color] = "row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'">
+      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;"
+               [style.background-color]="row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'">
       </mat-row>
     </mat-table>
     <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
@@ -146,3 +205,47 @@
   </div>
 </ng-template>
 <!-- begin::Body -->
+
+<ng-template #cUploadInvoices let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h2 class="modal-title">Uploaded Invoices</h2>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-8">
+        <label class="btn btn-default p-0">
+          <input type="file" (change)="selectFile($event)"/>
+        </label>
+      </div>
+
+      <div class="col-4">
+        <button class="btn btn-success btn-sm" [disabled]="!selectedFiles" (click)="upload()">
+          Upload
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="currentFile" class="progress my-3">
+      <div
+        class="progress-bar progress-bar-info progress-bar-striped"
+        role="progressbar"
+        attr.aria-valuenow="{{ progress }}"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [ngStyle]="{ width: progress + '%' }"
+      >
+        {{ progress }}%
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>
+    <!--    <button type="button" class="btn btn-outline-dark" (click)="c('yes')">Submit</button> -->
+  </div>
+</ng-template>
+<!-- begin::Body -->
+
+

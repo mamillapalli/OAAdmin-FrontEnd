@@ -113,7 +113,10 @@ import { Invoicestep1Component } from './OAAdmin/OAPF/invoice/invoicemodal/steps
 import { Invoicestep2Component } from './OAAdmin/OAPF/invoice/invoicemodal/steps/invoicestep2/invoicestep2.component';
 import { Invoicestep3Component } from './OAAdmin/OAPF/invoice/invoicemodal/steps/invoicestep3/invoicestep3.component';
 import { Invoicestep4Component } from './OAAdmin/OAPF/invoice/invoicemodal/steps/invoicestep4/invoicestep4.component';
-
+import { AccountsComponent } from './OAAdmin/Admin/accounts/accounts.component';
+import { AccountmodalComponent } from './OAAdmin/Admin/accounts/accountmodal/accountmodal.component';
+import { Accountstep1Component } from './OAAdmin/Admin/accounts/accountmodal/steps/accountstep1/accountstep1.component';
+import { Accountstep2Component } from './OAAdmin/Admin/accounts/accountmodal/steps/accountstep2/accountstep2.component';
 function appInitializer(authService: AuthService) {
   return () => {
     return new Promise((resolve) => {
@@ -189,7 +192,11 @@ function appInitializer(authService: AuthService) {
     Invoicestep1Component,
     Invoicestep2Component,
     Invoicestep3Component,
-    Invoicestep4Component
+    Invoicestep4Component,
+    AccountsComponent,
+    AccountmodalComponent,
+    Accountstep1Component,
+    Accountstep2Component
 
   ],
   imports: [

@@ -1,0 +1,225 @@
+<div class="card-header border-0 pt-5">
+  <h3 class="card-title align-items-start flex-column">
+    <span class="card-label fw-bolder fs-3 mb-1">Account Number Dashboard</span>
+  </h3>
+  <div class="d-flex align-items-center py-1">
+    <!-- begin::Wrapper  -->
+    <div class="me-4">
+      <!-- begin::Menu  -->
+      <a
+        class="
+          btn btn-sm btn-flex btn-light btn-active-primary
+          fw-bolder
+          cursor-pointer
+        "
+        data-kt-menu-trigger="click"
+        data-kt-menu-placement="bottom-end"
+        data-kt-menu-flip="top-end" (click)="openFilter(cFilter)"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/general/gen031.svg'"
+          class="svg-icon svg-icon-5 svg-icon-gray-500 me-1"
+        ></span>
+        Filter
+      </a>
+      <!-- end::Menu  -->
+    </div>
+    <div class="me-4">
+      <!-- begin::Menu  -->
+      <a
+        class="
+          btn btn-sm btn-flex btn-light btn-active-primary
+          fw-bolder
+          cursor-pointer
+        "
+        data-kt-menu-trigger="click"
+        data-kt-menu-placement="bottom-end"
+        data-kt-menu-flip="top-end" (click)="reset()"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/general/Refresh_icon_1.svg'"
+          class="svg-icon svg-icon-5 svg-icon-gray-500 me-1"
+        ><i class="fa fa-refresh" aria-hidden="true"></i></span>
+        Reset
+      </a>
+      <!-- end::Menu  -->
+    </div>
+    <!-- end::Wrapper  -->
+    <!-- begin::Button  -->
+    <a
+      class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder cursor-pointer"
+      data-bs-toggle="modal"
+      data-bs-target="#kt_modal_create_app"
+      (click)="newAccounts()"
+      style="margin-right: 16px"
+    >
+      Create Account
+    </a>
+    <!-- end::Button  -->
+  </div>
+  <!-- end::Actions  -->
+</div>
+<!-- end::Header -->
+<!-- begin::Body -->
+<div class="card-body py-3">
+  <!-- begin::Table container -->
+  <ng-container *ngIf="isLoading">
+    <div class="overlay-layer">
+      <div class="spinner spinner-lg spinner-primary"></div>
+    </div>
+  </ng-container>
+
+
+  <div class="table-responsive">
+    <!-- begin::Table -->
+    <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+               class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+      </mat-form-field>
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="accountId" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Account Id
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.accountId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Name</mat-header-cell>
+        <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.name}} </mat-cell>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Type
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.type}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="currency">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Currency
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.currency}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions" class="d-flex justify-content-end flex-shrink-0">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+        <span>
+          <a title="modify" (click)="openAccountDialog(element,'edit')"
+             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span
+                  [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
+                  class="svg-icon svg-icon-3"
+                ></span>
+              </a>
+        </span>
+          <span>
+          <a title="view" (click)="openAccountDialog(element,'view')"
+             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen019.svg'"
+                      class="svg-icon svg-icon-3"></span>
+              </a>
+        </span>
+          <span>
+          <a title="Authorize" (click)="openAccountDialog(element,'auth')"
+             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'" class="svg-icon svg-icon-2"></span>
+              </a>
+        </span>
+          <span>
+            <a title="Delete" (click)="openAccountDelete(deleteContent, element)"
+               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+            >
+                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                      class="svg-icon svg-icon-3"></span>
+              </a>
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+    </mat-paginator>
+    <!-- end::Table -->
+  </div>
+  <!-- end::Table container -->
+</div>
+<ng-template #deleteContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure to delete this?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('yes')">Yes</button>
+  </div>
+</ng-template>
+<!-- begin::Body -->
+
+<ng-template #cFilter let-c="close" let-d="dismiss">
+  <form [formGroup]="formdata" (ngSubmit)="getFilterValue()" class="form" enctype="multipart/form-data">
+    <div class="modal-header">
+      <h2 class="modal-title">Uploaded Invoices</h2>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-xl-6">
+          <div class="form-group">
+            <label class="form-label required">Filter By</label>
+            <select
+              class="form-control form-control-lg form-control-solid"
+              name="filterBy" id="filterBy" formControlName="filterBy">
+              <option value="accountId">AccountId</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-xl-6">
+          <div class="form-group">
+            <label class="form-label required">Filter Value</label>
+            <input
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              name="filterValue" id="filterValue" autocomplete="off"
+              placeholder="filterValue" formControlName="filterValue"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--  <div class="modal-body">-->
+
+    <!--      <div class="form-group">-->
+    <!--        <div class="input-group controls">-->
+    <!--          <input formControlName = "Fname" type="text" class="form-control">-->
+    <!--          <div *ngIf="formdata.controls.Fname.errors && formdata.controls.Fname.touched" style="color:red;float: left;width: 100%;background: #ff000014;margin-top: 10px;padding: 10px 2px 0px 1px;">-->
+    <!--            <ul>-->
+    <!--              <li>Fname is required.</li>-->
+    <!--            </ul>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--  </div>-->
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>
+      <button type="submit" class="btn btn-primary" (click)="c('Yes')">Submit</button>
+    </div>
+  </form>
+</ng-template>
+<!-- begin::Body -->

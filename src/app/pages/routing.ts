@@ -9,6 +9,8 @@ import {RmComponent} from "../OAAdmin/Admin/rm/rm.component";
 import {TestComponent} from "../OAAdmin/Admin/test/test.component";
 import {RelationshipmanagerComponent} from "../OAAdmin/Admin/relationshipmanager/relationshipmanager.component";
 import {InvoiceComponent} from "../OAAdmin/OAPF/invoice/invoice.component";
+import {AccountModule} from "../modules/account/account.module";
+import {AccountsComponent} from "../OAAdmin/Admin/accounts/accounts.component";
 
 const Routing: Routes = [
   {
@@ -84,6 +86,12 @@ const Routing: Routes = [
     path: 'relationshipmanager', // <= Page URL
     component: RelationshipmanagerComponent // <= Page component registration
   },
+  //Account number
+  {
+    path: 'accounts',
+    component: AccountsComponent
+  },
+  // Invoices
   {
     path: 'OAPF/invoice', // <= Page URL
     component: InvoiceComponent // <= Page component registration
