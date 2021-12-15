@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpEvent, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpEvent, HttpHeaders, HttpParams} from "@angular/common/http";
 import {BehaviorSubject, Observable, of, throwError} from "rxjs";
 import {catchError, finalize, retry} from "rxjs/operators";
 import {environment} from "../../../../environments/environment";
@@ -31,7 +31,15 @@ export class oaadminService {
       'Access-Control-Allow-Origin': '*'
     });
     if(methodType === 'filter') {
-      return this.http.get<any>('/oaadmin/api/v1/accounts?'+data.value.filterBy+'='+data.value.filterValue,  {headers: httpHeaders}).pipe(
+      const f = data.value.quantities
+
+      let httpParams = new HttpParams();
+      for(let i=0; i< f.length ;i++){
+        httpParams = httpParams.append(f[i].qty, f[i].price);
+      }
+      console.log(httpParams)
+
+      return this.http.get<any>('/oaadmin/api/v1/accounts',  { params:httpParams , headers: httpHeaders}).pipe(
         catchError(err => {
           this._errorMessage.next(err);
           console.error(err);

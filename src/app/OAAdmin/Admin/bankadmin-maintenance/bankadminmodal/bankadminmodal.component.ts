@@ -7,7 +7,6 @@ import {AuthService} from "../../../../modules/auth";
 import {catchError, retry} from "rxjs/operators";
 import {environment} from "../../../../../environments/environment";
 import {BankAdmin, inits} from "../../../model/bankadmin";
-
 const API_USERS_URL = `${environment.apiUrl}`;
 
 

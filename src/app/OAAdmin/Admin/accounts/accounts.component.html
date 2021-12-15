@@ -85,20 +85,20 @@
         <mat-cell *matCellDef="let row"> {{row.accountId}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="name">
+      <ng-container matColumnDef="accountName">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Name</mat-header-cell>
         <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.name}} </mat-cell>
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="type">
+      <ng-container matColumnDef="accountType">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Type
         </mat-header-cell>
         <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.type}}
         </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="currency">
+      <ng-container matColumnDef="accountCurrency">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Currency
         </mat-header-cell>
         <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.currency}} </mat-cell>
@@ -169,7 +169,8 @@
 <!-- begin::Body -->
 
 <ng-template #cFilter let-c="close" let-d="dismiss">
-  <form [formGroup]="formdata" (ngSubmit)="getFilterValue()" class="form" enctype="multipart/form-data">
+  <!--  <form [formGroup]="formdata" (ngSubmit)="getFilterValue()" class="form" enctype="multipart/form-data">-->
+  <form [formGroup]="productForm" (ngSubmit)="getFilterValue()">
     <div class="modal-header">
       <h2 class="modal-title">Uploaded Invoices</h2>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
@@ -177,28 +178,61 @@
       </button>
     </div>
     <div class="modal-body">
-      <div class="row">
-        <div class="col-xl-6">
-          <div class="form-group">
-            <label class="form-label required">Filter By</label>
-            <select
-              class="form-control form-control-lg form-control-solid"
-              name="filterBy" id="filterBy" formControlName="filterBy">
-              <option value="accountId">AccountId</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-xl-6">
-          <div class="form-group">
-            <label class="form-label required">Filter Value</label>
-            <input
-              type="text"
-              class="form-control form-control-lg form-control-solid"
-              name="filterValue" id="filterValue" autocomplete="off"
-              placeholder="filterValue" formControlName="filterValue"
-            />
-          </div>
-        </div>
+      <!--      <div class="row">-->
+      <!--        <div class="col-xl-6">-->
+      <!--          <div class="form-group">-->
+      <!--            <label class="form-label required">Filter By</label>-->
+      <!--            <select-->
+      <!--              class="form-control form-control-lg form-control-solid"-->
+      <!--              name="filterBy" id="filterBy" formControlName="filterBy">-->
+      <!--              <option value="accountId">AccountId</option>-->
+      <!--            </select>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        <div class="col-xl-6">-->
+      <!--          <div class="form-group">-->
+      <!--            <label class="form-label required">Filter Value</label>-->
+      <!--            <input-->
+      <!--              type="text"-->
+      <!--              class="form-control form-control-lg form-control-solid"-->
+      <!--              name="filterValue" id="filterValue" autocomplete="off"-->
+      <!--              placeholder="filterValue" formControlName="filterValue"-->
+      <!--            />-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <div class="container">
+
+        <table class="table table-bordered" formArrayName="quantities">
+          <tr>
+            <th colspan="2">Filter Option</th>
+            <th>
+              <button type="button" (click)="addFilterOption()" class="btn btn-primary">Add</button>
+            </th>
+          </tr>
+          <tr *ngFor="let quantity of quantities().controls; let i=index" [formGroupName]="i">
+            <td>
+              Filter Id :
+<!--              <input type="text" formControlName="qty" class="form-control">-->
+              <select
+                class="form-control form-control-lg form-control-
+                solid"
+                name="qty" id="qty" formControlName="qty">
+                <option value="{{currencyl}}" *ngFor="let currencyl of displayedColumns">{{currencyl}}</option>
+              </select>
+            </td>
+            <td>
+              Filter Value:
+              <input type="text" formControlName="price" class="form-control">
+            </td>
+            <td>
+              <button (click)="removeQuantity(i)" class="btn btn-danger">Remove</button>
+            </td>
+          </tr>
+        </table>
+
+        <!--          <button type="submit" class="btn btn-success">Submit</button>-->
+
       </div>
     </div>
 
@@ -220,6 +254,7 @@
       <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>
       <button type="submit" class="btn btn-primary" (click)="c('Yes')">Submit</button>
     </div>
+    <!--  </form>-->
   </form>
 </ng-template>
 <!-- begin::Body -->

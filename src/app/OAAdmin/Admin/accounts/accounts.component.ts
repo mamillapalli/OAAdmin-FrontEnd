@@ -4,7 +4,7 @@ import {Corporateadmin} from "../../Model/corporateadmin";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Subscription, throwError} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AuthService} from "../../../modules/auth";
@@ -25,7 +25,7 @@ import {AccountmodalComponent} from "./accountmodal/accountmodal.component";
 export class AccountsComponent implements OnInit {
 
   dataSource: any = new MatTableDataSource<Corporateadmin>();
-  displayedColumns: string[] = ['accountId', 'name', 'type', 'currency', 'actions'];
+  displayedColumns: string[] = ['accountId', 'accountName', 'accountType', 'accountCurrency', 'actions'];
   authToken: any;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
@@ -46,13 +46,47 @@ export class AccountsComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
   formdata: FormGroup
-
+  productForm: FormGroup;
   constructor(public http: HttpClient,
               public authService: AuthService,
               public modalService: NgbModal,
               public notifyService: NotificationService,
               public invoiceServices: invoiceService,
-              public oaadminService: oaadminService) {
+              public oaadminService: oaadminService,
+              private fb:FormBuilder) {
+    this.productForm = this.fb.group({
+      quantities: this.fb.array([]) ,
+    });
+  }
+
+  quantities() : FormArray {
+    return this.productForm.get("quantities") as FormArray
+  }
+
+  newQuantity(): FormGroup {
+    return this.fb.group({
+      qty: '',
+      price: '',
+    })
+  }
+
+  addFilterOption() {
+    this.quantities().push(this.newQuantity());
+  }
+
+  removeQuantity(i:number) {
+    this.quantities().removeAt(i);
+  }
+
+  onSubmit() {
+    console.log(this.productForm.value);
+    const f = this.productForm.value.quantities
+    for(let i=0; i< f.length ;i++)
+    {
+      console.log(f[i].price)
+      console.log(f[i].qty)
+    }
+    console.log(f);
   }
 
   ngOnInit(): void {
@@ -188,19 +222,6 @@ export class AccountsComponent implements OnInit {
   }
 
 
-  uploadInvoice(content: any) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-      if (result === 'yes') {
-        //this.getAccounts();
-        this.getFilterValue();
-      }
-    }, (reason) => {
-      //this.getAccounts();
-      this.getFilterValue();
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
 
   //Upload Invoices Events
   selectedFiles: any
@@ -211,68 +232,26 @@ export class AccountsComponent implements OnInit {
   filterBy: any;
   filterValue: any;
 
-  selectFile(event: any): void {
-    this.selectedFiles = event.target.files;
-  }
 
-  upload(): void {
-    this.progress = 0;
-    console.log(this.progress)
-    if (this.selectedFiles) {
-      const file: File | null = this.selectedFiles.item(0);
-
-      if (file) {
-        this.currentFile = file;
-        this.invoiceServices.upload(this.currentFile).subscribe(
-          (event: any) => {
-            console.log(event)
-            if (event !== null && event !== '') {
-              Swal.fire({
-                title: 'Invoices uploaded successfully',
-                icon: 'success'
-              }).then((result) => {
-                if (result.value) {
-                  this.modalService.dismissAll();
-                  //this.getAccounts();
-                  this.getFilterValue();
-                }
-              });
-            } else {
-              Swal.fire({
-                title: 'Error is occurred.',
-                icon: 'error'
-              });
-            }
-          },
-          (err: any) => {
-            console.log(err);
-            if (err.error && err.error.message) {
-              this.message = err.error.message;
-            } else {
-              this.message = 'Could not upload the file!';
-            }
-            //this.currentFile = undefined;
-          });
-      }
-      this.selectedFiles = undefined;
-    }
-  }
 
   openFilter(content: any) {
     const modalRef = this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
+      console.log(result)
       if (result === 'yes') {
-        console.log(result)
+        this.productForm.reset();
       }
     }, (reason) => {
-      this.getFilterValue();
+      this.quantities().reset();
+      this.productForm.reset();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
   getFilterValue() {
-    if (this.formdata.valid) {
-      const sb = this.oaadminService.getAccounts(this.formdata, '', 'filter').subscribe((res) => {
+    console.log('test'+this.productForm.value.quantities)
+    if (this.productForm.valid && this.productForm.value.quantities.length > 0) {
+      const sb = this.oaadminService.getAccounts(this.productForm, '', 'filter').subscribe((res) => {
         this.dataSource.data = res;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -280,7 +259,7 @@ export class AccountsComponent implements OnInit {
       });
       this.subscriptions.push(sb);
     } else {
-      const sb = this.oaadminService.getAccounts(this.formdata, '', 'all').subscribe((res) => {
+      const sb = this.oaadminService.getAccounts(this.productForm, '', 'all').subscribe((res) => {
         this.dataSource.data = res;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -291,7 +270,9 @@ export class AccountsComponent implements OnInit {
   }
 
   reset() {
-    this.formdata.reset();
+    this.quantities().reset();
+    this.productForm.invalid
+    this.productForm.reset();
     this.getFilterValue();
   }
 }

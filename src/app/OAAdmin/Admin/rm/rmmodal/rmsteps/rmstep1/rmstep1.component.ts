@@ -6,6 +6,8 @@ import {MatTableDataSource} from "@angular/material/table";
 import {Customer} from "../../../../../Model/customer";
 import {HttpClient} from "@angular/common/http";
 import {rm} from "../../../../../Model/request/rm";
+import {QuestionBase} from "./question-base";
+import {QuestionControlService} from "./question-control.service";
 
 @Component({
   selector: 'app-rmstep1',
@@ -32,7 +34,7 @@ export class Rmstep1Component implements OnInit {
   dataSource: any = new MatTableDataSource<rm>();
   clickedRows = new Set<Customer>();
 
-  constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal) {}
+  constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal,private qcs: QuestionControlService) {}
 
   ngOnInit() {
     this.initForm();
@@ -45,13 +47,16 @@ export class Rmstep1Component implements OnInit {
     }
     this.updateParentModel({}, this.checkForm());
   }
-
+  @Input() questions: QuestionBase<string>[] | null = [];
   initForm() {
-    this.form = this.fb.group({
-      rmId: [this.defaultValues.rmId,[Validators.required]],
-      //name: [this.defaultValues.name,[Validators.required]],
-      emailAddress: [this.defaultValues.emailAddress,[Validators.required]],
-    });
+    this.form = this.qcs.toFormGroup(this.questions as QuestionBase<string>[]);
+
+
+    // this.form = this.fb.group({
+    //   rmId: [this.defaultValues.rmId,[Validators.required]],
+    //   //name: [this.defaultValues.name,[Validators.required]],
+    //   emailAddress: [this.defaultValues.emailAddress,[Validators.required]],
+    // });
 
     const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
       this.updateParentModel(val, this.checkForm());
