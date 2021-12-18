@@ -6,8 +6,6 @@ import {MatTableDataSource} from "@angular/material/table";
 import {Customer} from "../../../../../Model/customer";
 import {HttpClient} from "@angular/common/http";
 import {rm} from "../../../../../Model/request/rm";
-import {QuestionBase} from "./question-base";
-import {QuestionControlService} from "./question-control.service";
 
 @Component({
   selector: 'app-rmstep1',
@@ -20,7 +18,7 @@ export class Rmstep1Component implements OnInit {
     part: Partial<rm>,
     isFormValid: boolean
   ) => void;
-  form: FormGroup;
+  rmStep1Form: FormGroup;
   @Input() defaultValues: Partial<rm>;
 
   private unsubscribe: Subscription[] = [];
@@ -34,43 +32,52 @@ export class Rmstep1Component implements OnInit {
   dataSource: any = new MatTableDataSource<rm>();
   clickedRows = new Set<Customer>();
 
-  constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal,private qcs: QuestionControlService) {}
+  constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal) {}
 
   ngOnInit() {
     this.initForm();
     if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view')
     {
-      this.form.disable()
+      this.rmStep1Form.disable()
     }
     if(this.mode !== 'new') {
       this.updateForm();
     }
     this.updateParentModel({}, this.checkForm());
   }
-  @Input() questions: QuestionBase<string>[] | null = [];
+
   initForm() {
-    this.form = this.qcs.toFormGroup(this.questions as QuestionBase<string>[]);
+    this.rmStep1Form = this.fb.group({
+      rmId: [this.defaultValues.rmId,[Validators.required]],
+      firstName: [this.defaultValues.firstName,[Validators.required]],
+      lastName: [this.defaultValues.lastName,[Validators.required]],
+      emailAddress: [this.defaultValues.emailAddress,[Validators.required]],
+    });
 
-
-    // this.form = this.fb.group({
-    //   rmId: [this.defaultValues.rmId,[Validators.required]],
-    //   //name: [this.defaultValues.name,[Validators.required]],
-    //   emailAddress: [this.defaultValues.emailAddress,[Validators.required]],
-    // });
-
-    const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
+    const formChangesSubscr = this.rmStep1Form.valueChanges.subscribe((val) => {
       this.updateParentModel(val, this.checkForm());
     });
     this.unsubscribe.push(formChangesSubscr);
   }
 
   checkForm() {
+
+    this.markFormGroupTouched(this.rmStep1Form);
+
+    console.log('form', this.rmStep1Form)
+
     return !(
-      this.form.get('rmId')?.hasError('required') ||
-      this.form.get('name')?.hasError('required') ||
-      this.form.get('emailAddress')?.hasError('required') ||
-      this.form.get('emailAddress')?.hasError('email')
+      this.rmStep1Form.get('rmId')?.hasError('required') ||
+      this.rmStep1Form.get('name')?.hasError('required') ||
+      this.rmStep1Form.get('emailAddress')?.hasError('required') ||
+      this.rmStep1Form.get('emailAddress')?.hasError('email')
     );
+  }
+
+  public markFormGroupTouched(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(key => {
+      console.log('markFormGroupTouched'+formGroup.controls[key])
+    });
   }
 
   ngOnDestroy() {
@@ -79,12 +86,13 @@ export class Rmstep1Component implements OnInit {
 
   updateForm()
   {
-    this.f.rmId.setValue(this.formValue.rmId);
-    this.f.name.setValue(this.formValue.name);
-    this.f.emailAddress.setValue(this.formValue.emailAddress);
+    this.rmStep1Form.setValue(this.formValue)
+    // this.f.rmId.setValue(this.formValue.rmId);
+    // this.f.name.setValue(this.formValue.name);
+    // this.f.emailAddress.setValue(this.formValue.emailAddress);
   }
 
   get f() {
-    return this.form.controls;
+    return this.rmStep1Form.controls;
   }
 }

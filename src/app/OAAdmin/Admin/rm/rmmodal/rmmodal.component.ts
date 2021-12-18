@@ -59,6 +59,7 @@ export class RmmodalComponent implements OnInit {
     if (nextStep > this.formsCount) {
       return;
     }
+    console.log()
     if (this.currentStep$.value === this.formsCount - 1) {
       this.rmRequest = new rmreq();
       this.rmRequest.rmId = this.account$.value.rmId

@@ -40,36 +40,23 @@
       >
         <div class="current">
           <ng-container *ngIf="currentStep$.value === 1">
-            <app-invoicestep1 class=""
-                                          [updateParentModel]="updateAccount"
-                                          [defaultValues]="account$.value"
-                                          [formValue]="formValue"
-                                          [formElement]="formElement"
-                                          [mode]=mode
-            ></app-invoicestep1>
+            <app-financingstep1 class="w-100"
+                              [updateParentModel]="updateAccount"
+                              [defaultValues]="account$.value"
+                              [formValue]="formValue"
+                              [mode]=mode
+            ></app-financingstep1>
           </ng-container>
 
           <ng-container *ngIf="currentStep$.value === 2">
-            <app-invoicestep2
+            <app-financingstep2
               class="w-100"
               [updateParentModel]="updateAccount"
               [defaultValues]="account$.value"
               [formValue]="formValue"
-              [formElement]="formElement"
               [mode]=mode
-            ></app-invoicestep2>
+            ></app-financingstep2>
           </ng-container>
-
-<!--          <ng-container *ngIf="currentStep$.value === 3">-->
-<!--            <app-invoicestep3-->
-<!--              class="w-100"-->
-<!--              [updateParentModel]="updateAccount"-->
-<!--              [defaultValues]="account$.value"-->
-<!--              [formValue]="formValue"-->
-<!--              [mode]=mode-->
-<!--            ></app-invoicestep3>-->
-<!--          </ng-container>-->
-
 
           <ng-container *ngIf="currentStep$.value === 3">
             <app-invoicestep3 class="w-100"></app-invoicestep3>

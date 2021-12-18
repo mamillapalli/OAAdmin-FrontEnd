@@ -1,7 +1,7 @@
 <div class="pb-10 pb-lg-12">
   <h2 class="fw-bolder text-dark">RM Information</h2>
 </div>
-<div [formGroup]="form">
+<div [formGroup]="rmStep1Form">
   <div class="fv-row mb-10">
     <label class="form-label required">RM Id</label
     ><input
@@ -12,8 +12,8 @@
     <div
       class="fv-plugins-message-container invalid-feedback"
       *ngIf="
-        form.get('rmId')?.hasError('required') &&
-        form.get('rmId')?.touched
+        rmStep1Form.get('rmId')?.hasError('required') &&
+        rmStep1Form.get('rmId')?.touched
       "
     >
       Relationship manager is required
@@ -24,15 +24,34 @@
         <input
           type="text"
           class="form-control form-control-lg form-control-solid"
-          name="name"
-          formControlName="name"
+          name="firstName"
+          formControlName="firstName"
           placeholder=" Name "
         />
     <div
       class="fv-plugins-message-container invalid-feedback"
       *ngIf="
-        form.get('name')?.hasError('required') &&
-        form.get('name')?.touched
+        rmStep1Form.get('firstName')?.hasError('required') &&
+        rmStep1Form.get('firstName')?.touched
+      "
+    >
+      Name is required
+    </div>
+  </div>
+  <div class="fv-row mb-10">
+    <label class="form-label required">Last Name</label>
+    <input
+      type="text"
+      class="form-control form-control-lg form-control-solid"
+      name="lastName"
+      formControlName="lastName"
+      placeholder=" Name "
+    />
+    <div
+      class="fv-plugins-message-container invalid-feedback"
+      *ngIf="
+        rmStep1Form.get('lastName')?.hasError('required') &&
+        rmStep1Form.get('lastName')?.touched
       "
     >
       Name is required
@@ -48,8 +67,8 @@
     <div
       class="fv-plugins-message-container invalid-feedback"
       *ngIf="
-        form.get('emailAddress')?.hasError('required') &&
-        form.get('emailAddress')?.touched
+        rmStep1Form.get('emailAddress')?.hasError('required') &&
+        rmStep1Form.get('emailAddress')?.touched
       "
     >
       Email Address is required

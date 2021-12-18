@@ -28,6 +28,7 @@ export class Invoicestep1Component implements OnInit {
 
   private unsubscribe: Subscription[] = [];
   @Input('formValue') formValue :  any;
+  @Input('formElement') formElement :  any;
   @Input() mode :  any;
   @ViewChild('myModal') myModal: any;
   modalOption: NgbModalOptions = {}; // not null!
@@ -76,10 +77,14 @@ export class Invoicestep1Component implements OnInit {
       portOfDischarge: [this.defaultValues.portOfDischarge,[Validators.required]],
       shipmentCorporation: [this.defaultValues.shipmentCorporation,[Validators.required]],
       realBeneficiary: [this.defaultValues.realBeneficiary,[Validators.required]],
-
     });
 
+
+
+
     const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
+      let formE = document.getElementById('form');
+      // console.log(formE?.innerHTML);
       this.updateParentModel(val, this.checkForm());
     });
     this.unsubscribe.push(formChangesSubscr);
@@ -113,27 +118,28 @@ export class Invoicestep1Component implements OnInit {
 
   updateForm()
   {
-    this.f.invoiceNumber.setValue(this.formValue.invoiceNumber);
-    this.f.sbrReferenceId.setValue(this.formValue.sbrReferenceId);
-    this.f.agreementId.setValue(this.formValue.agreementId);
-    this.f.anchorId.setValue(this.formValue.anchorId);
-    this.f.counterPartyId.setValue(this.formValue.counterPartyId);
-    this.f.documentType.setValue(this.formValue.documentType);
-    this.f.documentNumber.setValue(this.formValue.documentNumber);
-    this.f.currency.setValue(this.formValue.currency);
-    this.f.amount.setValue(this.formValue.amount);
-    const eDate = this.datePipe.transform(new Date(this.formValue.date), "yyyy-MM-dd");
-    this.f.date.setValue(eDate);
-    const eValueDate = this.datePipe.transform(new Date(this.formValue.valueDate), "yyyy-MM-dd");
-    this.f.valueDate.setValue(eValueDate);
-    const eDueDate = this.datePipe.transform(new Date(this.formValue.dueDate), "yyyy-MM-dd");
-    this.f.dueDate.setValue(eDueDate);
-    const eAgreedPaymentDate = this.datePipe.transform(new Date(this.formValue.agreedPaymentDate), "yyyy-MM-dd");
-    this.f.agreedPaymentDate.setValue(eAgreedPaymentDate);
-    this.f.portOfLoading.setValue(this.formValue.portOfLoading);
-    this.f.portOfDischarge.setValue(this.formValue.portOfDischarge);
-    this.f.shipmentCorporation.setValue(this.formValue.shipmentCorporation);
-    this.f.realBeneficiary.setValue(this.formValue.realBeneficiary);
+    this.form.patchValue(this.formValue)
+    // this.f.invoiceNumber.setValue(this.formValue.invoiceNumber);
+    // this.f.sbrReferenceId.setValue(this.formValue.sbrReferenceId);
+    // this.f.agreementId.setValue(this.formValue.agreementId);
+    // this.f.anchorId.setValue(this.formValue.anchorId);
+    // this.f.counterPartyId.setValue(this.formValue.counterPartyId);
+    // this.f.documentType.setValue(this.formValue.documentType);
+    // this.f.documentNumber.setValue(this.formValue.documentNumber);
+    // this.f.currency.setValue(this.formValue.currency);
+    // this.f.amount.setValue(this.formValue.amount);
+    // const eDate = this.datePipe.transform(new Date(this.formValue.date), "yyyy-MM-dd");
+    // this.f.date.setValue(eDate);
+    // const eValueDate = this.datePipe.transform(new Date(this.formValue.valueDate), "yyyy-MM-dd");
+    // this.f.valueDate.setValue(eValueDate);
+    // const eDueDate = this.datePipe.transform(new Date(this.formValue.dueDate), "yyyy-MM-dd");
+    // this.f.dueDate.setValue(eDueDate);
+    // const eAgreedPaymentDate = this.datePipe.transform(new Date(this.formValue.agreedPaymentDate), "yyyy-MM-dd");
+    // this.f.agreedPaymentDate.setValue(eAgreedPaymentDate);
+    // this.f.portOfLoading.setValue(this.formValue.portOfLoading);
+    // this.f.portOfDischarge.setValue(this.formValue.portOfDischarge);
+    // this.f.shipmentCorporation.setValue(this.formValue.shipmentCorporation);
+    // this.f.realBeneficiary.setValue(this.formValue.realBeneficiary);
   }
 
   get f() {

@@ -1,7 +1,7 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TranslateModule } from '@ngx-translate/core';
 import { InlineSVGModule } from 'ng-inline-svg';
@@ -117,6 +117,15 @@ import { AccountsComponent } from './OAAdmin/Admin/accounts/accounts.component';
 import { AccountmodalComponent } from './OAAdmin/Admin/accounts/accountmodal/accountmodal.component';
 import { Accountstep1Component } from './OAAdmin/Admin/accounts/accountmodal/steps/accountstep1/accountstep1.component';
 import { Accountstep2Component } from './OAAdmin/Admin/accounts/accountmodal/steps/accountstep2/accountstep2.component';
+import { FinancingComponent } from './OAAdmin/OAPF/financing/financing.component';
+import { FinancingmodalComponent } from './OAAdmin/OAPF/financing/financingmodal/financingmodal.component';
+import { Financingstep1Component } from './OAAdmin/OAPF/financing/financingmodal/steps/financingstep1/financingstep1.component';
+import { Financingstep2Component } from './OAAdmin/OAPF/financing/financingmodal/steps/financingstep2/financingstep2.component';
+import { SbrmodalComponent } from './OAAdmin/OAPF/common/sbrmodal/sbrmodal.component';
+import { InvoiceDOComponent } from './OAAdmin/OAPF/common/invoice-do/invoice-do.component';
+import { Financingstep3Component } from './OAAdmin/OAPF/financing/financingmodal/steps/financingstep3/financingstep3.component';
+
+
 function appInitializer(authService: AuthService) {
   return () => {
     return new Promise((resolve) => {
@@ -196,7 +205,14 @@ function appInitializer(authService: AuthService) {
     AccountsComponent,
     AccountmodalComponent,
     Accountstep1Component,
-    Accountstep2Component
+    Accountstep2Component,
+    FinancingComponent,
+    FinancingmodalComponent,
+    Financingstep1Component,
+    Financingstep2Component,
+    SbrmodalComponent,
+    InvoiceDOComponent,
+    Financingstep3Component
 
   ],
   imports: [

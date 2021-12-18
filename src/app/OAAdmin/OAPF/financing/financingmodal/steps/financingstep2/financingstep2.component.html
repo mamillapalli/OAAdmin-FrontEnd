@@ -1,0 +1,158 @@
+<div class="pb-15 pb-lg-8">
+  <h3 class="fw-bolder text-dark">Finance Info</h3>
+</div>
+<div [formGroup]="financingForm">
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Currency & Amount</label>
+      <div class="row fv-row">
+        <div class="col-4">
+          <select
+            class="form-control form-control-lg form-control-solid"
+            name="financeCurrency"
+            formControlName="financeCurrency" [class.is-invalid]="isControlInvalid('financeCurrency')"
+            [class.is-valid]="isControlValid('financeCurrency')">
+            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+          </select>
+        </div>
+        <div class="col-8">
+          <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+                 placeholder="Finance Amount" name="financeAmount" [class.is-invalid]="isControlInvalid('financeAmount')"
+                 [class.is-valid]="isControlValid('financeAmount')" formControlName="financeAmount"/>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <label>Max Finance Percentage</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Max Finance Percentage" name="maxFinancePercentage"
+             [class.is-invalid]="isControlInvalid('maxFinancePercentage')"
+             [class.is-valid]="isControlValid('maxFinancePercentage')" formControlName="maxFinancePercentage"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Interest Charge Type</label>
+      <select
+        class="form-control form-control-lg form-control-solid"
+        name="interestChargeType" [class.is-invalid]="isControlInvalid('interestChargeType')"
+        [class.is-valid]="isControlValid('interestChargeType')"
+        formControlName="interestChargeType">
+        <option value="UPFRONT">UpFront</option>
+      </select>
+    </div>
+    <div class="col-lg-3">
+      <label>Interest Rate Type</label>
+      <select
+        class="form-control form-control-lg form-control-solid"
+        name="interestRateType" [class.is-invalid]="isControlInvalid('interestRateType')"
+        [class.is-valid]="isControlValid('interestRateType')"
+        formControlName="interestRateType">
+        <option value="FIXEDRATE">Fixed Rate</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Interest Rate</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Interest Rate" name="interestRate" [class.is-invalid]="isControlInvalid('interestRate')"
+             [class.is-valid]="isControlValid('interestRate')" formControlName="interestRate"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Interest Margin</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Interest Margin" name="interestMargin" [class.is-invalid]="isControlInvalid('interestMargin')"
+             [class.is-valid]="isControlValid('interestMargin')" formControlName="interestMargin"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Value Date</label>
+      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Value Date" name="valueDate"
+             [class.is-invalid]="isControlInvalid('valueDate')"
+             [class.is-valid]="isControlValid('valueDate')" formControlName="valueDate"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Grace Days</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Grace Days" name="graceDays"
+             [class.is-invalid]="isControlInvalid('graceDays')"
+             [class.is-valid]="isControlValid('graceDays')" formControlName="graceDays"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Financing Interest Rate</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Financing Interest Rate" name="financingInterestRate"
+             [class.is-invalid]="isControlInvalid('financingInterestRate')"
+             [class.is-valid]="isControlValid('financingInterestRate')" formControlName="financingInterestRate"/>
+    </div>
+    <div class="col-lg-3">
+      <label>UpFront Interest Amount</label>
+      <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="UpFront Interest Amount" name="upfrontInterestAmount"
+             [class.is-invalid]="isControlInvalid('upfrontInterestAmount')"
+             [class.is-valid]="isControlValid('upfrontInterestAmount')" formControlName="upfrontInterestAmount"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Total Available Currency & Amount</label>
+      <div class="row fv-row">
+        <div class="col-4">
+          <select
+            class="form-control form-control-lg form-control-solid"
+            name="totalAvailableCurrency"
+            formControlName="totalAvailableCurrency" [class.is-invalid]="isControlInvalid('totalAvailableCurrency')"
+            [class.is-valid]="isControlValid('totalAvailableCurrency')">
+            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+          </select>
+        </div>
+        <div class="col-8">
+          <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+                 placeholder="Total Available Amount" name="totalAvailableAmount"
+                 [class.is-invalid]="isControlInvalid('totalAvailableAmount')"
+                 [class.is-valid]="isControlValid('totalAvailableAmount')" formControlName="totalAvailableAmount"/>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <label>To Seller Currency & Amount</label>
+      <div class="row fv-row">
+        <div class="col-4">
+          <select
+            class="form-control form-control-lg form-control-solid"
+            name="toSellerCurrency"
+            formControlName="toSellerCurrency" [class.is-invalid]="isControlInvalid('toSellerCurrency')"
+            [class.is-valid]="isControlValid('toSellerCurrency')">
+            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+          </select>
+        </div>
+        <div class="col-8">
+          <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+                 placeholder="To Seller Amount" name="toSellerAmount"
+                 [class.is-invalid]="isControlInvalid('toSellerAmount')"
+                 [class.is-valid]="isControlValid('toSellerAmount')" formControlName="toSellerAmount"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Debit Account</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Debit Account" name="debitAccount" [class.is-invalid]="isControlInvalid('debitAccount')"
+             [class.is-valid]="isControlValid('debitAccount')" formControlName="debitAccount"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Credit Account</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Credit Account" name="creditAccount" [class.is-invalid]="isControlInvalid('creditAccount')"
+             [class.is-valid]="isControlValid('creditAccount')" formControlName="creditAccount"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Finance Due Date</label>
+      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Finance Due Date" name="financeDueDate"
+             [class.is-invalid]="isControlInvalid('financeDueDate')"
+             [class.is-valid]="isControlValid('financeDueDate')" formControlName="financeDueDate"/>
+    </div>
+  </div>
+</div>

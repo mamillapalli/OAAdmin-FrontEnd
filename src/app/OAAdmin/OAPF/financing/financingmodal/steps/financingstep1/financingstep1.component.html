@@ -1,0 +1,165 @@
+<div [formGroup]="financingForm" id="form">
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label class="form-label required">Finance Id</label>
+      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="Finance Id" name="financeId" [class.is-invalid]="isControlInvalid('financeId')"
+             [class.is-valid]="isControlValid('financeId')" formControlName="financeId"/>
+    </div>
+    <div class="col-lg-3">
+      <label class="form-label required">SBR Reference Number</label>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <button
+            class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5 btn rounded-pill border-0 ml-n5"
+            type="button"
+            (click)="openSBRDialog()">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+        <input type="text" class="form-control form-control-sm form-control-solid" id="sbrReferenceId"
+               name="sbrReferenceId"
+               placeholder="SBR Reference Number" formControlName="sbrReferenceId"
+               [class.is-invalid]="isControlInvalid('sbrReferenceId')"
+               [class.is-valid]="isControlValid('sbrReferenceId')">
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <label class="form-label required">Agreement Number</label>
+      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="Agreement Number" name="agreementId" [class.is-invalid]="isControlInvalid('agreementId')"
+             [class.is-valid]="isControlValid('agreementId')" formControlName="agreementId"/>
+    </div>
+    <div class="col-lg-3">
+      <label class="form-label required">Anchor Id</label>
+      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="Anchor Id" name="buyerId" [class.is-invalid]="isControlInvalid('buyerId')"
+             [class.is-valid]="isControlValid('buyerId')" formControlName="buyerId"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label class="form-label required">Anchor Name</label>
+      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="Anchor Name" name="buyerName" [class.is-invalid]="isControlInvalid('buyerName')"
+             [class.is-valid]="isControlValid('buyerName')" formControlName="buyerName"/>
+    </div>
+    <div class="col-lg-3">
+      <label class="form-label required">CounterParty Id</label>
+      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="CounterParty Id" name="sellerId" [class.is-invalid]="isControlInvalid('sellerId')"
+             [class.is-valid]="isControlValid('sellerId')" formControlName="sellerId"/>
+    </div>
+    <div class="col-lg-3">
+      <label class="form-label required">CounterParty Name</label>
+      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="CounterParty Name" name="sellerName" [class.is-invalid]="isControlInvalid('sellerName')"
+             [class.is-valid]="isControlValid('sellerName')" formControlName="sellerName"/>
+    </div>
+    <div class="col-lg-3">
+      <label class="form-label required">Financing Type</label>
+      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="Financing Type" name="financingType" [class.is-invalid]="isControlInvalid('financingType')"
+             [class.is-valid]="isControlValid('financingType')" formControlName="financingType"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label class="form-label required">Business Type</label>
+      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="Business Type" name="businessType" [class.is-invalid]="isControlInvalid('businessType')"
+             [class.is-valid]="isControlValid('businessType')" formControlName="businessType"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Finance Due Date</label>
+      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Finance Due Date" name="date" [class.is-invalid]="isControlInvalid('financeDueDate')"
+             [class.is-valid]="isControlValid('financeDueDate')" formControlName="financeDueDate"
+             (change)="invoiceSelected = true"/>
+    </div>
+    <div class="col-lg-3">
+      <label></label>
+      <div>
+        <a class="btn btn-sm btn-primary fw-bolder" (click)="getInvoicesDate()" *ngIf="invoiceSelected">Get Invoice</a>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <mat-table [dataSource]="dataSource" matSort style="width: 100%;height: 80%"
+                 class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="checked">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="invoiceNumber" class="min-w-150px">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">INV No
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.invoiceNumber}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="currency">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">CCY</mat-header-cell>
+          <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.currency}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Amount
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.amount }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dueDate">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Due Date
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.dueDate | date: 'MM/dd/YYY' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Status
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.status }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions" class="d-flex justify-content-end flex-shrink-0">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <span>
+            <a title="Delete" (click)="openInvoiceDelete(element)"
+               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                      class="svg-icon svg-icon-3"></span>
+              </a>
+          </span>
+          </mat-cell>
+        </ng-container>
+
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" [style.min-height]="0"></mat-header-row>
+        <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+      <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]" >
+      </mat-paginator>
+      <!-- end::Table -->
+    </div>
+  </div>
+</div>

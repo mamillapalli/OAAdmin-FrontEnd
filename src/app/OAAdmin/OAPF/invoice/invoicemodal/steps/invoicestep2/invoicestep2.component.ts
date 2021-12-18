@@ -20,6 +20,7 @@ export class Invoicestep2Component implements OnInit {
   @Input() defaultValues: Partial<Invoice>;
   private unsubscribe: Subscription[] = [];
   @Input('formValue') formValue :  any;
+  @Input('formElement') formElement :  any;
   @Input() mode :  any;
   @ViewChild('dp') dp: NgbDatepicker;
   public currencyList:any = currencyList;

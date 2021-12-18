@@ -30,8 +30,9 @@ export class InvoicemodalComponent implements OnInit {
   );
   private unsubscribe: Subscription[] = [];
   cInvoice: cInvoice
-  @Input() mode: any;
+  @Output() mode: any;
   @Output() formValue: any
+  @Output() formElement: any
   fromParent: any;
   checkNextStage = true;
 
@@ -49,6 +50,7 @@ export class InvoicemodalComponent implements OnInit {
   }
 
   updateAccount = (part: Partial<Invoice>, isFormValid: boolean) => {
+    this.formElement = this.account$;
     const currentAccount = this.account$.value;
     const updatedAccount = { ...currentAccount, ...part };
     this.account$.next(updatedAccount);
@@ -62,39 +64,42 @@ export class InvoicemodalComponent implements OnInit {
     if (nextStep > this.formsCount) {
       return;
     }
+    console.log('this is form next step elemet is '+this.formElement)
     if (this.currentStep$.value === this.formsCount - 1) {
       this.cInvoice = new cInvoice();
-      this.cInvoice.invoiceNumber = this.account$.value.invoiceNumber
-      this.cInvoice.sbrReferenceId = this.account$.value.sbrReferenceId
-      this.cInvoice.agreementId = this.account$.value.agreementId
-      this.cInvoice.anchorId = this.account$.value.anchorId
-      this.cInvoice.counterPartyId = this.account$.value.counterPartyId
-      this.cInvoice.documentType = this.account$.value.documentType
-      this.cInvoice.documentNumber = this.account$.value.documentNumber
-      this.cInvoice.currency = this.account$.value.currency
-      this.cInvoice.amount = this.account$.value.amount
-      this.cInvoice.date = formatDate(this.account$.value.date, 'YYYY-MM-ddThh:mm:ss.s', 'en')
-      this.cInvoice.valueDate = formatDate(this.account$.value.valueDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
-      this.cInvoice.dueDate = formatDate(this.account$.value.dueDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
-      this.cInvoice.agreedPaymentDate = formatDate(this.account$.value.agreedPaymentDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
-      this.cInvoice.portOfLoading = this.account$.value.portOfLoading
-      this.cInvoice.portOfDischarge = this.account$.value.portOfDischarge
-      this.cInvoice.shipmentCorporation = this.account$.value.shipmentCorporation
-      this.cInvoice.realBeneficiary = this.account$.value.realBeneficiary
-      this.cInvoice.financingRate = this.account$.value.financingRate
-      this.cInvoice.financingInterestAmount = this.account$.value.financingInterestAmount
-      this.cInvoice.rebateAmount = this.account$.value.rebateAmount
-      this.cInvoice.netFinancingInterestAmount = this.account$.value.netFinancingInterestAmount
-      this.cInvoice.financeValueDate = this.account$.value.financeValueDate
-      this.cInvoice.financeDueDate = this.account$.value.financeDueDate
-      this.cInvoice.financeId = this.account$.value.financeId
-      this.cInvoice.financingAmount = this.account$.value.financingAmount
-      this.cInvoice.financingBalance = this.account$.value.financingBalance
-      this.cInvoice.paidBy = this.account$.value.paidBy
-      this.cInvoice.paymentDate = this.account$.value.paymentDate
-      this.cInvoice.paymentAmount = this.account$.value.paymentAmount
-      this.cInvoice.principalPaid = this.account$.value.principalPaid
-      this.cInvoice.interestPaid = this.account$.value.interestPaid
+      this.cInvoice = this.account$.value;
+
+      // this.cInvoice.invoiceNumber = this.account$.value.invoiceNumber
+      // this.cInvoice.sbrReferenceId = this.account$.value.sbrReferenceId
+      // this.cInvoice.agreementId = this.account$.value.agreementId
+      // this.cInvoice.anchorId = this.account$.value.anchorId
+      // this.cInvoice.counterPartyId = this.account$.value.counterPartyId
+      // this.cInvoice.documentType = this.account$.value.documentType
+      // this.cInvoice.documentNumber = this.account$.value.documentNumber
+      // this.cInvoice.currency = this.account$.value.currency
+      // this.cInvoice.amount = this.account$.value.amount
+      // this.cInvoice.date = formatDate(this.account$.value.date, 'YYYY-MM-ddThh:mm:ss.s', 'en')
+      // this.cInvoice.valueDate = formatDate(this.account$.value.valueDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
+      // this.cInvoice.dueDate = formatDate(this.account$.value.dueDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
+      // this.cInvoice.agreedPaymentDate = formatDate(this.account$.value.agreedPaymentDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
+      // this.cInvoice.portOfLoading = this.account$.value.portOfLoading
+      // this.cInvoice.portOfDischarge = this.account$.value.portOfDischarge
+      // this.cInvoice.shipmentCorporation = this.account$.value.shipmentCorporation
+      // this.cInvoice.realBeneficiary = this.account$.value.realBeneficiary
+      // this.cInvoice.financingRate = this.account$.value.financingRate
+      // this.cInvoice.financingInterestAmount = this.account$.value.financingInterestAmount
+      // this.cInvoice.rebateAmount = this.account$.value.rebateAmount
+      // this.cInvoice.netFinancingInterestAmount = this.account$.value.netFinancingInterestAmount
+      // this.cInvoice.financeValueDate = this.account$.value.financeValueDate
+      // this.cInvoice.financeDueDate = this.account$.value.financeDueDate
+      // this.cInvoice.financeId = this.account$.value.financeId
+      // this.cInvoice.financingAmount = this.account$.value.financingAmount
+      // this.cInvoice.financingBalance = this.account$.value.financingBalance
+      // this.cInvoice.paidBy = this.account$.value.paidBy
+      // this.cInvoice.paymentDate = this.account$.value.paymentDate
+      // this.cInvoice.paymentAmount = this.account$.value.paymentAmount
+      // this.cInvoice.principalPaid = this.account$.value.principalPaid
+      // this.cInvoice.interestPaid = this.account$.value.interestPaid
       //this.cInvoice.status = this.account$.value.status
 
       //const rmNewRequest = JSON.stringify(this.cInvoice)
