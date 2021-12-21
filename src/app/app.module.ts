@@ -124,7 +124,17 @@ import { Financingstep2Component } from './OAAdmin/OAPF/financing/financingmodal
 import { SbrmodalComponent } from './OAAdmin/OAPF/common/sbrmodal/sbrmodal.component';
 import { InvoiceDOComponent } from './OAAdmin/OAPF/common/invoice-do/invoice-do.component';
 import { Financingstep3Component } from './OAAdmin/OAPF/financing/financingmodal/steps/financingstep3/financingstep3.component';
-
+import { NgxSpinnerModule } from "ngx-spinner";
+import { FilterComponent } from './OAAdmin/OAPF/common/filter/filter.component';
+import { SettlementComponent } from './OAAdmin/OAPF/settlement/settlement.component';
+import {CdkTableExporterModule, MatTableExporterModule} from "mat-table-exporter";
+import { SettlementmodalComponent } from './OAAdmin/OAPF/settlement/settlementmodal/settlementmodal.component';
+import { Settlementstep1Component } from './OAAdmin/OAPF/settlement/settlementmodal/steps/settlementstep1/settlementstep1.component';
+import { Settlementstep2Component } from './OAAdmin/OAPF/settlement/settlementmodal/steps/settlementstep2/settlementstep2.component';
+import { Settlementstep3Component } from './OAAdmin/OAPF/settlement/settlementmodal/steps/settlementstep3/settlementstep3.component';
+import { FinancemodalComponent } from './OAAdmin/OAPF/common/financemodal/financemodal.component';
+import {CURRENCY_MASK_CONFIG, CurrencyMaskConfig, CurrencyMaskInputMode, NgxCurrencyModule} from "ngx-currency";
+import * as moment from "moment";
 
 function appInitializer(authService: AuthService) {
   return () => {
@@ -133,6 +143,18 @@ function appInitializer(authService: AuthService) {
     });
   };
 }
+
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+  allowZero: false,
+  nullable: false,
+  align: "right",
+  allowNegative: true,
+  decimal: ".",
+  precision: 2,
+  prefix: "",
+  suffix: "",
+  thousands: ","
+};
 
 @NgModule({
   declarations: [
@@ -212,7 +234,14 @@ function appInitializer(authService: AuthService) {
     Financingstep2Component,
     SbrmodalComponent,
     InvoiceDOComponent,
-    Financingstep3Component
+    Financingstep3Component,
+    FilterComponent,
+    SettlementComponent,
+    SettlementmodalComponent,
+    Settlementstep1Component,
+    Settlementstep2Component,
+    Settlementstep3Component,
+    FinancemodalComponent
 
   ],
   imports: [
@@ -270,6 +299,10 @@ function appInitializer(authService: AuthService) {
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     NgbModule,
+    NgxSpinnerModule,
+    MatTableExporterModule,
+    CdkTableExporterModule,
+    NgxCurrencyModule
   ],
   providers: [
     {
@@ -278,7 +311,8 @@ function appInitializer(authService: AuthService) {
       multi: true,
       deps: [AuthService],
     },
-    DatePipe
+    DatePipe,
+    { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
   ],
   bootstrap: [AppComponent],
 })
