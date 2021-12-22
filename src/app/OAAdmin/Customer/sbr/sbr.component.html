@@ -1,0 +1,113 @@
+<div class="card-header border-0 pt-5">
+  <h3 class="card-title align-items-start flex-column">
+    <span class="card-label fw-bolder fs-3 mb-1">SBR Dashboard</span>
+  </h3>
+  <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+    title="Click to add a SBR">
+    <a class="btn btn-sm btn-light-primary" (click)="newSBR()">
+      <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+      New SBR
+    </a>
+  </div>
+</div>
+<!-- end::Header -->
+<!-- begin::Body -->
+<div class="card-body py-3">
+  <!-- begin::Table container -->
+  <ng-container *ngIf="isLoading">
+    <div class="overlay-layer">
+      <div class="spinner spinner-lg spinner-primary"></div>
+    </div>
+  </ng-container>
+
+
+  <div class="table-responsive">
+    <!-- begin::Table -->
+    <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+      class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="sbrId" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Sbr Reference No
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.sbrId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="anchorCustomerContactName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Customer Name
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.anchorCustomerContactName}}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="anchorPartyAccountId">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Anchor Customer Id
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.anchorPartyAccountId}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="recourseFlag">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Recourse Flag
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.recourseFlag}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions" class="d-flex justify-content-end flex-shrink-0">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span>
+            <a title="modify" (click)="openSBRDialog(element,'edit')"
+              class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+              <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
+            </a>
+          </span>
+          <span>
+            <a title="view" (click)="openSBRDialog(element,'view')"
+              class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+              <span [inlineSVG]="'./assets/media/icons/duotune/general/gen019.svg'" class="svg-icon svg-icon-3"></span>
+            </a>
+          </span>
+          <span>
+            <a title="Authorize" (click)="openSBRDialog(element,'auth')"
+              class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+              <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'" class="svg-icon svg-icon-2"></span>
+            </a>
+          </span>
+          <span>
+            <a title="Delete" (click)="openSBRDelete(deleteContent, element)"
+              class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+              <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
+            </a>
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+    </mat-paginator>
+    <!-- end::Table -->
+  </div>
+  <!-- end::Table container -->
+</div>
+<ng-template #deleteContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">Ã—</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure to delete this?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('yes')">Yes</button>
+  </div>
+</ng-template>
+<!-- begin::Body -->
