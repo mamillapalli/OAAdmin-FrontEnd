@@ -1,0 +1,186 @@
+<div class="pb-15 pb-lg-8">
+  <h3 class="fw-bolder text-dark">SBR Info</h3>
+</div>
+<div [formGroup]="form">
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Sbr Reference Number</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Sbr Reference Number" name="sbrId" [class.is-invalid]="isControlInvalid('sbrId')"
+             [class.is-valid]="isControlValid('sbrId')" formControlName="sbrId"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Anchor Customer Id</label>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <button
+            class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5 btn rounded-pill border-0 ml-n5"
+            type="button"
+            (click)="openCustomerDialog()">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+        <input type="text" class="form-control form-control-solid" id="anchorCustomer" name="anchorCustomer"
+               placeholder="Anchor Customer" formControlName="anchorCustomer"
+               [class.is-invalid]="isControlInvalid('anchorCustomer')"
+               [class.is-valid]="isControlValid('anchorCustomer')">
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <label>Direct Contact Flag</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Direct Contact Flag" name="directContactFlag" [class.is-invalid]="isControlInvalid('directContactFlag')"
+             [class.is-valid]="isControlValid('directContactFlag')" formControlName="directContactFlag"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Recourse Flag</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Recourse Flag" name="recourseFlag" [class.is-invalid]="isControlInvalid('recourseFlag')"
+             [class.is-valid]="isControlValid('recourseFlag')" formControlName="recourseFlag"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Limit Type Flag</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Limit Type Flag" name="limitTypeFlag" [class.is-invalid]="isControlInvalid('limitTypeFlag')"
+             [class.is-valid]="isControlValid('limitTypeFlag')" formControlName="limitTypeFlag"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Nature of Business</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="natureOfBusiness" name="natureOfBusiness" [class.is-invalid]="isControlInvalid('natureOfBusiness')"
+             [class.is-valid]="isControlValid('natureOfBusiness')" formControlName="natureOfBusiness"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Goods Description</label>
+      <input type="goodsDescription" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="goodsDescription" name="goodsDescription"
+             [class.is-invalid]="isControlInvalid('goodsDescription')"
+             [class.is-valid]="isControlValid('goodsDescription')" formControlName="goodsDescription"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Applied Limit Currency & Amount</label>
+      <div class="row fv-row">
+        <div class="col-4">
+          <select
+            class="form-control form-control-lg form-control-solid"
+            name="appliedLimitCurrency"
+            formControlName="appliedLimitCurrency" [class.is-invalid]="isControlInvalid('appliedLimitCurrency')"
+            [class.is-valid]="isControlValid('appliedLimitCurrency')">
+            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+          </select>
+        </div>
+        <div class="col-8">
+          <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
+                 placeholder="appliedLimitAmount" name="appliedLimitAmount" [class.is-invalid]="isControlInvalid('appliedLimitAmount')"
+                 [class.is-valid]="isControlValid('appliedLimitAmount')" formControlName="appliedLimitAmount"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Transaction Date</label>
+      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Transaction Date" name="transactionDate" [class.is-invalid]="isControlInvalid('transactionDate')"
+             [class.is-valid]="isControlValid('transactionDate')" formControlName="transactionDate"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Payment Term Days  </label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="Limit Type Flag" name="paymentTermsDays" [class.is-invalid]="isControlInvalid('paymentTermsDays')"
+             [class.is-valid]="isControlValid('paymentTermsDays')" formControlName="paymentTermsDays"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Auto Financing Availability</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="autoFinanceAvailability" name="autoFinanceAvailability" [class.is-invalid]="isControlInvalid('autoFinanceAvailability')"
+             [class.is-valid]="isControlValid('autoFinanceAvailability')" formControlName="autoFinanceAvailability"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Auto Financing</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="autoFinancing" name="autoFinancing"
+             [class.is-invalid]="isControlInvalid('autoFinancing')"
+             [class.is-valid]="isControlValid('autoFinancing')" formControlName="autoFinancing"/>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Anchor Party Account Id</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="anchorPartyAccountId" name="anchorPartyAccountId"
+             [class.is-invalid]="isControlInvalid('anchorPartyAccountId')"
+             [class.is-valid]="isControlValid('anchorPartyAccountId')" formControlName="anchorPartyAccountId"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Counter Party Account Id</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="counterPartyAccountId" name="counterPartyAccountId"
+             [class.is-invalid]="isControlInvalid('counterPartyAccountId')"
+             [class.is-valid]="isControlValid('counterPartyAccountId')" formControlName="counterPartyAccountId"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Payment Terms Condition</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="paymentTermsCondition" name="paymentTermsCondition"
+             [class.is-invalid]="isControlInvalid('paymentTermsCondition')"
+             [class.is-valid]="isControlValid('paymentTermsCondition')" formControlName="paymentTermsCondition"/>
+    </div>
+    <div class="col-lg-3">
+      <label>Commercial Contract Details</label>
+      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
+             placeholder="commercialContractDetails" name="commercialContractDetails"
+             [class.is-invalid]="isControlInvalid('commercialContractDetails')"
+             [class.is-valid]="isControlValid('commercialContractDetails')" formControlName="commercialContractDetails"/>
+    </div>
+  </div>
+</div>
+<ng-template #CustContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Customer Information</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+                 class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-3">
+
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+        </mat-form-field>
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="customerId" class="min-w-150px">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Customer Id</mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.customerId}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="name" class="min-w-150px">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Customer Name
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="addressLine1" class="min-w-150px">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Customer Address
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.addressLine1}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row (click)="c(row)" *matRowDef="let row; let index = dataIndex; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+      <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+      </mat-paginator>
+      <!-- end::Table -->
+    </div>
+  </div>
+</ng-template>
+
