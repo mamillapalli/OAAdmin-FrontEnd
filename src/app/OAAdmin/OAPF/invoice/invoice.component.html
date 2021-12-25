@@ -2,25 +2,8 @@
   <h3 class="card-title align-items-start flex-column">
     <span class="card-label fw-bolder fs-3 mb-1">Invoices Dashboard</span>
   </h3>
-  <!--  <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"-->
-  <!--       title="Click to add a Invoice">-->
-  <!--    <a class="btn btn-sm btn-light-primary" (click)="newInvoices()">-->
-  <!--      <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>-->
-  <!--      New Invoice-->
-  <!--    </a>-->
-  <!--  </div>-->
-  <!--  <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"-->
-  <!--       title="Click to add a Invoice">-->
-  <!--    <a class="btn btn-sm btn-light-primary" (click)="uploadInvoice(cUploadInvoices)">-->
-  <!--      <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>-->
-  <!--      Upload Invoices-->
-  <!--    </a>-->
-  <!--  </div>-->
-  <!-- begin::Actions  -->
   <div class="d-flex align-items-center py-1">
-    <!-- begin::Wrapper  -->
     <div class="me-4">
-      <!-- begin::Menu  -->
       <a
         class="
           btn btn-sm btn-flex btn-light btn-active-primary
@@ -29,7 +12,7 @@
         "
         data-kt-menu-trigger="click"
         data-kt-menu-placement="bottom-end"
-        data-kt-menu-flip="top-end"
+        data-kt-menu-flip="top-end" (click)="openFilter()"
       >
         <span
           [inlineSVG]="'./assets/media/icons/duotune/general/gen031.svg'"
@@ -37,12 +20,7 @@
         ></span>
         Filter
       </a>
-
-      <!-- end::Menu  -->
     </div>
-    <!-- end::Wrapper  -->
-
-    <!-- begin::Button  -->
     <a
       class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder cursor-pointer"
       data-bs-toggle="modal"
@@ -62,23 +40,12 @@
     >
       Upload Invoice
     </a>
-    <!-- end::Button  -->
   </div>
-  <!-- end::Actions  -->
 </div>
-<!-- end::Header -->
-<!-- begin::Body -->
+
 <div class="card-body py-3">
-  <!-- begin::Table container -->
-  <ng-container *ngIf="isLoading">
-    <div class="overlay-layer">
-      <div class="spinner spinner-lg spinner-primary"></div>
-    </div>
-  </ng-container>
-
-
+  <ngx-spinner></ngx-spinner>
   <div class="table-responsive">
-    <!-- begin::Table -->
     <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
                class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
 
@@ -86,25 +53,16 @@
         <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
       </mat-form-field>
 
-      <!-- ID Column -->
       <ng-container matColumnDef="invoiceNumber" class="min-w-150px">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">INV No</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.invoiceNumber}} </mat-cell>
       </ng-container>
-
-      <!--      &lt;!&ndash; Progress Column &ndash;&gt;-->
-      <!--      <ng-container matColumnDef="invoiceNumber">-->
-      <!--        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> First Name-->
-      <!--        </mat-header-cell>-->
-      <!--        <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.invoiceNumber}} </mat-cell>-->
-      <!--      </ng-container>-->
 
       <ng-container matColumnDef="sbrReferenceId">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">SBR No</mat-header-cell>
         <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.sbrReferenceId}} </mat-cell>
       </ng-container>
 
-      <!-- Name Column -->
       <ng-container matColumnDef="agreementId">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Agreement No
         </mat-header-cell>
@@ -112,7 +70,6 @@
         </mat-cell>
       </ng-container>
 
-      <!-- Name Column -->
       <ng-container matColumnDef="currency">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">CCY</mat-header-cell>
         <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.currency}} </mat-cell>
@@ -134,16 +91,10 @@
         <mat-cell *matCellDef="let row"> {{ row.status }} </mat-cell>
       </ng-container>
 
-      <!--      <ng-container matColumnDef="transactionStatus">-->
-      <!--        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">TransactionStatus</mat-header-cell>-->
-      <!--        <mat-cell *matCellDef="let row"> {{ row.transactionStatus }} </mat-cell>-->
-      <!--      </ng-container>-->
-
-
-      <ng-container matColumnDef="actions" class="d-flex justify-content-end flex-shrink-0">
+      <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions
         </mat-header-cell>
-        <mat-cell *matCellDef="let element">
+        <mat-cell *matCellDef="let element" class="action-link">
         <span>
           <a title="modify" (click)="openInvoiceDialog(element,'edit')"
              class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
@@ -168,22 +119,20 @@
         </span>
           <span>
             <a title="Delete" (click)="openInvoiceDelete(deleteContent, element)"
-               *ngIf="element.transactionStatus === 'MASTER' || element.transactionStatus === 'PENDING'"
                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
             >
                 <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
-                      class="svg-icon svg-icon-3"></span>
+                      class="svg-icon svg-icon-3" color="warn"></span>
               </a>
           </span>
         </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;"
-               [style.background-color]="row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'">
+      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;">
       </mat-row>
     </mat-table>
-    <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]" showFirstLastButtons>
     </mat-paginator>
     <!-- end::Table -->
   </div>
@@ -221,9 +170,9 @@
         </label>
       </div>
 
-      <div class="col-4">
+      <div class="col-4 text-right">
         <button class="btn btn-success btn-sm" [disabled]="!selectedFiles" (click)="upload()">
-          Upload
+          Upload file
         </button>
       </div>
     </div>

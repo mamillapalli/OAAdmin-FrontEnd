@@ -54,9 +54,10 @@ export class invoiceService {
       );
     } else if (methodType === 'loanDueDate') {
       let httpParams = new HttpParams();
-      httpParams = httpParams.append('financeDueDate', data);
+      httpParams = httpParams.append('dueDate', data);
       httpParams = httpParams.append('transactionStatus', 'MASTER');
-      return this.http.get<any>('/oapf/api/v1/invoices', {params:httpParams , headers: httpHeaders}).pipe(
+      httpParams = httpParams.append('status', 'FINANCE_READY');
+      return this.http.get<any>('/oapf/api/v1/invoices', {params: httpParams, headers: httpHeaders}).pipe(
         catchError(err => {
           this._errorMessage.next(err);
           console.error(err);
@@ -156,11 +157,10 @@ export class invoiceService {
   errorHandle(error: { error: { message: string; }; status: any; message: any; }) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
-      // Get client-side error
       errorMessage = error.error.message;
     } else {
       // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      errorMessage = `Error Code: ${error.status}\n Message: ${error.message}`;
     }
     console.log(errorMessage);
     return throwError(errorMessage);
@@ -189,6 +189,20 @@ export class invoiceService {
     formData.append('docType', 'Invoice');
     console.log(formData)
     return this.http.post<any>('/oapf/api/v1/invoices/uploadFile', formData, {headers: httpHeaders})
+      .pipe(
+        retry(1),
+        catchError(this.errorHandle)
+      )
+  }
+
+  uploadFileStatus(fileId:any): Observable<HttpEvent<any>> {
+    this.authToken = this.authService.getAuthFromLocalStorage();
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${this.authToken?.jwt}`,
+    });
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('fileId', fileId);
+      return this.http.get<any>('/oapf/api/v1/invoices/uploadFileStatus',{params: httpParams, headers: httpHeaders})
       .pipe(
         retry(1),
         catchError(this.errorHandle)

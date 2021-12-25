@@ -15,3 +15,4 @@ app.use((req, res, next) => {
   // Pass to next layer of middleware
   next();
 });
+require('angular-dynamic-number');

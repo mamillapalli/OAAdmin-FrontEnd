@@ -25,7 +25,7 @@ import {AccountmodalComponent} from "./accountmodal/accountmodal.component";
 export class AccountsComponent implements OnInit {
 
   dataSource: any = new MatTableDataSource<Corporateadmin>();
-  displayedColumns: string[] = ['accountId', 'accountName', 'accountType', 'accountCurrency', 'actions'];
+  displayedColumns: string[] = ['accountId', 'accountName', 'accountType', 'accountCurrency'];
   authToken: any;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;

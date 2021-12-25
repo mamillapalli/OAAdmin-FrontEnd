@@ -17,6 +17,8 @@ import {environment} from "../../../../environments/environment";
 import {invoiceService} from "../../shared/OAPF/invoice.service";
 import {InvoicemodalComponent} from "./invoicemodal/invoicemodal.component";
 import Swal from "sweetalert2";
+import {NgxSpinnerService} from "ngx-spinner";
+import {FilterComponent} from "../common/filter/filter.component";
 
 const API_USERS_URL = `${environment.apiUrl}`;
 
@@ -48,7 +50,14 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     firstName: ''
   };
 
+  selectedFiles?: FileList;
+  currentFile?: File;
+  progress = 0;
+  message = '';
+  errorMsg = '';
+
   private subscriptions: Subscription[] = [];
+  isLoading$: any;
 
 
   constructor(public http: HttpClient,
@@ -56,7 +65,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
               public modalService: NgbModal,
               public notifyService: NotificationService,
               public invoiceServices: invoiceService,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,private spinner: NgxSpinnerService) {
   }
 
   ngOnInit(): void {
@@ -65,10 +74,13 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
   public getInvoices() {
     console.log('Get Invoices')
+    this.spinner.show();
     const sb = this.invoiceServices.getInvoice('', '', 'all').subscribe((res) => {
       this.dataSource.data = res;
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+      this.isLoading$ =false;
+      this.spinner.hide();
       this.dataSource.filterPredicate = this.createFilter();
     });
     this.subscriptions.push(sb);
@@ -211,55 +223,64 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     });
   }
 
-  //Upload Invoices Events
-  selectedFiles: any
-  progress: any;
-  currentFile: File;
-  message: any;
-  fileInfos: any;
-
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
   }
 
   upload(): void {
+    this.errorMsg = '';
+    this.message = '';
     this.progress = 0;
-    console.log(this.progress)
+
     if (this.selectedFiles) {
       const file: File | null = this.selectedFiles.item(0);
 
       if (file) {
         this.currentFile = file;
+
         this.invoiceServices.upload(this.currentFile).subscribe(
           (event: any) => {
             console.log(event)
-            if (event !== null && event !== '') {
-              Swal.fire({
-                title: 'Invoices uploaded successfully',
-                icon: 'success'
-              }).then((result) => {
-                if(result.value){
-                    this.modalService.dismissAll();
-                    this.getInvoices();
+            this.progress = Math.round(100 * 100  / 100);
+            if(event.fileId != null)
+            {
+              this.invoiceServices.uploadFileStatus(event.fileId).subscribe((res: any) => {
+                console.log(res)
+                if (res !== null) {
+                  let status = res
+                  Swal.fire({
+                    title: 'File Status is '+res.fileStatus,
+                    icon: 'success'
+                  });
+                } else {
+                  Swal.fire({
+                    title: 'Error is occurred.'+res,
+                    icon: 'error'
+                  });
                 }
-              });
-            } else {
-              Swal.fire({
-                title: 'Error is occurred.',
-                icon: 'error'
+              }, (error: { message: any }) => {
+                console.error('There was an error!', error);
+                Swal.fire({
+                  title: 'Error is occurred.'+error,
+                  icon: 'error'
+                });
+                return;
               });
             }
           },
           (err: any) => {
             console.log(err);
-            this.progress = 0;
-
-            if (err.error && err.error.message) {
-              this.message = err.error.message;
+            if (err.error && err.error.responseMessage) {
+              this.errorMsg = err.error.responseMessage;
             } else {
-              this.message = 'Could not upload the file!';
+              this.errorMsg = 'Error occurred while uploading a file!';
             }
-            //this.currentFile = undefined;
+            console.error('There was an error!', this.errorMsg);
+            Swal.fire({
+              title: 'Error is occurred.'+this.errorMsg,
+              icon: 'error'
+            });
+            this.currentFile = undefined;
           });
       }
 
@@ -267,5 +288,34 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     }
   }
 
-
+  openFilter() {
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalService.open(FilterComponent, this.modalOption).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+      if (result) {
+        console.log("row result is "+result)
+        console.log('test'+result.value)
+        // if (this.productForm.valid && this.productForm.value.quantities.length > 0) {
+        //   const sb = this.oaadminService.getAccounts(this.productForm, '', 'filter').subscribe((res) => {
+        //     this.dataSource.data = res;
+        //     this.dataSource.sort = this.sort;
+        //     this.dataSource.paginator = this.paginator;
+        //     this.dataSource.filterPredicate = this.createFilter();
+        //   });
+        //   this.subscriptions.push(sb);
+        // } else {
+        //   const sb = this.oaadminService.getAccounts(this.productForm, '', 'all').subscribe((res) => {
+        //     this.dataSource.data = res;
+        //     this.dataSource.sort = this.sort;
+        //     this.dataSource.paginator = this.paginator;
+        //     this.dataSource.filterPredicate = this.createFilter();
+        //   });
+        //   this.subscriptions.push(sb);
+        // }
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
 }

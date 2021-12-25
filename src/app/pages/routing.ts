@@ -13,6 +13,7 @@ import {AccountModule} from "../modules/account/account.module";
 import {AccountsComponent} from "../OAAdmin/Admin/accounts/accounts.component";
 import {FinancingComponent} from "../OAAdmin/OAPF/financing/financing.component";
 import {SettlementComponent} from "../OAAdmin/OAPF/settlement/settlement.component";
+import {ApprovalinvoicesModule} from "../OAAdmin/OAPF/approvalinvoices/approvalinvoices.module";
 
 const Routing: Routes = [
   {
@@ -47,11 +48,11 @@ const Routing: Routes = [
         (m) => m.WidgetsExamplesModule
       ),
   },
-  {
-    path: 'apps/chat',
-    loadChildren: () =>
-      import('../modules/apps/chat/chat.module').then((m) => m.ChatModule),
-  },
+  // {
+  //   path: 'apps/chat',
+  //   loadChildren: () =>
+  //     import('../modules/apps/chat/chat.module').then((m) => m.ChatModule),
+  // },
   {
     path: 'superadmin', // <= Page URL
     component: SuperAdminModuleComponent // <= Page component registration
@@ -108,6 +109,18 @@ const Routing: Routes = [
     path: 'OAPF/payments', // <= Page URL
     component: SettlementComponent // <= Page component registration
   },
+  // {
+  //   path: 'OAPF/approvalinvoices',
+  //   loadChildren: () =>
+  //     import('../OAAdmin/OAPF/approvalinvoices/approvalinvoices.module').then((m) => m.ApprovalinvoicesModule),
+  // },
+  {
+    path: 'approvalinvoices',
+    loadChildren: () =>
+      import('../OAAdmin/OAPF/approvalinvoices/approvalinvoices.module').then((m) => m.ApprovalinvoicesModule),
+  },
+
+
   {
     path: '',
     redirectTo: '/dashboard',

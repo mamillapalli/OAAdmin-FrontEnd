@@ -1,6 +1,5 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TranslateModule } from '@ngx-translate/core';
@@ -72,7 +71,6 @@ import { CorporatesmodalComponent } from './OAAdmin/Admin/corporates/corporatesm
 import {Corporatesstep1Component} from "./OAAdmin/Admin/corporates/corporatesmodal/corporatesmodalsteps/corporatesstep1/corporatesstep1.component";
 import {Corporatesstep2Component} from "./OAAdmin/Admin/corporates/corporatesmodal/corporatesmodalsteps/corporatesstep2/corporatesstep2.component";
 import {Corporatesstep3Component} from "./OAAdmin/Admin/corporates/corporatesmodal/corporatesmodalsteps/corporatesstep3/corporatesstep3.component";
-import {ToastrModule} from "ngx-toastr";
 import { BankuserComponent } from './OAAdmin/Admin/bankuser/bankuser.component';
 import { CorporateuserComponent } from './OAAdmin/Admin/corporateuser/corporateuser.component';
 import { CorporateusermodalComponent } from './OAAdmin/Admin/corporateuser/corporateusermodal/corporateusermodal.component';
@@ -134,7 +132,10 @@ import { Settlementstep2Component } from './OAAdmin/OAPF/settlement/settlementmo
 import { Settlementstep3Component } from './OAAdmin/OAPF/settlement/settlementmodal/steps/settlementstep3/settlementstep3.component';
 import { FinancemodalComponent } from './OAAdmin/OAPF/common/financemodal/financemodal.component';
 import {CURRENCY_MASK_CONFIG, CurrencyMaskConfig, CurrencyMaskInputMode, NgxCurrencyModule} from "ngx-currency";
-import * as moment from "moment";
+import {AccountcommonmodalComponent} from "./OAAdmin/OAPF/common/accountcommonmodal/accountcommonmodal.component";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+//import { ApprovalinvoicesComponent } from './OAAdmin/OAPF/approvalinvoices/approvalinvoices.component';
 
 function appInitializer(authService: AuthService) {
   return () => {
@@ -241,8 +242,9 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     Settlementstep1Component,
     Settlementstep2Component,
     Settlementstep3Component,
-    FinancemodalComponent
-
+    FinancemodalComponent,
+    AccountcommonmodalComponent,
+    //ApprovalinvoicesComponent,
   ],
   imports: [
     BrowserModule,
@@ -302,7 +304,9 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     NgxSpinnerModule,
     MatTableExporterModule,
     CdkTableExporterModule,
-    NgxCurrencyModule
+    NgxCurrencyModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     {
@@ -312,7 +316,10 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
       deps: [AuthService],
     },
     DatePipe,
-    { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
+    { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
+    // {
+    //   provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true
+    // }
   ],
   bootstrap: [AppComponent],
 })

@@ -42,6 +42,7 @@ export class Invoicestep1Component implements OnInit {
   public closeResult: string;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
+  sbrData: any
 
   constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal,private datePipe: DatePipe,public invoiceServices: invoiceService) {}
 
@@ -79,12 +80,8 @@ export class Invoicestep1Component implements OnInit {
       realBeneficiary: [this.defaultValues.realBeneficiary,[Validators.required]],
     });
 
-
-
-
     const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
       let formE = document.getElementById('form');
-      // console.log(formE?.innerHTML);
       this.updateParentModel(val, this.checkForm());
     });
     this.unsubscribe.push(formChangesSubscr);
@@ -171,6 +168,7 @@ export class Invoicestep1Component implements OnInit {
       this.closeResult = `Closed with: ${result}`;
       if (result) {
         console.log("row result is "+result)
+        this.sbrData = result
         this.f.sbrReferenceId.setValue(result.sbrId);
         this.f.anchorId.setValue(result.anchorCustomer['customerId']);
         this.f.counterPartyId.setValue(result.counterParty['customerId']);
