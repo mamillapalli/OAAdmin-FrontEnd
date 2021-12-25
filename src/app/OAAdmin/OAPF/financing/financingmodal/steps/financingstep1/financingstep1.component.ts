@@ -11,6 +11,8 @@ import {Corporateuser} from "../../../../../Model/corporateuser";
 import {Subscription} from "rxjs";
 import {invoiceService} from "../../../../../shared/OAPF/invoice.service";
 import {SelectionModel} from "@angular/cdk/collections";
+import {oaCommonService} from "../../../../../shared/oacommon.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-financingstep1',
@@ -37,18 +39,33 @@ export class Financingstep1Component implements OnInit {
   //checkbox
   selection = new SelectionModel<Element>(true, []);
   invoiceSelected = false
+  isDataSource = false
 
-  constructor(public modalService: NgbModal,private fb: FormBuilder,public invoiceServices: invoiceService) { }
+  constructor(public modalService: NgbModal,
+              private fb: FormBuilder,
+              public invoiceServices: invoiceService,
+              public oaCommonService: oaCommonService,
+              private spinner: NgxSpinnerService) {
+
+}
 
   ngOnInit(): void {
+    console.log(`Bearer $this.mode`)
     this.initForm()
-    if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view')
+
+    if(this.mode === 'new')
     {
-      this.financingForm.disable()
-    }
-    if(this.mode !== 'new') {
+      this.f.financeId.disabled
+      this.oaCommonService.getReferenceNumber('finances').subscribe((res) => {
+        this.f.financeId.setValue(res);
+      });
+    } else {
       this.f.financeId.disabled
       this.updateForm();
+      if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view')
+      {
+        this.financingForm.disable()
+      }
     }
     this.updateParentModel({}, this.checkForm());
   }
@@ -84,6 +101,14 @@ export class Financingstep1Component implements OnInit {
 
   updateForm() {
     this.financingForm.patchValue(this.formValue)
+    console.log('Invoice List '+this.formValue.invoiceList)
+    if(this.formValue.invoiceList.length > 0)
+    {
+      this.invoiceSelected = true;
+      this.dataSource.data = this.formValue.invoiceList;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   isControlValid(controlName: string): boolean {
@@ -143,19 +168,23 @@ export class Financingstep1Component implements OnInit {
   public getInvoicesDate() {
     console.log('Get Invoices')
     console.log()
+    this.spinner.show();
     const sb = this.invoiceServices.getInvoice(this.financingForm.value.financeDueDate, '', 'loanDueDate').subscribe((res) => {
-
-
-      for (let i = 0; i < res.length; i++) {
-        console.log(res[i].invoiceNumber)
-        const inv = this.fb.group({
-          invoiceNumber: [res[i].invoiceNumber, '']
-        });
-        this.invoiceList.push(inv)
+      if(res.length > 0) {
+        for (let i = 0; i < res.length; i++) {
+          console.log(res[i].invoiceNumber)
+          const inv = this.fb.group({
+            invoiceNumber: [res[i].invoiceNumber, '']
+          });
+          this.invoiceList.push(inv)
+        }
+        this.dataSource.data = res;
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.spinner.hide();
+      } else {
+        this.isDataSource = true
       }
-      this.dataSource.data = res;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
     });
     console.log("Form is "+this.financingForm)
     this.subscriptions.push(sb);
@@ -180,8 +209,13 @@ export class Financingstep1Component implements OnInit {
   }
 
   openInvoiceDelete(element: any) {
-    const index = this.dataSource.data.indexOf(element.id);
-    this.dataSource.data.splice(index, 1);
+    console.log('Delete Invoice Id is '+element.invoiceNumber)
+    const index = this.dataSource.data.indexOf(element.invoiceNumber);
+    //const user = this.dataSource.data.findIndex((x: { invoiceId: string; }) => x.invoiceId === element.id)
+    const idx: number = this.dataSource.data.findIndex((obj: { invoiceNumber: any; }) => obj.invoiceNumber === element.invoiceNumber);
+    console.log(idx)
+    console.log(index)
+    this.dataSource.data.splice(idx, 1);
     this.dataSource._updateChangeSubscription();
     this.invoiceList.clear()
     const res = this.dataSource.data

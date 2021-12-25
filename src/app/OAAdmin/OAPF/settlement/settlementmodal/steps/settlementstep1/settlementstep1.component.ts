@@ -50,6 +50,7 @@ export class Settlementstep1Component implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(`Bearer $this.mode`)
     this.initForm()
     if(this.mode === 'new')
     {
@@ -57,7 +58,7 @@ export class Settlementstep1Component implements OnInit {
         this.f.paymentId.setValue(res);
       });
     } else {
-      this.f.financeId.disabled
+      this.f.paymentId.disabled
       this.updateForm();
       if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view')
       {
@@ -99,7 +100,8 @@ export class Settlementstep1Component implements OnInit {
   updateForm() {
     this.paymentForm.patchValue(this.formValue)
     this.f.financeId.setValue(this.formValue.finance['financeId']);
-    if(this.formValue.finance['financeId'])
+    console.log('Invoice List '+this.formValue.finance['invoiceList'])
+    if(this.formValue.finance['invoiceList'].length > 0)
     {
         this.isFinanceFetched = true;
     }
@@ -154,8 +156,10 @@ export class Settlementstep1Component implements OnInit {
       this.f.sellerName.setValue(result.sellerName)
       this.f.paymentType.setValue('PAYMENT_BY_BUYER')
 
+      console.log('finance is '+result)
       this.f.finance.setValue(result)
       console.log(this.paymentForm)
+      console.log('paymentForm is '+this.paymentForm)
 
       let resInv = result.invoiceList
       console.log('Invoice List is '+resInv)

@@ -112,7 +112,7 @@ export class paymentService {
     }
     else {
       let httpParams = new HttpParams();
-      httpParams = httpParams.append('transactionStatus', 'MASTER');
+      httpParams = httpParams.append('transactionStatus', 'PENDING');
       return this.http.get<any>('/oapf/api/v1/payments', {params: httpParams,headers: httpHeaders}).pipe(
         catchError(err => {
           this._errorMessage.next(err);

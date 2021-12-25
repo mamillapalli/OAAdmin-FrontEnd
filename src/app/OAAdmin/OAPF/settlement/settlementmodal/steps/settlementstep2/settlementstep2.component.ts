@@ -1,10 +1,13 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {financing} from "../../../../../Model/OAPF/Request/financing";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
-import {NgbDatepicker} from "@ng-bootstrap/ng-bootstrap";
+import {NgbDatepicker, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import { currencyList } from 'src/app/OAAdmin/shared/currency';
 import {Payment} from "../../../../../Model/OAPF/Request/payment";
+import {FinancemodalComponent} from "../../../../common/financemodal/financemodal.component";
+import {AccountcommonmodalComponent} from "../../../../common/accountcommonmodal/accountcommonmodal.component";
+import {NotificationService} from "../../../../../shared/notification.service";
 @Component({
   selector: 'app-settlementstep2',
   templateUrl: './settlementstep2.component.html',
@@ -22,8 +25,11 @@ export class Settlementstep2Component implements OnInit {
   @Input() mode :  any;
   @ViewChild('dp') dp: NgbDatepicker;
   public currencyList:any = currencyList;
+  modalOption: NgbModalOptions = {};
+  @Output() accountParam: any
 
-  constructor(private fb: FormBuilder) { }
+
+  constructor(private fb: FormBuilder,public modalService: NgbModal,private notifyService : NotificationService) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -103,10 +109,28 @@ export class Settlementstep2Component implements OnInit {
   }
 
   openDebitAccount() {
-
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalOption.windowClass = 'my-class'
+    const modalRef = this.modalService.open(AccountcommonmodalComponent, this.modalOption);
+    modalRef.componentInstance.accountParam = 'MASTER';
+    modalRef.result.then((result) => {
+      console.log('result is ' + result);
+    }, (reason) => {
+      console.log('reason is ' + reason);
+    });
   }
 
   openCreditAccount() {
-
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalOption.windowClass = 'my-class'
+    const modalRef = this.modalService.open(AccountcommonmodalComponent, this.modalOption);
+    modalRef.componentInstance.accountParam = 'MASTER';
+    modalRef.result.then((result) => {
+      console.log('result is ' + result);
+    }, (reason) => {
+      console.log('reason is ' + reason);
+    });
   }
 }

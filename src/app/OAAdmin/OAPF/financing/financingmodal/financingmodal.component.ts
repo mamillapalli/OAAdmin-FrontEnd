@@ -1,10 +1,12 @@
 import {Component, OnInit, Output} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
-import {financing,inits} from "../../../Model/OAPF/Request/financing";
+import {financing, inits} from "../../../Model/OAPF/Request/financing";
 import {cFinancing} from "../../../Model/OAPF/CRequest/cFinancing";
 import Swal from "sweetalert2";
 import {financingService} from "../../../shared/OAPF/financing.service";
+import {FormGroup} from "@angular/forms";
+import {NotificationService} from "../../../shared/notification.service";
 
 @Component({
   selector: 'app-financingmodal',
@@ -22,8 +24,11 @@ export class FinancingmodalComponent implements OnInit {
   fromParent: any;
   checkNextStage = true;
   cFinancing: cFinancing;
+  @Output() calculatedDetails: any
 
-  constructor(public activeModal: NgbActiveModal, public financingService: financingService) {
+  constructor(public activeModal: NgbActiveModal,
+              public financingService: financingService,
+              public NotificationService: NotificationService) {
   }
 
   ngOnInit(): void {
@@ -43,13 +48,32 @@ export class FinancingmodalComponent implements OnInit {
     if (nextStep > this.formsCount) {
       return;
     }
+    if (nextStep === 2) {
+      if (this.mode === 'new' || this.mode === 'edit') {
+        this.checkNextStage = false;
+        this.financingService.CalculateFinanceDetails(this.account$.value).subscribe((res: any) => {
+            console.log('response invoice calculate details is ' + res)
+            if (res != null) {
+              this.calculatedDetails = res
+              this.currentStep$.next(nextStep);
+            } else {
+              console.log('No Calculation is found')
+            }
+          }, (err: any) => console.log('HTTP Error', err),
+          () => console.log('HTTP request completed.'))
+      }
+    }
     if (this.currentStep$.value === this.formsCount - 1) {
+      const res = this.checkBusinessValidation();
+      if(res){
+        return;
+      }
       this.cFinancing = new cFinancing();
       this.cFinancing = this.account$.value;
       const rmNewRequest = this.cFinancing;
       if (this.mode === 'new') {
         this.checkNextStage = false;
-        this.financingService.dataItem(rmNewRequest,this.mode).subscribe(res => {
+        this.financingService.dataItem(rmNewRequest, this.mode).subscribe(res => {
           if (res !== null && res !== '') {
             this.checkNextStage = true;
             Swal.fire({
@@ -63,7 +87,7 @@ export class FinancingmodalComponent implements OnInit {
             });
           }
           if (res !== null && res !== '') {
-            if(this.checkNextStage) {
+            if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
           }
@@ -72,11 +96,10 @@ export class FinancingmodalComponent implements OnInit {
           console.error('There was an error!', error);
           return;
         });
-      }
-      else if (this.mode === 'edit') {
+      } else if (this.mode === 'edit') {
         this.checkNextStage = false;
-        this.financingService.dataItem(rmNewRequest,this.mode).subscribe(res => {
-          console.log('Response is : '+res)
+        this.financingService.dataItem(rmNewRequest, this.mode).subscribe(res => {
+          console.log('Response is : ' + res)
           if (res !== null && res !== '') {
             this.checkNextStage = true;
             Swal.fire({
@@ -89,8 +112,8 @@ export class FinancingmodalComponent implements OnInit {
               icon: 'error'
             });
           }
-          if(res !== null && res !== '') {
-            if(this.checkNextStage) {
+          if (res !== null && res !== '') {
+            if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
           }
@@ -99,10 +122,9 @@ export class FinancingmodalComponent implements OnInit {
           console.error('There was an error!', error);
           return;
         });
-      }
-      else if (this.mode === 'auth') {
+      } else if (this.mode === 'auth') {
         this.checkNextStage = false;
-        this.financingService.dataItem(rmNewRequest,this.mode).subscribe(res => {
+        this.financingService.dataItem(rmNewRequest, this.mode).subscribe(res => {
           if (res !== null && res !== '') {
             this.checkNextStage = true;
             Swal.fire({
@@ -116,7 +138,7 @@ export class FinancingmodalComponent implements OnInit {
             });
           }
           if (res !== null && res !== '') {
-            if(this.checkNextStage) {
+            if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
           }
@@ -127,7 +149,7 @@ export class FinancingmodalComponent implements OnInit {
         });
       }
     }
-    if(this.checkNextStage) {
+    if (this.checkNextStage) {
       this.currentStep$.next(nextStep);
     }
   }
@@ -146,6 +168,16 @@ export class FinancingmodalComponent implements OnInit {
     const updatedAccount = {...currentAccount, ...part};
     this.account$.next(updatedAccount);
     this.isCurrentFormValid$.next(isFormValid);
+    this.calculatedDetails = this.account$.value;
   };
 
+  private checkBusinessValidation():boolean {
+    console.log('checkBusinessValidation');
+    if(this.account$.value.financeAmount > this.account$.value.totalAvailableAmount)
+    {
+      this.NotificationService.showError('Finance should not greater than Total Available Amount','Business Validation')
+      return true
+    }
+    return false
+  }
 }

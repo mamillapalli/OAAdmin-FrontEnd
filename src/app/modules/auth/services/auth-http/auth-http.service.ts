@@ -15,7 +15,8 @@ export class AuthHTTPService {
 
   // public methods
   login(emailAddress: string, password: string): Observable<any> {
-    return this.http.post<AuthModel>(`${API_USERS_URL}/authenticate`, {
+    //return this.http.post<AuthModel>(`${API_USERS_URL}/authenticate`, {
+    return this.http.post<AuthModel>(`oaadmin/authenticate`, {
       emailAddress,
       password,
     });
@@ -37,7 +38,8 @@ export class AuthHTTPService {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-    return this.http.get<UserModel>(`${API_USERS_URL}/api/v1/myprofile`, {
+    //return this.http.get<UserModel>(`${API_USERS_URL}/api/v1/myprofile`, {
+    return this.http.get<UserModel>(`oaadmin/api/v1/myprofile`, {
       headers: httpHeaders,
     });
   }

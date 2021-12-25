@@ -1,4 +1,4 @@
-<div class="card-header border-0 pt-5">
+  <div class="card-header border-0 pt-5">
   <h3 class="card-title align-items-start flex-column">
     <span class="card-label fw-bolder fs-3 mb-1">Financing Dashboard</span>
   </h3>
@@ -68,6 +68,8 @@
 
 
   <div class="table-responsive">
+    <ngx-spinner></ngx-spinner>'
+
     <!-- begin::Table -->
     <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
                class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
@@ -99,7 +101,7 @@
 
       <ng-container matColumnDef="financeAmount">
         <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Amount</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.financeAmount }} </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.financeAmount | number:'1.0-3' }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="financeDueDate">
@@ -143,7 +145,7 @@
         </span>
           <span>
             <a title="Delete" (click)="openInvoiceDelete(deleteContent, element)"
-               *ngIf="element.transactionStatus === 'MASTER' || element.transactionStatus === 'PENDING'"
+               *ngIf="element.transactionStatus !== 'MASTER'"
                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
             >
                 <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"

@@ -1,10 +1,13 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Invoice} from "../../../../../Model/OAPF/Request/invoice";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
-import {NgbDatepicker} from "@ng-bootstrap/ng-bootstrap";
+import {NgbDatepicker, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import { currencyList } from 'src/app/OAAdmin/shared/currency';
 import {financing} from "../../../../../Model/OAPF/Request/financing";
+import {AccountcommonmodalComponent} from "../../../../common/accountcommonmodal/accountcommonmodal.component";
+import { financingService} from "../../../../../shared/OAPF/financing.service";
+import {NotificationService} from "../../../../../shared/notification.service";
 
 @Component({
   selector: 'app-financingstep2',
@@ -14,7 +17,7 @@ import {financing} from "../../../../../Model/OAPF/Request/financing";
 export class Financingstep2Component implements OnInit {
   expiryDate: any
   @Input('updateParentModel') updateParentModel: (part: Partial<financing>,isFormValid: boolean) => void;
-  financingForm: FormGroup;
+  //financingForm: FormGroup;
   @Input() defaultValues: Partial<financing>;
   private unsubscribe: Subscription[] = [];
   @Input('formValue') formValue :  any;
@@ -22,8 +25,15 @@ export class Financingstep2Component implements OnInit {
   @Input() mode :  any;
   @ViewChild('dp') dp: NgbDatepicker;
   public currencyList:any = currencyList;
+  @Input('financingForm') financingForm: FormGroup;
+  modalOption: NgbModalOptions = {};
+  @Input('calculatedDetails') calculatedDetails: any
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,
+              public modalService: NgbModal,
+              public financingService: financingService,
+              private notifyService : NotificationService
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -33,6 +43,10 @@ export class Financingstep2Component implements OnInit {
     }
     if(this.mode !== 'new'){
       this.updateForm();
+    }
+    if(this.mode === 'new' || this.mode === 'Edit')
+    {
+      this.financingForm.patchValue(this.calculatedDetails)
     }
     this.updateParentModel({}, this.checkForm());
   }
@@ -101,4 +115,54 @@ export class Financingstep2Component implements OnInit {
     return  false;
   }
 
+
+  openDebitAccount() {
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalOption.windowClass = 'my-class'
+    const modalRef = this.modalService.open(AccountcommonmodalComponent, this.modalOption);
+    modalRef.componentInstance.accountParam = 'MASTER';
+    modalRef.result.then((result) => {
+      console.log('result is ' + result);
+      if(result != null) {
+        this.f.debitAccount.setValue(result.accountId)
+      }
+    }, (reason) => {
+      console.log('reason is ' + reason);
+    });
+  }
+
+  openCreditAccount() {
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalOption.windowClass = 'my-class'
+    const modalRef = this.modalService.open(AccountcommonmodalComponent, this.modalOption);
+    modalRef.componentInstance.accountParam = 'MASTER';
+    modalRef.result.then((result) => {
+      console.log('result is ' + result);
+      if(result != null) {
+        this.f.creditAccount.setValue(result.accountId)
+      }
+    }, (reason) => {
+      console.log('reason is ' + reason);
+    });
+  }
+
+  calculateFinanceDetails() {
+    //this.checkBusinessValidation()
+    console.log('Calaculate details object is '+ JSON.stringify(this.calculatedDetails))
+    this.financingService.CalculateFinanceDetails(this.calculatedDetails).subscribe((res: any) => {
+        console.log('response invoice calculate details is '+res)
+        this.calculatedDetails = res
+        this.financingForm.patchValue(res)
+      }, (err: any) => console.log('HTTP Error', err),
+      () => console.log('HTTP request completed.'))
+  }
+
+  private checkBusinessValidation() {
+    if(this.financingForm.value.financeAmount > this.financingForm.value.totalAvailableAmount )
+    {
+        this.notifyService.showWarning('Finance should not greater than Total Invoice Amount','BusinessValidation')
+    }
+  }
 }

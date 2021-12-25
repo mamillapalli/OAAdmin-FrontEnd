@@ -1,3 +1,4 @@
+<ngx-spinner></ngx-spinner>'
 <div [formGroup]="financingForm" id="form">
   <div class="form-group row">
     <div class="col-lg-3">
@@ -73,19 +74,20 @@
     </div>
     <div class="col-lg-3">
       <label>Finance Due Date</label>
-      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
+      <input type="date" class="form-control form-control-sm form-control-solid" autocomplete="off"
              placeholder="Finance Due Date" name="date" [class.is-invalid]="isControlInvalid('financeDueDate')"
              [class.is-valid]="isControlValid('financeDueDate')" formControlName="financeDueDate"
-             (change)="invoiceSelected = true"/>
+             (ngModelChange)="getInvoicesDate();invoiceSelected = true;"/>
     </div>
-    <div class="col-lg-3">
+    <!--<div class="col-lg-3">
       <label></label>
       <div>
         <a class="btn btn-sm btn-primary fw-bolder" (click)="getInvoicesDate()" *ngIf="invoiceSelected">Get Invoice</a>
       </div>
-    </div>
+    </div>-->
   </div>
-  <div class="form-group row">
+  <div class="form-group row"  *ngIf="invoiceSelected && isDataSource">No records found</div>
+  <div class="form-group row" *ngIf="invoiceSelected && !isDataSource">
     <div class="table-responsive">
       <!-- begin::Table -->
       <mat-table [dataSource]="dataSource" matSort style="width: 100%;height: 80%"
@@ -141,9 +143,9 @@
         <ng-container matColumnDef="actions" class="d-flex justify-content-end flex-shrink-0">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions
           </mat-header-cell>
-          <mat-cell *matCellDef="let element">
+          <mat-cell *matCellDef="let row">
             <span>
-            <a title="Delete" (click)="openInvoiceDelete(element)"
+            <a title="Delete" (click)="openInvoiceDelete(row)"
                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
                 <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
                       class="svg-icon svg-icon-3"></span>

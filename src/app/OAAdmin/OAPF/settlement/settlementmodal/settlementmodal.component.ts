@@ -47,6 +47,7 @@ export class SettlementmodalComponent implements OnInit {
       this.cPayment = new cPayment();
       this.cPayment = this.account$.value;
       const rmNewRequest = this.cPayment;
+      console.log('this.cPayment '+this.cPayment)
       if (this.mode === 'new') {
         this.checkNextStage = false;
         this.paymentServices.dataItem(rmNewRequest,this.mode).subscribe(res => {

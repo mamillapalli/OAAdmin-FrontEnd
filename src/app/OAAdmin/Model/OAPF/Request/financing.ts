@@ -1,77 +1,91 @@
 import {Invoice} from "./invoice";
 
 interface financing {
-  agreementId: string
-  businessType: string
-  buyerId: string
-  buyerName: string
-  creditAccount: string
-  debitAccount: string
-  deleteFlag: boolean
-  diaryDueDate: Date
-  diaryId: string
-  diaryNarrative: string
-  financeAmount: number
-  financeCurrency: string
-  financeDueDate: Date
-  financeId: string
-  financingInterestRate: number
-  financingType: string
-  graceDays: number
-  interestChargeType: string
-  interestMargin: number
-  interestRate: number
-  interestRateType: string
+  financeId: string,
+  sbrReferenceId: string,
+  agreementId: string,
+  buyerId: string,
+  sellerId: string,
+  buyerName: string,
+  sellerName: string,
+  financingType: string,
+  businessType: string,
+  transactionDate: Date,
   invoiceList: [Invoice]
+  totalInvoiceCurrency: string
+  totalInvoiceAmount: number
+  financeCurrency: string,
+  financeAmount: number
+  financeTotalCurrency: string,
+  financeTotalAmount: number
   maxFinancePercentage: number
-  sbrReferenceId: string
-  sellerId: string
-  sellerName: string
-  systemId: string
-  toSellerAmount: number
-  toSellerCurrency: string
-  totalAvailableAmount: number
-  totalAvailableCurrency: string
-  transactionDate: string
+  interestChargeType: string,
+  interestRateType: string,
+  interestRate: number
+  interestMargin: number
+  valueDate: Date,
+  graceDays: number
+  financingInterestRate: number
   upfrontInterestAmount: number
-  valueDate: Date
+  totalAvailableCurrency: string,
+  totalAvailableAmount: number
+  toSellerCurrency: string,
+  toSellerAmount: number
+  debitAccount: string,
+  creditAccount: string,
+  diaryId: string,
+  diaryDueDate: Date
+  diaryNarrative: string,
+  financeDueDate: Date,
+  deleteFlag: boolean
+  financeServiceChargeCurrency: string,
+  financeServiceChargeAmount: number
+  interestCurrency: string,
+  interestAmount: number
 }
 
 const inits: financing = {
-  agreementId: "",
-  businessType: "",
-  buyerId: "",
-  buyerName: "",
-  creditAccount: "",
-  debitAccount: "",
-  deleteFlag: false,
-  diaryDueDate: new Date,
-  diaryId: "",
-  diaryNarrative: "",
+  financeId: '',
+  sbrReferenceId: '',
+  agreementId: '',
+  buyerId: '',
+  sellerId: '',
+  buyerName: '',
+  sellerName: '',
+  financingType: '',
+  businessType: '',
+  transactionDate: new Date,
+  invoiceList: [{} as Invoice],
+  totalInvoiceCurrency: '',
+  totalInvoiceAmount: 0,
+  financeCurrency: '',
   financeAmount: 0,
-  financeCurrency: "",
-  financeDueDate: new Date,
-  financeId: "",
-  financingInterestRate: 0,
-  financingType: "",
-  graceDays: 0,
-  interestChargeType: "",
-  interestMargin: 0,
-  interestRate: 0,
-  interestRateType: "",
-  invoiceList: [{} as Invoice] ,
+  financeTotalCurrency: '',
+  financeTotalAmount: 0,
   maxFinancePercentage: 0,
-  sbrReferenceId: "",
-  sellerId: "",
-  sellerName: "",
-  systemId: "",
-  toSellerAmount: 0,
-  toSellerCurrency: "",
-  totalAvailableAmount: 0,
-  totalAvailableCurrency: "",
-  transactionDate: "",
+  interestChargeType: '',
+  interestRateType: '',
+  interestRate: 0,
+  interestMargin: 0,
+  valueDate: new Date,
+  graceDays: 0,
+  financingInterestRate: 0,
   upfrontInterestAmount: 0,
-  valueDate: new Date
+  totalAvailableCurrency: '',
+  totalAvailableAmount: 0,
+  toSellerCurrency: '',
+  toSellerAmount: 0,
+  debitAccount: '',
+  creditAccount: '',
+  diaryId: '',
+  diaryDueDate: new Date,
+  diaryNarrative: '',
+  financeDueDate: new Date,
+  deleteFlag: false,
+  financeServiceChargeCurrency: '',
+  financeServiceChargeAmount: 0,
+  interestCurrency: '',
+  interestAmount: 0,
 
 }
 export {financing, inits};

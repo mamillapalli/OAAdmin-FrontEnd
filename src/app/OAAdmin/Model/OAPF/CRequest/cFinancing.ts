@@ -1,38 +1,45 @@
 import {Invoice} from "../Request/invoice";
 
 export class cFinancing{
-  agreementId: string
-  businessType: string
-  buyerId: string
-  buyerName: string
-  creditAccount: string
-  debitAccount: string
-  deleteFlag: boolean
-  diaryDueDate: Date
-  diaryId: string
-  diaryNarrative: string
-  financeAmount: number
-  financeCurrency: string
-  financeDueDate: Date
   financeId: string
-  financingInterestRate: number
-  financingType: string
-  graceDays: number
-  interestChargeType: string
-  interestMargin: number
-  interestRate: number
-  interestRateType: string
-  invoiceList: [Invoice]
-  maxFinancePercentage: number
   sbrReferenceId: string
+  agreementId: string
+  buyerId: string
   sellerId: string
+  buyerName: string
   sellerName: string
-  systemId: string
-  toSellerAmount: number
-  toSellerCurrency: string
-  totalAvailableAmount: number
-  totalAvailableCurrency: string
-  transactionDate: string
-  upfrontInterestAmount: number
+  financingType: string
+  businessType: string
+  transactionDate: Date
+  invoiceList: [Invoice]
+  totalInvoiceCurrency: string
+  totalInvoiceAmount: number
+  financeCurrency: string
+  financeAmount: number
+  financeTotalCurrency: string
+  financeTotalAmount: number
+  maxFinancePercentage: number
+  interestChargeType: string
+  interestRateType: string
+  interestRate: number
+  interestMargin: number
   valueDate: Date
+  graceDays: number
+  financingInterestRate: number
+  upfrontInterestAmount: number
+  totalAvailableCurrency: string
+  totalAvailableAmount: number
+  toSellerCurrency: string
+  toSellerAmount: number
+  debitAccount: string
+  creditAccount: string
+  diaryId: string
+  diaryDueDate: Date
+  diaryNarrative: string
+  financeDueDate: Date
+  deleteFlag: boolean
+  financeServiceChargeCurrency: string
+  financeServiceChargeAmount: number
+  interestCurrency: string
+  interestAmount: number
 }

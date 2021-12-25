@@ -2,16 +2,12 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
-import {Corporateadmin} from "../../Model/corporateadmin";
 import {financingService} from "../../shared/OAPF/financing.service";
 import {Subscription} from "rxjs";
-import {connectableObservableDescriptor} from "rxjs/internal/observable/ConnectableObservable";
 import {financing, inits} from "../../Model/OAPF/Request/financing";
-import {InvoicemodalComponent} from "../invoice/invoicemodal/invoicemodal.component";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {FinancingmodalComponent} from "./financingmodal/financingmodal.component";
-import {HttpHeaders} from "@angular/common/http";
-import {catchError, retry} from "rxjs/operators";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-financing',
@@ -30,7 +26,8 @@ export class FinancingComponent implements OnInit {
   modalOption: NgbModalOptions = {};
   closeResult: string;
 
-  constructor(public financingService: financingService,public modalService: NgbModal) { }
+  constructor(public financingService: financingService, public modalService: NgbModal, private spinner: NgxSpinnerService) {
+  }
 
   ngOnInit(): void {
     this.getFinancing();
@@ -38,9 +35,11 @@ export class FinancingComponent implements OnInit {
 
   public getFinancing() {
     console.log('Get Invoices')
+    this.spinner.show();
     const sb = this.financingService.getFinancing('', '', 'all').subscribe((res) => {
       this.dataSource.data = res;
       this.dataSource.sort = this.sort;
+      this.spinner.hide();
       this.dataSource.paginator = this.paginator;
     });
     this.subscriptions.push(sb);
