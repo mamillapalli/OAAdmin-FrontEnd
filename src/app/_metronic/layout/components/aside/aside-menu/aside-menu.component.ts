@@ -14,11 +14,15 @@ export class AsideMenuComponent implements OnInit {
   private authLocalStorageToken = `${environment.appVersion}-${environment.USERDATA_KEY}`;
   authRoles : any
   constructor() {}
+  checkSuperAdmin: any
+  checkBankAdmin: any
+  checkBankUser: any
 
   ngOnInit(): void {
     const auth = this.getAuthFromLocalStorage();
     console.log(auth?.aRoles)
     this.authRoles = auth?.aRoles
+    this.checkIfExists()
   }
 
   public getAuthFromLocalStorage(): AuthModel | undefined {
@@ -33,6 +37,22 @@ export class AsideMenuComponent implements OnInit {
     } catch (error) {
       console.error(error);
       return undefined;
+    }
+  }
+
+  checkIfExists() {
+    const checkValue = this.authRoles.split(',')
+    for(let i=0;i< checkValue.length;i++)
+    {
+       if(checkValue[i] === 'SUPER_ADMIN')
+       {
+         this.checkSuperAdmin = true;
+       } else if(checkValue[i] === ('BANK_USER_MAKER' || 'BANK_USER_CHECKER' || 'BANK_USER_VIEWER'))
+       {
+          this.checkBankUser = true;
+       } else if(checkValue[i] === ('BANK_ADMIN_MAKER' || 'BANK_ADMIN_CHECKER' || 'BANK_ADMIN_VIEWER')) {
+         this.checkBankAdmin = true;
+       }
     }
   }
 }

@@ -1,114 +1,194 @@
+<ng-container *ngIf="checkSuperAdmin">
+  <div class="menu-item">
+    <div class="menu-content pt-8 pb-2">
+      <span class="menu-section text-muted text-uppercase fs-8 ls-1">Super Admin</span>
+    </div>
+  </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/superadmin" routerLinkActive="active">
+    <span class="menu-icon">
+      <span [inlineSVG]="'./assets/media/icons/duotune/coding/cod001.svg'" class="svg-icon svg-icon-2"></span>
+    </span>
+      <span class="menu-title">Super Admin Maintenance</span>
+    </a>
+  </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/bankadmin" routerLinkActive="active">
+    <span class="menu-icon">
+      <span [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'" class="svg-icon svg-icon-2"></span>
+    </span>
+      <span class="menu-title">Bank Admin Maintenance</span></a>
+  </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/bankuser" routerLinkActive="active">
+    <span class="menu-icon">
+      <span [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'" class="svg-icon svg-icon-2">
+      </span>
+    </span>
+      <span class="menu-title">Bank User Maintenance</span>
+    </a>
+  </div>
+
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/corporates" routerLinkActive="active">
+    <span class="menu-icon">
+      <span [inlineSVG]="'./assets/media/icons/duotune/communication/com013.svg'" class="svg-icon svg-icon-2">
+      </span>
+    </span>
+      <span class="menu-title">Corporates Maintenance</span>
+    </a>
+  </div>
+
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/corporateadmin" routerLinkActive="active">
+    <span class="menu-icon">
+      <span [inlineSVG]="'./assets/media/icons/duotune/communication/com014.svg'" class="svg-icon svg-icon-2">
+      </span>
+    </span>
+      <span class="menu-title">Corporate Admin Maintenance</span>
+    </a>
+  </div>
+
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/corporateuser" routerLinkActive="active">
+    <span class="menu-icon">
+      <span [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'" class="svg-icon svg-icon-2">
+      </span>
+    </span>
+      <span class="menu-title">Corporate User Maintenance</span>
+    </a>
+  </div>
+
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/relationshipmanager" routerLinkActive="active">
+      <span class="menu-icon">
+        <span [inlineSVG]="'./assets/media/icons/duotune/communication/com001.svg'" class="svg-icon svg-icon-2"></span>
+      </span>
+      <span class="menu-title">Relationship Manager Maintenance</span>
+    </a>
+  </div>
+
+  <!--  <div class="menu-item">-->
+  <!--    <a class="menu-link without-sub" routerLink="/rm" routerLinkActive="active">-->
+  <!--    <span class="menu-icon">-->
+  <!--      <span [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'" class="svg-icon svg-icon-2"></span>-->
+  <!--    </span>-->
+  <!--      <span class="menu-title">RM Maintenance</span>-->
+  <!--    </a>-->
+  <!--  </div>-->
+</ng-container>
+
+//bank admin user Login
+<ng-container  *ngIf="checkBankAdmin">
+  <div class="menu-item">
+    <div class="menu-content pt-8 pb-2">
+      <span class="menu-section text-muted text-uppercase fs-8 ls-1">Bank Admin</span>
+    </div>
+  </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/bankadmin" routerLinkActive="active">
+    <span class="menu-icon">
+      <span [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'" class="svg-icon svg-icon-2"></span>
+    </span>
+      <span class="menu-title">Bank Admin Maintenance</span></a>
+  </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/bankuser" routerLinkActive="active">
+    <span class="menu-icon">
+      <span [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'" class="svg-icon svg-icon-2">
+      </span>
+    </span>
+      <span class="menu-title">Bank User Maintenance</span>
+    </a>
+  </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/corporates" routerLinkActive="active">
+    <span class="menu-icon">
+      <span [inlineSVG]="'./assets/media/icons/duotune/communication/com013.svg'" class="svg-icon svg-icon-2">
+      </span>
+    </span>
+      <span class="menu-title">Corporates Maintenance</span>
+    </a>
+  </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/corporateadmin" routerLinkActive="active">
+    <span class="menu-icon">
+      <span [inlineSVG]="'./assets/media/icons/duotune/communication/com014.svg'" class="svg-icon svg-icon-2">
+      </span>
+    </span>
+      <span class="menu-title">Corporate Admin Maintenance</span>
+    </a>
+  </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/corporateuser" routerLinkActive="active">
+    <span class="menu-icon">
+      <span [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'" class="svg-icon svg-icon-2">
+      </span>
+    </span>
+      <span class="menu-title">Corporate User Maintenance</span>
+    </a>
+  </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/relationshipmanager" routerLinkActive="active">
+      <span class="menu-icon">
+        <span [inlineSVG]="'./assets/media/icons/duotune/communication/com001.svg'" class="svg-icon svg-icon-2"></span>
+      </span>
+      <span class="menu-title">Relationship Manager Maintenance</span>
+    </a>
+  </div>
+</ng-container>
+
+<ng-container  *ngIf="checkBankUser">
+  <div class="menu-item">
+    <div class="menu-content pt-8 pb-2">
+      <span class="menu-section text-muted text-uppercase fs-8 ls-1">Bank User</span>
+    </div>
+  </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/accounts" routerLinkActive="active" >
+      <span class="menu-icon">
+      <span [inlineSVG]="'./assets/media/icons/duotune/finance/fin006.svg'" class="svg-icon svg-icon-2"></span>
+      </span>
+      <span class="menu-title">Accounts</span>
+    </a>
+  </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/relationshipmanager" routerLinkActive="active">
+      <span class="menu-icon">
+        <span [inlineSVG]="'./assets/media/icons/duotune/communication/com001.svg'" class="svg-icon svg-icon-2"></span>
+      </span>
+      <span class="menu-title">Relationship Manager Maintenance</span>
+    </a>
+  </div>
+</ng-container>
+
 // Other code
 <!-- begin::1 Level -->
-<div class="menu-item">
-  <a
-    class="menu-link without-sub"
-    routerLink="/superadmin"
-    routerLinkActive="active"
-  ><span class="menu-icon">
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/general/gen019.svg'"
-        class="svg-icon svg-icon-2"
-      ></span> </span
-  ><span class="menu-title">Super Admin Module</span></a
-  >
-</div>
+
 <!-- end::1 Level -->
 
 <!-- begin::1 Level -->
-<div class="menu-item">
-  <a
-    class="menu-link without-sub"
-    routerLink="/bankadmin"
-    routerLinkActive="active"
-  ><span class="menu-icon">
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'"
-        class="svg-icon svg-icon-2"
-      ></span> </span
-  ><span class="menu-title">Bank Admin</span></a
-  >
-</div>
+
 <!-- end::1 Level -->
 
 <!-- begin::1 Level -->
-<div class="menu-item">
-  <a
-    class="menu-link without-sub"
-    routerLink="/corporateadmin"
-    routerLinkActive="active"
-  ><span class="menu-icon">
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'"
-        class="svg-icon svg-icon-2"
-      ></span> </span
-  ><span class="menu-title">Corporate Admin</span></a
-  >
-</div>
+
 <!-- end::1 Level -->
 
 <!-- begin::1 Level -->
-<div class="menu-item">
-  <a
-    class="menu-link without-sub"
-    routerLink="/corporates"
-    routerLinkActive="active"
-  ><span class="menu-icon">
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'"
-        class="svg-icon svg-icon-2"
-      ></span> </span
-  ><span class="menu-title">Corporates</span></a
-  >
-</div>
+
 <!-- end::1 Level -->
 
 <!-- begin::1 Level -->
-<div class="menu-item">
-  <a
-    class="menu-link without-sub"
-    routerLink="/corporateuser"
-    routerLinkActive="active"
-  ><span class="menu-icon">
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'"
-        class="svg-icon svg-icon-2"
-      ></span> </span
-  ><span class="menu-title">Corporate User</span></a
-  >
-</div>
+
 <!-- end::1 Level -->
 
 <!-- begin::1 Level -->
-<div class="menu-item">
-  <a
-    class="menu-link without-sub"
-    routerLink="/bankuser"
-    routerLinkActive="active"
-  ><span class="menu-icon">
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'"
-        class="svg-icon svg-icon-2"
-      ></span> </span
-  ><span class="menu-title">Bank User</span></a
-  >
-</div>
+
 <!-- end::1 Level -->
 
 <!-- begin::1 Level -->
-<div class="menu-item">
-  <a
-    class="menu-link without-sub"
-    routerLink="/rm"
-    routerLinkActive="active"
-  ><span class="menu-icon">
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'"
-        class="svg-icon svg-icon-2"
-      ></span> </span
-  ><span class="menu-title">RM</span></a
-  >
-</div>
+
 <!-- end::1 Level -->
 
 <!--<div class="menu-item">-->
@@ -125,33 +205,21 @@
 <!--  >-->
 <!--</div>-->
 
-<div class="menu-item">
-  <a
-    class="menu-link without-sub"
-    routerLink="/accounts"
-    routerLinkActive="active"
-  ><span class="menu-icon">
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/finance/account-number.png'"
-        class="svg-icon svg-icon-2"
-      ></span> </span
-  ><span class="menu-title">Accounts</span></a
-  >
-</div>
 
-<div class="menu-item">
-  <a
-    class="menu-link without-sub"
-    routerLink="/relationshipmanager"
-    routerLinkActive="active"
-  ><span class="menu-icon">
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'"
-        class="svg-icon svg-icon-2"
-      ></span> </span
-  ><span class="menu-title">Relationship Manager</span></a
-  >
-</div>
+
+<!--<div class="menu-item">-->
+<!--  <a-->
+<!--    class="menu-link without-sub"-->
+<!--    routerLink="/relationshipmanager"-->
+<!--    routerLinkActive="active"-->
+<!--  ><span class="menu-icon">-->
+<!--      <span-->
+<!--        [inlineSVG]="'./assets/media/icons/duotune/finance/fin001.svg'"-->
+<!--        class="svg-icon svg-icon-2"-->
+<!--      ></span> </span-->
+<!--  ><span class="menu-title">Relationship Manager</span></a-->
+<!--  >-->
+<!--</div>-->
 Separator
 <div class="menu-item">
   <div class="menu-content pt-8 pb-2">
@@ -261,13 +329,13 @@ Separator
   routerLinkActive="here show"
 >
   <span class="menu-link"
-    ><span class="menu-icon"
-      ><span
-        class="svg-icon svg-icon-2"
-        [inlineSVG]="'./assets/media/icons/duotune/communication/com012.svg'"
-      ></span></span
-    ><span class="menu-title" data-link="/approvalinvoices">Approval Invoices</span
-    ><span class="menu-arrow"></span
+  ><span class="menu-icon"
+  ><span
+    class="svg-icon svg-icon-2"
+    [inlineSVG]="'./assets/media/icons/duotune/communication/com012.svg'"
+  ></span></span
+  ><span class="menu-title" data-link="/approvalinvoices">Approval Invoices</span
+  ><span class="menu-arrow"></span
   ></span>
   <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
     <div class="menu-item">
@@ -275,8 +343,8 @@ Separator
         class="menu-link without-sub"
         routerLinkActive="active"
         routerLink="/approvalinvoices/buyerapprovalinvoices"
-        ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
-        ><span class="menu-title">Buyer Approval Invoices</span></a
+      ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+      ><span class="menu-title">Buyer Approval Invoices</span></a
       >
     </div>
     <div class="menu-item">
@@ -284,8 +352,8 @@ Separator
         class="menu-link without-sub"
         routerLinkActive="active"
         routerLink="/approvalinvoices/sellerapprovalinvoices"
-        ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
-        ><span class="menu-title">Seller Approval Invoices</span></a
+      ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+      ><span class="menu-title">Seller Approval Invoices</span></a
       >
     </div>
   </div>
@@ -297,7 +365,6 @@ Separator
     <div class="separator mx-1 my-4"></div>
   </div>
 </div>
-
 
 
 <!--&lt;!&ndash; Dashboard &ndash;&gt;-->
