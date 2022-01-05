@@ -5,7 +5,7 @@ import { NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {MatTableDataSource} from "@angular/material/table";
 import {Customer} from "../../../../../Model/customer";
 import {HttpClient} from "@angular/common/http";
-import {rm} from "../../../../../Model/request/rm";
+import {rm} from "../../../../../Model/OAAdmin/Request/rm";
 
 @Component({
   selector: 'app-rmstep1',

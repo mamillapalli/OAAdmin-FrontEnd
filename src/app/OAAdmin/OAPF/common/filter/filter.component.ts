@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
@@ -9,12 +9,13 @@ import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class FilterComponent implements OnInit {
   filterForm: FormGroup;
-  displayedColumns: string[] = ['accountId', 'accountName', 'accountType', 'accountCurrency', 'actions'];
+  @Input() fDisplayedColumns: any;
 
   constructor(private fb: FormBuilder, public activeModal: NgbActiveModal) {
   }
 
   ngOnInit(): void {
+    console.log(this.fDisplayedColumns)
     this.filterForm = this.fb.group({
       filterOption: this.fb.array([this.newFilterOption()])
     });

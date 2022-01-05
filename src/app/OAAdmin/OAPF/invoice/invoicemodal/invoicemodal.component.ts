@@ -1,18 +1,16 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
 import {BehaviorSubject, Observable, Subscription, throwError} from "rxjs";
-import {rmreq} from "../../../Model/response/rmreq";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../modules/auth";
 import {formatDate} from "@angular/common";
 import {catchError, retry} from "rxjs/operators";
-import {environment} from "../../../../../environments/environment";
 import Swal from "sweetalert2";
 import {invoiceService} from "../../../shared/OAPF/invoice.service";
 import {Invoice,inits} from "../../../Model/OAPF/Request/invoice";
 import {cInvoice} from "../../../Model/OAPF/CRequest/cinvoice";
-const API_USERS_URL = `${environment.apiUrl}`;
+import {oapfcommonService} from "../../../shared/oapfcommon.service";
 
 @Component({
   selector: 'app-invoicemodal',
@@ -21,7 +19,7 @@ const API_USERS_URL = `${environment.apiUrl}`;
 })
 export class InvoicemodalComponent implements OnInit {
 
-  formsCount = 3;
+  formsCount = 2;
   account$: BehaviorSubject<Invoice> =
     new BehaviorSubject<Invoice>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
@@ -36,12 +34,9 @@ export class InvoicemodalComponent implements OnInit {
   fromParent: any;
   checkNextStage = true;
 
-  constructor(private router: Router,
-              private route: ActivatedRoute,
-              private http: HttpClient,
-              public activeModal: NgbActiveModal,
-              private authService: AuthService,
-              public invoiceServices: invoiceService) {}
+  constructor(public activeModal: NgbActiveModal,
+              public invoiceServices: invoiceService,
+              public oapfcommonService: oapfcommonService) {}
 
   ngOnInit(): void {
     if (this.mode !== 'new') {
@@ -59,12 +54,11 @@ export class InvoicemodalComponent implements OnInit {
 
   nextStep() {
 
-
     const nextStep = this.currentStep$.value + 1;
     if (nextStep > this.formsCount) {
       return;
     }
-    console.log('this is form next step elemet is '+this.formElement)
+    console.log('this is form next step element is '+this.formElement)
     if (this.currentStep$.value === this.formsCount - 1) {
       this.cInvoice = new cInvoice();
       this.cInvoice = this.account$.value;
@@ -107,8 +101,8 @@ export class InvoicemodalComponent implements OnInit {
       console.log(rmNewRequest);
       if (this.mode === 'new') {
         this.checkNextStage = false;
-        this.invoiceServices.dataItem(rmNewRequest,this.mode).subscribe(res => {
-          if (res !== null && res !== '') {
+        this.oapfcommonService.dataItem(rmNewRequest,'',this.mode,'/oapf/api/v1/invoices').subscribe(res => {
+          if (res !== undefined) {
               this.checkNextStage = true;
               Swal.fire({
                 title: 'Add Record Successfully',
@@ -120,7 +114,7 @@ export class InvoicemodalComponent implements OnInit {
                 icon: 'error'
               });
             }
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             if(this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
@@ -133,9 +127,9 @@ export class InvoicemodalComponent implements OnInit {
       }
       else if (this.mode === 'edit') {
         this.checkNextStage = false;
-        this.invoiceServices.dataItem(rmNewRequest,this.mode).subscribe(res => {
+        this.oapfcommonService.dataItem(rmNewRequest,'',this.mode,'/oapf/api/v1/invoices').subscribe(res => {
           console.log('Response is : '+res)
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Edit Record Successfully',
@@ -147,7 +141,7 @@ export class InvoicemodalComponent implements OnInit {
               icon: 'error'
             });
           }
-          if(res !== null && res !== '') {
+          if (res !== undefined) {
             if(this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
@@ -160,8 +154,8 @@ export class InvoicemodalComponent implements OnInit {
       }
       else if (this.mode === 'auth') {
         this.checkNextStage = false;
-        this.invoiceServices.dataItem(rmNewRequest,this.mode).subscribe(res => {
-          if (res !== null && res !== '') {
+        this.oapfcommonService.dataItem(rmNewRequest,'',this.mode,'/oapf/api/v1/invoices').subscribe(res => {
+          if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Authorize Record Successfully',
@@ -173,7 +167,7 @@ export class InvoicemodalComponent implements OnInit {
               icon: 'error'
             });
           }
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             if(this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
@@ -202,44 +196,6 @@ export class InvoicemodalComponent implements OnInit {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 
-  CreateRM(data: any): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.post<any>(API_USERS_URL + '/api/v1/rms/', data, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  modifyRM(data: any): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/rms/' + this.account$.value.invoiceNumber, data, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  public authRM(): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/rms/authorise/' + this.account$.value.invoiceNumber, {}, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
 
   errorHandle(error: { error: { message: string; }; status: any; message: any; }) {
     let errorMessage;

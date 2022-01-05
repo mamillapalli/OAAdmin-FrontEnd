@@ -79,21 +79,12 @@
              [class.is-valid]="isControlValid('financeDueDate')" formControlName="financeDueDate"
              (ngModelChange)="getInvoicesDate();invoiceSelected = true;"/>
     </div>
-    <!--<div class="col-lg-3">
-      <label></label>
-      <div>
-        <a class="btn btn-sm btn-primary fw-bolder" (click)="getInvoicesDate()" *ngIf="invoiceSelected">Get Invoice</a>
-      </div>
-    </div>-->
   </div>
   <div class="form-group row"  *ngIf="invoiceSelected && isDataSource">No records found</div>
   <div class="form-group row" *ngIf="invoiceSelected && !isDataSource">
     <div class="table-responsive">
-      <!-- begin::Table -->
-      <mat-table [dataSource]="dataSource" matSort style="width: 100%;height: 80%"
+      <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortChanges($event)" style="width: 100%;height: 80%"
                  class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-
-        <!-- Checkbox Column -->
         <ng-container matColumnDef="checked">
           <mat-header-cell *matHeaderCellDef>
             <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -108,38 +99,30 @@
             </mat-checkbox>
           </mat-cell>
         </ng-container>
-
-        <!-- ID Column -->
         <ng-container matColumnDef="invoiceNumber" class="min-w-150px">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">INV No
           </mat-header-cell>
           <mat-cell *matCellDef="let row"> {{row.invoiceNumber}} </mat-cell>
         </ng-container>
-
-        <!-- Name Column -->
         <ng-container matColumnDef="currency">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">CCY</mat-header-cell>
           <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.currency}} </mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="amount">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Amount
           </mat-header-cell>
           <mat-cell *matCellDef="let row"> {{row.amount }} </mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="dueDate">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Due Date
           </mat-header-cell>
           <mat-cell *matCellDef="let row"> {{ row.dueDate | date: 'MM/dd/YYY' }} </mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Status
           </mat-header-cell>
           <mat-cell *matCellDef="let row"> {{ row.status }} </mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="actions" class="d-flex justify-content-end flex-shrink-0">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions
           </mat-header-cell>
@@ -153,15 +136,13 @@
           </span>
           </mat-cell>
         </ng-container>
-
-
         <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" [style.min-height]="0"></mat-header-row>
         <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;">
         </mat-row>
       </mat-table>
-      <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]" >
+      <mat-paginator #paginator [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize"
+                     [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)" aria-label="Select page">
       </mat-paginator>
-      <!-- end::Table -->
     </div>
   </div>
 </div>

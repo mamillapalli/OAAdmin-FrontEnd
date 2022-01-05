@@ -6,7 +6,6 @@ import {CorporatesComponent} from "../OAAdmin/Admin/corporates/corporates.compon
 import {CorporateuserComponent} from "../OAAdmin/Admin/corporateuser/corporateuser.component";
 import {BankuserComponent} from "../OAAdmin/Admin/bankuser/bankuser.component";
 import {RmComponent} from "../OAAdmin/Admin/rm/rm.component";
-import {TestComponent} from "../OAAdmin/Admin/test/test.component";
 import {RelationshipmanagerComponent} from "../OAAdmin/Admin/relationshipmanager/relationshipmanager.component";
 import {InvoiceComponent} from "../OAAdmin/OAPF/invoice/invoice.component";
 import {AccountModule} from "../modules/account/account.module";
@@ -14,6 +13,7 @@ import {AccountsComponent} from "../OAAdmin/Admin/accounts/accounts.component";
 import {FinancingComponent} from "../OAAdmin/OAPF/financing/financing.component";
 import {SettlementComponent} from "../OAAdmin/OAPF/settlement/settlement.component";
 import {ApprovalinvoicesModule} from "../OAAdmin/OAPF/approvalinvoices/approvalinvoices.module";
+import {ExChangeRatesComponent} from "../OAData/ex-change-rates/ex-change-rates.component";
 
 const Routing: Routes = [
   {
@@ -82,10 +82,6 @@ const Routing: Routes = [
     component: RmComponent // <= Page component registration
   },
   {
-    path: 'test', // <= Page URL
-    component: TestComponent // <= Page component registration
-  },
-  {
     path: 'relationshipmanager', // <= Page URL
     component: RelationshipmanagerComponent // <= Page component registration
   },
@@ -93,6 +89,10 @@ const Routing: Routes = [
   {
     path: 'accounts',
     component: AccountsComponent
+  },
+  {
+    path: 'exchangerates',
+    component: ExChangeRatesComponent
   },
   // Invoices
   {
@@ -118,6 +118,12 @@ const Routing: Routes = [
     path: 'approvalinvoices',
     loadChildren: () =>
       import('../OAAdmin/OAPF/approvalinvoices/approvalinvoices.module').then((m) => m.ApprovalinvoicesModule),
+  },
+
+  {
+    path: 'systemmaintenance',
+    loadChildren: () =>
+      import('../OAAdmin/Admin/system-maintenance/system-maintenance.module').then((m) => m.SystemMaintenanceModule),
   },
 
 

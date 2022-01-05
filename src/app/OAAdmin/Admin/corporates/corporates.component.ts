@@ -1,19 +1,17 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {Corporateadmin} from "../../Model/corporateadmin";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {environment} from "../../../../environments/environment";
 import {AuthService} from "../../../modules/auth";
 import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
-import {CorporateadminmodalComponent} from "../corporateadmin/corporateadminmodal/corporateadminmodal.component";
+import {MatSort, Sort} from "@angular/material/sort";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {CorporatesmodalComponent} from "./corporatesmodal/corporatesmodal.component";
-import {catchError, retry} from "rxjs/operators";
-import {throwError} from "rxjs";
+import {Subscription, throwError} from "rxjs";
 import {NotificationService} from "../../shared/notification.service";
-import {CustomerService} from "../../shared/customer.service";
-const API_USERS_URL = `${environment.apiUrl}`;
+import {DatePipe} from "@angular/common";
+import {NgxSpinnerService} from "ngx-spinner";
+import {FilterComponent} from "../../OAPF/common/filter/filter.component";
+import {oaCommonService} from "../../shared/oacommon.service";
+import {corporates} from "../../Model/OAAdmin/Request/corporates";
 
 @Component({
   selector: 'app-corporates',
@@ -21,104 +19,102 @@ const API_USERS_URL = `${environment.apiUrl}`;
   styleUrls: ['./corporates.component.scss']
 })
 export class CorporatesComponent implements OnInit {
-  dataSource: any = new MatTableDataSource<Corporateadmin>();
-  displayedColumns: string[] = ['customerId', 'name', 'emailAddress', 'transactionStatus', 'status', 'actions'];
+  dataSource: any = new MatTableDataSource<corporates>();
+  displayedColumns:  string[] = ['customerId', 'name', 'emailAddress', 'transactionStatus', 'status', 'actions'];
+  fDisplayedColumns: string[] = ['customerId', 'name', 'emailAddress', 'transactionStatus', 'status'];
   authToken: any;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
-  @ViewChild(MatSort) sort: MatSort | any;
-  modalOption: NgbModalOptions = {}; // not null!
+  modalOption: NgbModalOptions = {};
   closeResult: string;
-  colorCode:string;
   isLoading: any;
 
-  constructor(public http: HttpClient,
-              public authService: AuthService,
-              public modalService: NgbModal,
-              public notifyService : NotificationService,
-              public customerService: CustomerService) { }
+  private subscriptions: Subscription[] = [];
+  isLoading$: any;
+  authRoles : any
+
+  //SORTING
+  totalRows = 0;
+  pageSize = 5;
+  currentPage = 0;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
+  @ViewChild(MatSort) sort: MatSort | any;
+  sortData: any
+
+  constructor(
+    public authService: AuthService,
+    public modalService: NgbModal,
+    public notifyService: NotificationService,
+    private datePipe: DatePipe,
+    private spinner: NgxSpinnerService,
+    public oaCommonService: oaCommonService) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    this.authRoles = auth?.aRoles
+
+  }
+
 
   ngOnInit(): void {
-    this.getCorporates();
+    this.getBankUsers();
   }
 
-  public getCorporates() {
-    this.isLoading = true;
-    this.authToken = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${this.authToken?.jwt}`,
+  public getBankUsers() {
+    const sb = this.oaCommonService.getMethodWithPagination('/oaadmin/api/v1/customers', '', this.currentPage, this.pageSize, this.sortData ).subscribe((res) => {
+      this.dataSource.data = res.content;
+      this.totalRows = res.totalElements
     });
-    return this.http.get(API_USERS_URL + '/api/v1/customers', {
-      headers: httpHeaders,
-    }).subscribe(data => {
-      this.dataSource.data = data;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    });
+    this.subscriptions.push(sb);
   }
+
 
   newCorporates() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'lg'
     const modalRef = this.modalService.open(CorporatesmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
-      console.log('newBankAdmin is '+result);
+      console.log('newbankadmins is ' + result);
     }, (reason) => {
-      this.getCorporates();
+      this.getBankUsers();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
-  openCorporatesDialog(element: any, mode: any) {
+  openBankUserDialog(element: any, mode: any) {
     console.log(element)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'lg'
     const modalRef = this.modalService.open(CorporatesmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {
-      this.getCorporates();
+      this.getBankUsers();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
-  openDelete(content:any, element: any) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+  openBankUserDelete(content: any, element: any) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
-        this.deleteModal(element.customerId);
+        this.deleteModal(element);
       }
     }, (reason) => {
-      this.getCorporates();
+      this.getBankUsers();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
-  private deleteModal(customerId:any) {
-    this.deleteCorporates(customerId).subscribe(res => {
+  private deleteModal(data: any) {
+    this.oaCommonService.dataItem(data, data.userId, 'delete', '/oaadmin/api/v1/customers/delete/').subscribe(res => {
     }, (error: { message: any }) => {
-      this.notifyService.showError(error,'Delete Customer')
+      this.notifyService.showError(error, 'Delete Customer')
       console.error('There was an error!', error);
       return;
     });
-  }
-
-  deleteCorporates(customerId: any) {
-    console.log(customerId)
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.delete<any>(API_USERS_URL + '/api/v1/customers/' + customerId, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
   }
 
   private getDismissReason(reason: any): string {
@@ -138,25 +134,54 @@ export class CorporatesComponent implements OnInit {
       errorMessage = error.error.message;
     } else {
       // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      errorMessage = `Error Code: ${error.status}\n Message: ${error.message}`;
     }
     console.log(errorMessage);
     return throwError(errorMessage);
   }
 
-  getColor(post: any) {
-    {
-      if(post.deleteFlag)
-      {
-        this.colorCode = '#cc0248'
-      } else if(post.transactionStatus === 'MASTER') {
-        this.colorCode = '#151414'
-      } else {
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sb => sb.unsubscribe());
+  }
 
-        this.colorCode = '#5db6e3'
+  openFilter() {
+    console.log('open filter')
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    const modalRef = this.modalService.open(FilterComponent, this.modalOption);
+    console.log(this.fDisplayedColumns)
+    modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      if (result.valid && result.value.filterOption.length > 0) {
+        const sb = this.oaCommonService.getFilterWithPagination(result, 'filter', '/oaadmin/api/v1/customers', this.currentPage, this.pageSize, this.sortData).subscribe((res: any) => {
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
+        });
+        this.subscriptions.push(sb);
+      } else {
+        const sb = this.oaCommonService.getFilterWithPagination(result, 'all', '/oaadmin/api/v1/customers', this.currentPage, this.pageSize, this.sortData).subscribe((res: any) => {
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
+        });
+        this.subscriptions.push(sb);
       }
-      return this.colorCode;
-    }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  pageChanged(event: any) {
+    console.log(this.sort)
+    console.log({event});
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.getBankUsers();
+  }
+
+  sortChanges(event: Sort) {
+    console.log(event.direction)
+    this.sortData = event.active + ',' + event.direction
+    this.getBankUsers();
   }
 
 

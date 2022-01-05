@@ -1,130 +1,95 @@
-<div class="pb-10 pb-lg-12">
-  <h2 class="fw-bolder text-dark">Admin Information</h2>
+<div class="pb-15 pb-lg-8">
+  <h3 class="fw-bolder text-dark">Corporate Admin Info</h3>
 </div>
-<div [formGroup]="form">
-  <div class="fv-row mb-10">
-    <label class="form-label required">User Id</label
-    ><input
-    name="userId"
-    class="form-control form-control-lg form-control-solid"
-    formControlName="userId" placeholder="User Id"
-  />
-    <div
-      class="fv-plugins-message-container invalid-feedback"
-      *ngIf="
-        form.get('userId')?.hasError('required') &&
-        form.get('userId')?.touched
-      "
-    >
-      UserId is required
-    </div>
-  </div>
-  <div class="row">
+<div [formGroup]="corporateAdminForm" id="form">
+  <div class="form-group row">
     <div class="col-xl-6">
-      <div class="form-group">
-        <label class="form-label required">First Name</label>
-        <input
-          type="text"
-          class="form-control form-control-lg form-control-solid"
-          name="firstName"
-          formControlName="firstName"
-          placeholder="First Name"
-        />
-      </div>
+      <label class="form-label required">User Id</label>
+      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="User Id" name="userId" [class.is-invalid]="isControlInvalid('userId')"
+             [class.is-valid]="isControlValid('userId')" formControlName="userId"/>
     </div>
     <div class="col-xl-6">
-      <label class="form-label required">Last Name</label
-      ><input
-      type="text"
-      class="form-control form-control-lg form-control-solid"
-      name="lastName"
-      formControlName="lastName"
-      placeholder="Last Name"
-    />
+      <label class="form-label required">Email Address</label>
+      <input type="email" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="Email Address" name="emailAddress" [class.is-invalid]="isControlInvalid('emailAddress')"
+             [class.is-valid]="isControlValid('emailAddress')" formControlName="emailAddress"/>
     </div>
   </div>
-  <div class="fv-row mb-0">
-    <label class="fs-6 fw-bold form-label required">Email Address</label
-    ><input
-    name="emailAddress"
-    class="form-control form-control-lg form-control-solid"
-    formControlName="emailAddress"
-  />
-    <div
-      class="fv-plugins-message-container invalid-feedback"
-      *ngIf="
-        form.get('emailAddress')?.hasError('required') &&
-        form.get('emailAddress')?.touched
-      "
-    >
-      Email Address is required
+  <div class="form-group row">
+    <div class="col-xl-6">
+      <label class="form-label required">First Name</label>
+      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="First Name" name="firstName" [class.is-invalid]="isControlInvalid('firstName')"
+             [class.is-valid]="isControlValid('firstName')" formControlName="firstName"/>
     </div>
-    <div
-      class="fv-plugins-message-container invalid-feedback"
-      *ngIf="
-        form.get('emailAddress')?.hasError('email') &&
-        form.get('emailAddress')?.touched
-      "
-    >
-      Wrong email format
+    <div class="col-xl-6">
+      <label class="form-label required">Last Name</label>
+      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="Last Name" name="lastName" [class.is-invalid]="isControlInvalid('lastName')"
+             [class.is-valid]="isControlValid('lastName')" formControlName="lastName"/>
+    </div>
+
+  </div>
+  <div class="form-group row">
+    <div class="col-xl-6">
+      <label class="form-label required">Effective Date</label>
+      <input type="date" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="Effective Date" name="effectiveDate" [class.is-invalid]="isControlInvalid('effectiveDate')"
+             [class.is-valid]="isControlValid('effectiveDate')" formControlName="effectiveDate"/>
+    </div>
+    <div class="col-xl-6">
+      <label class="form-label required">Expiry Date</label>
+      <input type="date" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="Expiry Date" name="expiryDate" [class.is-invalid]="isControlInvalid('expiryDate')"
+             [class.is-valid]="isControlValid('expiryDate')" formControlName="expiryDate"/>
     </div>
   </div>
-  <div class="row">
-    <div class="col-xl-10">
-      <div class="form-group">
-        <label class="form-label required">Customers</label>
+  <div class="form-group row">
+    <label class="form-label required">Roles</label>
+    <div class="col-xl-6">
+      <ng-multiselect-dropdown
+        [settings]="dropdownSettings"
+        [data]="dropdownList"
+        formControlName="roles"
+      >
+      </ng-multiselect-dropdown>
+    </div>
+    <div class="col-xl-6">
+      <div class="me-5">
+        <label class="fs-6 fw-bold form-label"
+        >Active State</label>
+      </div>
+      <label class="form-check form-switch form-check-custom form-check-solid"
+      >
+      <span class="form-check-label fw-bold text-gray-400"
+      >Enabled</span>
         <input
-          type="text"
-          class="form-control form-control-lg form-control-solid"
-          name="customers"
-          formControlName="customers"
-          placeholder="Customers"
-        />
-        <a (click)="openCustomerDialog(content)"
-           class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen019.svg'"
-                      class="svg-icon svg-icon-3"></span>
-        </a>
+          class="form-check-input"
+          name="status"
+          formControlName="status"
+          type="checkbox"
+        /><span class="form-check-label fw-bold text-gray-400"
+      >Disabled</span
+      ></label
+      >
+    </div>
+    <div class="col-xl-6">
+      <label class="form-label required">Customer</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <button
+            class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5 btn rounded-pill border-0 ml-n5"
+            type="button"
+            (click)="openCustomerDialog()">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+        <input type="text" class="form-control form-control-solid" id="customerId" name="customerId"
+               placeholder="Customer Id" formControlName="customerId"
+               [class.is-invalid]="isControlInvalid('customerId')"
+               [class.is-valid]="isControlValid('customerId')" readonly>
       </div>
     </div>
   </div>
 </div>
-<ng-template #content let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">×</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
-      <ng-container matColumnDef="customerId">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-        <mat-cell *matCellDef="let row" (click) = "selectedCustomer(row.customerId)">{{row.customerId}}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
-        <mat-cell *matCellDef="let row" (click) = "selectedCustomer(row.customerId)"> {{row.name}}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="emailAddress">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>State</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.emailAddress}}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Url</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.status}}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="transactionStatus">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Created at</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.transactionStatus}}</mat-cell>
-      </ng-container>
-
-      <mat-row (click)="c(row)"
-               *matRowDef="let row;  columns: displayedColumns;"></mat-row>
-    </mat-table>
-  </div>
-</ng-template>

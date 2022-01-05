@@ -1,16 +1,13 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
-import {BehaviorSubject, Observable, Subscription, throwError} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {BehaviorSubject, Subscription} from "rxjs";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../modules/auth";
-import {catchError, retry} from "rxjs/operators";
-import {environment} from "../../../../../environments/environment";
-import {Corporateadmin, inits} from "../../../Model/corporateadmin";
-import {coporateadminreq} from "../../../Model/coporateadminreq";
-import {Customer} from "../../../Model/customer";
-import {Customerreq} from "../../../Model/customerreq";
-const API_USERS_URL = `${environment.apiUrl}`;
+import {corporateadmin,inits} from "../../../Model/OAAdmin/Request/corporateadmin";
+import {NotificationService} from "../../../shared/notification.service";
+import {DatePipe} from "@angular/common";
+import Swal from "sweetalert2";
+import {oaCommonService} from "../../../shared/oacommon.service";
+import {ccorporateadmin} from "../../../Model/OAAdmin/CRequest/ccorporateadmin";
 
 @Component({
   selector: 'app-corporateadminmodal',
@@ -19,22 +16,23 @@ const API_USERS_URL = `${environment.apiUrl}`;
 })
 export class CorporateadminmodalComponent implements OnInit {
 
-  formsCount = 3;
-  account$: BehaviorSubject<any> =
-    new BehaviorSubject<Corporateadmin>(inits);
+  formsCount = 2;
+  account$: BehaviorSubject<any> = new BehaviorSubject<corporateadmin>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
-  isCurrentFormValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
+  isCurrentFormValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   errorMsg: string;
   private unsubscribe: Subscription[] = [];
   @Input() mode: any;
   @Output() formValue: any
   fromParent: any;
-  coporateadminreq: coporateadminreq;
-  Customerreq: Customerreq;
+  ccorporateadmin: ccorporateadmin
+  checkNextStage: boolean;
 
-  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient, public activeModal: NgbActiveModal, private authService: AuthService) {
+  constructor(public activeModal: NgbActiveModal,
+              private authService: AuthService,
+              public notifyService: NotificationService,
+              public oaCommonService: oaCommonService,
+              private datePipe: DatePipe) {
   }
 
   ngOnInit(): void {
@@ -43,7 +41,7 @@ export class CorporateadminmodalComponent implements OnInit {
     }
   }
 
-  updateAccount = (part: Partial<Corporateadmin>, isFormValid: boolean) => {
+  updateAccount = (part: Partial<corporateadmin>, isFormValid: boolean) => {
     const currentAccount = this.account$.value;
     const updatedAccount = {...currentAccount, ...part};
     this.account$.next(updatedAccount);
@@ -53,67 +51,101 @@ export class CorporateadminmodalComponent implements OnInit {
   modal: any;
 
   nextStep() {
+    console.log('check validation')
     const nextStep = this.currentStep$.value + 1;
     if (nextStep > this.formsCount) {
       return;
     }
     if (this.currentStep$.value === this.formsCount - 1) {
-      const auth = this.authService.getAuthFromLocalStorage();
-      const httpHeaders = new HttpHeaders({
-        Authorization: `Bearer ${auth?.jwt}`,
-        'Content-Type': 'application/json'
-      });
-      console.log('auth jwt token is ' + auth?.jwt)
-      this.coporateadminreq = new coporateadminreq();
-      this.Customerreq = new Customerreq();
-
-      if (!this.coporateadminreq.customers) {
-        this.coporateadminreq.customers = [new Customerreq()];
+      if( this.checkBusinessValidation()){
+        return;
       }
-
-      this.coporateadminreq.userId = this.account$.value.userId
-      this.coporateadminreq.firstName = this.account$.value.firstName
-      this.coporateadminreq.lastName = this.account$.value.lastName
-      this.coporateadminreq.effectiveDate = this.account$.value.effectiveDate
-      this.coporateadminreq.status = this.account$.value.status
-      this.coporateadminreq.emailAddress = this.account$.value.emailAddress
-      this.coporateadminreq.roles = this.account$.value.roles
-
-      this.Customerreq.customerId = this.account$.value.customers
-      this.coporateadminreq.customers =  [this.Customerreq]
-
-
-      console.log(this.coporateadminreq)
-      const newreq = JSON.stringify(this.coporateadminreq)
-      console.log('new is :'+newreq)
+      this.ccorporateadmin = new ccorporateadmin();
+      this.ccorporateadmin = this.account$.value;
+      const rmNewRequest = this.ccorporateadmin;
       if (this.mode === 'new') {
-        this.CreateCorporateAdmin(newreq).subscribe(res => {
-          this.currentStep$.next(nextStep);
+        this.checkNextStage = false;
+        this.oaCommonService.dataItem(rmNewRequest,'',this.mode,'oaadmin/api/v1/bankusers').subscribe(res => {
+          console.log('Response is : ' + res)
+          if (res !== undefined) {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Add Record Successfully',
+              icon: 'success'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== undefined) {
+            if (this.checkNextStage) {
+              this.currentStep$.next(nextStep);
+            }
+          }
         }, (error: { message: any }) => {
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       } else if (this.mode === 'edit') {
-
-        this.modifyCorporateAdmin(newreq).subscribe(res => {
-          this.currentStep$.next(nextStep);
+        this.checkNextStage = false;
+        this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.userId,this.mode,'oaadmin/api/v1/bankusers').subscribe(res => {
+          console.log('Response is : ' + res)
+          if (res !== undefined) {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Edit Record Successfully',
+              icon: 'success'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== undefined) {
+            if (this.checkNextStage) {
+              this.currentStep$.next(nextStep);
+            }
+          }
         }, (error: { message: any }) => {
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       } else if (this.mode === 'auth') {
-        this.authBankAdmin().subscribe(res => {
-          this.currentStep$.next(nextStep);
+        this.checkNextStage = false;
+        this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.userId,this.mode,'oaadmin/api/v1/bankusers').subscribe(res => {
+          if (res !== undefined) {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Authorize Record Successfully',
+              icon: 'success'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== undefined) {
+            if (this.checkNextStage) {
+              this.currentStep$.next(nextStep);
+            }
+          }
         }, (error: { message: any }) => {
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       }
     }
-    this.currentStep$.next(nextStep);
+    if (this.checkNextStage) {
+      this.currentStep$.next(nextStep);
+    }
   }
-
-
 
   prevStep() {
     const prevStep = this.currentStep$.value - 1;
@@ -132,132 +164,22 @@ export class CorporateadminmodalComponent implements OnInit {
     this.activeModal.dismiss();
   }
 
-  // submit() {
-  //   console.log('submit')
-  //
-  //   console.log('mode of transaction is ' + jsonval);
-  //
-  //
-  //   if (this.mode === 'new') {
-  //     console.log(this.account$.value)
-  //     console.log(this.cancelButton)
-  //     return this.http.post(API_USERS_URL + '/api/v1/BankAdmins/',
-  //       jsonval, {headers: httpHeaders})
-  //       .pipe(
-  //         catchError(error => {
-  //           this.cancelButton = true;
-  //           if (error.error instanceof ErrorEvent) {
-  //             this.errorMsg = `Error: ${error.error.message}`;
-  //           } else {
-  //             this.errorMsg = `Error: ${error.message}`;
-  //           }
-  //           return [];
-  //         })
-  //       ).subscribe(res => {
-  //         console.log(this.cancelButton)
-  //         this.cancelButton = true;
-  //         console.log(this.cancelButton)
-  //         console.log(res);
-  //       });
-  //
-  //
-  //   } else if (this.mode === 'edit') {
-  //     return this.http.put(API_USERS_URL + '/api/v1/BankAdmins/' + this.account$.value.customerId,
-  //       JSON.stringify(this.account$.value), {headers: httpHeaders})
-  //       .subscribe(res => {
-  //         console.log(res)
-  //       }, (error: { message: any; }) => {
-  //         console.error('There was an error!', error);
-  //       });
-  //   } else if (this.mode === 'auth') {
-  //     return this.http.put(API_USERS_URL + '/api/v1/BankAdmins/authorise/' + this.account$.value.customerId, {}, {headers: httpHeaders})
-  //       .subscribe(res => {
-  //         console.log(res)
-  //       }, (error: { message: any; }) => {
-  //         console.error('There was an error!', error);
-  //       });
-  //   } else if (this.mode === 'delete') {
-  //     return this.http.put(API_USERS_URL + '/api/v1/BankAdmins/delete/' + this.account$.value.customerId, {headers: httpHeaders}, {headers: httpHeaders})
-  //       .subscribe(res => {
-  //         console.log(res)
-  //       }, (error: { message: any; }) => {
-  //         console.error('There was an error!', error);
-  //       });
-  //   }
-  // }
-
-  errorHandl(error: { error: { message: string; }; status: any; message: any; }) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+  private checkBusinessValidation(): boolean {
+    let currentDate:any = new Date();
+    currentDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
+    if(this.account$.value.expiryDate < currentDate){
+      this.notifyService.showWarning('Expiry Date should not less than today Date','Business Validation')
+      return true;
     }
-    console.log(errorMessage);
-    return throwError(errorMessage);
-  }
-
-  CreateCorporateAdmin(data: any): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.post<any>(API_USERS_URL + '/api/v1/customeradmins/', data, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      );
-  }
-
-  modifyCorporateAdmin(data: any): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/customeradmins/' + this.account$.value.userId, data, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      );
-  }
-
-  public authBankAdmin(): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/customeradmins/authorise/' + this.account$.value.userId, {}, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      );
-  }
-
-  deleteBankAdmin(): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/customeradmins/delete' + this.account$.value.userId, {}, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      );
-  }
-
-  deleteModal(post: any) {
-    this.deleteBankAdmin().subscribe(res => {
-      this.activeModal.dismiss();
-    }, (error: { message: any }) => {
-      console.error('There was an error!', error);
-      return;
-    });
+    if(this.account$.value.effectiveDate < currentDate){
+      this.notifyService.showWarning('Effective Date should not less than today Date','Business Validation')
+      return true;
+    }
+    if(this.account$.value.expiryDate < this.account$.value.effectiveDate){
+      this.notifyService.showWarning('Expiry should not less than today Date','Business Validation')
+      return true;
+    }
+    return false
   }
 
 

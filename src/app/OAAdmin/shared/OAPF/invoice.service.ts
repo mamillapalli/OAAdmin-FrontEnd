@@ -1,11 +1,13 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpEvent, HttpHeaders, HttpParams} from "@angular/common/http";
 import {BehaviorSubject, Observable, of, throwError} from "rxjs";
-import {catchError, finalize, retry} from "rxjs/operators";
+import {catchError, delay, finalize, retry} from "rxjs/operators";
 import {environment} from "../../../../environments/environment";
 import {AuthModel} from "../../../modules/auth/models/auth.model";
 import {AuthService} from "../../../modules/auth";
 import {Customer} from "../../Model/customer";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NotificationService} from "../notification.service";
 
 const API_USERS_URL = `${environment.apiUrl}`;
 
@@ -21,10 +23,10 @@ export class invoiceService {
   protected _isLoading$ = new BehaviorSubject<boolean>(false);
   protected _errorMessage = new BehaviorSubject<string>('');
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private http: HttpClient, private authService: AuthService,private spinner: NgxSpinnerService, public notifyService: NotificationService) {
   }
 
-  getInvoice(data: any, id: any, methodType: any): Observable<any> {
+  getInvoiceWithPagination(url:any , data: any, id: any, currentPage: any, pageSize: any, sortData:any, methodType:any): Observable<any> {
     this._isLoading$.next(true);
     this._errorMessage.next('');
     this.authToken = this.authService.getAuthFromLocalStorage();
@@ -33,8 +35,15 @@ export class invoiceService {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*'
     });
-    if (methodType === 'id') {
-      return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
+    if(methodType === 'pagination') {
+      let httpParams = new HttpParams();
+      httpParams = httpParams.append('page', currentPage);
+      httpParams = httpParams.append('size', pageSize);
+      console.log(sortData)
+      if (sortData !== null && sortData !== undefined)
+        httpParams = httpParams.append('sort', sortData);
+      //httpParams = httpParams.append('direction', sortData);
+      return this.http.get<any>(url, {headers: httpHeaders, params: httpParams}).pipe(
         catchError(err => {
           this._errorMessage.next(err);
           console.error(err);
@@ -42,22 +51,15 @@ export class invoiceService {
         }),
         finalize(() => this._isLoading$.next(false))
       );
-    } else if (methodType === 'filter') {
+    } else if(methodType === 'loanDueDate') {
       let httpParams = new HttpParams();
-      return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
-        catchError(err => {
-          this._errorMessage.next(err);
-          console.error(err);
-          return of({id: undefined});
-        }),
-        finalize(() => this._isLoading$.next(false))
-      );
-    } else if (methodType === 'loanDueDate') {
-      let httpParams = new HttpParams();
+      httpParams = httpParams.append('page', currentPage);
+      httpParams = httpParams.append('size', pageSize);
+      console.log(sortData)
+      if (sortData !== null && sortData !== undefined)
+        httpParams = httpParams.append('sort', sortData);
       httpParams = httpParams.append('dueDate', data);
-      httpParams = httpParams.append('transactionStatus', 'MASTER');
-      httpParams = httpParams.append('status', 'FINANCE_READY');
-      return this.http.get<any>('/oapf/api/v1/invoices', {params: httpParams, headers: httpHeaders}).pipe(
+      return this.http.get<any>(url, {headers: httpHeaders, params: httpParams}).pipe(
         catchError(err => {
           this._errorMessage.next(err);
           console.error(err);
@@ -66,13 +68,103 @@ export class invoiceService {
         finalize(() => this._isLoading$.next(false))
       );
     } else {
-      return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
+      let httpParams = new HttpParams();
+      httpParams = httpParams.append('page', currentPage);
+      httpParams = httpParams.append('size', pageSize);
+      console.log(sortData)
+      if (sortData !== null && sortData !== undefined)
+        httpParams = httpParams.append('sort', sortData);
+      //httpParams = httpParams.append('direction', sortData);
+      return this.http.get<any>(url, {headers: httpHeaders, params: httpParams}).pipe(
         catchError(err => {
           this._errorMessage.next(err);
           console.error(err);
           return of({id: undefined});
         }),
         finalize(() => this._isLoading$.next(false))
+      );
+    }
+  }
+
+  getInvoice(data: any, id: any, methodType: any): Observable<any> {
+    this.spinner.show()
+    this.authToken = this.authService.getAuthFromLocalStorage();
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${this.authToken?.jwt}`,
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    });
+    if (methodType === 'id') {
+      return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          this.spinner.hide()
+          return of([]);
+        }),
+        finalize(() => this.spinner.hide())
+      );
+    } else if (methodType === 'filter') {
+      let httpParams = new HttpParams();
+      return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          this.spinner.hide()
+          return of([]);
+        }),
+        finalize(() => this.spinner.hide())
+      );
+    } else if (methodType === 'loanDueDate') {
+      let httpParams = new HttpParams();
+      httpParams = httpParams.append('dueDate', data);
+      httpParams = httpParams.append('transactionStatus', 'MASTER');
+      httpParams = httpParams.append('status', 'FINANCE_READY');
+      return this.http.get<any>('/oapf/api/v1/invoices', {params: httpParams, headers: httpHeaders}).pipe(
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          this.spinner.hide()
+          return of([]);
+        }),
+        finalize(() => this.spinner.hide())
+      );
+    }
+      // else if(methodType === 'pagination') {
+      //   let httpParams = new HttpParams();
+      //   httpParams = httpParams.append('page', currentPage);
+      //   httpParams = httpParams.append('size', pageSize);
+      //   httpParams = httpParams.append('sort', 'invoiceNumber');
+      //   return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
+      //     catchError(err => {
+      //       this._errorMessage.next(err);
+      //       console.error(err);
+      //       return of({id: undefined});
+      //     }),
+      //     finalize(() => this._isLoading$.next(false))
+      //   );
+    // }
+    else if (methodType === 'viewHistory') {
+      let httpParams = new HttpParams();
+      httpParams = httpParams.append('invoiceNumber', id);
+      return this.http.get<any>('/oapf/api/v1/invoiceHistory', {params: httpParams, headers: httpHeaders}).pipe(
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          this.spinner.hide()
+          return of([]);
+        }),
+        finalize(() => this.spinner.hide())
+      );
+    } else {
+      return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          this.spinner.hide()
+          return of([]);
+        }),
+        finalize(() => this.spinner.hide())
       );
     }
   }
@@ -116,6 +208,17 @@ export class invoiceService {
       );
     } else if (mode === 'auth') {
       return this.http.put<any>('/oapf/api/v1/invoices/authorise', dataPost, {
+        headers: httpHeaders
+      }).pipe(
+        catchError(err => {
+          this._errorMessage.next(err);
+          console.log(err)
+          return of(null);
+        }),
+        finalize(() => this._isLoading$.next(false))
+      );
+    } else if (mode === 'authBuyer') {
+      return this.http.put<any>('/oapf/api/v1/invoices/registerAnchorPartyApproval', dataPost, {
         headers: httpHeaders
       }).pipe(
         catchError(err => {
@@ -195,14 +298,14 @@ export class invoiceService {
       )
   }
 
-  uploadFileStatus(fileId:any): Observable<HttpEvent<any>> {
+  uploadFileStatus(fileId: any): Observable<HttpEvent<any>> {
     this.authToken = this.authService.getAuthFromLocalStorage();
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${this.authToken?.jwt}`,
     });
     let httpParams = new HttpParams();
     httpParams = httpParams.append('fileId', fileId);
-      return this.http.get<any>('/oapf/api/v1/invoices/uploadFileStatus',{params: httpParams, headers: httpHeaders})
+    return this.http.get<any>('/oapf/api/v1/invoices/uploadFileStatus', {params: httpParams, headers: httpHeaders})
       .pipe(
         retry(1),
         catchError(this.errorHandle)

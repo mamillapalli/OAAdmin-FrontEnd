@@ -10,5 +10,17 @@
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"
+  },
+  "/oanotification": {
+    "target": "http://localhost:8765",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/oadata": {
+    "target": "http://localhost:8765",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
 }

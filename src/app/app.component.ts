@@ -7,6 +7,7 @@ import {locale as esLang} from './modules/i18n/vocabs/es';
 import {locale as jpLang} from './modules/i18n/vocabs/jp';
 import {locale as deLang} from './modules/i18n/vocabs/de';
 import {locale as frLang} from './modules/i18n/vocabs/fr';
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -16,7 +17,7 @@ import {locale as frLang} from './modules/i18n/vocabs/fr';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
-  constructor(private translationService: TranslationService) {
+  constructor(private translationService: TranslationService,private spinner: NgxSpinnerService) {
     // register translations
     this.translationService.loadTranslations(
       enLang,

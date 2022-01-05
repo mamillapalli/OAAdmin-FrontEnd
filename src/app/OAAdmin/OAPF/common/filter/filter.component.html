@@ -1,0 +1,50 @@
+<div [formGroup]="filterForm" id="form">
+  <div class="modal-header">
+    <h2 class="modal-title">Filters</h2>
+    <button type="button" class="close" aria-label="Close" (click)="getFilterValue('Cancel')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <table class="table table-bordered" formArrayName="filterOption">
+<!--        <tr>-->
+<!--          <th colspan="2">Filter Option</th>-->
+<!--          <th>-->
+<!--            <button type="button" (click)="addFilterOption()" class="btn btn-primary">Add</button>-->
+<!--          </th>-->
+<!--        </tr>-->
+        <tr *ngFor="let quantity of filterOption().controls; let i=index" [formGroupName]="i">
+          <td>
+            Filter Id :
+            <select
+              class="form-control form-control-lg form-control-
+                solid"
+              name="filterId" id="filterId" formControlName="filterId">
+              <option value="{{currencyl}}" *ngFor="let currencyl of fDisplayedColumns">{{currencyl}}</option>
+            </select>
+          </td>
+          <td>
+            Filter Value:
+            <input type="text" formControlName="filterValue" id="filterValue" class="form-control">
+          </td>
+          <td>
+            <button mat-icon-button color="primary" aria-label="Remove/clear"
+                    (click)="removeFilter(i)" matTooltip="Remove">
+              <mat-icon>highlight_off</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" aria-label="Add"
+                    (click)="addFilterOption()" matTooltip="Add">
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="getFilterValue('Cancel')">Cancel</button>
+    <button type="submit" class="btn btn-primary" (click)="getFilterValue('Yes')">Submit</button>
+  </div>
+</div>
+

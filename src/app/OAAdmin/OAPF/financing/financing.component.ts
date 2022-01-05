@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
+import {MatSort, Sort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
 import {financingService} from "../../shared/OAPF/financing.service";
 import {Subscription} from "rxjs";
@@ -8,6 +8,8 @@ import {financing, inits} from "../../Model/OAPF/Request/financing";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {FinancingmodalComponent} from "./financingmodal/financingmodal.component";
 import {NgxSpinnerService} from "ngx-spinner";
+import {oapfcommonService} from "../../shared/oapfcommon.service";
+import {AuthService} from "../../../modules/auth";
 
 @Component({
   selector: 'app-financing',
@@ -19,30 +21,42 @@ export class FinancingComponent implements OnInit {
   dataSource: any = new MatTableDataSource<financing>();
   displayedColumns: string[] = ['financeId', 'sbrReferenceId', 'agreementId', 'financeCurrency', 'financeAmount', 'financeDueDate', 'businessType',
     'actions'];
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
-  @ViewChild(MatSort) sort: MatSort | any;
+
   subscriptions: Subscription[] = [];
   financing: financing;
   modalOption: NgbModalOptions = {};
   closeResult: string;
+  authRoles: any
 
-  constructor(public financingService: financingService, public modalService: NgbModal, private spinner: NgxSpinnerService) {
+  //sort
+  totalRows = 0;
+  pageSize = 5;
+  currentPage = 0;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
+  @ViewChild(MatSort) sort: MatSort | any;
+  sortData : any
+
+  constructor(public financingService: financingService,
+              public modalService: NgbModal,
+              private spinner: NgxSpinnerService,
+              public oapfcommonService: oapfcommonService,
+              public authService: AuthService) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    this.authRoles = auth?.aRoles
   }
 
   ngOnInit(): void {
-    this.getFinancing();
+    this.getFinancing(this.currentPage,this.pageSize,this.sortData);
   }
 
-  public getFinancing() {
+  public getFinancing(currentPage: number, pageSize: number, sortData: any) {
     console.log('Get Invoices')
     this.spinner.show();
-    const sb = this.financingService.getFinancing('', '', 'all').subscribe((res) => {
-      this.dataSource.data = res;
-      this.dataSource.sort = this.sort;
-      this.spinner.hide();
-      this.dataSource.paginator = this.paginator;
+    const sb = this.oapfcommonService.getDataWithPagination('/oapf/api/v1/finances/', this.currentPage, this.pageSize,this.sortData).subscribe((res) => {
+      this.dataSource.data = res.content;
+      this.totalRows = res.totalElements
     });
-    this.subscriptions.push(sb);
   }
 
   newFinance() {
@@ -54,7 +68,7 @@ export class FinancingComponent implements OnInit {
     modalRef.result.then((result) => {
       console.log('newBankAdmin is ' + result);
     }, (reason) => {
-      this.getFinancing();
+      this.getFinancing(this.currentPage,this.pageSize,this.sortData);
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -70,7 +84,7 @@ export class FinancingComponent implements OnInit {
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {
-      this.getFinancing();
+      this.getFinancing(this.currentPage,this.pageSize,this.sortData);
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -82,7 +96,7 @@ export class FinancingComponent implements OnInit {
         this.deleteModal(element);
       }
     }, (reason) => {
-      this.getFinancing();
+      this.getFinancing(this.currentPage,this.pageSize,this.sortData);
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -103,5 +117,17 @@ export class FinancingComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  pageChanged(event: any) {
+    console.log({ event });
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.getFinancing(this.currentPage,this.pageSize,this.sortData);
+  }
+
+  sortChanges(event: Sort) {
+    this.sortData = event.active
+    this.getFinancing(this.currentPage,this.pageSize,this.sortData);
   }
 }

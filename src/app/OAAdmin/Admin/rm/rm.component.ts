@@ -1,6 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {Corporateadmin} from "../../Model/corporateadmin";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
@@ -14,6 +13,7 @@ import {throwError} from "rxjs";
 import {environment} from "../../../../environments/environment";
 import {RmmodalComponent} from "./rmmodal/rmmodal.component";
 import {FormControl} from "@angular/forms";
+import {rm} from "../../Model/OAAdmin/Request/rm";
 const API_USERS_URL = `${environment.apiUrl}`;
 @Component({
   selector: 'app-rm',
@@ -22,7 +22,7 @@ const API_USERS_URL = `${environment.apiUrl}`;
 })
 export class RmComponent implements OnInit {
 
-  dataSource: any = new MatTableDataSource<Corporateadmin>();
+  dataSource: any = new MatTableDataSource<rm>();
   displayedColumns: string[] = ['rmId', 'firstName', 'lastName' , 'emailAddress', 'joiningDate', 'expiryDate',  'status', 'actions'];
   authToken: any;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;

@@ -56,18 +56,17 @@ export class AccountmodalComponent implements OnInit {
     }
     if (this.currentStep$.value === this.formsCount - 1) {
       this.cAccounts = new caccounts();
-      this.cAccounts.accountId = this.account$.value.accountId
-      this.cAccounts.name = this.account$.value.name
-      this.cAccounts.type = this.account$.value.type
-      this.cAccounts.description = this.account$.value.description
-      this.cAccounts.currency = this.account$.value.currency
-      this.cAccounts.status = true
+      this.cAccounts = this.account$.value
+      // this.cAccounts.name = this.account$.value.name
+      // this.cAccounts.type = this.account$.value.type
+      // this.cAccounts.description = this.account$.value.description
+      // this.cAccounts.currency = this.account$.value.currency
+      // this.cAccounts.status = true
 
 
       //this.cInvoice.status = this.account$.value.status
 
-      //const rmNewRequest = JSON.stringify(this.cInvoice)
-      const rmNewRequest = this.cAccounts;
+      const rmNewRequest = JSON.stringify(this.cAccounts)
       console.log(rmNewRequest);
       if (this.mode === 'new') {
         this.checkNextStage = false;

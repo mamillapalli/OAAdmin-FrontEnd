@@ -1,33 +1,98 @@
+//styles for the Heading...
+h3{
+  font-size:14px;
+  font-family: Verdana,Sans-Serif;
+  text-align:center;
+  font-weight:bold;
+  margin-top:0px;
+}
+
+
+//styles for material table
+
+
+.example-container {
+  height: 300px;
+  width: 600px;
+  margin-left: 30px;
+}
+
+
+mat-table{
+  text-align:center;
+  padding: 0.35rem 0.35rem;
+  text-align:center;
+  font-size:11px;
+  font-family: Verdana,Sans-Serif;
+  color: #1a084c;
+  width: 600px;
+  height: 300px;
+  overflow:auto;
+}
+
+mat-header-cell, mat-header-row, .mat-header-cell-def{
+  text-align:center;
+  min-height:25px;
+  font-family:Verdana,sans-serif;
+  font-weight:bold;
+  font-size:12px;
+  color: #1a084c;
+  margin-bottom:10px;
+  top: 0;
+  position: sticky;
+  z-index: 1;
+  background-color: inherit;
+}
+
+mat-row{
+  text-align:center;
+  min-height:25px;
+  font-family:Verdana,sans-serif;
+  font-size:13px;
+  color: #1a084c;
+  margin-bottom:10px;
+
+}
+mat-cell{
+  text-align:center;
+  height:25px;
+  font-family:Verdana,sans-serif;
+  font-size:13px;
+  color: #1a084c;
+
+}
+
+
+
+//styles for mat raised button
+
+.mat-raised-button{
+  border-radius: 15px;
+  margin-left: 50px;
+  font-size:12px;
+  font-family: Verdana,Sans-Serif;
+  text-align:center;
+  font-weight:bold;
+  height:30px;
+
+}
+
+
+//styles for grid
+
+mat-grid-tile {
+  background: lightblue;
+  margin-left:-600px;
+
+}
+
 ::ng-deep .my-class .modal-dialog {
-  max-width: 70%;
-  width: 70%;
+  max-width: 95%;
+  width: 95%;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow-y: auto;
   min-height: calc(100vh - 60px);
-}
-.alternate { color: #cc0248
-}
-
-.mat-table {
-  //overflow-x: scroll;
-}
-
-.mat-cell,
-.mat-header-cell {
-  word-wrap: initial;
-  display: table-cell;
-  padding: 0px 10px;
-  line-break: unset;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  vertical-align: middle;
-}
-
-.mat-row,
-.mat-header-row {
-  display: table-row;
 }

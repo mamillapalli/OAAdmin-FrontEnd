@@ -1,0 +1,62 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Finance Information</h4>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="table-responsive">
+    <!-- begin::Table -->
+    <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+               class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+      <ng-container matColumnDef="financeId" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Finance Id</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.financeId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="sbrReferenceId" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">SBR Reference Id</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.sbrReferenceId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="agreementId" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Agreement Id</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.agreementId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="buyerId" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Buyer Id
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.buyerId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="sellerId" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Seller Id
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.sellerId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="financeCurrency" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">financeCurrency
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.financeCurrency}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="financeAmount" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">financeAmount
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.financeAmount}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;" (click)="passRow(row)">
+      </mat-row>
+    </mat-table>
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+    </mat-paginator>
+    <!-- end::Table -->
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>
+  </div>
+</div>

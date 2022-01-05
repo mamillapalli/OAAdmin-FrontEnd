@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Accounting Information</h4>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="table-responsive">
+    <!-- begin::Table -->
+    <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+               class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+      <ng-container matColumnDef="accountId" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Account Id</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.accountId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Name
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="type" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Type
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.type}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="currency" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Currency
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.currency}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;" (click)="passRow(row)">
+      </mat-row>
+    </mat-table>
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+    </mat-paginator>
+    <!-- end::Table -->
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>
+  </div>
+</div>

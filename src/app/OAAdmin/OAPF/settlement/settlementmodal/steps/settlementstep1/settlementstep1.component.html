@@ -78,6 +78,13 @@
              placeholder="Business Type" name="businessType" [class.is-invalid]="isControlInvalid('businessType')"
              [class.is-valid]="isControlValid('businessType')" formControlName="businessType"/>
     </div>
+    <div class="col-lg-3">
+      <label>Value Date</label>
+      <input type="date" class="form-control form-control-sm form-control-solid" autocomplete="off"
+             placeholder="Value Date" name="valueDate"
+             [class.is-invalid]="isControlInvalid('valueDate')"
+             [class.is-valid]="isControlValid('valueDate')" formControlName="valueDate"/>
+    </div>
   </div>
   <ng-container *ngIf="isFinanceFetched">
     <div class="form-group row">

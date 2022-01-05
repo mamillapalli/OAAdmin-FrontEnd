@@ -1,186 +1,144 @@
 import {Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Observable, Subscription, throwError} from "rxjs";
-import {Corporateadmin} from "../../../../../Model/corporateadmin";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {catchError, retry} from "rxjs/operators";
+import {corporateadmin} from "../../../../../Model/OAAdmin/Request/corporateadmin";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
-import {AuthService} from "../../../../../../modules/auth";
-import {environment} from "../../../../../../../environments/environment";
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {Customer} from "../../../../../Model/customer";
-import { coporateadminreq } from 'src/app/OAAdmin/Model/coporateadminreq';
-import {MatTableDataSource} from "@angular/material/table";
-const API_USERS_URL = `${environment.apiUrl}`;
+import {IDropdownSettings} from "ng-multiselect-dropdown";
+import {ReterivecustomersmodalComponent} from "../../../../common/reterivecustomersmodal/reterivecustomersmodal.component";
+import {oaCommonService} from "../../../../../shared/oacommon.service";
+import {Subscription} from "rxjs";
 @Component({
   selector: 'app-corporateadminstep1',
   templateUrl: './corporateadminstep1.component.html',
   styleUrls: ['./corporateadminstep1.component.scss']
 })
 export class Corporateadminstep1Component implements OnInit {
-  coporateadminreq: coporateadminreq;
-
-  @Input('updateParentModel') updateParentModel: (
-    part: Partial<Corporateadmin>,
-    isFormValid: boolean
-  ) => void;
-  form: FormGroup;
-  @Input() defaultValues: Partial<Corporateadmin>;
-
+  @Input('updateParentModel') updateParentModel: (part: Partial<corporateadmin>, isFormValid: boolean) => void;
+  @Input() defaultValues: Partial<corporateadmin>;
   private unsubscribe: Subscription[] = [];
-  @Input('formValue') formValue :  any;
-  @Input() mode :  any;
-  @ViewChild('myModal') myModal: any;
+  corporateAdminForm: FormGroup;
+  @Input() mode: any;
+  @Input('formValue') formValue: any;
+  dropdownList: any = [];
+  dropdownSettings: IDropdownSettings = {
+    singleSelection: false,
+    textField: 'name',
+    selectAllText: 'Select All',
+    unSelectAllText: 'UnSelect All',
+    itemsShowLimit: 3,
+    allowSearchFilter: true
+  };
+  selectedItems: any = [];
   modalOption: NgbModalOptions = {}; // not null!
   private closeResult: string;
-  private content: any;
-  customerList: any;
-  authToken: any;
-  dataSource: any = new MatTableDataSource<Corporateadmin>();
-  public displayedColumns: string[] = ['customerId', 'name', 'emailAddress','status','transactionStatus'];
-  clickedRows = new Set<Customer>();
 
-  constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal,private authService: AuthService) {}
+  constructor(private fb: FormBuilder,
+              public oaCommonService: oaCommonService,
+              public modalService: NgbModal) {
+
+  }
 
   ngOnInit() {
     this.initForm();
-    if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view')
-    {
-      this.form.disable()
-    }
-    if(this.mode !== 'new') {
+    if (this.mode === 'new') {
+      this.oaCommonService.getReferenceNumber('customeradmins').subscribe((res) => {
+        this.f.userId.setValue(res);
+      });
+      // this.roles = [
+      //   { name: "BANK_ADMIN_MAKER" },
+      //   { name: "BANK_ADMIN_CHECKER" },
+      //   { name: "BANK_ADMIN_VIEWER" },
+      // ];
+      this.dropdownList = [
+        {name: "CORPORATE_ADMIN_MAKER"},
+        {name: "CORPORATE_ADMIN_CHECKER"},
+        {name: "CORPORATE_ADMIN_VIEWER"}
+      ];
+
+    } else {
       this.updateForm();
+      if (this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view') {
+        this.corporateAdminForm.disable()
+      }
     }
     this.updateParentModel({}, this.checkForm());
   }
 
-  initForm() {
-    this.form = this.fb.group({
-      userId: [this.defaultValues.userId,[Validators.required]],
-      firstName: [this.defaultValues.firstName,[Validators.required]],
-      lastName: [this.defaultValues.lastName,[Validators.required]],
-      emailAddress: [this.defaultValues.emailAddress,[Validators.required, Validators.email]],
-      customers: [this.defaultValues.customers]
-    });
-
-    const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
-      this.updateParentModel(val, this.checkForm());
-    });
-    this.unsubscribe.push(formChangesSubscr);
+  get f() {
+    return this.corporateAdminForm.controls;
   }
 
-  checkForm() {
-    return !(
-      this.form.get('userId')?.hasError('required') ||
-      this.form.get('firstName')?.hasError('required') ||
-      this.form.get('lastName')?.hasError('required') ||
-      this.form.get('emailAddress')?.hasError('required') ||
-      this.form.get('emailAddress')?.hasError('email')
-    );
+  updateForm() {
+    this.corporateAdminForm.patchValue(this.formValue)
+    this.dropdownList = this.formValue.roles
+    const customerList = this.formValue.customers
+    this.f.customerId.setValue(customerList[0].customerId)
+  }
+
+  initForm() {
+    this.corporateAdminForm = this.fb.group({
+      userId: [this.defaultValues.userId, [Validators.required]],
+      firstName: [this.defaultValues.firstName, [Validators.required]],
+      lastName: [this.defaultValues.lastName, [Validators.required]],
+      effectiveDate: [this.defaultValues.effectiveDate, [Validators.required]],
+      expiryDate: [this.defaultValues.expiryDate, [Validators.required]],
+      emailAddress: [this.defaultValues.emailAddress, [Validators.required]],
+      roles: [this.defaultValues.roles, [Validators.required]],
+      customerId:[this.defaultValues.roles,[Validators.required]],
+      customers:[[Validators.required]],
+      status:[this.defaultValues.status,[Validators.required]]
+    });
+
+    const formChangesSubscr = this.corporateAdminForm.valueChanges.subscribe((val) => {
+      this.updateParentModel(val, true);
+    });
+    this.unsubscribe.push(formChangesSubscr);
   }
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 
-  updateForm()
-  {
-    this.f.userId.setValue(this.formValue.userId);
-    this.f.firstName.setValue(this.formValue.firstName);
-    this.f.lastName.setValue(this.formValue.lastName);
-    this.f.emailAddress.setValue(this.formValue.emailAddress);
-    console.log(this.formValue.customers[0].customerId)
-    this.f.customers.setValue(this.formValue.customers[0].customerId);
+  isControlValid(controlName: string): boolean {
+    const control = this.corporateAdminForm.controls[controlName];
+    return control.valid && (control.dirty || control.touched);
   }
 
-  // private loadCustomerList() {
-  //   this.authToken = this.authService.getAuthFromLocalStorage();
-  //   const httpHeaders = new HttpHeaders({
-  //     Authorization: `Bearer ${this.authToken?.jwt}`,
-  //   });
-  //
-  //   return this.http.get(API_USERS_URL + '/api/v1/customers', {
-  //     headers: httpHeaders,
-  //   }).pipe(
-  //     retry(1)
-  //   );
-  // }
-
-  loadEmployees() {
-    return this.loadCustomerList().subscribe((data: {}) => {
-      console.log("data is :"+data)
-      this.dataSource.data = data;
-      console.log(this.dataSource.data)
-    })
+  isControlInvalid(controlName: string): boolean {
+    const control = this.corporateAdminForm.controls[controlName];
+    return control.invalid && (control.dirty || control.touched);
   }
 
-  loadCustomerList(): Observable<Customer> {
-    this.authToken = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${this.authToken?.jwt}`,
-    });
-    return this.http.get<Customer>(API_USERS_URL + '/api/v1/customers',{headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.handleError)
-      )
+  controlHasError(validation: string, controlName: string) {
+    const control = this.corporateAdminForm.controls[controlName];
+    return control.hasError(validation) && (control.dirty || control.touched);
   }
 
-  handleError(error: { error: { message: string; }; status: any; message: any; }) {
-    let errorMessage = '';
-    if(error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    window.alert(errorMessage);
-    return throwError(errorMessage);
+  isControlTouched(controlName: string): boolean {
+    return false;
   }
 
-  get f() {
-    return this.form.controls;
+  checkForm() {
+    return !(
+      this.corporateAdminForm.get('userId')?.hasError('required') ||
+      this.corporateAdminForm.get('firstName')?.hasError('required') ||
+      this.corporateAdminForm.get('lastName')?.hasError('required') ||
+      this.corporateAdminForm.get('emailAddress')?.hasError('required') ||
+      this.corporateAdminForm.get('emailAddress')?.hasError('email')
+    );
   }
 
-  closeModel() {
-    this.myModal.nativeElement.className = 'modal hide';
-  }
-
-  openModel() {
-    this.myModal.nativeElement.className = 'modal fade show';
-  }
-
-  openCustomers() {
-    this.modalService.open(this.content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-      if (result === 'yes') {
-        this.deleteModal();
-      }
+  openCustomerDialog() {
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalOption.size = 'lg'
+    const modalRef = this.modalService.open(ReterivecustomersmodalComponent, this.modalOption);
+    modalRef.componentInstance.mode = 'new';
+    modalRef.result.then((result) => {
+      this.f.customers.setValue([result])
+      this.f.customerId.setValue(result.customerId)
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-  }
-
-  deleteModal() {
-    this.deleteSuperAdmin().subscribe(res => {
-    }, (error: { message: any }) => {
-      console.error('There was an error!', error);
-      return;
-    });
-  }
-
-  deleteSuperAdmin() {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/superadmins/delete/' , {}, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
   }
 
   private getDismissReason(reason: any): string {
@@ -191,41 +149,5 @@ export class Corporateadminstep1Component implements OnInit {
     } else {
       return `with: ${reason}`;
     }
-  }
-
-  errorHandle(error: { error: { message: string; }; status: any; message: any; }) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    console.log(errorMessage);
-    return throwError(errorMessage);
-  }
-
-
-  openCustomerDialog(content: any) {
-    this.loadEmployees();
-    console.log("openCustomerDialog");
-    console.log(this.dataSource.data)
-    this.modalOption.backdrop = 'static';
-    this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
-    this.modalService.open(content, this.modalOption).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-      if (result) {
-          console.log("row result is "+result.customerId)
-        this.f.customers.setValue(result.customerId);
-      }
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  selectedCustomer(aaa: any) {
-      console.log(aaa);
   }
 }

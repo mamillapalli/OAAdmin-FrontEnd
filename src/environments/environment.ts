@@ -8,7 +8,7 @@ export const environment = {
   USERDATA_KEY: 'authf649fc9a5f55',
   isMockEnabled: false,
   //apiUrl: 'api',
-  appThemeName: 'Metronic',
+  appThemeName: 'TrishanKu',
   appPurchaseUrl: 'https://1.envato.market/EA4JP',
   appHTMLIntegration: 'https://preview.keenthemes.com/metronic8/demo1/documentation/base/helpers/flex-layouts.html',
   appPreviewUrl: 'https://preview.keenthemes.com/metronic8/angular/demo1/',

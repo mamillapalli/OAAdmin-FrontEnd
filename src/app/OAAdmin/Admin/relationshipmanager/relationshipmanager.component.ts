@@ -1,52 +1,116 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {environment} from "../../../../environments/environment";
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AuthService} from "../../../modules/auth";
-import {RelationshipmanagermodalComponent} from "./relationshipmanagermodal/relationshipmanagermodal.component";
 import {MatTableDataSource} from "@angular/material/table";
-import {rm} from "../../Model/request/rm";
-import {RmmodalComponent} from "../rm/rmmodal/rmmodal.component";
-import {catchError, retry} from "rxjs/operators";
-import {throwError} from "rxjs";
+import {Subscription, throwError} from "rxjs";
 import {NotificationService} from "../../shared/notification.service";
-const API_USERS_URL = `${environment.apiUrl}`;
+import {DatePipe} from "@angular/common";
+import {NgxSpinnerService} from "ngx-spinner";
+import {FilterComponent} from "../../OAPF/common/filter/filter.component";
+import {oaCommonService} from "../../shared/oacommon.service";
+import {rm} from "../../Model/OAAdmin/Request/rm"
+import {RelationshipmanagermodalComponent} from "./relationshipmanagermodal/relationshipmanagermodal.component";
+
 @Component({
   selector: 'app-relationshipmanager',
   templateUrl: './relationshipmanager.component.html',
   styleUrls: ['./relationshipmanager.component.scss']
 })
 export class RelationshipmanagerComponent implements OnInit {
-  authToken: any;
-  isLoading: any;
   dataSource: any = new MatTableDataSource<rm>();
-  displayedColumns: string[] = ['rmId', 'emailAddress', 'joiningDate', 'expiryDate' , 'transactionStatus', 'actions']
-  modalOption: NgbModalOptions = {}; // not null!
+  displayedColumns:  string[] = ['rmId', 'firstName', 'lastName','expiryDate', 'transactionStatus', 'status', 'actions'];
+  fDisplayedColumns: string[] = ['rmId', 'firstName', 'lastName','expiryDate', 'transactionStatus', 'status'];
+  authToken: any;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
-  private closeResult: string;
+  modalOption: NgbModalOptions = {};
+  closeResult: string;
+  isLoading: any;
 
+  private subscriptions: Subscription[] = [];
+  isLoading$: any;
+  authRoles : any
 
-  constructor(public modalService: NgbModal,public http: HttpClient,
-  public authService: AuthService,public notifyService : NotificationService) { }
+  constructor(
+    public authService: AuthService,
+    public modalService: NgbModal,
+    public notifyService: NotificationService,
+    private datePipe: DatePipe,
+    private spinner: NgxSpinnerService,
+    public oaCommonService: oaCommonService) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    this.authRoles = auth?.aRoles
 
-  ngOnInit(): void {
-    this.getRMUser();
   }
 
-  newRM() {
+
+  ngOnInit(): void {
+    this.getRM();
+  }
+
+  public getRM() {
+    this.spinner.show();
+    const sb = this.oaCommonService.getMethod('/oaadmin/api/v1/rms', '', ).subscribe((res) => {
+      this.dataSource.data = res;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.isLoading$ =false;
+      this.spinner.hide();
+    });
+    this.subscriptions.push(sb);
+  }
+
+
+  rm() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'lg'
     const modalRef = this.modalService.open(RelationshipmanagermodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
-      console.log('newBankAdmin is '+result);
+      console.log('newbankadmins is ' + result);
     }, (reason) => {
-      this.getRMUser();
+      this.getRM();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  openRMDialog(element: any, mode: any) {
+    console.log(element)
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalOption.size = 'lg'
+    const modalRef = this.modalService.open(RelationshipmanagermodalComponent, this.modalOption);
+    modalRef.componentInstance.mode = mode;
+    modalRef.componentInstance.fromParent = element;
+    modalRef.result.then((result) => {
+      console.log(result);
+    }, (reason) => {
+      this.getRM();
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  openRM(content: any, element: any) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+      if (result === 'yes') {
+        this.deleteModal(element);
+      }
+    }, (reason) => {
+      this.getRM();
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private deleteModal(data: any) {
+    this.oaCommonService.dataItem(data, data.rmId, 'delete', '/oaadmin/api/v1/rms/delete/').subscribe(res => {
+    }, (error: { message: any }) => {
+      this.notifyService.showError(error, 'Delete Customer')
+      console.error('There was an error!', error);
+      return;
     });
   }
 
@@ -60,62 +124,6 @@ export class RelationshipmanagerComponent implements OnInit {
     }
   }
 
-  applyFilter($event: KeyboardEvent) {
-
-  }
-
-  openRMDialog(element: any, mode: any) {
-    console.log(element)
-    this.modalOption.backdrop = 'static';
-    this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
-    const modalRef = this.modalService.open(RelationshipmanagermodalComponent, this.modalOption);
-
-    modalRef.componentInstance.mode = mode;
-    modalRef.componentInstance.fromParent = element;
-    modalRef.result.then((result) => {
-      console.log(result);
-    }, (reason) => {
-      this.getRMUser();
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  openRMDelete(content:any, element: any) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-      if (result === 'yes') {
-        this.deleteModal(element.customerId);
-      }
-    }, (reason) => {
-      this.getRMUser();
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  private deleteModal(customerId:any) {
-    this.deleteRMUser(customerId).subscribe(res => {
-    }, (error: { message: any }) => {
-      this.notifyService.showError(error,'Delete Customer')
-      console.error('There was an error!', error);
-      return;
-    });
-  }
-
-  deleteRMUser(userId: any) {
-    console.log(userId)
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.delete<any>(API_USERS_URL + '/api/v1/rms/' + userId, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
   errorHandle(error: { error: { message: string; }; status: any; message: any; }) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
@@ -123,25 +131,41 @@ export class RelationshipmanagerComponent implements OnInit {
       errorMessage = error.error.message;
     } else {
       // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      errorMessage = `Error Code: ${error.status}\n Message: ${error.message}`;
     }
     console.log(errorMessage);
     return throwError(errorMessage);
   }
 
-  public getRMUser() {
-    this.authToken = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${this.authToken?.jwt}`,
-    });
-    return this.http.get(API_USERS_URL + '/api/v1/rms', {
-      headers: httpHeaders,
-    }).subscribe(data => {
-      this.dataSource.data = data;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.filterPredicate = (data:{name: string}, filterValue: string) =>
-        data.name.trim().toLowerCase().indexOf(filterValue) !== -1;
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sb => sb.unsubscribe());
+  }
+
+  openFilter() {
+    console.log('open filter')
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    const modalRef = this.modalService.open(FilterComponent, this.modalOption);
+    console.log(this.fDisplayedColumns)
+    modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      if (result.valid && result.value.filterOption.length > 0) {
+        const sb = this.oaCommonService.getFilter(result, 'filter', '/oaadmin/api/v1/rms').subscribe((res: any) => {
+          this.dataSource.data = res;
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        });
+        this.subscriptions.push(sb);
+      } else {
+        const sb = this.oaCommonService.getFilter(result, 'all', '/oaadmin/api/v1/rms').subscribe((res: any) => {
+          this.dataSource.data = res;
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        });
+        this.subscriptions.push(sb);
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 }

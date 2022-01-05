@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {MatTableDataSource} from "@angular/material/table";
-import {Corporateuser} from "../../../../../Model/corporateuser";
+import {corporateUser} from "../../../../../Model/OAAdmin/Request/corporateUser";
 import {Customer} from "../../../../../Model/customer";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
@@ -32,7 +32,7 @@ export class Accountstep1Component implements OnInit {
   public content: any;
   customerList: any;
   authToken: any;
-  dataSource: any = new MatTableDataSource<Corporateuser>();
+  dataSource: any = new MatTableDataSource<corporateUser>();
   public displayedColumns: string[] = ['sbrId','anchorCustomer','counterParty','agreement'];
   clickedRows = new Set<Customer>();
   public currencyList:any = currencyList;
@@ -90,6 +90,7 @@ export class Accountstep1Component implements OnInit {
     this.f.type.setValue(this.formValue.type);
     this.f.description.setValue(this.formValue.description);
     this.f.currency.setValue(this.formValue.currency);
+    this.form.patchValue(this.formValue)
   }
 
   get f() {

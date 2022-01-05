@@ -1,24 +1,15 @@
 import { ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
-import { rm} from "../../../../../Model/request/rm";
+import { rm} from "../../../../../Model/OAAdmin/Request/rm";
 import { FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subscription, throwError} from "rxjs";
 import {ModalDismissReasons, NgbDatepicker, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {environment} from "../../../../../../../environments/environment";
 import {MatPaginator} from "@angular/material/paginator";
-import {Corporateadmin} from "../../../../../Model/corporateadmin";
 import {MatSort} from "@angular/material/sort";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {AuthService} from "../../../../../../modules/auth";
-import {NotificationService} from "../../../../../shared/notification.service";
-import {CustomerService} from "../../../../../shared/customer.service";
 import {DatePipe} from "@angular/common";
-import {RmmodalComponent} from "../../rmmodal.component";
-import {catchError, retry} from "rxjs/operators";
 import {CustomermodalComponent} from "./customermodal/customermodal.component";
-import {CustomerstablemodalComponent} from "./customermodal/customerstablemodal/customerstablemodal.component";
-import {Corporates} from "../../../../../Model/corporates";
-const API_USERS_URL = `${environment.apiUrl}`;
+import {corporates} from "../../../../../Model/OAAdmin/Request/corporates";
 
 @Component({
   selector: 'app-rmstep3',
@@ -34,7 +25,7 @@ export class Rmstep3Component implements OnInit {
   @Input() mode :  any;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
-  dataSource: any = new MatTableDataSource<Corporates>();
+  dataSource: any = new MatTableDataSource<corporates>();
   closeResult: string;
   displayedColumns: string[] = ['customerId', 'name', 'emailAddress', 'effectiveDate', 'expiryDate', 'status' , 'actions'];
   customers: FormArray = this.fb.array([]);

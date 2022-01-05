@@ -59,12 +59,17 @@ import {NgxSpinnerModule} from "ngx-spinner";
 import {CdkTableExporterModule, MatTableExporterModule} from "mat-table-exporter";
 import {NgxCurrencyModule} from "ngx-currency";
 import {RouterModule} from "@angular/router";
-
+import { BuyerapprovalinvoicesmodalComponent } from './approvalinvoicesbuyer/buyerapprovalinvoicesmodal/buyerapprovalinvoicesmodal.component';
+import { Buyerapprovalstep1Component } from './approvalinvoicesbuyer/buyerapprovalinvoicesmodal/steps/buyerapprovalstep1/buyerapprovalstep1.component';
+import { Buyerapprovalstep2Component } from './approvalinvoicesbuyer/buyerapprovalinvoicesmodal/steps/buyerapprovalstep2/buyerapprovalstep2.component';
 @NgModule({
   declarations: [
     ApprovalinvoicesComponent,
     ApprovalinvoicesbuyerComponent,
     ApprovalinvoicessellerComponent,
+    BuyerapprovalinvoicesmodalComponent,
+    Buyerapprovalstep1Component,
+    Buyerapprovalstep2Component,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,112 @@
+<div class="card-header border-0 pt-5">
+  <h3 class="card-title align-items-start flex-column">
+    <span class="card-label fw-bolder fs-3 mb-1">Seller Invoice Approval Dashboard</span>
+  </h3>
+  <div class="d-flex align-items-center py-1">
+    <div class="me-4">
+      <a
+        class="
+          btn btn-sm btn-flex btn-light btn-active-primary
+          fw-bolder
+          cursor-pointer
+        "
+        data-kt-menu-trigger="click"
+        data-kt-menu-placement="bottom-end"
+        data-kt-menu-flip="top-end" (click)="openFilter()"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/general/gen031.svg'"
+          class="svg-icon svg-icon-5 svg-icon-gray-500 me-1"
+        ></span>
+        Filter
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="card-body py-3">
+  <ngx-spinner></ngx-spinner>
+  <div class="table-responsive">
+    <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+               class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+      </mat-form-field>
+
+      <ng-container matColumnDef="invoiceNumber" class="min-w-150px">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">INV No</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.invoiceNumber}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="sbrReferenceId">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">SBR No</mat-header-cell>
+        <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.sbrReferenceId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="agreementId">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Agreement No
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.agreementId}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="currency">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">CCY</mat-header-cell>
+        <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.currency}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Amount</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.amount }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="dueDate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Due Date
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.dueDate | date: 'MM/dd/YYY' }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Status</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.status }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="action-link">
+          <span>
+          <a title="Authorize" (click)="openInvoiceDialog(element,'auth')"
+             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'" class="svg-icon svg-icon-2"></span>
+              </a>
+        </span>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]" showFirstLastButtons>
+    </mat-paginator>
+    <!-- end::Table -->
+  </div>
+  <!-- end::Table container -->
+</div>
+<ng-template #deleteContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure to delete this?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('yes')">Yes</button>
+  </div>
+</ng-template>

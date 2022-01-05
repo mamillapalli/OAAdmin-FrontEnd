@@ -33,6 +33,25 @@
         </div>
       </div>
 
+      <div>
+        <span>
+              <a
+                class="btn btn-sm btn-flex btn-light btn-color-red btn-active-primary fw-bolder cursor-pointer"
+                data-bs-toggle="modal"
+                data-bs-target="#kt_modal_create_app"
+                (click)="viewVoucher()"
+                style="margin-right: 16px">
+                Preview Voucher
+                <span
+                  [inlineSVG]="'./assets/media/svg/icons/Communication/Clipboard-list.svg'"
+                  class="svg-icon svg-icon-5 svg-icon-gray-500 me-1"
+                ></span>
+
+              </a>
+        </span>
+      </div>
+
+
       <form
         class="mx-auto mw-100 w-100 pt-15 pb-10"
         noValidate

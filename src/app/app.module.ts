@@ -1,5 +1,7 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import {CommonModule, DatePipe} from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TranslateModule } from '@ngx-translate/core';
@@ -10,11 +12,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { SuperAdminModuleComponent } from './OAAdmin/Admin/super-admin-module/super-admin-module.component';
 import { SuperAdminModalComponent } from './OAAdmin/Admin/super-admin-module/super-admin-modal/super-admin-modal.component';
 import {AdminStep1Component} from "./OAAdmin/Admin/super-admin-module/super-admin-modal/steps/adminstep1/adminstep1.component";
-import {ReactiveFormsModule} from "@angular/forms";
 import {AdminStep2Component} from "./OAAdmin/Admin/super-admin-module/super-admin-modal/steps/adminstep2/adminstep2.component";
-import {AdminStep3Component} from "./OAAdmin/Admin/super-admin-module/super-admin-modal/steps/adminstep3/adminstep3.component";
-import {AdminStep4Component} from "./OAAdmin/Admin/super-admin-module/super-admin-modal/steps/adminstep4/adminstep4.component";
-import {AdminStep5Component} from "./OAAdmin/Admin/super-admin-module/super-admin-modal/steps/adminstep5/step5.component";
 import {AuthService} from "./modules/auth";
 import {BankadminMaintenanceComponent} from "./OAAdmin/Admin/bankadmin-maintenance/bankadmin-maintenance.component";
 import {Bankadminstep1Component} from "./OAAdmin/Admin/bankadmin-maintenance/bankadminmodal/bankadminstep/bankadminstep1/bankadminstep1.component";
@@ -22,7 +20,7 @@ import {Bankadminstep2Component} from "./OAAdmin/Admin/bankadmin-maintenance/ban
 import {Bankadminstep3Component} from "./OAAdmin/Admin/bankadmin-maintenance/bankadminmodal/bankadminstep/bankadminstep3/bankadminstep3.component";
 import {BankadminmodalComponent} from "./OAAdmin/Admin/bankadmin-maintenance/bankadminmodal/bankadminmodal.component";
 import {NgSelectModule} from "@ng-select/ng-select";
-import {DatePipe} from "@angular/common";
+
 import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
 // #fake-end#
 import {MatIconModule} from "@angular/material/icon";
@@ -88,13 +86,6 @@ import { Rmstep1Component } from './OAAdmin/Admin/rm/rmmodal/rmsteps/rmstep1/rms
 import { Rmstep2Component } from './OAAdmin/Admin/rm/rmmodal/rmsteps/rmstep2/rmstep2.component';
 import { Rmstep3Component } from './OAAdmin/Admin/rm/rmmodal/rmsteps/rmstep3/rmstep3.component';
 import { Rmstep4Component } from './OAAdmin/Admin/rm/rmmodal/rmsteps/rmstep4/rmstep4.component';
-import { TestComponent } from './OAAdmin/Admin/test/test.component';
-import { TestmodalComponent } from './OAAdmin/Admin/test/testmodal/testmodal.component';
-import {Step1Component} from "./OAAdmin/Admin/test/testmodal/steps/step1/step1.component";
-import {Step2Component} from "./OAAdmin/Admin/test/testmodal/steps/step2/step2.component";
-import {Step3Component} from "./OAAdmin/Admin/test/testmodal/steps/step3/step3.component";
-import {Step4Component} from "./OAAdmin/Admin/test/testmodal/steps/step4/step4.component";
-import {Step5Component} from "./OAAdmin/Admin/test/testmodal/steps/step5/step5.component";
 import { CustomermodalComponent } from './OAAdmin/Admin/rm/rmmodal/rmsteps/rmstep3/customermodal/customermodal.component';
 import { CustomerstablemodalComponent } from './OAAdmin/Admin/rm/rmmodal/rmsteps/rmstep3/customermodal/customerstablemodal/customerstablemodal.component';
 import { RelationshipmanagerComponent } from './OAAdmin/Admin/relationshipmanager/relationshipmanager.component';
@@ -119,7 +110,7 @@ import { FinancingComponent } from './OAAdmin/OAPF/financing/financing.component
 import { FinancingmodalComponent } from './OAAdmin/OAPF/financing/financingmodal/financingmodal.component';
 import { Financingstep1Component } from './OAAdmin/OAPF/financing/financingmodal/steps/financingstep1/financingstep1.component';
 import { Financingstep2Component } from './OAAdmin/OAPF/financing/financingmodal/steps/financingstep2/financingstep2.component';
-import { SbrmodalComponent } from './OAAdmin/OAPF/common/sbrmodal/sbrmodal.component';
+import { SbrdatamodalComponent } from './OAAdmin/OAPF/common/sbrdatamodal/sbrdatamodal.component';
 import { InvoiceDOComponent } from './OAAdmin/OAPF/common/invoice-do/invoice-do.component';
 import { Financingstep3Component } from './OAAdmin/OAPF/financing/financingmodal/steps/financingstep3/financingstep3.component';
 import { NgxSpinnerModule } from "ngx-spinner";
@@ -135,6 +126,17 @@ import {CURRENCY_MASK_CONFIG, CurrencyMaskConfig, CurrencyMaskInputMode, NgxCurr
 import {AccountcommonmodalComponent} from "./OAAdmin/OAPF/common/accountcommonmodal/accountcommonmodal.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { ReterivecustomersmodalComponent } from './OAAdmin/Admin/common/reterivecustomersmodal/reterivecustomersmodal.component';
+import { InvoicehistroyComponent } from './OAAdmin/OAPF/common/invoicehistroy/invoicehistroy.component';
+import { VouchermodalComponent } from './OAAdmin/OAPF/common/vouchermodal/vouchermodal.component';
+import { SystemMaintenanceComponent } from './OAAdmin/Admin/system-maintenance/system-maintenance.component';
+import { ExChangeRatesComponent } from './OAData/ex-change-rates/ex-change-rates.component';
+import { ExChangeRatesModalComponent } from './OAData/ex-change-rates/ex-change-rates-modal/ex-change-rates-modal.component';
+import { ExChangeRatesStep1Component } from './OAData/ex-change-rates/ex-change-rates-modal/steps/ex-change-rates-step1/ex-change-rates-step1.component';
+import { ExChangeRatesStep2Component } from './OAData/ex-change-rates/ex-change-rates-modal/steps/ex-change-rates-step2/ex-change-rates-step2.component';
+import {InvoicestatsWidget5Component} from "./OAAdmin/OAPF/invoice/invoicestats-widget5/invoicestats-widget5.component";
+import {ChartComponent} from "ng-apexcharts";
+import {NgChartsModule} from "ng2-charts";
 //import { ApprovalinvoicesComponent } from './OAAdmin/OAPF/approvalinvoices/approvalinvoices.component';
 
 function appInitializer(authService: AuthService) {
@@ -164,9 +166,6 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     SuperAdminModalComponent,
     AdminStep1Component,
     AdminStep2Component,
-    AdminStep3Component,
-    AdminStep4Component,
-    AdminStep5Component,
     BankadminMaintenanceComponent,
     BankadminmodalComponent,
     Bankadminstep1Component,
@@ -200,13 +199,6 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     Rmstep2Component,
     Rmstep3Component,
     Rmstep4Component,
-    TestComponent,
-    TestmodalComponent,
-    Step1Component,
-    Step2Component,
-    Step3Component,
-    Step4Component,
-    Step5Component,
     CustomermodalComponent,
     CustomerstablemodalComponent,
     RelationshipmanagerComponent,
@@ -233,7 +225,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     FinancingmodalComponent,
     Financingstep1Component,
     Financingstep2Component,
-    SbrmodalComponent,
+    SbrdatamodalComponent,
     InvoiceDOComponent,
     Financingstep3Component,
     FilterComponent,
@@ -244,10 +236,21 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     Settlementstep3Component,
     FinancemodalComponent,
     AccountcommonmodalComponent,
+    ReterivecustomersmodalComponent,
+    InvoicehistroyComponent,
+    Corporateuserstep2Component,
+    VouchermodalComponent,
+    SystemMaintenanceComponent,
+    ExChangeRatesComponent,
+    ExChangeRatesModalComponent,
+    ExChangeRatesStep1Component,
+    ExChangeRatesStep2Component,
     //ApprovalinvoicesComponent,
+    InvoicestatsWidget5Component
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
     HttpClientModule,
@@ -256,6 +259,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     InlineSVGModule.forRoot(),
     DataTablesModule,
     ReactiveFormsModule,
+    FormsModule,
     NgSelectModule,
     NgMultiSelectDropDownModule.forRoot(),
     MatAutocompleteModule,
@@ -297,7 +301,6 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     DragDropModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    BrowserModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     NgbModule,
@@ -306,7 +309,10 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     CdkTableExporterModule,
     NgxCurrencyModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    NgSelectModule,
+    NgMultiSelectDropDownModule.forRoot()
+
   ],
   providers: [
     {

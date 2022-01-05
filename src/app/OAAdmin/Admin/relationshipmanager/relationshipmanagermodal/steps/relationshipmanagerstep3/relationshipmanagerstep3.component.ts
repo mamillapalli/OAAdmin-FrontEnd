@@ -1,14 +1,14 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {rm} from "../../../../../Model/request/rm";
+import {rm} from "../../../../../Model/OAAdmin/Request/rm";
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
-import {Corporates} from "../../../../../Model/corporates";
 import {DatePipe} from "@angular/common";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {CustomermodalComponent} from "../../../../rm/rmmodal/rmsteps/rmstep3/customermodal/customermodal.component";
+import {corporates} from "../../../../../Model/OAAdmin/Request/corporates";
 
 @Component({
   selector: 'app-relationshipmanagerstep3',
@@ -25,7 +25,7 @@ export class Relationshipmanagerstep3Component implements OnInit {
   @Input() mode :  any;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
-  dataSource: any = new MatTableDataSource<Corporates>();
+  dataSource: any = new MatTableDataSource<corporates>();
   closeResult: string;
   displayedColumns: string[] = ['customerId', 'name', 'emailAddress', 'effectiveDate', 'expiryDate', 'status' , 'actions'];
   customers: FormArray = this.fb.array([]);
@@ -92,9 +92,6 @@ export class Relationshipmanagerstep3Component implements OnInit {
       const cust = this.fb.group({
         customerId: [result.customerId,'']
       });
-
-
-
       this.customers.push(cust)
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;

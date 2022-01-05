@@ -4,11 +4,17 @@ import {AuthModel} from "../../../modules/auth/models/auth.model";
 import {environment} from "../../../../environments/environment";
 import {AuthService} from "../../../modules/auth";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
-import {Subject, throwError} from "rxjs";
-import {catchError, retry} from "rxjs/operators";
-import {DataTableDirective} from "angular-datatables";
+import {Subject, Subscription, throwError} from "rxjs";
 import {SuperAdminModalComponent} from "./super-admin-modal/super-admin-modal.component";
-const API_USERS_URL = `${environment.apiUrl}`;
+import {MatTableDataSource} from "@angular/material/table";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort, Sort} from "@angular/material/sort";
+import {NotificationService} from "../../shared/notification.service";
+import {DatePipe} from "@angular/common";
+import {NgxSpinnerService} from "ngx-spinner";
+import {FilterComponent} from "../../OAPF/common/filter/filter.component";
+import {oaCommonService} from "../../shared/oacommon.service";
+import {superAdmin} from "../../Model/super-admin";
 
 @Component({
   selector: 'app-super-admin-module',
@@ -16,118 +22,96 @@ const API_USERS_URL = `${environment.apiUrl}`;
   styleUrls: ['./super-admin-module.component.scss']
 })
 export class SuperAdminModuleComponent implements OnInit {
-
-  @ViewChild(DataTableDirective, {static: false})
-  dtElement: DataTableDirective;
-  subscription : any;
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject();
-  rows = [];
-  posts: any;
+  dataSource: any = new MatTableDataSource<superAdmin>();
+  displayedColumns: string[] = ['userId', 'firstName', 'lastName', 'expiryDate', 'emailAddress', 'transactionStatus', 'actions'];
+  fDisplayedColumns: string[] = ['userId', 'firstName', 'lastName', 'expiryDate', 'emailAddress', 'transactionStatus']
   authToken: any;
-  min: any = 0;
-  max: any = 0;
-  private authLocalStorageToken = `${environment.appVersion}-${environment.USERDATA_KEY}`;
-  deleteMode = false;
-  private closeResult: string;
+  modalOption: NgbModalOptions = {};
+  closeResult: string;
+  isLoading: any;
+  private subscriptions: Subscription[] = [];
+  isLoading$: any;
+  authRoles: any
+  //SORTING
+  totalRows = 0;
+  pageSize = 5;
+  currentPage = 0;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
+  @ViewChild(MatSort) sort: MatSort | any;
+  sortData: any
 
-  constructor(private http: HttpClient, public modalService: NgbModal,private authService: AuthService) { }
+  constructor(public http: HttpClient,
+              public authService: AuthService,
+              public modalService: NgbModal,
+              public notifyService: NotificationService,
+              private datePipe: DatePipe,
+              private spinner: NgxSpinnerService,
+              public oaCommonService: oaCommonService) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    this.authRoles = auth?.aRoles
+  }
 
   ngOnInit(): void {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 5
-    };
-    this.getAllAdmin();
+    this.getSuperAdmin();
   }
 
-  getAllAdmin(){
-    this.authToken = this.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${this.authToken?.jwt}`,
+  public getSuperAdmin() {
+    const sb = this.oaCommonService.getMethodWithPagination('/oaadmin/api/v1/superadmins', '', this.currentPage, this.pageSize, this.sortData).subscribe((res) => {
+      this.dataSource.data = res.content;
+      this.totalRows = res.totalElements
     });
-    this.http.get(API_USERS_URL + '/api/v1/superadmins', {
-      headers: httpHeaders,
-    }).subscribe(posts => {
-      console.log(this.posts)
-      this.posts = posts;
-      this.dtTrigger.next();
-    });
+    this.subscriptions.push(sb);
   }
 
-  filterById(): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.draw();
-    });
-  }
-
-
-
-  rerender(): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
-      dtInstance.destroy();
-      // Call the dtTrigger to rerender again
-      this.dtTrigger.next();
-    });
-  }
-
-  private getAuthFromLocalStorage(): AuthModel | undefined {
-    try {
-      const lsValue = localStorage.getItem(this.authLocalStorageToken);
-      if (!lsValue) {
-        return undefined;
-      }
-      const authData = JSON.parse(lsValue);
-      return authData;
-    } catch (error) {
-      console.error(error);
-      return undefined;
-    }
-  }
-  modalOption: NgbModalOptions = {}; // not null!
-  open(element: any,mode: string) {
-    console.log(element);
-    // const modalRef = this.modalService.open(ModalComponent);
+  newSuperAdmin() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    //this.modalOption.size = 'lg';
-    this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'lg'
+    const modalRef = this.modalService.open(SuperAdminModalComponent, this.modalOption);
+    modalRef.componentInstance.mode = 'new';
+    modalRef.result.then((result) => {
+      console.log('newSuperAdmin is ' + result);
+    }, (reason) => {
+      this.getSuperAdmin();
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  openSuperAdminDialog(element: any, mode: any) {
+    console.log(element)
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalOption.size = 'lg'
     const modalRef = this.modalService.open(SuperAdminModalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {
+      this.getSuperAdmin();
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
-  newAdmin() {
-    this.modalOption.backdrop = 'static';
-    this.modalOption.keyboard = false;
-    //this.modalOption.size = 'lg';
-    this.modalOption.windowClass = 'my-class'
-    const modalRef = this.modalService.open(SuperAdminModalComponent, this.modalOption);
-    modalRef.componentInstance.mode = 'new';
-    modalRef.result.then((result) => {
-      console.log(result);
-    }, () => {
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
-    $.fn.dataTable.ext.search.pop();
-  }
-
-  openDelete(content: any, post: any) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+  openSuperAdminDelete(content: any, element: any) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
-        this.deleteModal(post.userId);
+        this.deleteModal(element);
       }
     }, (reason) => {
+      this.getSuperAdmin();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private deleteModal(data: any) {
+    this.oaCommonService.dataItem(data, data.userId, 'delete', '/oaadmin/api/v1/superadmins/delete').subscribe(res => {
+    }, (error: { message: any }) => {
+      this.notifyService.showError(error, 'Delete Customer')
+      console.error('There was an error!', error);
+      return;
     });
   }
 
@@ -139,27 +123,6 @@ export class SuperAdminModuleComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
-  }
-
-  deleteModal(id: any) {
-    this.deleteSuperAdmin(id).subscribe(res => {
-    }, (error: { message: any }) => {
-      console.error('There was an error!', error);
-      return;
-    });
-  }
-
-  deleteSuperAdmin(id: any) {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/superadmins/delete/' + id, {}, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
   }
 
   errorHandle(error: { error: { message: string; }; status: any; message: any; }) {
@@ -174,21 +137,48 @@ export class SuperAdminModuleComponent implements OnInit {
     console.log(errorMessage);
     return throwError(errorMessage);
   }
-  colorcode:string;
-  getColor(post: any) {
-    {
-      if(post.deleteFlag)
-      {
-        this.colorcode = '#cc0248'
-      } else if(post.transactionStatus === 'MASTER' && !post.deleteFlag) {
-        this.colorcode = '#151414'
-      } else {
 
-        this.colorcode = '#36a0d5'
-      }
-      console.log(this.colorcode)
-      return this.colorcode;
-    }
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sb => sb.unsubscribe());
   }
 
+  openFilter() {
+    console.log('open filter')
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    const modalRef = this.modalService.open(FilterComponent, this.modalOption);
+    console.log(this.fDisplayedColumns)
+    modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      if (result.valid && result.value.filterOption.length > 0) {
+        const sb = this.oaCommonService.getFilterWithPagination(result, 'filter', '/oaadmin/api/v1/superadmins',this.currentPage,this.pageSize,this.sortData).subscribe((res: any) => {
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
+        });
+        this.subscriptions.push(sb);
+      } else {
+        const sb = this.oaCommonService.getFilterWithPagination(result, 'all', '/oaadmin/api/v1/superadmins',this.currentPage,this.pageSize,this.sortData).subscribe((res: any) => {
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
+        });
+        this.subscriptions.push(sb);
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  pageChanged(event: any) {
+    console.log(this.sort)
+    console.log({event});
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.getSuperAdmin();
+  }
+
+  sortChanges(event: Sort) {
+    console.log(event.direction)
+    this.sortData = event.active + ',' + event.direction
+    this.getSuperAdmin();
+  }
 }

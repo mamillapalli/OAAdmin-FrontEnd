@@ -1,44 +1,39 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
-import {BehaviorSubject, Observable, Subscription, throwError} from "rxjs";
-import {inits, rm} from "../../../Model/request/rm";
-import {rmreq} from "../../../Model/response/rmreq";
-import {formatDate} from "@angular/common";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {catchError, retry} from "rxjs/operators";
-import {environment} from "../../../../../environments/environment";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Component, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {BehaviorSubject, Subscription} from "rxjs";
+import {inits, rm} from "../../../Model/OAAdmin/Request/rm";
+import {crm} from "../../../Model/OAAdmin/CRequest/crm";
+import {DatePipe} from "@angular/common";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../modules/auth";
 import Swal from 'sweetalert2';
-import {OOAdminService} from "../../../shared/oaadmin.service";
-const API_USERS_URL = `${environment.apiUrl}`;
+import {NotificationService} from "../../../shared/notification.service";
+import {oaCommonService} from "../../../shared/oacommon.service";
 
 @Component({
   selector: 'app-relationshipmanagermodal',
   templateUrl: './relationshipmanagermodal.component.html',
   styleUrls: ['./relationshipmanagermodal.component.scss']
 })
-export class RelationshipmanagermodalComponent implements OnInit {
+export class RelationshipmanagermodalComponent implements OnInit, OnDestroy {
 
-  formsCount = 4;
-  account$: BehaviorSubject<rm> =
-    new BehaviorSubject<rm>(inits);
+  formsCount = 2;
+  account$: BehaviorSubject<any> = new BehaviorSubject<rm>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
-  isCurrentFormValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
-  private unsubscribe: Subscription[] = [];
-  rmRequest: rmreq
+  isCurrentFormValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  errorMsg: string;
+  unsubscribe: Subscription[] = [];
   @Input() mode: any;
   @Output() formValue: any
   fromParent: any;
+  crm: crm
+  checkNextStage: boolean;
 
-  constructor(private router: Router,
-              private route: ActivatedRoute,
-              private http: HttpClient,
-              public activeModal: NgbActiveModal,
+  constructor(public activeModal: NgbActiveModal,
               private authService: AuthService,
-              public OOAdminService: OOAdminService) {}
+              public notifyService: NotificationService,
+              public oaCommonService: oaCommonService,
+              private datePipe: DatePipe) {
+  }
 
   ngOnInit(): void {
     if (this.mode !== 'new') {
@@ -48,60 +43,58 @@ export class RelationshipmanagermodalComponent implements OnInit {
 
   updateAccount = (part: Partial<rm>, isFormValid: boolean) => {
     const currentAccount = this.account$.value;
-    const updatedAccount = { ...currentAccount, ...part };
+    const updatedAccount = {...currentAccount, ...part};
     this.account$.next(updatedAccount);
     this.isCurrentFormValid$.next(isFormValid);
   };
 
-  nextStep() {
-    let checkNextStage = true;
+  modal: any;
 
+  nextStep() {
+    console.log('check validation')
     const nextStep = this.currentStep$.value + 1;
     if (nextStep > this.formsCount) {
       return;
     }
     if (this.currentStep$.value === this.formsCount - 1) {
-      this.rmRequest = new rmreq();
-      this.rmRequest.rmId = this.account$.value.rmId
-      this.rmRequest.firstName = this.account$.value.firstName
-      this.rmRequest.lastName = this.account$.value.lastName
-      this.rmRequest.emailAddress = this.account$.value.emailAddress
-      this.rmRequest.joiningDate = formatDate(this.account$.value.joiningDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
-      //this.rmRequest.validDate = formatDate(this.account$.value.validDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
-      this.rmRequest.expiryDate = formatDate(this.account$.value.expiryDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
-      this.rmRequest.status = this.account$.value.status
-      this.rmRequest.customers = this.account$.value.customers
-      const rmNewRequest = JSON.stringify(this.rmRequest)
-
+      if( this.checkBusinessValidation()){
+        return;
+      }
+      this.crm = new crm();
+      this.crm = this.account$.value;
+      const rmNewRequest = this.crm;
       if (this.mode === 'new') {
-        checkNextStage = true;
-
-        this.CreateRM(rmNewRequest).subscribe(res => {
-          if(res) {
-            if (res) {
-              Swal.fire({
-                title: 'Add Record Successfully',
-                icon: 'success'
-              });
-            } else {
-              Swal.fire({
-                title: 'Error is occurred.',
-                icon: 'error'
-              });
-            }
-            if(checkNextStage) {
+        this.checkNextStage = false;
+        this.oaCommonService.dataItem(rmNewRequest,'',this.mode,'oaadmin/api/v1/rms').subscribe(res => {
+          console.log('Response is : ' + res)
+          if (res !== undefined) {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Add Record Successfully',
+              icon: 'success'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== undefined) {
+            if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
           }
         }, (error: { message: any }) => {
-          checkNextStage = false
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       } else if (this.mode === 'edit') {
-        checkNextStage = true;
-        this.modifyRM(rmNewRequest).subscribe(res => {
-          if (res) {
+        this.checkNextStage = false;
+        this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.rmId,this.mode,'oaadmin/api/v1/rms').subscribe(res => {
+          console.log('Response is : ' + res)
+          if (res !== undefined) {
+            this.checkNextStage = true;
             Swal.fire({
               title: 'Edit Record Successfully',
               icon: 'success'
@@ -112,20 +105,21 @@ export class RelationshipmanagermodalComponent implements OnInit {
               icon: 'error'
             });
           }
-          if(res) {
-            if(checkNextStage) {
+          if (res !== undefined) {
+            if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
           }
         }, (error: { message: any }) => {
-          checkNextStage = false
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       } else if (this.mode === 'auth') {
-        checkNextStage = true;
-        this.authRM().subscribe(res => {
-          if (res) {
+        this.checkNextStage = false;
+        this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.rmId,this.mode,'oaadmin/api/v1/rms').subscribe(res => {
+          if (res !== undefined) {
+            this.checkNextStage = true;
             Swal.fire({
               title: 'Authorize Record Successfully',
               icon: 'success'
@@ -136,19 +130,19 @@ export class RelationshipmanagermodalComponent implements OnInit {
               icon: 'error'
             });
           }
-          if(res) {
-            if(checkNextStage) {
+          if (res !== undefined) {
+            if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
           }
         }, (error: { message: any }) => {
-          checkNextStage = false
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       }
     }
-    if(checkNextStage) {
+    if (this.checkNextStage) {
       this.currentStep$.next(nextStep);
     }
   }
@@ -165,123 +159,27 @@ export class RelationshipmanagermodalComponent implements OnInit {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 
-  CreateRM(data: any): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.post<any>(API_USERS_URL + '/api/v1/rms/', data, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  modifyRM(data: any): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/rms/' + this.account$.value.rmId, data, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  public authRM(): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/rms/authorise/' + this.account$.value.rmId, {}, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  errorHandle(error: { error: { message: string; }; status: any; message: any; }) {
-    let errorMessage;
-    if (error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    console.log(errorMessage);
-    return throwError(errorMessage);
-  }
-
   closeModal() {
     console.log('close modal');
     this.activeModal.dismiss();
   }
 
-  rmTransaction(data: any , mode: any)
-  {
-    console.log(mode)
-    console.log(data)
-    if(mode === 'new') {
-      const ooAdminCreate = this.OOAdminService.OOAdminRM(data, mode).subscribe((res) => {
-        if (res) {
-          Swal.fire({
-            title: 'Created transaction successfully',
-            icon: 'success'
-          });
-        } else {
-          Swal.fire({
-            title: 'Error is occured',
-            icon: 'error'
-          });
-        }
-      }, err => this.onError(err));
-      this.unsubscribe.push(ooAdminCreate);
-    } else if (mode === 'edit')
-    {
-      const ooAdminUpdate = this.OOAdminService.OOAdminRM(data, mode).subscribe((res) => {
-        if (res) {
-          Swal.fire({
-            title: 'update transaction successfully',
-            icon: 'success'
-          });
-        } else {
-          Swal.fire({
-            title: 'Error is occured',
-            icon: 'error'
-          });
-        }
-      }, err => this.onError(err));
-      this.unsubscribe.push(ooAdminUpdate);
-    } else if (mode === 'auth')
-    {
-      const ooAdminAuth = this.OOAdminService.OOAdminRM(data, mode).subscribe((res) => {
-        if (res) {
-          Swal.fire({
-            title: 'Authorise transaction successfully',
-            icon: 'success'
-          });
-        } else {
-          Swal.fire({
-            title: 'Error is occured',
-            icon: 'error'
-          });
-        }
-      }, err => this.onError(err));
-      this.unsubscribe.push(ooAdminAuth);
+  private checkBusinessValidation(): boolean {
+    let currentDate:any = new Date();
+    currentDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
+    if(this.account$.value.expiryDate < currentDate){
+      this.notifyService.showWarning('Expiry Date should not less than today Date','Business Validation')
+      return true;
     }
-  }
-
-  private onError(err: any) {
-    console.log(err);
-    Swal.fire({
-      title: 'Error is occurred.',
-      icon: 'error'
-    });
+    if(this.account$.value.effectiveDate < currentDate){
+      this.notifyService.showWarning('Effective Date should not less than today Date','Business Validation')
+      return true;
+    }
+    if(this.account$.value.expiryDate < this.account$.value.effectiveDate){
+      this.notifyService.showWarning('Expiry should not less than today Date','Business Validation')
+      return true;
+    }
+    return false
   }
 
 }

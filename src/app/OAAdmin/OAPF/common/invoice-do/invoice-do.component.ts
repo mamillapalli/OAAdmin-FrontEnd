@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/c
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
-import {Corporateuser} from "../../../Model/corporateuser";
+import {corporateUser} from "../../../Model/OAAdmin/Request/corporateUser";
 import {invoiceService} from "../../../shared/OAPF/invoice.service";
 import {Subscription} from "rxjs";
 
@@ -14,7 +14,7 @@ import {Subscription} from "rxjs";
 export class InvoiceDOComponent implements OnInit,OnDestroy {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
-  dataSource: any = new MatTableDataSource<Corporateuser>();
+  dataSource: any = new MatTableDataSource<corporateUser>();
   private subscriptions: Subscription[] = [];
   @Output('LoanDueDate') LoanDueDate: any
   displayedColumns: string[] = ['invoiceNumber', 'sbrReferenceId', 'agreementId', 'currency', 'amount', 'dueDate', 'status'];

@@ -68,6 +68,44 @@
     </a>
   </div>
 
+  <div
+    class="menu-item menu-accordion"
+    data-kt-menu-trigger="click"
+    routerLinkActive="here show"
+  >
+  <span class="menu-link"
+  ><span class="menu-icon"
+  ><span
+    class="svg-icon svg-icon-2"
+    [inlineSVG]="'./assets/media/icons/duotune/communication/com012.svg'"
+  ></span></span
+  ><span class="menu-title" data-link="/systemmaintenance">System Organization</span
+  ><span class="menu-arrow"></span
+  ></span>
+    <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+      <div class="menu-item">
+        <a
+          class="menu-link without-sub"
+          routerLinkActive="active"
+          routerLink="/systemmaintenance/batchmanager"
+        ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+        ><span class="menu-title">Batch Manager</span></a
+        >
+      </div>
+    </div>
+    <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+      <div class="menu-item">
+        <a
+          class="menu-link without-sub"
+          routerLinkActive="active"
+          routerLink="/systemmaintenance/exchangerate"
+        ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
+        ><span class="menu-title">Exchange Rate</span></a
+        >
+      </div>
+    </div>
+  </div>
+
   <!--  <div class="menu-item">-->
   <!--    <a class="menu-link without-sub" routerLink="/rm" routerLinkActive="active">-->
   <!--    <span class="menu-icon">-->
@@ -79,7 +117,7 @@
 </ng-container>
 
 //bank admin user Login
-<ng-container  *ngIf="checkBankAdmin">
+<ng-container *ngIf="checkBankAdmin">
   <div class="menu-item">
     <div class="menu-content pt-8 pb-2">
       <span class="menu-section text-muted text-uppercase fs-8 ls-1">Bank Admin</span>
@@ -138,14 +176,14 @@
   </div>
 </ng-container>
 
-<ng-container  *ngIf="checkBankUser">
+<ng-container *ngIf="checkBankUser">
   <div class="menu-item">
     <div class="menu-content pt-8 pb-2">
       <span class="menu-section text-muted text-uppercase fs-8 ls-1">Bank User</span>
     </div>
   </div>
   <div class="menu-item">
-    <a class="menu-link without-sub" routerLink="/accounts" routerLinkActive="active" >
+    <a class="menu-link without-sub" routerLink="/accounts" routerLinkActive="active">
       <span class="menu-icon">
       <span [inlineSVG]="'./assets/media/icons/duotune/finance/fin006.svg'" class="svg-icon svg-icon-2"></span>
       </span>
@@ -160,9 +198,66 @@
       <span class="menu-title">Relationship Manager Maintenance</span>
     </a>
   </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/exchangerates" routerLinkActive="active">
+      <span class="menu-icon">
+        <span [inlineSVG]="'./assets/media/icons/duotune/communication/com001.svg'" class="svg-icon svg-icon-2"></span>
+      </span>
+      <span class="menu-title"> Exchange Rates </span>
+    </a>
+  </div>
 </ng-container>
 
-// Other code
+<ng-container *ngIf="checkBankUser">
+  <div class="menu-item">
+    <div class="menu-content pt-8 pb-2">
+    <span class="menu-section text-muted text-uppercase fs-8 ls-1"
+    >OA PF</span
+    >
+    </div>
+  </div>
+  <div class="menu-item">
+    <a
+      class="menu-link without-sub"
+      routerLink="/OAPF/invoice"
+      routerLinkActive="active"
+    ><span class="menu-icon">
+      <span
+        [inlineSVG]="'./assets/media/icons/duotune/finance/invoice.png'"
+        class="svg-icon svg-icon-2"
+      ></span> </span
+    ><span class="menu-title">Invoices</span></a
+    >
+  </div>
+
+  <div class="menu-item">
+    <a
+      class="menu-link without-sub"
+      routerLink="/OAPF/financing"
+      routerLinkActive="active"
+    ><span class="menu-icon">
+      <span
+        [inlineSVG]="'./assets/media/icons/duotune/finance/invoice.png'"
+        class="svg-icon svg-icon-2"
+      ></span> </span
+    ><span class="menu-title">Financing</span></a
+    >
+  </div>
+
+  <div class="menu-item">
+    <a
+      class="menu-link without-sub"
+      routerLink="/OAPF/payments"
+      routerLinkActive="active"
+    ><span class="menu-icon">
+      <span
+        [inlineSVG]="'./assets/media/icons/duotune/finance/invoice.png'"
+        class="svg-icon svg-icon-2"
+      ></span> </span
+    ><span class="menu-title">Payments</span></a
+    >
+  </div>
+</ng-container>
 <!-- begin::1 Level -->
 
 <!-- end::1 Level -->
@@ -206,7 +301,6 @@
 <!--</div>-->
 
 
-
 <!--<div class="menu-item">-->
 <!--  <a-->
 <!--    class="menu-link without-sub"-->
@@ -220,55 +314,6 @@
 <!--  ><span class="menu-title">Relationship Manager</span></a-->
 <!--  >-->
 <!--</div>-->
-Separator
-<div class="menu-item">
-  <div class="menu-content pt-8 pb-2">
-    <span class="menu-section text-muted text-uppercase fs-8 ls-1"
-    >OA PF</span
-    >
-  </div>
-</div>
-<div class="menu-item">
-  <a
-    class="menu-link without-sub"
-    routerLink="/OAPF/invoice"
-    routerLinkActive="active"
-  ><span class="menu-icon">
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/finance/invoice.png'"
-        class="svg-icon svg-icon-2"
-      ></span> </span
-  ><span class="menu-title">Invoices</span></a
-  >
-</div>
-
-<div class="menu-item">
-  <a
-    class="menu-link without-sub"
-    routerLink="/OAPF/financing"
-    routerLinkActive="active"
-  ><span class="menu-icon">
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/finance/invoice.png'"
-        class="svg-icon svg-icon-2"
-      ></span> </span
-  ><span class="menu-title">Financing</span></a
-  >
-</div>
-
-<div class="menu-item">
-  <a
-    class="menu-link without-sub"
-    routerLink="/OAPF/payments"
-    routerLinkActive="active"
-  ><span class="menu-icon">
-      <span
-        [inlineSVG]="'./assets/media/icons/duotune/finance/invoice.png'"
-        class="svg-icon svg-icon-2"
-      ></span> </span
-  ><span class="menu-title">Payments</span></a
-  >
-</div>
 
 
 <!-- Separator -->
@@ -551,6 +596,7 @@ Separator
 <!--        routerLink="/crafted/account/overview"-->
 <!--        ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span-->
 <!--        ><span class="menu-title">Overview</span></a-->
+<!--      >-->
 <!--      >-->
 <!--    </div>-->
 <!--    <div class="menu-item">-->

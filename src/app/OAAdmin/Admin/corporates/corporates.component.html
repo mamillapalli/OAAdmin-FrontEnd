@@ -1,105 +1,158 @@
-<div class="card-header border-0 pt-5">
-  <h3 class="card-title align-items-start flex-column">
-    <span class="card-label fw-bolder fs-3 mb-1">Corporates Dashboard</span>
-  </h3>
-  <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
-       title="Click to add a user">
-    <a class="btn btn-sm btn-light-primary" (click)="newCorporates()">
-      <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
-      New Corporates
-    </a>
-  </div>
-</div>
-<!-- end::Header -->
-<!-- begin::Body -->
-<div class="card-body py-3">
-  <!-- begin::Table container -->
-  <ng-container *ngIf="isLoading">
-    <div class="overlay-layer">
-      <div class="spinner spinner-lg spinner-primary"></div>
+<div class="card card-custom gutter-b">
+  <div class="card-header">
+    <div class="card-title">
+      <h3 class="card-label">Corporates Dashboard</h3>
     </div>
-  </ng-container>
+    <div class="card-toolbar">
+      <ng-container *ngIf="authRoles === 'SUPER_ADMIN' || authRoles === 'BANK_USER_MAKER'">
+        <a class="btn btn-sm btn-flex btn-light-success btn-active-primary fw-bolder cursor-pointer"
+           data-bs-toggle="modal"
+           data-bs-target="#kt_modal_create_app"
+           (click)="newCorporates()"
+           style="margin-right: 16px"
+        > <span
+          [inlineSVG]="'./assets/media/svg/icons/Communication/Add-user.svg'"
+          class="svg-icon svg-icon-5 svg-icon-gray-500 me-1"
+        ></span>
+          Create Corporates
+        </a>
+      </ng-container>
+      <a
+        class="
+          btn btn-sm btn-flex btn-light-warning btn-active-primary fw-bolder cursor-pointer"
+        data-kt-menu-trigger="click"
+        data-kt-menu-placement="bottom-end"
+        data-kt-menu-flip="top-end" (click)="openFilter()"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/general/gen031.svg'"
+          class="svg-icon svg-icon-5 svg-icon-gray-500 me-1"
+        ></span>
+        Filter
+      </a>
+    </div>
+  </div>
+
+  <ngx-spinner></ngx-spinner>
   <div class="table-responsive">
-    <!-- begin::Table -->
-    <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+    <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortChanges($event)" style="width: 100%;"
                class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
 
-      <!-- ID Column -->
       <ng-container matColumnDef="customerId" class="min-w-150px">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="min-w-150px"> Customer Id </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Customer Id</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.customerId}} </mat-cell>
       </ng-container>
 
-      <!-- Progress Column -->
       <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Name
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.name}} </mat-cell>
       </ng-container>
 
-      <!-- Name Column -->
       <ng-container matColumnDef="emailAddress">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Email Address </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.emailAddress}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Email Address
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.emailAddress}}
+        </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="transactionStatus">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Transaction Status </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.transactionStatus.toLowerCase()}} </mat-cell>
+      <ng-container matColumnDef="expiryDate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Expiry Date
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"
+                  class="label label-lg label-inline"> {{row.expiryDate |  date: 'yyyy-MM-dd'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.status}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Status
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.status}}
+        </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="actions" class="d-flex justify-content-end flex-shrink-0">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-        <span>
-          <a (click)="openCorporatesDialog(element,'edit')"
-             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                <span
-                  [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
-                  class="svg-icon svg-icon-3"
-                ></span>
-              </a>
-        </span>
-          <span>
-          <a (click)="openCorporatesDialog(element,'view')"
-             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen019.svg'"
-                      class="svg-icon svg-icon-3"></span>
-              </a>
-        </span>
-          <span>
-          <a (click)="openCorporatesDialog(element,'auth')"
-             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'" class="svg-icon svg-icon-2"></span>
-              </a>
-        </span>
-          <span>
-            <a (click)="openDelete(content, element)"
-               *ngIf="element.transactionStatus === 'MASTER' || element.transactionStatus === 'PENDING'"
-               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
-            >
-                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
-                      class="svg-icon svg-icon-3"></span>
-              </a>
+      <ng-container matColumnDef="transactionStatus">
+        <mat-header-cell *matHeaderCellDef="let row">Transaction Status</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <span class="btn btn-lg badge badge-square" style="width:100px"
+                [class.badge-light-success]="row.transactionStatus === 'MASTER'"
+                [class.badge-light-warning]="row.transactionStatus === 'PENDING'"
+          >
+            <span class="font-bold font-primary">
+               <ng-container *ngIf=" row.transactionStatus === 'MASTER' ">Master</ng-container>
+               <ng-container *ngIf=" row.transactionStatus === 'PENDING' ">Pending</ng-container>
+            </span>
           </span>
+        </mat-cell>
+
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="action-link">
+          <ng-container *ngIf="authRoles === 'SUPER_ADMIN'
+          || authRoles === 'BANK_USER_MAKER'
+          || authRoles === 'BANK_ADMIN_MAKER'">
+            <a (click)="openBankUserDialog(element,'edit')"
+               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/svg/icons/Communication/Write.svg'"
+                      class="svg-icon svg-icon-md svg-icon-primary">
+                </span>
+            </a>
+          </ng-container>
+          <ng-container *ngIf="authRoles === 'SUPER_ADMIN'
+          || authRoles === 'BANK_USER_MAKER'
+          || authRoles === 'BANK_USER_CHECKER'
+          || authRoles === 'BANK_USER_VIEWER'
+          || authRoles === 'BANK_ADMIN_MAKER'
+          || authRoles === 'BANK_ADMIN_CHECKER'
+          || authRoles === 'BANK_ADMIN_VIEWER'">
+            <a ng-if="(this.authRoles === 'SUPER_ADMIN')" title="view" (click)="openBankUserDialog(element,'view')"
+               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/svg/icons/Code/Compiling.svg'"
+                      class="svg-icon svg-icon-md svg-icon-success"></span>
+            </a>
+          </ng-container>
+          <ng-container *ngIf="(authRoles === 'SUPER_ADMIN'
+          || authRoles === 'BANK_USER_MAKER'
+          || authRoles === 'BANK_USER_CHECKER'
+          || authRoles === 'BANK_USER_VIEWER'
+          || authRoles === 'BANK_ADMIN_MAKER'
+          || authRoles === 'BANK_ADMIN_CHECKER'
+          || authRoles === 'BANK_ADMIN_VIEWER' ) && element.transactionStatus === 'PENDING' ">
+            <a
+              title="Authorize" (click)="openBankUserDialog(element,'auth')"
+              class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'"
+                      class="svg-icon svg-icon-md svg-icon-warning"></span>
+            </a>
+          </ng-container>
+          <ng-container *ngIf="(authRoles === 'SUPER_ADMIN'
+          || authRoles === 'BANK_ADMIN_VIEWER'
+          || authRoles === 'BANK_USER_VIEWER')
+          && element.transactionStatus === 'PENDING' ">
+            <a title="Delete customer" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+               (click)="openBankUserDelete(deleteContent, element)">
+                <span [inlineSVG]="'./assets/media/svg/icons/General/Trash.svg'"
+                      fill="#2DB757" class="svg-icon svg-icon-md svg-icon-danger">
+                </span>
+            </a>
+          </ng-container>
         </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;" [style.background-color] = "row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'">
+      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;">
       </mat-row>
     </mat-table>
-    <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+    <mat-paginator #paginator [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize"
+                   [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)" aria-label="Select page">
     </mat-paginator>
     <!-- end::Table -->
   </div>
-  <!-- end::Table container -->
 </div>
-<ng-template #content let-c="close" let-d="dismiss">
+<!-- end::Table container -->
+<ng-template #deleteContent let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">

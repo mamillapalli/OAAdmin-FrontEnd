@@ -6,8 +6,8 @@ import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../modules/auth";
 import {formatDate} from "@angular/common";
 import {catchError, retry} from "rxjs/operators";
-import {inits, rm} from "../../../Model/request/rm";
-import {rmreq} from "../../../Model/response/rmreq";
+import {inits, rm} from "../../../Model/OAAdmin/Request/rm";
+import {crm} from "../../../Model/OAAdmin/CRequest/crm";
 import {environment} from "../../../../../environments/environment";
 const API_USERS_URL = `${environment.apiUrl}`;
 
@@ -29,7 +29,7 @@ export class RmmodalComponent implements OnInit {
   @Input() mode: any;
   @Output() formValue: any
   fromParent: any;
-  rmRequest: rmreq
+  rmRequest: crm
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -61,14 +61,14 @@ export class RmmodalComponent implements OnInit {
     }
     console.log()
     if (this.currentStep$.value === this.formsCount - 1) {
-      this.rmRequest = new rmreq();
+      this.rmRequest = new crm();
       this.rmRequest.rmId = this.account$.value.rmId
       this.rmRequest.firstName = this.account$.value.firstName
       this.rmRequest.emailAddress = this.account$.value.emailAddress
-      this.rmRequest.joiningDate = formatDate(this.account$.value.joiningDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
+      //this.rmRequest.joiningDate = formatDate(this.account$.value.joiningDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
       //this.rmRequest.validDate = formatDate(this.account$.value.validDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
-      this.rmRequest.expiryDate = formatDate(this.account$.value.expiryDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
-      this.rmRequest.status = this.account$.value.status
+      //this.rmRequest.expiryDate = formatDate(this.account$.value.expiryDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
+      //this.rmRequest.status = this.account$.value.status
       this.rmRequest.customers = this.account$.value.customers
       const rmNewRequest = JSON.stringify(this.rmRequest)
 

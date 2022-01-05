@@ -41,16 +41,17 @@ export class AsideMenuComponent implements OnInit {
   }
 
   checkIfExists() {
+    console.log('check exist')
     const checkValue = this.authRoles.split(',')
     for(let i=0;i< checkValue.length;i++)
     {
        if(checkValue[i] === 'SUPER_ADMIN')
        {
          this.checkSuperAdmin = true;
-       } else if(checkValue[i] === ('BANK_USER_MAKER' || 'BANK_USER_CHECKER' || 'BANK_USER_VIEWER'))
+       } else if(checkValue[i] === 'BANK_USER_MAKER' || checkValue[i] === 'BANK_USER_CHECKER' || checkValue[i] ==='BANK_USER_VIEWER')
        {
           this.checkBankUser = true;
-       } else if(checkValue[i] === ('BANK_ADMIN_MAKER' || 'BANK_ADMIN_CHECKER' || 'BANK_ADMIN_VIEWER')) {
+       } else if(checkValue[i] === 'BANK_ADMIN_MAKER' || checkValue[i] === 'BANK_ADMIN_CHECKER' || checkValue[i] ==='BANK_ADMIN_VIEWER') {
          this.checkBankAdmin = true;
        }
     }

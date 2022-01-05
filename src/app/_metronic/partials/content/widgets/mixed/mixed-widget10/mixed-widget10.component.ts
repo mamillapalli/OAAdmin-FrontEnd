@@ -26,7 +26,7 @@ function getChartOptions(chartHeight: string, chartColor: string) {
     series: [
       {
         name: 'Net Profit',
-        data: [15, 25, 15, 40, 20, 50],
+        data: [500, 25, 15, 40, 20, 50],
       },
     ],
     chart: {

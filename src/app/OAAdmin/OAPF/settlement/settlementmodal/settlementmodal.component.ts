@@ -22,6 +22,7 @@ export class SettlementmodalComponent implements OnInit {
   fromParent: any;
   checkNextStage = true;
   cPayment: cPayment;
+  @Output() calculatedDetails: any
 
   constructor(public activeModal: NgbActiveModal, public paymentServices: paymentService) {
   }
@@ -42,6 +43,21 @@ export class SettlementmodalComponent implements OnInit {
     const nextStep = this.currentStep$.value + 1;
     if (nextStep > this.formsCount) {
       return;
+    }
+    if (nextStep === 2) {
+      if (this.mode === 'new' || this.mode === 'edit') {
+        this.checkNextStage = false;
+        this.paymentServices.CalculatePaymentDetails(this.account$.value).subscribe((res: any) => {
+            console.log('response invoice calculate details is ' + res)
+            if (res != null) {
+              this.calculatedDetails = res
+              this.currentStep$.next(nextStep);
+            } else {
+              console.log('No Calculation is found')
+            }
+          }, (err: any) => console.log('HTTP Error', err),
+          () => console.log('HTTP request completed.'))
+      }
     }
     if (this.currentStep$.value === this.formsCount - 1) {
       this.cPayment = new cPayment();

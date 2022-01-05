@@ -6,7 +6,6 @@ interface superAdmin {
   expiryDate: string;
   status: string;
   emailAddress : string;
-  accountType:string
 }
 
 const inits: superAdmin = {
@@ -17,7 +16,6 @@ const inits: superAdmin = {
   expiryDate: '',
   status: '',
   emailAddress : '',
-  accountType:''
 };
 
 export { superAdmin, inits };

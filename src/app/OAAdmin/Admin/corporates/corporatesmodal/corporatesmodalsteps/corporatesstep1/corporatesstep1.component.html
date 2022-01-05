@@ -1,109 +1,156 @@
-<div class="pb-10 pb-lg-12">
-  <h2 class="fw-bolder text-dark">Customer Information</h2>
-</div>
-<div [formGroup]="form">
-  <div class="fv-row mb-10">
-    <label class="form-label required"> Customer Id </label
-    ><input
-    name="customerId"
-    class="form-control form-control-lg form-control-solid"
-    formControlName="customerId" placeholder="Customer Id"
-  />
-    <div
-      class="fv-plugins-message-container invalid-feedback"
-      *ngIf="
-        form.get('customerId')?.hasError('required') &&
-        form.get('customerId')?.touched
-      "
-    >
-      UserId is required
-    </div>
-  </div>
-  <div class="fv-row mb-10">
-    <label class="form-label required"> Name </label
-    ><input
-    name="name"
-    class="form-control form-control-lg form-control-solid"
-    formControlName="name" placeholder="Name"
-  />
-    <div
-      class="fv-plugins-message-container invalid-feedback"
-      *ngIf="
-        form.get('name')?.hasError('required') &&
-        form.get('name')?.touched
-      "
-    >
-      UserId is required
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xl-6">
-      <div class="form-group">
-        <label class="form-label"> Address Line 1 </label>
-        <input
-          type="text"
-          class="form-control form-control-lg form-control-solid"
-          name="addressLine1"
-          formControlName="addressLine1"
-          placeholder="addressLine1"
-        />
+<div [formGroup]="corporatesform">
+  <div>
+    <h4 class="fw-bolder text-dark">Customer Information</h4>
+    <div class="form-group row">
+      <div class="col-xl-6">
+        <label class="form-label required">Customer Id</label>
+        <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+               placeholder="User Id" name="customerId" [class.is-invalid]="isControlInvalid('customerId')"
+               [class.is-valid]="isControlValid('customerId')" formControlName="customerId"/>
+      </div>
+      <div class="col-xl-6">
+        <label class="form-label required">Name</label>
+        <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+               placeholder="Customer Name" name="name" [class.is-invalid]="isControlInvalid('name')"
+               [class.is-valid]="isControlValid('name')" formControlName="name"/>
       </div>
     </div>
-    <div class="col-xl-6">
-      <label class="form-label"> Address Line 2 </label
-      ><input
-      type="text"
-      class="form-control form-control-lg form-control-solid"
-      name="addressLine2"
-      formControlName="addressLine2"
-      placeholder="Address Line 2"
-    />
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xl-6">
-      <div class="form-group">
-        <label class="form-label"> Address Line 3 </label>
-        <input
-          type="text"
-          class="form-control form-control-lg form-control-solid"
-          name="addressLine3"
-          formControlName="addressLine3"
-          placeholder="addressLine3"
-        />
+    <div class="form-group row">
+      <div class="col-xl-6">
+        <label class="form-label">Address Line 1</label>
+        <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+               placeholder="Address Line1" name="addressLine1" formControlName="addressLine1"/>
+      </div>
+      <div class="col-xl-6">
+        <label class="form-label">Address Line 2</label>
+        <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+               placeholder="Address Line2" name="addressLine2" formControlName="addressLine2"/>
       </div>
     </div>
-    <div class="col-xl-3">
-      <label class="form-label"> PO Box </label
-      ><input
-      type="text"
-      class="form-control form-control-lg form-control-solid"
-      name="poBox"
-      formControlName="poBox"
-      placeholder="PO Box"
-    />
+    <div class="form-group row">
+      <div class="col-xl-6">
+        <label class="form-label">Address Line 3</label>
+        <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+               placeholder="Address Line3" name="addressLine3" formControlName="addressLine3"/>
+      </div>
+      <div class="col-xl-3">
+        <label class="form-label">Po Box</label>
+        <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+               placeholder="Po Box" name="poBox" formControlName="poBox"/>
+      </div>
+      <div class="col-xl-3">
+        <label class="form-label"> Country </label>
+        <select name="country" class="form-control form-control-sm form-control-solid" formControlName="country">
+          <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>
+        </select>
+      </div>
     </div>
-    <div class="col-xl-3">
-      <label class="form-label"> Country </label>
-      <select name="country" class="form-select form-select-lg form-select-solid" formControlName="country">
-        <option *ngFor="let country of countries" [value]="country.name">{{country.name}}</option>
-      </select>
+    <div class="form-group row">
+      <div class="col-xl-6">
+        <label class="form-label required">Email Address</label>
+        <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+               placeholder="Email Address" name="emailAddress" formControlName="emailAddress"
+               [class.is-invalid]="isControlInvalid('emailAddress')"
+               [class.is-valid]="isControlValid('emailAddress')"/>
+      </div>
+      <div class="col-xl-3">
+        <div class="me-5">
+          <label class="fs-6 fw-bold form-label"
+          >Active State</label>
+        </div>
+        <label class="form-check form-switch form-check-custom form-check-solid"
+        >
+      <span class="form-check-label fw-bold text-gray-400"
+      >Enabled</span>
+          <input
+            class="form-check-input"
+            name="status"
+            formControlName="status"
+            type="checkbox"
+          /><span class="form-check-label fw-bold text-gray-400"
+        >Disabled</span
+        ></label
+        >
+      </div>
+      <div class="col-xl-3">
+        <div class="me-5">
+          <label class="fs-6 fw-bold form-label"
+          >Is Bank</label>
+        </div>
+        <label class="form-check form-switch form-check-custom form-check-solid"
+        >
+      <span class="form-check-label fw-bold text-gray-400"
+      >Enabled</span>
+          <input
+            class="form-check-input"
+            name="bank"
+            formControlName="bank"
+            type="checkbox"
+          /><span class="form-check-label fw-bold text-gray-400"
+        >Disabled</span
+        ></label
+        >
+      </div>
+
     </div>
   </div>
-  <div class="fv-row mb-0">
-    <label class="fs-6 fw-bold form-label required"> Email Address </label
-    ><input
-    name="emailAddress"
-    class="form-control form-control-lg form-control-solid"
-    formControlName="emailAddress"
-  />
-    <div class="fv-plugins-message-container invalid-feedback"
-      *ngIf="form.get('emailAddress')?.hasError('required') && form.get('emailAddress')?.touched">
-      Email Address is required
+  <div>
+    <h4 class="fw-bolder text-dark">Business Information</h4>
+    <div class="form-group row">
+      <div class="col-xl-6">
+        <label class="form-label">EffectiveDate</label>
+        <input type="date" class="form-control form-control-sm form-control-solid"
+               placeholder="EffectiveDate" name="effectiveDate"
+               formControlName="effectiveDate" [class.is-invalid]="isControlInvalid('effectiveDate')"
+               [class.is-valid]="isControlValid('effectiveDate')"/>
+      </div>
+      <div class="col-xl-6">
+        <label class="form-label">Expiry Date</label>
+        <input type="date" class="form-control form-control-sm form-control-solid"
+               placeholder="expiryDate" name="expiryDate"
+               formControlName="expiryDate" [class.is-invalid]="isControlInvalid('expiryDate')"
+               [class.is-valid]="isControlValid('expiryDate')"/>
+      </div>
     </div>
-    <div class="fv-plugins-message-container invalid-feedback"
-      *ngIf="form.get('emailAddress')?.hasError('email') && form.get('emailAddress')?.touched">
-      Wrong email format
+    <div class="form-group row">
+      <div class="col-xl-6">
+        <label class="form-label">Vat Registration Number</label>
+        <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+               placeholder="Vat Registration Number" name="vatRegistrationNumber"
+               formControlName="vatRegistrationNumber"/>
+      </div>
+      <div class="col-xl-6">
+        <label class="form-label">Tax Registration Number</label>
+        <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+               placeholder="Tax Registration Number" name="taxRegistrationNumber"
+               formControlName="taxRegistrationNumber"/>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-xl-6">
+        <label class="form-label">Director Name</label>
+        <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+               placeholder="directorName" name="directorName" formControlName="directorName"/>
+      </div>
+      <div class="col-xl-6">
+        <label class="form-label">Director Details</label>
+        <textarea class="form-control form-control-sm form-control-solid" autocomplete="off"
+                  placeholder="Director Details" name="directorDetails" formControlName="directorDetails" rows="2">
+      </textarea>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-xl-6">
+        <label class="form-label">Sponsor Name</label>
+        <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
+               placeholder="Sponsor Name" name="sponsorName" formControlName="sponsorName"/>
+      </div>
+      <div class="col-xl-6">
+        <label class="form-label">Sponsor Details</label>
+        <textarea class="form-control form-control-sm form-control-solid" autocomplete="off"
+                  placeholder="Sponsor Details" name="sponsorDetails" formControlName="sponsorDetails" rows="2">
+      </textarea>
+      </div>
     </div>
   </div>
 </div>

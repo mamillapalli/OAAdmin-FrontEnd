@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {Corporateadmin} from "../../Model/corporateadmin";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
+import {corporateadmin} from "../../Model/OAAdmin/Request/corporateadmin";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {MatSort, Sort} from "@angular/material/sort";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl} from "@angular/forms";
 import {HttpClient, HttpEvent, HttpEventType, HttpHeaders, HttpResponse} from "@angular/common/http";
@@ -19,6 +19,10 @@ import {InvoicemodalComponent} from "./invoicemodal/invoicemodal.component";
 import Swal from "sweetalert2";
 import {NgxSpinnerService} from "ngx-spinner";
 import {FilterComponent} from "../common/filter/filter.component";
+import {oapfcommonService} from "../../shared/oapfcommon.service";
+import {InvoicehistroyComponent} from "../common/invoicehistroy/invoicehistroy.component";
+import {Invoice} from "../../Model/OAPF/Request/invoice";
+import { StatsWidget6Component } from "../../../_metronic/partials/content/widgets/stats/stats-widget6/stats-widget6.component";
 
 const API_USERS_URL = `${environment.apiUrl}`;
 
@@ -29,13 +33,13 @@ const API_USERS_URL = `${environment.apiUrl}`;
 })
 export class InvoiceComponent implements OnInit, OnDestroy {
 
-  dataSource: any = new MatTableDataSource<Corporateadmin>();
+  dataSource: any = new MatTableDataSource<Invoice>();
   displayedColumns: string[] = ['invoiceNumber', 'sbrReferenceId', 'agreementId', 'currency', 'amount', 'dueDate', 'status',
     'actions'];
-  authToken: any;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
-  @ViewChild(MatSort) sort: MatSort | any;
-  modalOption: NgbModalOptions = {}; // not null!
+  fDisplayedColumns: string[] = ['invoiceNumber', 'sbrReferenceId', 'agreementId', 'currency', 'amount', 'dueDate', 'status']
+    authToken: any;
+
+  modalOption: NgbModalOptions = {};
   closeResult: string;
   colorCode: string;
   isLoading: any;
@@ -58,28 +62,47 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
   isLoading$: any;
+  authRoles : any
 
+
+  totalRows = 0;
+  pageSize = 5;
+  currentPage = 0;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
+  @ViewChild(MatSort) sort: MatSort | any;
+  sortData : any
 
   constructor(public http: HttpClient,
               public authService: AuthService,
               public modalService: NgbModal,
               public notifyService: NotificationService,
               public invoiceServices: invoiceService,
-              private datePipe: DatePipe,private spinner: NgxSpinnerService) {
+              private datePipe: DatePipe,
+              private spinner: NgxSpinnerService,
+              public oapfcommonService: oapfcommonService) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    this.authRoles = auth?.aRoles
   }
 
   ngOnInit(): void {
-    this.getInvoices();
+    this.getInvoices(this.currentPage, this.pageSize, this.sortData);
   }
 
-  public getInvoices() {
+  public getInvoices(currentPage: number, pageSize: number, sortData: any) {
+
     console.log('Get Invoices')
     this.spinner.show();
-    const sb = this.invoiceServices.getInvoice('', '', 'all').subscribe((res) => {
-      this.dataSource.data = res;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.isLoading$ =false;
+    const sb = this.oapfcommonService.getDataWithPagination('/oapf/api/v1/invoices/', this.currentPage, this.pageSize,this.sortData).subscribe((res) => {
+      console.log(res)
+      this.dataSource.data = res.content;
+      this.totalRows = res.totalElements
+      console.log(this.totalRows)
+      // this.dataSource.pageSize = res.totalPages
+      // this.dataSource.sort = this.sort;
+      // this.dataSource.pageSize = res.totalPages
+      // this.dataSource.sort = this.sort;
+      // this.dataSource.paginator = this.paginator;
       this.spinner.hide();
       this.dataSource.filterPredicate = this.createFilter();
     });
@@ -97,31 +120,48 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   newInvoices() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(InvoicemodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
       console.log('newBankAdmin is ' + result);
     }, (reason) => {
-      this.getInvoices();
+      this.getInvoices(this.currentPage, this.pageSize, this.sortData);
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
   openInvoiceDialog(element: any, mode: any) {
-    console.log(element)
-    this.modalOption.backdrop = 'static';
-    this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
-    const modalRef = this.modalService.open(InvoicemodalComponent, this.modalOption);
-    modalRef.componentInstance.mode = mode;
-    modalRef.componentInstance.fromParent = element;
-    modalRef.result.then((result) => {
-      console.log(result);
-    }, (reason) => {
-      this.getInvoices();
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    if(mode === 'viewHistory')
+    {
+      this.modalOption.backdrop = 'static';
+      this.modalOption.keyboard = false;
+      //this.modalOption.windowClass = 'my-class'
+      this.modalOption.size = 'xl';
+      const modalRef = this.modalService.open(InvoicehistroyComponent, this.modalOption);
+      modalRef.componentInstance.invoiceNumber = element.invoiceNumber;
+      modalRef.result.then((result) => {
+        console.log(result);
+      }, (reason) => {
+        this.getInvoices(this.currentPage, this.pageSize, this.sortData);
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    } else {
+      this.modalOption.backdrop = 'static';
+      this.modalOption.keyboard = false;
+      //this.modalOption.windowClass = 'my-class'
+      this.modalOption.size = 'xl';
+      const modalRef = this.modalService.open(InvoicemodalComponent, this.modalOption);
+      modalRef.componentInstance.mode = mode;
+      modalRef.componentInstance.fromParent = element;
+      modalRef.result.then((result) => {
+        console.log(result);
+      }, (reason) => {
+        this.getInvoices(this.currentPage, this.pageSize, this.sortData);
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    }
   }
 
   openInvoiceDelete(content: any, element: any) {
@@ -131,7 +171,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
         this.deleteModal(element);
       }
     }, (reason) => {
-      this.getInvoices();
+      this.getInvoices(this.currentPage, this.pageSize, this.sortData);
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -215,10 +255,10 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
-        this.getInvoices();
+        this.getInvoices(this.currentPage, this.pageSize, this.sortData);
       }
     }, (reason) => {
-      this.getInvoices();
+      this.getInvoices(this.currentPage, this.pageSize, this.sortData);
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -291,31 +331,41 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   openFilter() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalService.open(FilterComponent, this.modalOption).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-      if (result) {
-        console.log("row result is "+result)
-        console.log('test'+result.value)
-        // if (this.productForm.valid && this.productForm.value.quantities.length > 0) {
-        //   const sb = this.oaadminService.getAccounts(this.productForm, '', 'filter').subscribe((res) => {
-        //     this.dataSource.data = res;
-        //     this.dataSource.sort = this.sort;
-        //     this.dataSource.paginator = this.paginator;
-        //     this.dataSource.filterPredicate = this.createFilter();
-        //   });
-        //   this.subscriptions.push(sb);
-        // } else {
-        //   const sb = this.oaadminService.getAccounts(this.productForm, '', 'all').subscribe((res) => {
-        //     this.dataSource.data = res;
-        //     this.dataSource.sort = this.sort;
-        //     this.dataSource.paginator = this.paginator;
-        //     this.dataSource.filterPredicate = this.createFilter();
-        //   });
-        //   this.subscriptions.push(sb);
-        // }
+    const modalRef = this.modalService.open(FilterComponent, this.modalOption);
+    modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      if (result.valid && result.value.filterOption.length > 0) {
+        const sb = this.oapfcommonService.getFilter(result, 'filter', 'oapf/api/v1/invoices').subscribe((res: any) => {
+          this.dataSource.data = res;
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        });
+        this.subscriptions.push(sb);
+      } else {
+        const sb = this.oapfcommonService.getFilter(result, 'all', 'oapf/api/v1/invoices').subscribe((res: any) => {
+          this.dataSource.data = res;
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        });
+        this.subscriptions.push(sb);
       }
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
+
+  pageChanged(event: any) {
+    console.log(this.sort)
+    console.log({ event });
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.getInvoices(this.currentPage,this.pageSize,this.sortData);
+  }
+
+  sortChanges(event: Sort) {
+    console.log(event.direction)
+    this.sortData = event.active+','+event.direction
+    this.getInvoices(this.currentPage,this.pageSize,event.active);
+  }
+
 }

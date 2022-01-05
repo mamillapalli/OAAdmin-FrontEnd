@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {Corporateadmin} from "../../Model/corporateadmin";
+import {corporateadmin} from "../../Model/OAAdmin/Request/corporateadmin";
 import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
+import {MatSort, Sort} from "@angular/material/sort";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Subscription, throwError} from "rxjs";
@@ -16,6 +16,13 @@ import {InvoicemodalComponent} from "../../OAPF/invoice/invoicemodal/invoicemoda
 import {catchError, retry} from "rxjs/operators";
 import Swal from "sweetalert2";
 import {AccountmodalComponent} from "./accountmodal/accountmodal.component";
+import {caccounts} from "../../Model/OAAdmin/CRequest/caccounts";
+import {bankuser} from "../../Model/OAAdmin/Request/bankuser";
+import {NgxSpinnerService} from "ngx-spinner";
+import {BankusermodalComponent} from "../bankuser/bankusermodal/bankusermodal.component";
+import {FilterComponent} from "../../OAPF/common/filter/filter.component";
+import { oaCommonService } from "../../shared/oacommon.service";
+import {Accounts} from "../../Model/OAAdmin/Request/accounts";
 
 @Component({
   selector: 'app-accounts',
@@ -24,145 +31,110 @@ import {AccountmodalComponent} from "./accountmodal/accountmodal.component";
 })
 export class AccountsComponent implements OnInit {
 
-  dataSource: any = new MatTableDataSource<Corporateadmin>();
-  displayedColumns: string[] = ['accountId', 'accountName', 'accountType', 'accountCurrency'];
+  dataSource: any = new MatTableDataSource<Accounts>();
+  displayedColumns: string[] =  ['accountId', 'name', 'accountType', 'currency', 'debitCreditFlag', 'customerId','businessType','actions'];
+  fDisplayedColumns: string[] = ['accountId', 'name', 'accountType', 'currency', 'debitCreditFlag', 'customerId','businessType']
   authToken: any;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
-  @ViewChild(MatSort) sort: MatSort | any;
-  modalOption: NgbModalOptions = {}; // not null!
+  modalOption: NgbModalOptions = {};
   closeResult: string;
-  colorCode: string;
   isLoading: any;
-  public time: string | null;
-
-
-  customFilters = [];
-  addFilterFlag = false;
-  selectedCustomColumn: any
-  firstName = new FormControl('');
-  filterValues = {
-    firstName: ''
-  };
 
   private subscriptions: Subscription[] = [];
-  formdata: FormGroup
-  productForm: FormGroup;
-  constructor(public http: HttpClient,
-              public authService: AuthService,
-              public modalService: NgbModal,
-              public notifyService: NotificationService,
-              public invoiceServices: invoiceService,
-              public oaadminService: oaadminService,
-              private fb:FormBuilder) {
-    this.productForm = this.fb.group({
-      quantities: this.fb.array([]) ,
-    });
+  authRoles : any
+
+  //sort
+  totalRows = 0;
+  pageSize = 5;
+  currentPage = 0;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
+  @ViewChild(MatSort) sort: MatSort | any;
+  sortData : any
+
+  constructor(
+    public authService: AuthService,
+    public modalService: NgbModal,
+    public notifyService: NotificationService,
+    public oaCommonService: oaCommonService) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    this.authRoles = auth?.aRoles
+
   }
 
-  quantities() : FormArray {
-    return this.productForm.get("quantities") as FormArray
-  }
-
-  newQuantity(): FormGroup {
-    return this.fb.group({
-      qty: '',
-      price: '',
-    })
-  }
-
-  addFilterOption() {
-    this.quantities().push(this.newQuantity());
-  }
-
-  removeQuantity(i:number) {
-    this.quantities().removeAt(i);
-  }
-
-  onSubmit() {
-    console.log(this.productForm.value);
-    const f = this.productForm.value.quantities
-    for(let i=0; i< f.length ;i++)
-    {
-      console.log(f[i].price)
-      console.log(f[i].qty)
-    }
-    console.log(f);
-  }
 
   ngOnInit(): void {
-    //this.getAccounts();
-    this.formdata = new FormGroup({
-      filterBy: new FormControl("", [Validators.required]),
-      filterValue: new FormControl("", [Validators.required])
-    });
-    this.getFilterValue();
+    console.log(this.authRoles.split(','))
+    this.authRoles = this.authRoles.split(',')
+    this.getAccounts();
   }
 
   public getAccounts() {
-    console.log('Get Invoices')
-    const sb = this.oaadminService.getAccounts('', '', 'all').subscribe((res) => {
-      this.dataSource.data = res;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.filterPredicate = this.createFilter();
+    const sb = this.oaCommonService.getMethodWithPagination('/oaadmin/api/v1/accounts', '', this.currentPage,this.pageSize ,this.sortData  ).subscribe((res) => {
+      console.log('response is '+res)
+      this.dataSource.data = res.content;
+      this.totalRows = res.totalElements
     });
     this.subscriptions.push(sb);
   }
 
-  createFilter(): (data: any, filter: string) => boolean {
-    let filterFunction = function (data: { firstName: string; }, filter: string): boolean {
-      let searchTerms = JSON.parse(filter);
-      return data.firstName.toLowerCase().indexOf(searchTerms.firstName) !== -1
-    }
-    return filterFunction;
-  }
 
   newAccounts() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'lg'
     const modalRef = this.modalService.open(AccountmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
-      console.log('newBankAdmin is ' + result);
+      console.log('newbankadmins is ' + result);
     }, (reason) => {
-      //this.getAccounts();
-      this.getFilterValue();
+      this.getAccounts();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
-  openAccountDialog(element: any, mode: any) {
+  findValueInArray(value: any, arr: string | any[]) {
+    let result = false;
+    for (var i = 0; i < arr.length; i++) {
+      var name = arr[i];
+      console.log(name)
+      if (name === value) {
+        result = true
+        break;
+      }
+    }
+    return result;
+  }
+
+  openAccountsDialog(element: any, mode: any) {
+    console.log(element)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'lg'
     const modalRef = this.modalService.open(AccountmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {
-      // this.getAccounts();
-      this.getFilterValue();
+      this.getAccounts();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
-  openAccountDelete(content: any, element: any) {
+  openBankUserDelete(content: any, element: any) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
         this.deleteModal(element);
       }
     }, (reason) => {
-      //this.getAccounts();
-      this.getFilterValue();
+      this.getAccounts();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
   private deleteModal(data: any) {
-    this.oaadminService.dataItem(data, 'delete').subscribe(res => {
+    this.oaCommonService.dataItem(data, data.userId, 'delete', '/oaadmin/api/v1/accounts/delete/').subscribe(res => {
     }, (error: { message: any }) => {
       this.notifyService.showError(error, 'Delete Customer')
       console.error('There was an error!', error);
@@ -187,92 +159,57 @@ export class AccountsComponent implements OnInit {
       errorMessage = error.error.message;
     } else {
       // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      errorMessage = `Error Code: ${error.status}\n Message: ${error.message}`;
     }
     console.log(errorMessage);
     return throwError(errorMessage);
-  }
-
-  getColor(post: any) {
-    {
-      if (post.deleteFlag) {
-        this.colorCode = '#cc0248'
-      } else if (post.transactionStatus === 'MASTER') {
-        this.colorCode = '#151414'
-      } else {
-
-        this.colorCode = '#5db6e3'
-      }
-      return this.colorCode;
-    }
-  }
-
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sb => sb.unsubscribe());
   }
 
-
-
-  //Upload Invoices Events
-  selectedFiles: any
-  progress: any;
-  currentFile: File;
-  message: any;
-  fileInfos: any;
-  filterBy: any;
-  filterValue: any;
-
-
-
-  openFilter(content: any) {
-    const modalRef = this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-      console.log(result)
-      if (result === 'yes') {
-        this.productForm.reset();
+  openFilter() {
+    this.pageSize = 5;
+    this.currentPage = 0;
+    console.log('open filter')
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    const modalRef = this.modalService.open(FilterComponent, this.modalOption);
+    console.log(this.fDisplayedColumns)
+    modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      if (result.valid && result.value.filterOption.length > 0) {
+        const sb = this.oaCommonService.getFilterWithPagination(result, 'filter', '/oaadmin/api/v1/accounts',this.currentPage,this.pageSize,this.sortData).subscribe((res: any) => {
+          this.dataSource.data = res;
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        });
+        this.subscriptions.push(sb);
+      } else {
+        const sb = this.oaCommonService.getFilterWithPagination(result, 'all', '/oaadmin/api/v1/accounts',this.currentPage,this.pageSize,this.sortData).subscribe((res: any) => {
+          this.dataSource.data = res;
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        });
+        this.subscriptions.push(sb);
       }
     }, (reason) => {
-      this.quantities().reset();
-      this.productForm.reset();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
-  getFilterValue() {
-    console.log('test'+this.productForm.value.quantities)
-    if (this.productForm.valid && this.productForm.value.quantities.length > 0) {
-      const sb = this.oaadminService.getAccounts(this.productForm, '', 'filter').subscribe((res) => {
-        this.dataSource.data = res;
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.filterPredicate = this.createFilter();
-      });
-      this.subscriptions.push(sb);
-    } else {
-      const sb = this.oaadminService.getAccounts(this.productForm, '', 'all').subscribe((res) => {
-        this.dataSource.data = res;
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.filterPredicate = this.createFilter();
-      });
-      this.subscriptions.push(sb);
-    }
+  pageChanged(event: any) {
+    console.log({ event });
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.getAccounts();
   }
 
-  reset() {
-    this.quantities().reset();
-    this.productForm.invalid
-    this.productForm.reset();
-    this.getFilterValue();
+  sortChanges(event: Sort) {
+    this.sortData = event.active
+    this.getAccounts();
   }
+
+
 }

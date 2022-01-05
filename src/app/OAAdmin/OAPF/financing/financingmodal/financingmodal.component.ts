@@ -1,12 +1,14 @@
 import {Component, OnInit, Output} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {NgbActiveModal, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {financing, inits} from "../../../Model/OAPF/Request/financing";
 import {cFinancing} from "../../../Model/OAPF/CRequest/cFinancing";
 import Swal from "sweetalert2";
 import {financingService} from "../../../shared/OAPF/financing.service";
 import {FormGroup} from "@angular/forms";
 import {NotificationService} from "../../../shared/notification.service";
+import {CorporateadminmodalComponent} from "../../../Admin/corporateadmin/corporateadminmodal/corporateadminmodal.component";
+import {VouchermodalComponent} from "../../common/vouchermodal/vouchermodal.component";
 
 @Component({
   selector: 'app-financingmodal',
@@ -25,10 +27,13 @@ export class FinancingmodalComponent implements OnInit {
   checkNextStage = true;
   cFinancing: cFinancing;
   @Output() calculatedDetails: any
+  modalOption: NgbModalOptions = {};
+
 
   constructor(public activeModal: NgbActiveModal,
               public financingService: financingService,
-              public NotificationService: NotificationService) {
+              public NotificationService: NotificationService,
+              public modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -179,5 +184,18 @@ export class FinancingmodalComponent implements OnInit {
       return true
     }
     return false
+  }
+
+  viewVoucher() {
+
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalOption.size = 'lg'
+    const modalRef = this.modalService.open(VouchermodalComponent, this.modalOption);
+    modalRef.componentInstance.voucherData = this.account$.value;
+    modalRef.result.then((result) => {
+    }, (reason) => {
+    });
+
   }
 }

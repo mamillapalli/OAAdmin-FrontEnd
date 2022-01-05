@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import { NgbActiveModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {MatTableDataSource} from "@angular/material/table";
-import {Corporateadmin} from "../../../../../../../Model/corporateadmin";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
@@ -9,6 +8,7 @@ import {AuthService} from "../../../../../../../../modules/auth";
 import {NotificationService} from "../../../../../../../shared/notification.service";
 import {CustomerService} from "../../../../../../../shared/customer.service";
 import {environment} from "../../../../../../../../../environments/environment";
+import {corporates} from "../../../../../../../Model/OAAdmin/Request/corporates";
 
 const API_USERS_URL = `${environment.apiUrl}`;
 
@@ -19,7 +19,7 @@ const API_USERS_URL = `${environment.apiUrl}`;
 })
 export class CustomerstablemodalComponent implements OnInit {
 
-  dataSource: any = new MatTableDataSource<Corporateadmin>();
+  dataSource: any = new MatTableDataSource<corporates>();
   displayedColumns: string[] = ['customerId', 'name', 'emailAddress', 'transactionStatus', 'status'];
   authToken: any;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;

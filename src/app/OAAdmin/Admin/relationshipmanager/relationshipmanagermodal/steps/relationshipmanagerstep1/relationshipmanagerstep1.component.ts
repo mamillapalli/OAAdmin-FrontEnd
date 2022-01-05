@@ -1,10 +1,14 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {rm} from "../../../../../Model/request/rm";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {rm} from "../../../../../Model/OAAdmin/Request/rm";
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
-import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
+import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
+import {ReterivecustomersmodalComponent} from "../../../../common/reterivecustomersmodal/reterivecustomersmodal.component";
+import {oaCommonService} from "../../../../../shared/oacommon.service";
 import {MatTableDataSource} from "@angular/material/table";
-import {HttpClient} from "@angular/common/http";
+import {corporates} from "../../../../../Model/OAAdmin/Request/corporates";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-relationshipmanagerstep1',
@@ -13,74 +17,159 @@ import {HttpClient} from "@angular/common/http";
 })
 export class Relationshipmanagerstep1Component implements OnInit {
 
-  @Input('updateParentModel') updateParentModel: (
-    part: Partial<rm>,
-    isFormValid: boolean
-  ) => void;
-  form: FormGroup;
+  @Input('updateParentModel') updateParentModel: (part: Partial<rm>, isFormValid: boolean) => void;
   @Input() defaultValues: Partial<rm>;
-
   private unsubscribe: Subscription[] = [];
-  @Input('formValue') formValue :  any;
-  @Input() mode :  any;
-  @ViewChild('myModal') myModal: any;
-  modalOption: NgbModalOptions = {}; // not null!
-  public content: any;
-  customerList: any;
-  authToken: any;
-  dataSource: any = new MatTableDataSource<rm>();
+  rmForm: FormGroup;
+  @Input() mode: any;
+  @Input('formValue') formValue: any;
+  private closeResult: string;
+  modalOption: NgbModalOptions = {};
+  dataSource: any = new MatTableDataSource<corporates>();
+  displayedColumns: string[] = ['customerId', 'name', 'emailAddress', 'effectiveDate', 'expiryDate', 'status' , 'actions'];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
+  @ViewChild(MatSort) sort: MatSort | any;
+  customers: FormArray = this.fb.array([]);
 
-  constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal) {}
+  constructor(private fb: FormBuilder,
+              public oaCommonService: oaCommonService,
+              public modalService: NgbModal) {
+  }
 
   ngOnInit() {
     this.initForm();
-    if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view')
-    {
-      this.form.disable()
-    }
-    if(this.mode !== 'new') {
+    if (this.mode === 'new') {
+      this.oaCommonService.getReferenceNumber('customeradmins').subscribe((res) => {
+        this.f.rmId.setValue(res);
+      });
+    } else {
       this.updateForm();
+      if (this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view') {
+        this.rmForm.disable()
+      }
     }
     this.updateParentModel({}, this.checkForm());
   }
 
-  initForm() {
-    this.form = this.fb.group({
-      rmId: [this.defaultValues.rmId,[Validators.required]],
-      firstName: [this.defaultValues.firstName,[Validators.required]],
-      lastName: [this.defaultValues.lastName,[Validators.required]],
-      emailAddress: [this.defaultValues.emailAddress,[Validators.required]],
-    });
+  get f() {
+    return this.rmForm.controls;
+  }
 
-    const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
-      this.updateParentModel(val, this.checkForm());
+  initForm() {
+    this.rmForm = this.fb.group({
+      rmId: [this.defaultValues.rmId, [Validators.required]],
+      firstName: [this.defaultValues.firstName, [Validators.required]],
+      lastName: [this.defaultValues.lastName, [Validators.required]],
+      effectiveDate: [this.defaultValues.effectiveDate, [Validators.required]],
+      joiningDate: [this.defaultValues.joiningDate, [Validators.required]],
+      expiryDate: [this.defaultValues.expiryDate, [Validators.required]],
+      emailAddress: [this.defaultValues.emailAddress, [Validators.required]],
+      customers: this.customers
+    });
+    const formChangesSubscr = this.rmForm.valueChanges.subscribe((val) => {
+      this.updateParentModel(val, true);
     });
     this.unsubscribe.push(formChangesSubscr);
   }
 
-  checkForm() {
-    return !(
-      this.form.get('rmId')?.hasError('required') ||
-      this.form.get('name')?.hasError('required') ||
-      this.form.get('emailAddress')?.hasError('required') ||
-      this.form.get('emailAddress')?.hasError('email')
-    );
+  updateForm() {
+    this.rmForm.patchValue(this.formValue)
+    console.log('Invoice List '+this.formValue.customers)
+    if(this.formValue.customers.length > 0)
+    {
+      this.dataSource.data = this.formValue.customers;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 
-  updateForm()
-  {
-    this.f.rmId.setValue(this.formValue.rmId);
-    this.f.firstName.setValue(this.formValue.firstName);
-    this.f.lastName.setValue(this.formValue.lastName);
-    this.f.emailAddress.setValue(this.formValue.emailAddress);
+  isControlValid(controlName: string): boolean {
+    const control = this.rmForm.controls[controlName];
+    return control.valid && (control.dirty || control.touched);
   }
 
-  get f() {
-    return this.form.controls;
+  isControlInvalid(controlName: string): boolean {
+    const control = this.rmForm.controls[controlName];
+    return control.invalid && (control.dirty || control.touched);
   }
 
+  controlHasError(validation: string, controlName: string) {
+    const control = this.rmForm.controls[controlName];
+    return control.hasError(validation) && (control.dirty || control.touched);
+  }
+
+  isControlTouched(controlName: string): boolean {
+    return false;
+  }
+
+  checkForm() {
+    return !(
+      this.rmForm.get('rmId')?.hasError('required') ||
+      this.rmForm.get('firstName')?.hasError('required') ||
+      this.rmForm.get('lastName')?.hasError('required') ||
+      this.rmForm.get('emailAddress')?.hasError('required') ||
+      this.rmForm.get('emailAddress')?.hasError('email')
+    );
+  }
+
+  openCustomerDialog() {
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalOption.size = 'lg'
+    const modalRef = this.modalService.open(ReterivecustomersmodalComponent, this.modalOption);
+    modalRef.componentInstance.mode = 'new';
+    modalRef.result.then((result) => {
+      const idx: number = this.dataSource.data.findIndex((obj: { customerId: any; }) => obj.customerId === result.customerId);
+      console.log('idx----------------->'+idx)
+      if(idx === -1) {
+        this.dataSource.data.push(result);
+        const cust = this.fb.group({
+          customerId: [result.customerId, '']
+        });
+        this.customers.push(cust)
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  openRMDelete(element: any) {
+    const index = this.dataSource.data.indexOf(element.customerId);
+    const idx: number = this.dataSource.data.findIndex((obj: { customerId: any; }) => obj.customerId === element.customerId);
+    this.dataSource.data.splice(idx, 1);
+    this.dataSource._updateChangeSubscription();
+    this.customers.clear()
+    const res = this.dataSource.data
+    for (let i = 0; i < res.length; i++) {
+      console.log(res[i].customers)
+      const inv = this.fb.group({
+        customers: [res[i].customerId, '']
+      });
+      this.customers.push(inv)
+    }
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  openRMDialog(element:any, edit: any) {
+
+  }
+
+  get array(): FormArray {
+    return this.rmForm.get('customers') as FormArray;
+  }
 }

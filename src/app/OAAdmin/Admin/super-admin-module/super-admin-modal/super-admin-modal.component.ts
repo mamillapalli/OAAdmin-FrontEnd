@@ -7,7 +7,11 @@ import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {catchError, retry} from "rxjs/operators";
 import {AuthService} from "../../../../modules/auth";
 import {environment} from "../../../../../environments/environment";
-const API_USERS_URL = `${environment.apiUrl}`;
+import {NotificationService} from "../../../shared/notification.service";
+import Swal from "sweetalert2";
+import {csuperAdmin} from "../../../Model/OAAdmin/CRequest/csuper-admin";
+import {oaCommonService} from "../../../shared/oacommon.service";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-super-admin-modal',
@@ -16,7 +20,7 @@ const API_USERS_URL = `${environment.apiUrl}`;
 })
 export class SuperAdminModalComponent implements OnInit {
 
-  formsCount = 3;
+  formsCount = 2;
   account$: BehaviorSubject<any> =
     new BehaviorSubject<superAdmin>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
@@ -29,8 +33,17 @@ export class SuperAdminModalComponent implements OnInit {
   @Output() formValue: any
   fromParent: any;
   deleteModalDp: any;
+  cSuperAdmin: csuperAdmin
+  checkNextStage: boolean;
 
-  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient, public activeModal: NgbActiveModal, private authService: AuthService) {
+  constructor(private router: Router,
+              private route: ActivatedRoute,
+              private http: HttpClient,
+              public activeModal: NgbActiveModal,
+              private authService: AuthService,
+              public notifyService: NotificationService,
+              public oaCommonService: oaCommonService,
+              private datePipe: DatePipe) {
   }
 
   ngOnInit(): void {
@@ -49,51 +62,100 @@ export class SuperAdminModalComponent implements OnInit {
   modal: any;
 
   nextStep() {
-    let nextStepBoolean = true;
+    console.log('check validation')
     const nextStep = this.currentStep$.value + 1;
     if (nextStep > this.formsCount) {
       return;
     }
     if (this.currentStep$.value === this.formsCount - 1) {
-      const auth = this.authService.getAuthFromLocalStorage();
-      const httpHeaders = new HttpHeaders({
-        Authorization: `Bearer ${auth?.jwt}`,
-        'Content-Type': 'application/json'
-      });
-      console.log('auth jwt token is ' + auth?.jwt)
-      const jsonValue = JSON.stringify(this.account$.value)
+      if( this.checkBusinessValidation()){
+        return;
+      }
+      this.cSuperAdmin = new csuperAdmin();
+      this.cSuperAdmin = this.account$.value;
+      const rmNewRequest = this.cSuperAdmin;
       if (this.mode === 'new') {
-        nextStepBoolean = false;
-        this.CreateSuperAdmin(jsonValue).subscribe(res => {
-          if (res != null)
-             this.currentStep$.next(nextStep);
+        this.checkNextStage = false;
+        this.oaCommonService.dataItem(rmNewRequest,'',this.mode,'oaadmin/api/v1/superadmins').subscribe(res => {
+          if (res !== null) {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Add Record Successfully',
+              icon: 'success'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== null) {
+            if (this.checkNextStage) {
+              this.currentStep$.next(nextStep);
+            }
+          }
         }, (error: { message: any }) => {
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       } else if (this.mode === 'edit') {
-        nextStepBoolean = false;
-        this.modifySuperAdmin(jsonValue).subscribe(res => {
-          this.currentStep$.next(nextStep);
+        this.checkNextStage = false;
+        this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.userId,this.mode,'oaadmin/api/v1/superadmins').subscribe(res => {
+          console.log('Response is : ' + res)
+          if (res !== null && res !== '') {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Edit Record Successfully',
+              icon: 'success'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== null && res !== '') {
+            if (this.checkNextStage) {
+              this.currentStep$.next(nextStep);
+            }
+          }
         }, (error: { message: any }) => {
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       } else if (this.mode === 'auth') {
-        nextStepBoolean = false;
-        this.authSuperAdmin().subscribe(res => {
-          this.currentStep$.next(nextStep);
+        this.checkNextStage = false;
+        this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.userId,this.mode,'oaadmin/api/v1/superadmins').subscribe(res => {
+          if (res !== null && res !== '') {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Authorize Record Successfully',
+              icon: 'success'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== null && res !== '') {
+            if (this.checkNextStage) {
+              this.currentStep$.next(nextStep);
+            }
+          }
         }, (error: { message: any }) => {
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       }
     }
-    if(nextStepBoolean)
+    if (this.checkNextStage) {
       this.currentStep$.next(nextStep);
+    }
   }
-
-
 
   prevStep() {
     const prevStep = this.currentStep$.value - 1;
@@ -112,59 +174,6 @@ export class SuperAdminModalComponent implements OnInit {
     this.activeModal.dismiss();
   }
 
-  // submit() {
-  //   console.log('submit')
-  //
-  //   console.log('mode of transaction is ' + jsonval);
-  //
-  //
-  //   if (this.mode === 'new') {
-  //     console.log(this.account$.value)
-  //     console.log(this.cancelButton)
-  //     return this.http.post(API_USERS_URL + '/api/v1/superadmins/',
-  //       jsonval, {headers: httpHeaders})
-  //       .pipe(
-  //         catchError(error => {
-  //           this.cancelButton = true;
-  //           if (error.error instanceof ErrorEvent) {
-  //             this.errorMsg = `Error: ${error.error.message}`;
-  //           } else {
-  //             this.errorMsg = `Error: ${error.message}`;
-  //           }
-  //           return [];
-  //         })
-  //       ).subscribe(res => {
-  //         console.log(this.cancelButton)
-  //         this.cancelButton = true;
-  //         console.log(this.cancelButton)
-  //         console.log(res);
-  //       });
-  //
-  //
-  //   } else if (this.mode === 'edit') {
-  //     return this.http.put(API_USERS_URL + '/api/v1/superadmins/' + this.account$.value.customerId,
-  //       JSON.stringify(this.account$.value), {headers: httpHeaders})
-  //       .subscribe(res => {
-  //         console.log(res)
-  //       }, (error: { message: any; }) => {
-  //         console.error('There was an error!', error);
-  //       });
-  //   } else if (this.mode === 'auth') {
-  //     return this.http.put(API_USERS_URL + '/api/v1/superadmins/authorise/' + this.account$.value.customerId, {}, {headers: httpHeaders})
-  //       .subscribe(res => {
-  //         console.log(res)
-  //       }, (error: { message: any; }) => {
-  //         console.error('There was an error!', error);
-  //       });
-  //   } else if (this.mode === 'delete') {
-  //     return this.http.put(API_USERS_URL + '/api/v1/superadmins/delete/' + this.account$.value.customerId, {headers: httpHeaders}, {headers: httpHeaders})
-  //       .subscribe(res => {
-  //         console.log(res)
-  //       }, (error: { message: any; }) => {
-  //         console.error('There was an error!', error);
-  //       });
-  //   }
-  // }
 
   errorHandl(error: { error: { message: string; }; status: any; message: any; }) {
     let errorMessage = '';
@@ -179,65 +188,21 @@ export class SuperAdminModalComponent implements OnInit {
     return throwError(errorMessage);
   }
 
-  CreateSuperAdmin(data: any): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.post<any>(API_USERS_URL + '/api/v1/superadmins/', data, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      );
+  private checkBusinessValidation(): boolean {
+    let currentDate:any = new Date();
+    currentDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
+    if(this.account$.value.expiryDate < currentDate){
+        this.notifyService.showWarning('Expiry Date should not less than today Date','Business Validation')
+      return true;
+    }
+    if(this.account$.value.effectiveDate < currentDate){
+      this.notifyService.showWarning('Effective Date should not less than today Date','Business Validation')
+      return true;
+    }
+    if(this.account$.value.expiryDate < this.account$.value.effectiveDate){
+      this.notifyService.showWarning('Expiry should not less than today Date','Business Validation')
+      return true;
+    }
+    return false
   }
-
-  modifySuperAdmin(data: any): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/superadmins/' + this.account$.value.userId, data, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      );
-  }
-
-  public authSuperAdmin(): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/superadmins/authorise/' + this.account$.value.userId, {}, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      );
-  }
-
-  deleteSuperAdmin(): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/superadmins/delete' + this.account$.value.userId, {}, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      );
-  }
-
-  deleteModal(post: any) {
-    this.deleteSuperAdmin().subscribe(res => {
-      this.activeModal.dismiss();
-    }, (error: { message: any }) => {
-      console.error('There was an error!', error);
-      return;
-    });
-  }
-
 }

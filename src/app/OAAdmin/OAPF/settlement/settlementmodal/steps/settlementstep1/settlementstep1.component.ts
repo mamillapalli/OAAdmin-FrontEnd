@@ -5,15 +5,16 @@ import {Subscription} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
-import {Corporateuser} from "../../../../../Model/corporateuser";
+import {corporateUser} from "../../../../../Model/OAAdmin/Request/corporateUser";
 import {SelectionModel} from "@angular/cdk/collections";
 import {invoiceService} from "../../../../../shared/OAPF/invoice.service";
-import {SbrmodalComponent} from "../../../../common/sbrmodal/sbrmodal.component";
+import {SbrdatamodalComponent} from "../../../../common/sbrdatamodal/sbrdatamodal.component";
 import { currencyList } from 'src/app/OAAdmin/shared/currency';
 import {Payment} from "../../../../../Model/OAPF/Request/payment";
 import {FinancemodalComponent} from "../../../../common/financemodal/financemodal.component";
 import {paymentService} from "../../../../../shared/OAPF/payment.service";
 import {oaCommonService} from "../../../../../shared/oacommon.service";
+import {oapfcommonService} from "../../../../../shared/oapfcommon.service";
 @Component({
   selector: 'app-settlementstep1',
   templateUrl: './settlementstep1.component.html',
@@ -33,7 +34,7 @@ export class Settlementstep1Component implements OnInit {
   //Invoices
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
-  dataSource: any = new MatTableDataSource<Corporateuser>();
+  dataSource: any = new MatTableDataSource<corporateUser>();
   private subscriptions: Subscription[] = [];
   displayedColumns: string[] = [ 'invoiceNumber', 'currency', 'amount', 'dueDate', 'status' ];
   invoiceList: FormArray = this.fb.array([]);
@@ -46,7 +47,7 @@ export class Settlementstep1Component implements OnInit {
   constructor(public modalService: NgbModal,
               private fb: FormBuilder,
               public paymentService: paymentService,
-              public oaCommonService: oaCommonService
+              public oapfcommonService: oapfcommonService
   ) { }
 
   ngOnInit(): void {
@@ -54,7 +55,7 @@ export class Settlementstep1Component implements OnInit {
     this.initForm()
     if(this.mode === 'new')
     {
-      this.oaCommonService.getReferenceNumber('payment').subscribe((res) => {
+      this.oapfcommonService.getReferenceNumber('payments').subscribe((res) => {
         this.f.paymentId.setValue(res);
       });
     } else {
@@ -87,6 +88,7 @@ export class Settlementstep1Component implements OnInit {
       businessType: [this.defaultValues.businessType,[Validators.required]],
       finance: this.defaultValues.finance,
       financeId: ['', [Validators.required]],
+      valueDate: [this.defaultValues.valueDate,[Validators.required]],
     });
 
     const formChangesSubscr = this.paymentForm.valueChanges.subscribe((val) => {

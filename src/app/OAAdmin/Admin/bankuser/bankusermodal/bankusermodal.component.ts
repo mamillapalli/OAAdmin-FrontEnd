@@ -1,38 +1,37 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
-import {BehaviorSubject, Observable, Subscription, throwError} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {BehaviorSubject, Subscription} from "rxjs";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../modules/auth";
-import {formatDate} from "@angular/common";
-import {catchError, retry} from "rxjs/operators";
-import {bankuser, inits} from "../../../Model/request/bankuser";
-import {bankuserreq} from "../../../Model/response/bankuserreq";
-import {environment} from "../../../../../environments/environment";
-const API_USERS_URL = `${environment.apiUrl}`;
-1
+import {DatePipe} from "@angular/common";
+import {bankuser,inits} from "../../../Model/OAAdmin/Request/bankuser";
+import {cbankuser} from "../../../Model/OAAdmin/CRequest/cbankuser";
+import {NotificationService} from "../../../shared/notification.service";
+import Swal from "sweetalert2";
+import {oaCommonService} from "../../../shared/oacommon.service";
+
 @Component({
   selector: 'app-bankusermodal',
   templateUrl: './bankusermodal.component.html',
   styleUrls: ['./bankusermodal.component.scss']
 })
 export class BankusermodalComponent implements OnInit {
-  formsCount = 3;
-  @Input() mode: any;
-  @Output() formValue: any
-  unsubscribe: Subscription[] = [];
+  formsCount = 2;
   account$: BehaviorSubject<any> = new BehaviorSubject<bankuser>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
   isCurrentFormValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   errorMsg: string;
+  private unsubscribe: Subscription[] = [];
+  @Input() mode: any;
+  @Output() formValue: any
   fromParent: any;
-  reqBankUserReq: bankuserreq;
+  cbankuser: cbankuser
+  checkNextStage: boolean;
 
-  constructor(private router: Router,
-              private route: ActivatedRoute,
-              private http: HttpClient,
-              public activeModal: NgbActiveModal,
-              private authService: AuthService) {
+  constructor(public activeModal: NgbActiveModal,
+              private authService: AuthService,
+              public notifyService: NotificationService,
+              public oaCommonService: oaCommonService,
+              private datePipe: DatePipe) {
   }
 
   ngOnInit(): void {
@@ -47,61 +46,107 @@ export class BankusermodalComponent implements OnInit {
     this.account$.next(updatedAccount);
     this.isCurrentFormValid$.next(isFormValid);
   };
+
   modal: any;
 
   nextStep() {
+    console.log('check validation')
     const nextStep = this.currentStep$.value + 1;
     if (nextStep > this.formsCount) {
       return;
     }
     if (this.currentStep$.value === this.formsCount - 1) {
-      this.reqBankUserReq = new bankuserreq();
-      this.reqBankUserReq.userId = this.account$.value.userId
-      this.reqBankUserReq.firstName = this.account$.value.firstName
-      this.reqBankUserReq.lastName = this.account$.value.lastName
-      this.reqBankUserReq.effectiveDate = formatDate(this.account$.value.effectiveDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
-      this.reqBankUserReq.expiryDate = formatDate(this.account$.value.expiryDate, 'YYYY-MM-ddThh:mm:ss.s', 'en')
-      this.reqBankUserReq.status = this.account$.value.status
-      this.reqBankUserReq.emailAddress = this.account$.value.emailAddress
-      this.reqBankUserReq.roles = this.account$.value.roles
-
-      const bankRequest = JSON.stringify(this.reqBankUserReq)
-
-      console.log('new is :'+bankRequest)
+      if( this.checkBusinessValidation()){
+        return;
+      }
+      this.cbankuser = new cbankuser();
+      this.cbankuser = this.account$.value;
+      //this.cbankuser.customers = this.account$.value.customerId
+      const rmNewRequest = this.cbankuser;
+      console.log('json '+ JSON.stringify(rmNewRequest))
       if (this.mode === 'new') {
-        this.CreateBankUser(bankRequest).subscribe(res => {
-          if(res) {
-            this.currentStep$.next(nextStep);
+        this.checkNextStage = false;
+        this.oaCommonService.dataItem(rmNewRequest,'',this.mode,'oaadmin/api/v1/bankusers').subscribe(res => {
+          console.log('Response is : ' + res)
+          if (res !== undefined) {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Add Record Successfully',
+              icon: 'success'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== undefined) {
+            if (this.checkNextStage) {
+              this.currentStep$.next(nextStep);
+            }
           }
         }, (error: { message: any }) => {
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       } else if (this.mode === 'edit') {
-
-        this.modifyBankUser(bankRequest).subscribe(res => {
-          if(res) {
-            this.currentStep$.next(nextStep);
+        this.checkNextStage = false;
+        this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.userId,this.mode,'oaadmin/api/v1/bankusers').subscribe(res => {
+          console.log('Response is : ' + res)
+          if (res !== undefined) {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Edit Record Successfully',
+              icon: 'success'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== undefined) {
+            if (this.checkNextStage) {
+              this.currentStep$.next(nextStep);
+            }
           }
         }, (error: { message: any }) => {
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       } else if (this.mode === 'auth') {
-        this.authBankUser().subscribe(res => {
-          if(res) {
-            this.currentStep$.next(nextStep);
+        this.checkNextStage = false;
+        this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.userId,this.mode,'oaadmin/api/v1/bankusers').subscribe(res => {
+          if (res !== undefined) {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Authorize Record Successfully',
+              icon: 'success'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== undefined) {
+            if (this.checkNextStage) {
+              this.currentStep$.next(nextStep);
+            }
           }
         }, (error: { message: any }) => {
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       }
     }
-    this.currentStep$.next(nextStep);
+    if (this.checkNextStage) {
+      this.currentStep$.next(nextStep);
+    }
   }
-
-
 
   prevStep() {
     const prevStep = this.currentStep$.value - 1;
@@ -120,80 +165,21 @@ export class BankusermodalComponent implements OnInit {
     this.activeModal.dismiss();
   }
 
-  errorHandle(error: { error: { message: string; }; status: any; message: any; }) {
-    let errorMessage;
-    if (error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+  private checkBusinessValidation(): boolean {
+    let currentDate:any = new Date();
+    currentDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
+    if(this.account$.value.expiryDate < currentDate){
+      this.notifyService.showWarning('Expiry Date should not less than today Date','Business Validation')
+      return true;
     }
-    console.log(errorMessage);
-    return throwError(errorMessage);
+    if(this.account$.value.effectiveDate < currentDate){
+      this.notifyService.showWarning('Effective Date should not less than today Date','Business Validation')
+      return true;
+    }
+    if(this.account$.value.expiryDate < this.account$.value.effectiveDate){
+      this.notifyService.showWarning('Expiry should not less than today Date','Business Validation')
+      return true;
+    }
+    return false
   }
-
-  CreateBankUser(data: any): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.post<any>(API_USERS_URL + '/api/v1/bankusers/', data, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  modifyBankUser(data: any): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/bankusers/' + this.account$.value.userId, data, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  public authBankUser(): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/bankusers/authorise/' + this.account$.value.userId, {}, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  deleteBankAdmin(): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/bankusers/delete' + this.account$.value.userId, {}, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  deleteModal() {
-    this.deleteBankAdmin().subscribe(res => {
-      if(res){
-        this.activeModal.dismiss();
-      }
-    }, (error: { message: any }) => {
-      console.error('There was an error!', error);
-      return;
-    });
-  }
-
 }

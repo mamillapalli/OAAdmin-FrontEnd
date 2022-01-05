@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
 import { NgbDatepicker} from "@ng-bootstrap/ng-bootstrap";
 import {DatePipe} from "@angular/common";
-import {rm} from "../../../../../Model/request/rm";
+import {rm} from "../../../../../Model/OAAdmin/Request/rm";
 
 @Component({
   selector: 'app-rmstep2',

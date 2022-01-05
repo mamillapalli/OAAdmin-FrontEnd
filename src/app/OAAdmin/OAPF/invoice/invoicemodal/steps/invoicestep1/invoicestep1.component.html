@@ -1,195 +1,178 @@
-<div class="pb-15 pb-lg-8">
-  <h3 class="fw-bolder text-dark">Invoice Info</h3>
-</div>
-<div [formGroup]="form" id="form">
-  <div class="form-group row">
-    <div class="col-lg-3">
-      <label class="form-label required">Invoice Number</label>
-      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="Invoice Number" name="invoiceNumber" [class.is-invalid]="isControlInvalid('invoiceNumber')"
-             [class.is-valid]="isControlValid('invoiceNumber')" formControlName="invoiceNumber"/>
-    </div>
-    <div class="col-lg-3">
-      <label class="form-label required">SBR Reference Number</label>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <button
-            class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5 btn rounded-pill border-0 ml-n5"
-            type="button"
-            (click)="openSBRDialog(SBRContent)">
-            <i class="fa fa-search"></i>
-          </button>
+<div class="card-body">
+  <div [formGroup]="invoiceForm" id="form">
+    <div class="container">
+      <div class="form-grouprow">
+        <h3 class="fw-bolder text-dark">Invoice Info</h3>
+      </div>
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="inpu-group">
+            <label class="form-label required" for="invoiceNumber">Invoice Number</label>
+            <input type="text" class="input_OA form-control input_OA_protected form-control-solid" autocomplete="off"
+                   name="invoiceNumber" id="invoiceNumber" formControlName="invoiceNumber"/>
+          </div>
         </div>
-        <input type="text" class="form-control form-control-solid" id="sbrReferenceId" name="sbrReferenceId"
-               placeholder="SBR Reference Number" formControlName="sbrReferenceId"
-               [class.is-invalid]="isControlInvalid('sbrReferenceId')"
-               [class.is-valid]="isControlValid('sbrReferenceId')" readonly>
+        <div class="col-3">
+          <label class="form-label required" for="sbrReferenceId">SBR Id</label>
+          <div class=" input-group mb-3">
+            <input type="text" class="input_OA form-control" name="sbrReferenceId" id="sbrReferenceId"
+                   (focusout)="getSBRChange()"
+                   [class.is-invalid]="isControlInvalid('sbrReferenceId')"
+                   [class.is-valid]="isControlValid('sbrReferenceId')" formControlName="sbrReferenceId">
+            <button class="btn btn-search button_OA" type="button" (click)="openSBRDialog()"><i class="fa fa-search fa-fw"></i></button>
+
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="inpu-group">
+            <label class="form-label" for="agreementId">Agreement Number</label>
+            <input type="text" class="input_OA form-control  input_OA_protected form-control-solid" autocomplete="off"
+                   name="agreementId" id="agreementId" formControlName="agreementId" readonly/>
+
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="inpu-group">
+            <label class="form-label" for="anchorId">Anchor Id</label>
+            <input type="text" class="input_OA form-control  input_OA_protected form-control-solid" autocomplete="off"
+                   name="anchorId" id="anchorId" formControlName="anchorId" readonly/>
+
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-lg-3">
-      <label class="form-label required">Agreement Number</label>
-      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="Agreement Number" name="agreementId" [class.is-invalid]="isControlInvalid('agreementId')"
-             [class.is-valid]="isControlValid('agreementId')" formControlName="agreementId" readonly/>
-    </div>
-    <div class="col-lg-3">
-      <label class="form-label required">Anchor Id</label>
-      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="Anchor Id" name="anchorId" [class.is-invalid]="isControlInvalid('anchorId')"
-             [class.is-valid]="isControlValid('anchorId')" formControlName="anchorId" readonly/>
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-lg-3">
-      <label class="form-label required">CounterParty Id</label>
-      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="CounterParty Id" name="counterPartyId" [class.is-invalid]="isControlInvalid('counterPartyId')"
-             [class.is-valid]="isControlValid('counterPartyId')" formControlName="counterPartyId" readonly/>
-    </div>
-    <div class="col-lg-3">
-      <label class="form-label required">Document Type</label>
-      <select
-        class="form-control form-control-lg form-control-solid selected"
-        name="documentType"
-        formControlName="documentType" [class.is-invalid]="isControlInvalid('documentType')"
-        [class.is-valid]="isControlValid('documentType')"
-      >
-        <option value="INVOICE">Invoice</option>
-      </select>
-    </div>
-    <div class="col-lg-3">
-      <label>Document Number</label>
-      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="documentNumber" name="documentNumber" [class.is-invalid]="isControlInvalid('documentNumber')"
-             [class.is-valid]="isControlValid('documentNumber')" formControlName="documentNumber"/>
-    </div>
-    <div class="col-lg-3">
-      <label class="form-label required">Currency & Amount</label>
-      <div class="row fv-row">
-        <div class="col-4">
+    <div class="container">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="inpu-group">
+            <label class="form-label required" for="counterPartyId">Counter Party Id</label>
+            <input type="text" class="input_OA form-control  input_OA_protected form-control-solid" autocomplete="off"
+                   id="counterPartyId" name="counterPartyId" formControlName="counterPartyId" readonly/>
+
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="inpu-group">
+            <label class="form-label required" for="documentType">Invoice Type</label>
+            <select
+              class="select_OA form-select input_OA_required"
+              name="documentType" id="documentType"
+              formControlName="documentType">
+              <option value="INVOICE" selected>Invoice</option>
+            </select>
+
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="inpu-group">
+            <label class="form-label required" for="documentNumber">Document Number</label>
+            <input type="text" class="input_OA form-control  input_OA_required" autocomplete="off"
+                   id="documentNumber" name="documentNumber" [class.is-invalid]="isControlInvalid('documentNumber')"
+                   [class.is-valid]="isControlValid('documentNumber')" formControlName="documentNumber"/>
+
+          </div>
+        </div>
+        <div class="col-1 ">
+          <label class="form-label required" for="currency">Currency</label>
           <select
-            class="form-control form-control-lg form-control-solid"
-            name="currency"
-            formControlName="currency" [class.is-invalid]="isControlInvalid('currency')"
-            [class.is-valid]="isControlValid('currency')">
+            class="input_OA form-control input_OA_required"
+            name="currency" id="currency"
+            formControlName="currency">
             <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
           </select>
+
         </div>
-        <div class="col-8">
-          <input type="number" class="form-control form-control-lg form-control-solid" autocomplete="off"
-                 placeholder="Amount" name="amount" [class.is-invalid]="isControlInvalid('amount')"
-                 [class.is-valid]="isControlValid('amount')" formControlName="amount"/>
+        <div class="col-2 ">
+          <label class="form-label required" for="amount">Amount</label>
+          <input class="input_OA form-control input_OA_required" autocomplete="off"
+                 id="Amount" name="amount" [class.is-invalid]="isControlInvalid('amount')"
+                 [class.is-valid]="isControlValid('amount')" formControlName="amount"
+                 currencyMask/>
+
         </div>
       </div>
     </div>
-  </div>
-  <div class="pb-5 pb-lg-8">
-    <h4 class="fw-bolder text-dark">Business Info</h4>
-  </div>
-  <div class="form-group row">
-    <div class="col-lg-3">
-      <label class="form-label required">Issue Date</label>
-      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="Issue Date" name="date" [class.is-invalid]="isControlInvalid('date')"
-             [class.is-valid]="isControlValid('date')" formControlName="date"/>
-    </div>
-    <div class="col-lg-3">
-      <label class="form-label required">Value Date</label>
-      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="valueDate" name="valueDate" [class.is-invalid]="isControlInvalid('valueDate')"
-             [class.is-valid]="isControlValid('valueDate')" formControlName="valueDate"/>
-    </div>
-    <div class="col-lg-3">
-      <label class="form-label required">Due Date</label>
-      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="dueDate" name="dueDate" [class.is-invalid]="isControlInvalid('dueDate')"
-             [class.is-valid]="isControlValid('dueDate')" formControlName="dueDate"/>
-    </div>
-    <div class="col-lg-3">
-      <label class="form-label required">Agreed Payment Date</label>
-      <input type="date" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="agreedPaymentDate" name="agreedPaymentDate"
-             [class.is-invalid]="isControlInvalid('agreedPaymentDate')"
-             [class.is-valid]="isControlValid('agreedPaymentDate')" formControlName="agreedPaymentDate"/>
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-lg-3">
-      <label>Port Of Loading</label>
-      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="portOfLoading" name="portOfLoading" [class.is-invalid]="isControlInvalid('portOfLoading')"
-             [class.is-valid]="isControlValid('portOfLoading')" formControlName="portOfLoading"/>
-      <div class="feedback" *ngIf="!isControlTouched('portOfLoading')">
-        Please enter <b>Port Of Loading</b>
+    <div class="container">
+      <div class="form-group row">
+        <h4 class="fw-bolder text-dark">Business Info</h4>
       </div>
-      <div class="valid-feedback" *ngIf="isControlValid('portOfLoading')">
-        Port Of Loading was entered correct
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="inpu-group">
+            <label class="form-label required">Invoice Date</label>
+            <input type="date" class="input_OA form-control input_OA_required" autocomplete="off"
+                   placeholder="Issue Date" name="date" [class.is-invalid]="isControlInvalid('date')"
+                   [class.is-valid]="isControlValid('date')" formControlName="date"/>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="inpu-group">
+            <label class="form-label required">Value Date</label>
+            <input type="date" class="input_OA form-control input_OA_required" autocomplete="off"
+                   placeholder="valueDate" name="valueDate" [class.is-invalid]="isControlInvalid('valueDate')"
+                   [class.is-valid]="isControlValid('valueDate')" formControlName="valueDate"/>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="inpu-group">
+            <label class="form-label required">Due Date</label>
+            <input type="date" class="input_OA form-control input_OA_required" autocomplete="off"
+                   placeholder="dueDate" name="dueDate" [class.is-invalid]="isControlInvalid('dueDate')"
+                   [class.is-valid]="isControlValid('dueDate')" formControlName="dueDate"/>
+          </div>
+        </div>
+        <div class="col-3">
+          <label class="form-label">Port Of Loading</label>
+          <input type="text" class="input_OA form-control" autocomplete="off"
+                 placeholder="Port Of Loading" name="portOfLoading" formControlName="portOfLoading"/>
+        </div>
       </div>
     </div>
-    <div class="col-lg-3">
-      <label>SBR Reference Number</label>
-      <input type="portOfDischarge" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="portOfDischarge" name="portOfDischarge" formControlName="portOfDischarge"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Shipment Corporation</label>
-      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="shipmentCorporation" name="shipmentCorporation" formControlName="shipmentCorporation"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Real Beneficiary</label>
-      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="realBeneficiary" name="realBeneficiary" formControlName="realBeneficiary"/>
+    <div class="container">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="inpu-group">
+            <label class="form-label" >Port Of Discharge</label>
+            <input type="portOfDischarge" class="input_OA form-control input_OA_open" autocomplete="off"
+                   placeholder="Port Of Discharge" name="portOfDischarge" formControlName="portOfDischarge"/>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="inpu-group">
+            <label class="form-label">Shipment Corporation</label>
+            <input type="text" class="input_OA form-control input_OA_open" autocomplete="off"
+                   placeholder="Shipment Corporation" name="shipmentCorporation" formControlName="shipmentCorporation"/>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="inpu-group">
+            <label class="form-label">Real Beneficiary</label>
+            <input type="text" class="input_OA form-control input_OA_open" autocomplete="off"
+                   placeholder="Real Beneficiary" name="realBeneficiary" formControlName="realBeneficiary"/>
+          </div>
+        </div>
+        <div class="col-1 ">
+          <label class="form-label required" for="currency">CCY</label>
+          <select
+            class="input_OA form-control input_OA_required"
+            name="currency"
+            formControlName="invoiceServiceChargeCurrency">
+            <option value="{{invoiceServiceChargeCurrency.code}}"
+                    *ngFor="let invoiceServiceChargeCurrency of currencyList">{{invoiceServiceChargeCurrency.code}}</option>
+          </select>
+
+        </div>
+        <div class="col-2 ">
+          <label class="form-label required" for="amount">Charges Amount</label>
+          <input class="input_OA form-control input_OA_required" autocomplete="off"
+                 placeholder="invoiceServiceChargeAmount" name="invoiceServiceChargeAmount"
+                 [class.is-invalid]="isControlInvalid('invoiceServiceChargeAmount')"
+                 [class.is-valid]="isControlValid('invoiceServiceChargeAmount')"
+                 formControlName="invoiceServiceChargeAmount"
+                 currencyMask
+          />
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<ng-template #SBRContent let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">SBR Information</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">×</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div class="table-responsive">
-      <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
-                 class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-
-        <mat-form-field>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
-        </mat-form-field>
-
-        <ng-container matColumnDef="sbrId" class="min-w-150px">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">SBR</mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.sbrId}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="anchorCustomer" class="min-w-150px">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Anchor Customer
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.anchorCustomer['customerId']}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="counterParty" class="min-w-150px">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Anchor Customer
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.counterParty['customerId']}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="agreement" class="min-w-150px">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Agreement No
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.agreement['contractReferenceNumber']}} </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row (click)="c(row)" *matRowDef="let row; let index = dataIndex; columns: displayedColumns;">
-        </mat-row>
-      </mat-table>
-
-      <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]"></mat-paginator>
-
-    </div>
-  </div>
-</ng-template>
-

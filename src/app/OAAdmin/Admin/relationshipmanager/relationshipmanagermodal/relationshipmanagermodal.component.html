@@ -1,44 +1,17 @@
 <div class="card">
   <div class="card-body">
-    <div
-      class="stepper stepper-links d-flex flex-column pt-15"
-      id="kt_create_account_stepper"
-    >
+    <div class="stepper stepper-links d-flex flex-column pt-15" id="kt_create_account_stepper" >
       <div class="stepper-nav mb-5">
-        <div
-          class="stepper-item"
-          [ngClass]="{
-            current: currentStep$.value === 1,
-            completed: currentStep$.value > 1
-          }"
+        <div class="stepper-item"
+             [ngClass]="{
+             current: currentStep$.value === 1,
+             completed: currentStep$.value > 1
+             }"
         >
           <h3 class="stepper-title">RM Info</h3>
         </div>
-
-        <div
-          class="stepper-item"
-          [ngClass]="{
-            current: currentStep$.value === 2,
-            completed: currentStep$.value > 2
-          }"
-        >
-          <h3 class="stepper-title">Business Info</h3>
-        </div>
-
-        <div
-          class="stepper-item"
-          [ngClass]="{
-            current: currentStep$.value === 3,
-            completed: currentStep$.value > 3
-          }"
-        >
-          <h3 class="stepper-title">Customer Info</h3>
-        </div>
-
-        <div
-          class="stepper-item"
-          [ngClass]="{ current: currentStep$.value === 4 }"
-        >
+        <div class="stepper-item"
+             [ngClass]="{ current: currentStep$.value === 2 }">
           <h3 class="stepper-title">Completed</h3>
         </div>
       </div>
@@ -59,28 +32,7 @@
           </ng-container>
 
           <ng-container *ngIf="currentStep$.value === 2">
-            <app-relationshipmanagerstep2
-              class="w-100"
-              [updateParentModel]="updateAccount"
-              [defaultValues]="account$.value"
-              [formValue]="formValue"
-              [mode]=mode
-            ></app-relationshipmanagerstep2>
-          </ng-container>
-
-          <ng-container *ngIf="currentStep$.value === 3">
-            <app-relationshipmanagerstep3
-              class="w-100"
-              [updateParentModel]="updateAccount"
-              [defaultValues]="account$.value"
-              [formValue]="formValue"
-              [mode]=mode
-            ></app-relationshipmanagerstep3>
-          </ng-container>
-
-
-          <ng-container *ngIf="currentStep$.value === 4">
-            <app-relationshipmanagerstep4 class="w-100"></app-relationshipmanagerstep4>
+            <app-relationshipmanagerstep2 class="w-100"></app-relationshipmanagerstep2>
           </ng-container>
         </div>
 

@@ -1,68 +1,35 @@
-<div class="pb-10 pb-lg-15">
-  <h2 class="fw-bolder text-dark">Business Info Details</h2>
+<div class="pb-8 pb-lg-10">
+  <h2 class="fw-bolder text-dark">Your Are Done!</h2>
+  <div class="text-gray-400 fw-bold fs-6">
+    If you need more info, please
+    <a class="link-primary fw-bolder cursor-pointer"> Sign In</a>.
+  </div>
 </div>
-<div [formGroup]="form">
-  <div class="d-flex flex-column mb-7 fv-row">
-    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-      <span class="required">Joining Date</span>
-      <i class="fas fa-exclamation-circle ms-2 fs-7" ngbTooltip="Specify a Joining Date"></i>
-    </label>
-    <div class="input-group">
-      <input type="date" id="joiningDate" formControlName="joiningDate" class="form-control"
-             [value]="joiningDate">
-    </div>
-    <div *ngIf="
-         form.get('joiningDate')?.hasError('required') &&
-         form.get('joiningDate')?.touched"
-         class="fv-plugins-message-container invalid-feedback"> Joining Date is required </div>
+<div class="mb-0">
+  <div class="fs-6 text-gray-600 mb-5">
+    Writing headlines for blog posts is as much an art as it is a science and
+    probably warrants its own post, but for all advise is with what works for
+    your great &amp; amazing audience.
   </div>
-<!--  <div class="d-flex flex-column mb-7 fv-row">-->
-<!--    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">-->
-<!--      <span class="required">Valid Date</span>-->
-<!--      <i class="fas fa-exclamation-circle ms-2 fs-7" ngbTooltip="Specify a Valid Date"></i>-->
-<!--    </label>-->
-<!--    <div class="input-group">-->
-<!--      <input type="date" id="validDate" formControlName="validDate" class="form-control"-->
-<!--             [value]="validDate">-->
-<!--    </div>-->
-<!--    <div *ngIf="-->
-<!--         form.get('validDate')?.hasError('required') &&-->
-<!--         form.get('validDate')?.touched"-->
-<!--         class="fv-plugins-message-container invalid-feedback"> Valid Date is required </div>-->
-<!--  </div>-->
-  <div class="d-flex flex-column mb-7 fv-row">
-    <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-      <span class="required">Expiry Date</span>
-      <i class="fas fa-exclamation-circle ms-2 fs-7" ngbTooltip="Specify a Expiry Date"></i>
-    </label>
-    <div class="input-group">
-      <input type="date" id="expiryDate" formControlName="expiryDate" class="form-control"
-             [value]="expiryDate">
-    </div>
-    <div *ngIf="
-         form.get('expiryDate')?.hasError('required') &&
-         form.get('expiryDate')?.touched
-         " class="fv-plugins-message-container invalid-feedback"> Expiry Date is required </div>
-  </div>
-  <div class="d-flex flex-column mb-7 fv-row">
-    <div class="d-flex flex-stack">
-      <div class="me-5">
-        <label class="fs-6 fw-bold form-label"
-        >Active State</label>
+  <div
+    class="
+      notice
+      d-flex
+      bg-light-warning
+      rounded
+      border-warning border border-dashed
+      p-6
+    "
+  >
+    <span class="svg-icon svg-icon-2tx svg-icon-warning me-4"></span>
+    <div class="d-flex flex-stack flex-grow-1">
+      <div class="fw-bold">
+        <h4 class="text-gray-800 fw-bolder">We need your attention!</h4>
+        <div class="fs-6 text-gray-600">
+          To start using great tools, please, please
+          <a class="fw-bolder cursor-pointer"> Create Team Platform</a>
+        </div>
       </div>
-      <label class="form-check form-switch form-check-custom form-check-solid"
-      >
-      <span class="form-check-label fw-bold text-gray-400"
-      >Enabled</span>
-        <input
-          class="form-check-input"
-          name="status"
-          formControlName="status"
-          type="checkbox"
-        /><span class="form-check-label fw-bold text-gray-400"
-      >Disabled</span
-      ></label
-      >
     </div>
   </div>
 </div>

@@ -120,6 +120,18 @@ export class financingService {
         finalize(() => this._isLoading$.next(false))
       );
     }
+    else if(methodType === 'financeModal') {
+      let httpParams = new HttpParams();
+      httpParams = httpParams.append('transactionStatus', 'MASTER');
+      return this.http.get<any>('/oapf/api/v1/finances', {params: httpParams,headers: httpHeaders}).pipe(
+        catchError(err => {
+          this._errorMessage.next(err);
+          console.error(err);
+          return of({id: undefined});
+        }),
+        finalize(() => this._isLoading$.next(false))
+      );
+    }
     else {
       let httpParams = new HttpParams();
       httpParams = httpParams.append('transactionStatus', 'PENDING');
@@ -132,6 +144,33 @@ export class financingService {
         finalize(() => this._isLoading$.next(false))
       );
     }
+  }
+
+  getVoucherEntries(data: any): Observable<any> {
+    this._isLoading$.next(true);
+    this._errorMessage.next('');
+    this.authToken = this.authService.getAuthFromLocalStorage();
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${this.authToken?.jwt}`,
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    });
+    const removeEmptyOrNull = (obj: any) => {
+      Object.keys(obj).forEach(k =>
+        (obj[k] && typeof obj[k] === 'object') && removeEmptyOrNull(obj[k]) ||
+        (!obj[k] && obj[k] !== undefined) && delete obj[k]
+      );
+      return obj;
+    };
+    const myObj2 = removeEmptyOrNull(data);
+    const dataConvertPost = JSON.stringify(myObj2)
+    return this.http.post<any>('/oapf/api/v1/finances/voucher', dataConvertPost, {
+      headers: httpHeaders
+    }).pipe(
+      catchError(this.handleError),
+      finalize(() => this._isLoading$.next(false))
+    );
+
   }
 
   CalculateFinanceDetails(data: any): Observable<any> {

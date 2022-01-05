@@ -18,16 +18,12 @@ interface Payment {
   "paymentAmount": number,
   "financeCurrency": string,
   "financeTotalDue": number,
-  "financePrincipalDue": number,
-  "financeInterestDue": number,
-  "principalSettled": number,
-  "interestSettled": number,
+  "paymentTotalDue": number,
   "interestRefunded": number,
   "cableChargeCurrency": string,
   "cableChargeAmount": number,
   "communicationChargeCurrency": string,
   "communicationChargeAmount": number,
-  "newFinanceTotalDue": number,
   "paymentNotes": string,
   "refundInterestDetails": string,
   "debitAccount": string,
@@ -35,8 +31,6 @@ interface Payment {
   "diaryId": string,
   "diaryDueDate": string,
   "diaryNarrative": string,
-  "deleteFlag": boolean,
-  "totalSettled": string
 }
 const inits: Payment = {
   "paymentId": "",
@@ -55,16 +49,12 @@ const inits: Payment = {
   "paymentAmount": 0.00,
   "financeCurrency": "",
   "financeTotalDue": 0.00,
-  "financePrincipalDue": 0.00,
-  "financeInterestDue": 0.00,
-  "principalSettled": 0.00,
-  "interestSettled": 0.00,
+  "paymentTotalDue": 0.00,
   "interestRefunded": 0.00,
   "cableChargeCurrency": "",
   "cableChargeAmount": 0.00,
   "communicationChargeCurrency": "",
   "communicationChargeAmount": 0.00,
-  "newFinanceTotalDue": 0.00,
   "paymentNotes": "",
   "refundInterestDetails": "",
   "debitAccount": "",
@@ -72,8 +62,6 @@ const inits: Payment = {
   "diaryId": "",
   "diaryDueDate": "",
   "diaryNarrative": "",
-  "deleteFlag": false,
-  "totalSettled": ""
 }
 
 export { Payment, inits };

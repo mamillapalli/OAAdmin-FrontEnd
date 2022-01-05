@@ -1,17 +1,17 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
-import {SbrmodalComponent} from "../../../../common/sbrmodal/sbrmodal.component";
+import {SbrdatamodalComponent} from "../../../../common/sbrdatamodal/sbrdatamodal.component";
 import { currencyList } from 'src/app/OAAdmin/shared/currency';
 import {financing} from "../../../../../Model/OAPF/Request/financing";
 import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
+import {MatSort, Sort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
-import {Corporateuser} from "../../../../../Model/corporateuser";
+import {corporateUser} from "../../../../../Model/OAAdmin/Request/corporateUser";
 import {Subscription} from "rxjs";
 import {invoiceService} from "../../../../../shared/OAPF/invoice.service";
 import {SelectionModel} from "@angular/cdk/collections";
-import {oaCommonService} from "../../../../../shared/oacommon.service";
+import {oapfcommonService} from "../../../../../shared/oapfcommon.service";
 import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
@@ -30,9 +30,7 @@ export class Financingstep1Component implements OnInit {
   private unsubscribe: Subscription[] = [];
 
   //Invoices
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
-  @ViewChild(MatSort) sort: MatSort | any;
-  dataSource: any = new MatTableDataSource<Corporateuser>();
+  dataSource: any = new MatTableDataSource<corporateUser>();
   private subscriptions: Subscription[] = [];
   displayedColumns: string[] = ['checked','invoiceNumber', 'currency', 'amount', 'dueDate', 'status' ,'actions'];
   invoiceList: FormArray = this.fb.array([]);
@@ -41,10 +39,19 @@ export class Financingstep1Component implements OnInit {
   invoiceSelected = false
   isDataSource = false
 
+  //sort
+  totalRows = 0;
+  pageSize = 5;
+  currentPage = 0;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
+  @ViewChild(MatSort) sort: MatSort | any;
+  sortData : any
+
   constructor(public modalService: NgbModal,
               private fb: FormBuilder,
               public invoiceServices: invoiceService,
-              public oaCommonService: oaCommonService,
+              public oapfcommonService: oapfcommonService,
               private spinner: NgxSpinnerService) {
 
 }
@@ -56,7 +63,7 @@ export class Financingstep1Component implements OnInit {
     if(this.mode === 'new')
     {
       this.f.financeId.disabled
-      this.oaCommonService.getReferenceNumber('finances').subscribe((res) => {
+      this.oapfcommonService.getReferenceNumber('finances').subscribe((res) => {
         this.f.financeId.setValue(res);
       });
     } else {
@@ -135,7 +142,7 @@ export class Financingstep1Component implements OnInit {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
     this.modalOption.windowClass = 'my-class'
-    const modalRef = this.modalService.open(SbrmodalComponent, this.modalOption);
+    const modalRef = this.modalService.open(SbrdatamodalComponent, this.modalOption);
     modalRef.result.then((result) => {
       this.financingForm.patchValue(result)
       this.f.sbrReferenceId.setValue(result.sbrId)
@@ -167,20 +174,20 @@ export class Financingstep1Component implements OnInit {
 
   public getInvoicesDate() {
     console.log('Get Invoices')
-    console.log()
     this.spinner.show();
-    const sb = this.invoiceServices.getInvoice(this.financingForm.value.financeDueDate, '', 'loanDueDate').subscribe((res) => {
-      if(res.length > 0) {
-        for (let i = 0; i < res.length; i++) {
-          console.log(res[i].invoiceNumber)
+    //const sb = this.invoiceServices.getInvoice(this.financingForm.value.financeDueDate, '', 'loanDueDate').subscribe((res) => {
+    const sb = this.oapfcommonService.getDataWithPaginationLoan('/oapf/api/v1/invoices/',this.currentPage,this.pageSize,this.sortData,this.financingForm.value.financeDueDate).subscribe((res) => {
+      console.log(res)
+      if(res.content.length > 0) {
+        for (let i = 0; i < res.content.length; i++) {
+          console.log(res.content[i].invoiceNumber)
           const inv = this.fb.group({
-            invoiceNumber: [res[i].invoiceNumber, '']
+            invoiceNumber: [res.content[i].invoiceNumber, '']
           });
           this.invoiceList.push(inv)
         }
-        this.dataSource.data = res;
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.data = res.content;
+        this.totalRows = res.totalElements;
         this.spinner.hide();
       } else {
         this.isDataSource = true
@@ -228,4 +235,17 @@ export class Financingstep1Component implements OnInit {
     }
     console.log(this.financingForm)
   }
+
+  pageChanged(event: any) {
+    console.log({ event });
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.getInvoicesDate();
+  }
+
+  sortChanges(event: Sort) {
+    this.sortData = event.active
+    this.getInvoicesDate();
+  }
+
 }

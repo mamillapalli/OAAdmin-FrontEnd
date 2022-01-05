@@ -6,7 +6,7 @@ import { TableService } from './table.service';
   providedIn: 'root'
 })
 export class TableExtendedService extends TableService<any> {
-  constructor(@Inject(HttpClient) http) {
+  constructor(@Inject(HttpClient) http:HttpClient) {
     super(http);
   }
 }

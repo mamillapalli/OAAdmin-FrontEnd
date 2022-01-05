@@ -1,12 +1,12 @@
 <div class="pb-15 pb-lg-8">
   <h3 class="fw-bolder text-dark">Finance Info</h3>
 </div>
-<div [formGroup]="financingForm">
+<div [formGroup]="paymentForm">
   <div class="form-group row">
     <div class="col-lg-3">
-      <label>Currency & Amount</label>
       <div class="row fv-row">
         <div class="col-4">
+          <label>Payment Currency</label>
           <select
             class="form-control form-control-lg form-control-solid"
             name="paymentCurrency"
@@ -16,6 +16,7 @@
           </select>
         </div>
         <div class="col-8">
+          <label>Payment Amount</label>
           <input class="form-control form-control-lg form-control-solid" autocomplete="off"
                  placeholder="Payment Amount" name="paymentAmount"
                  [class.is-invalid]="isControlInvalid('paymentAmount')"
@@ -26,9 +27,9 @@
       </div>
     </div>
     <div class="col-lg-3">
-      <label>Currency & Amount</label>
       <div class="row fv-row">
         <div class="col-4">
+          <label>Finance Currency</label>
           <select
             class="form-control form-control-lg form-control-solid"
             name="financeCurrency"
@@ -38,6 +39,7 @@
           </select>
         </div>
         <div class="col-8">
+          <label>Finance Total Due</label>
           <input class="form-control form-control-lg form-control-solid" autocomplete="off"
                  placeholder="Finance Total Due" name="financeTotalDue"
                  [class.is-invalid]="isControlInvalid('financeTotalDue')"
@@ -47,52 +49,24 @@
       </div>
     </div>
     <div class="col-lg-3">
-      <label>Finance Principal Due</label>
+      <label>Payment Total Due</label>
       <input class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="Max Finance Percentage" name="financePrincipalDue"
-             [class.is-invalid]="isControlInvalid('financePrincipalDue')"
-             [class.is-valid]="isControlValid('financePrincipalDue')" formControlName="financePrincipalDue"
-             currencyMask
-      />
-    </div>
-    <div class="col-lg-3">
-      <label>Finance Interest Due</label>
-      <input class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="Finance Interest Due" name="financeInterestDue"
-             [class.is-invalid]="isControlInvalid('financeInterestDue')"
-             [class.is-valid]="isControlValid('financeInterestDue')" formControlName="financeInterestDue"
-             currencyMask
-      />
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-lg-3">
-      <label>Principal Settled</label>
-      <input class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="Interest Rate" name="principalSettled"
-             [class.is-invalid]="isControlInvalid('principalSettled')"
-             [class.is-valid]="isControlValid('principalSettled')" formControlName="principalSettled"
-             currencyMask
-      />
-    </div>
-    <div class="col-lg-3">
-      <label>Interest Settled</label>
-      <input class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="Interest Settled" name="interestSettled"
-             [class.is-invalid]="isControlInvalid('interestSettled')"
-             [class.is-valid]="isControlValid('interestSettled')" formControlName="interestSettled"
+             placeholder="Payment Total Due" name="paymentTotalDue"
+             [class.is-invalid]="isControlInvalid('paymentTotalDue')"
+             [class.is-valid]="isControlValid('paymentTotalDue')" formControlName="paymentTotalDue"
              currencyMask
       />
     </div>
     <div class="col-lg-3">
       <label>Interest Refunded</label>
-      <input class="form-control form-control-lg form-control-solid" autocomplete="off"
+      <input type="interestRefunded" class="form-control form-control-lg form-control-solid" autocomplete="off"
              placeholder="Interest Refunded" name="interestRefunded"
              [class.is-invalid]="isControlInvalid('interestRefunded')"
              [class.is-valid]="isControlValid('interestRefunded')" formControlName="interestRefunded"
-             currencyMask
       />
     </div>
+  </div>
+  <div class="form-group row">
     <div class="col-lg-3">
       <label>Currency & Amount</label>
       <div class="row fv-row">
@@ -115,10 +89,8 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="form-group row">
     <div class="col-lg-3">
-      <label>Currency & Amount</label>
+      <label>Communication Charge Currency & Amount</label>
       <div class="row fv-row">
         <div class="col-4">
           <select
@@ -140,15 +112,6 @@
           />
         </div>
       </div>
-    </div>
-    <div class="col-lg-3">
-      <label>New Finance Total Due</label>
-      <input class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="New Finance Total Due" name="newFinanceTotalDue"
-             [class.is-invalid]="isControlInvalid('newFinanceTotalDue')"
-             [class.is-valid]="isControlValid('newFinanceTotalDue')" formControlName="newFinanceTotalDue"
-             currencyMask
-      />
     </div>
     <div class="col-lg-3">
       <label>Payment Notes</label>
@@ -197,14 +160,6 @@
                placeholder="Credit Account" name="creditAccount" [class.is-invalid]="isControlInvalid('creditAccount')"
                [class.is-valid]="isControlValid('creditAccount')" formControlName="creditAccount"/>
       </div>
-    </div>
-    <div class="col-lg-3">
-      <label>totalSettled</label>
-      <input class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="Total Settled" name="totalSettled"
-             [class.is-invalid]="isControlInvalid('totalSettled')"
-             [class.is-valid]="isControlValid('totalSettled')" formControlName="totalSettled"
-             currencyMask/>
     </div>
   </div>
 </div>

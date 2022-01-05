@@ -1,0 +1,125 @@
+<div class="card mb-5 mb-xl-5" id="kt_profile_details_view">
+  <div class="card">
+    <div class="card-header cursor-pointer">
+      <div class="card-title m-0">
+        <h3 class="fw-lighter m-0">Batch Manager</h3>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card card-columns mx-auto d-flex justify-content-center col-12" style="width: 50%;">
+        <div [formGroup]="batchManagerForm">
+          <div class="d-flex flex-column mb-7 fv-row">
+            <div class="d-flex flex-stack">
+              <div class="me-5">
+                <label class="fs-6 fw-light form-label">Portal Task</label>
+              </div>
+              <label class="form-check form-switch form-check-custom form-check-solid">
+                <span class="form-check-label fw-light text-danger">Stopped</span>
+                <input class="form-check-input" name="portalStatus" id="portalStatus" formControlName="portalStatus"
+                       type="checkbox"
+                       (change)="changeStatusTask($event)"/>
+                <span class="form-check-label fw-light text-success">Started</span>
+              </label>
+            </div>
+          </div>
+          <div class="d-flex flex-column mb-7 fv-row">
+            <div class="d-flex flex-stack">
+              <div class="me-5">
+                <label class="fs-6 fw-light form-label">Notification Task</label>
+              </div>
+              <label class="form-check form-switch form-check-custom form-check-solid">
+                <span class="form-check-label fw-light text-danger"> Stopped </span>
+                <input class="form-check-input" name="notificationStatus" id="notificationStatus"
+                       formControlName="notificationStatus" type="checkbox"
+                       (change)="changeStatusTask($event)"/>
+                <span class="form-check-label fw-light text-success">Started</span>
+              </label>
+            </div>
+          </div>
+          <div class="d-flex flex-column mb-7 fv-row">
+            <div class="d-flex flex-stack">
+              <div class="me-5">
+                <label class="fs-6 fw-light form-label">Email Notification Task</label>
+              </div>
+              <label class="form-check form-switch form-check-custom form-check-solid">
+                <span class="form-check-label fw-light text-danger"> Stopped </span>
+                <input class="form-check-input" name="emailStatus" id="emailStatus" formControlName="notificationStatus"
+                       type="checkbox"
+                       (change)="changeStatusTask($event)"/>
+                <span class="form-check-label fw-light text-success"> Started </span>
+              </label>
+            </div>
+          </div>
+          <div class="d-flex flex-column mb-7 fv-row">
+            <div class="d-flex flex-stack">
+              <div class="me-5">
+                <label class="fs-6 fw-light form-label">Auto Finance Task</label>
+              </div>
+              <label class="form-check form-switch form-check-custom form-check-solid">
+                <span class="form-check-label fw-light text-danger"> Stopped </span>
+                <input class="form-check-input" name="financeTask" id="financeTask" formControlName="financeTask"
+                       type="checkbox"
+                       (change)="changeStatusTask($event)"/>
+                <span class="form-check-label fw-light text-green-400">Started</span>
+              </label>
+            </div>
+          </div>
+          <div class="d-flex flex-column mb-7 fv-row">
+            <div class="d-flex flex-stack">
+              <div class="me-5">
+                <label class="fs-6 fw-light form-label">Auto Payment Task</label>
+              </div>
+              <label class="form-check form-switch form-check-custom form-check-solid ">
+                <span class="form-check-label fw-light text-danger"> Stopped </span>
+                <input class="form-check-input" name="paymentTask" id="paymentTask" formControlName="paymentTask"
+                       type="checkbox"
+                       (change)="changeStatusTask($event)"/>
+                <span class="form-check-label fw-light text-success"> Started </span>
+              </label>
+            </div>
+          </div>
+          <div class="d-flex flex-column mb-7 fv-row">
+            <div class="d-flex flex-stack">
+              <div class="me-5">
+                <label class="fs-6 fw-light form-label">Invoice Validation Task</label>
+              </div>
+              <label class="form-check form-switch form-check-custom form-check-solid ">
+                <span class="form-check-label fw-light text-danger"> Stopped </span>
+                <input class="form-check-input" name="invValidationTask" id="invValidationTask"
+                       formControlName="invValidationTask" type="checkbox"
+                       (change)="changeStatusTask($event)"/>
+                <span class="form-check-label fw-light text-success"> Started </span>
+              </label>
+            </div>
+          </div>
+          <div class="d-flex flex-column mb-7 fv-row">
+            <div class="d-flex flex-stack">
+              <div class="me-5">
+                <label class="fs-6 fw-light form-label">Record Upload Invoices Task</label>
+              </div>
+              <label class="form-check form-switch form-check-custom form-check-solid ">
+                <span class="form-check-label fw-light text-danger"> Stopped </span>
+                <input class="form-check-input" name="recUploadInvoiceTask" id="recUploadInvoiceTask"
+                       formControlName="recUploadInvoiceTask" type="checkbox" (change)="changeStatusTask($event)"/>
+                <span class="form-check-label fw-light text-success"> Started </span>
+              </label>
+            </div>
+          </div>
+          <div class="d-flex flex-column mb-7 fv-row">
+            <div class="d-flex flex-stack">
+              <div class="me-5">
+                <label class="fs-6 fw-light form-label">Exchange Rate Task</label>
+              </div>
+              <label class="form-check form-switch form-check-custom form-check-solid ">
+                <span class="form-check-label fw-light text-danger"> Stopped </span>
+                <input class="form-check-input" name="exchangeRateTask" id="exchangeRateTask"
+                       formControlName="exchangeRateTask" type="checkbox" (change)="changeStatusTask($event)"/>
+                <span class="form-check-label fw-light text-success"> Started </span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

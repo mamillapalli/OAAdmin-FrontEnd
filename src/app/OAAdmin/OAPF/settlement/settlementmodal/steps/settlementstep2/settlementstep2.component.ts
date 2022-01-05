@@ -8,6 +8,7 @@ import {Payment} from "../../../../../Model/OAPF/Request/payment";
 import {FinancemodalComponent} from "../../../../common/financemodal/financemodal.component";
 import {AccountcommonmodalComponent} from "../../../../common/accountcommonmodal/accountcommonmodal.component";
 import {NotificationService} from "../../../../../shared/notification.service";
+import {paymentService} from "../../../../../shared/OAPF/payment.service";
 @Component({
   selector: 'app-settlementstep2',
   templateUrl: './settlementstep2.component.html',
@@ -17,7 +18,7 @@ export class Settlementstep2Component implements OnInit {
 
   expiryDate: any
   @Input('updateParentModel') updateParentModel: (part: Partial<Payment>,isFormValid: boolean) => void;
-  financingForm: FormGroup;
+  paymentForm: FormGroup;
   @Input() defaultValues: Partial<Payment>;
   private unsubscribe: Subscription[] = [];
   @Input('formValue') formValue :  any;
@@ -27,46 +28,49 @@ export class Settlementstep2Component implements OnInit {
   public currencyList:any = currencyList;
   modalOption: NgbModalOptions = {};
   @Output() accountParam: any
+  @Input('calculatedDetails') calculatedDetails: any
 
 
-  constructor(private fb: FormBuilder,public modalService: NgbModal,private notifyService : NotificationService) { }
+  constructor(private fb: FormBuilder,
+              public modalService: NgbModal,
+              private notifyService : NotificationService,
+              public paymentService: paymentService) { }
 
   ngOnInit(): void {
     this.initForm();
     if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view')
     {
-      this.financingForm.disable()
+      this.paymentForm.disable()
     }
     if(this.mode !== 'new'){
       this.updateForm();
+    }
+    if(this.mode === 'new' || this.mode === 'Edit')
+    {
+      this.paymentForm.patchValue(this.calculatedDetails)
     }
     this.updateParentModel({}, this.checkForm());
   }
 
   initForm() {
-    this.financingForm = this.fb.group({
+    this.paymentForm = this.fb.group({
       paymentCurrency: [this.defaultValues.paymentCurrency,[Validators.required]],
       paymentAmount: [this.defaultValues.paymentAmount,[Validators.required]],
       financeCurrency: [this.defaultValues.financeCurrency,[Validators.required]],
+      paymentTotalDue: [this.defaultValues.paymentTotalDue,[Validators.required]],
       financeTotalDue: [this.defaultValues.financeTotalDue,[Validators.required]],
-      financePrincipalDue: [this.defaultValues.financePrincipalDue,[Validators.required]],
-      financeInterestDue: [this.defaultValues.financeInterestDue,[Validators.required]],
-      principalSettled: [this.defaultValues.principalSettled,[Validators.required]],
-      interestSettled: [this.defaultValues.interestSettled,[Validators.required]],
       interestRefunded: [this.defaultValues.interestRefunded,[Validators.required]],
       cableChargeCurrency: [this.defaultValues.cableChargeCurrency,[Validators.required]],
       cableChargeAmount: [this.defaultValues.cableChargeAmount,[Validators.required]],
       communicationChargeCurrency: [this.defaultValues.communicationChargeCurrency,[Validators.required]],
       communicationChargeAmount: [this.defaultValues.communicationChargeAmount,[Validators.required]],
-      newFinanceTotalDue: [this.defaultValues.newFinanceTotalDue,[Validators.required]],
       paymentNotes: [this.defaultValues.paymentNotes,[Validators.required]],
       refundInterestDetails: [this.defaultValues.refundInterestDetails,[Validators.required]],
       debitAccount: [this.defaultValues.debitAccount,[Validators.required]],
       creditAccount: [this.defaultValues.creditAccount,[Validators.required]],
-      totalSettled: [this.defaultValues.totalSettled,[Validators.required]],
     });
 
-    const formChangesSubscr = this.financingForm.valueChanges.subscribe((val) => {
+    const formChangesSubscr = this.paymentForm.valueChanges.subscribe((val) => {
       this.updateParentModel(val, this.checkForm());
     });
     this.unsubscribe.push(formChangesSubscr);
@@ -74,31 +78,31 @@ export class Settlementstep2Component implements OnInit {
 
   checkForm() {
     return !(
-      this.financingForm.get('joiningDate')?.hasError('required')
+      this.paymentForm.get('joiningDate')?.hasError('required')
     );
   }
 
   updateForm()
   {
-    this.financingForm.patchValue(this.formValue)
+    this.paymentForm.patchValue(this.formValue)
   }
 
   get f() {
-    return this.financingForm.controls;
+    return this.paymentForm.controls;
   }
 
   isControlValid(controlName: string): boolean {
-    const control = this.financingForm.controls[controlName];
+    const control = this.paymentForm.controls[controlName];
     return control.valid && (control.dirty || control.touched);
   }
 
   isControlInvalid(controlName: string): boolean {
-    const control = this.financingForm.controls[controlName];
+    const control = this.paymentForm.controls[controlName];
     return control.invalid && (control.dirty || control.touched);
   }
 
   controlHasError(validation: string, controlName: string) {
-    const control = this.financingForm.controls[controlName];
+    const control = this.paymentForm.controls[controlName];
     return control.hasError(validation) && (control.dirty || control.touched);
   }
 
@@ -132,5 +136,23 @@ export class Settlementstep2Component implements OnInit {
     }, (reason) => {
       console.log('reason is ' + reason);
     });
+  }
+
+  calculateFinanceDetails() {
+    //this.checkBusinessValidation()
+    console.log('Calaculate details object is '+ JSON.stringify(this.calculatedDetails))
+    this.paymentService.CalculatePaymentDetails(this.calculatedDetails).subscribe((res: any) => {
+        console.log('response invoice calculate details is '+res)
+        this.calculatedDetails = res
+        this.paymentForm.patchValue(res)
+      }, (err: any) => console.log('HTTP Error', err),
+      () => console.log('HTTP request completed.'))
+  }
+
+  private checkBusinessValidation() {
+    if(this.paymentForm.value.financeAmount > this.paymentForm.value.totalAvailableAmount )
+    {
+      this.notifyService.showWarning('Finance should not greater than Total Invoice Amount','BusinessValidation')
+    }
   }
 }
