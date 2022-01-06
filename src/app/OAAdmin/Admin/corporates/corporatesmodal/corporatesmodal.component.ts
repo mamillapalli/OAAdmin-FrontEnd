@@ -1,19 +1,14 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../modules/auth";
-import {BehaviorSubject, Subscription, throwError} from "rxjs";
-import {catchError, retry} from "rxjs/operators";
-import {environment} from "../../../../../environments/environment";
-import {CorporatesReq} from "../../../Model/corporatereq";
+import {BehaviorSubject, Subscription} from "rxjs";
 import {corporates, inits} from "../../../Model/OAAdmin/Request/corporates";
-import {ccorporates} from "../../../Model/OAAdmin/cRequest/ccorporates";
 import {bankuser} from "../../../Model/OAAdmin/Request/bankuser";
 import {NotificationService} from "../../../shared/notification.service";
 import {DatePipe} from "@angular/common";
 import Swal from "sweetalert2";
 import {oaCommonService} from "../../../shared/oacommon.service";
+import {CCorporates} from "../../../Model/OAAdmin/CRequest/c-corporates";
 @Component({
   selector: 'app-corporatesmodal',
   templateUrl: './corporatesmodal.component.html',
@@ -29,7 +24,7 @@ export class CorporatesmodalComponent implements OnInit {
   @Input() mode: any;
   @Output() formValue: any
   fromParent: any;
-  ccorporates: ccorporates
+  CCorporates: CCorporates
   checkNextStage: boolean;
 
   constructor(public activeModal: NgbActiveModal,
@@ -64,9 +59,9 @@ export class CorporatesmodalComponent implements OnInit {
       if( this.checkBusinessValidation()){
         return;
       }
-      this.ccorporates = new ccorporates();
-      this.ccorporates = this.account$.value;
-      const rmNewRequest = this.ccorporates;
+      this.CCorporates = new CCorporates();
+      this.CCorporates = this.account$.value;
+      const rmNewRequest = this.CCorporates;
       if (this.mode === 'new') {
         this.checkNextStage = false;
         this.oaCommonService.dataItem(rmNewRequest,'',this.mode,'oaadmin/api/v1/customers').subscribe(res => {

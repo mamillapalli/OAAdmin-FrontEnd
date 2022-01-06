@@ -6,7 +6,6 @@ import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-b
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AuthService} from "../../../modules/auth";
 import {NotificationService} from "../../shared/notification.service";
-import {CustomerService} from "../../shared/customer.service";
 import {DatePipe} from "@angular/common";
 import {catchError, retry} from "rxjs/operators";
 import {throwError} from "rxjs";
@@ -46,7 +45,6 @@ export class RmComponent implements OnInit {
               public authService: AuthService,
               public modalService: NgbModal,
               public notifyService : NotificationService,
-              public customerService: CustomerService,
               private datePipe: DatePipe) { }
 
   ngOnInit(): void {

@@ -1,5 +1,4 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {corporateUser} from "../../../../../Model/OAAdmin/Request/corporateUser";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {bankuser} from "../../../../../Model/OAAdmin/Request/bankuser";
@@ -8,7 +7,7 @@ import {oaCommonService} from "../../../../../shared/oacommon.service";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {BankusermodalComponent} from "../../bankusermodal.component";
 import {ReterivecustomersmodalComponent} from "../../../../common/reterivecustomersmodal/reterivecustomersmodal.component";
-import {ccorporates} from "../../../../../Model/OAAdmin/cRequest/ccorporates";
+import { CCorporates } from "../../../../../Model/OAAdmin/CRequest/c-corporates";
 
 
 @Component({
@@ -34,8 +33,8 @@ export class Bankuserstep1Component implements OnInit {
   };
   selectedItems: any = [];
   modalOption: NgbModalOptions = {}; // not null!
-  private closeResult: string;
-  ccorporates: ccorporates
+  closeResult: string;
+  CCorporates:CCorporates
 
   constructor(private fb: FormBuilder,
               public oaCommonService: oaCommonService,
@@ -44,7 +43,7 @@ export class Bankuserstep1Component implements OnInit {
   }
 
   ngOnInit() {
-    this.ccorporates = new ccorporates();
+    this.CCorporates = new CCorporates();
     this.initForm();
     if (this.mode === 'new') {
       this.oaCommonService.getReferenceNumber('bankusers').subscribe((res) => {
@@ -152,8 +151,8 @@ export class Bankuserstep1Component implements OnInit {
 
   changeCustomerId()
   {
-    this.ccorporates.customerId = this.bankUserForm.value.customerId
-    this.f.customers.setValue([this.ccorporates])
+    this.CCorporates.customerId = this.bankUserForm.value.customerId
+    this.f.customers.setValue([this.CCorporates])
   }
 
   private getDismissReason(reason: any): string {

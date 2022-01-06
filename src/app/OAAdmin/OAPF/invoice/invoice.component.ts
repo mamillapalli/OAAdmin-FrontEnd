@@ -1,18 +1,15 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {corporateadmin} from "../../Model/OAAdmin/Request/corporateadmin";
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {MatPaginator} from "@angular/material/paginator";
 import {MatSort, Sort} from "@angular/material/sort";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl} from "@angular/forms";
-import {HttpClient, HttpEvent, HttpEventType, HttpHeaders, HttpResponse} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AuthService} from "../../../modules/auth";
 import {NotificationService} from "../../shared/notification.service";
-import {CustomerService} from "../../shared/customer.service";
 import {DatePipe} from "@angular/common";
-import {RmmodalComponent} from "../../Admin/rm/rmmodal/rmmodal.component";
 import {catchError, retry} from "rxjs/operators";
-import {Observable, Subscription, throwError} from "rxjs";
+import {Subscription, throwError} from "rxjs";
 import {environment} from "../../../../environments/environment";
 import {invoiceService} from "../../shared/OAPF/invoice.service";
 import {InvoicemodalComponent} from "./invoicemodal/invoicemodal.component";
@@ -22,7 +19,6 @@ import {FilterComponent} from "../common/filter/filter.component";
 import {oapfcommonService} from "../../shared/oapfcommon.service";
 import {InvoicehistroyComponent} from "../common/invoicehistroy/invoicehistroy.component";
 import {Invoice} from "../../Model/OAPF/Request/invoice";
-import { StatsWidget6Component } from "../../../_metronic/partials/content/widgets/stats/stats-widget6/stats-widget6.component";
 
 const API_USERS_URL = `${environment.apiUrl}`;
 

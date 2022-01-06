@@ -134,7 +134,6 @@ import { ExChangeRatesComponent } from './OAData/ex-change-rates/ex-change-rates
 import { ExChangeRatesModalComponent } from './OAData/ex-change-rates/ex-change-rates-modal/ex-change-rates-modal.component';
 import { ExChangeRatesStep1Component } from './OAData/ex-change-rates/ex-change-rates-modal/steps/ex-change-rates-step1/ex-change-rates-step1.component';
 import { ExChangeRatesStep2Component } from './OAData/ex-change-rates/ex-change-rates-modal/steps/ex-change-rates-step2/ex-change-rates-step2.component';
-import {InvoicestatsWidget5Component} from "./OAAdmin/OAPF/invoice/invoicestats-widget5/invoicestats-widget5.component";
 import {ChartComponent} from "ng-apexcharts";
 import {NgChartsModule} from "ng2-charts";
 //import { ApprovalinvoicesComponent } from './OAAdmin/OAPF/approvalinvoices/approvalinvoices.component';
@@ -245,8 +244,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ExChangeRatesModalComponent,
     ExChangeRatesStep1Component,
     ExChangeRatesStep2Component,
-    //ApprovalinvoicesComponent,
-    InvoicestatsWidget5Component
+    //ApprovalinvoicesComponent
   ],
   imports: [
     BrowserModule,

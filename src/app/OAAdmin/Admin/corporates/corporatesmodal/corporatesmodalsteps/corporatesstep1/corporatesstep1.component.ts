@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 import {Subscription} from "rxjs";
-import { countries } from '../../../../../model/country-data-store';
+import { countries } from '../../../../../Model/country-data-store';
 import {corporates} from "../../../../../Model/OAAdmin/Request/corporates";
 import {oaCommonService} from "../../../../../shared/oacommon.service";
 

@@ -6,7 +6,6 @@ import {MatSort} from "@angular/material/sort";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AuthService} from "../../../../../../../../modules/auth";
 import {NotificationService} from "../../../../../../../shared/notification.service";
-import {CustomerService} from "../../../../../../../shared/customer.service";
 import {environment} from "../../../../../../../../../environments/environment";
 import {corporates} from "../../../../../../../Model/OAAdmin/Request/corporates";
 
@@ -32,8 +31,7 @@ export class CustomerstablemodalComponent implements OnInit {
   constructor(public http: HttpClient,
               public authService: AuthService,
               public modalService: NgbActiveModal,
-              public notifyService: NotificationService,
-              public customerService: CustomerService) {
+              public notifyService: NotificationService) {
   }
 
   ngOnInit(): void {
