@@ -136,6 +136,7 @@ import { ExChangeRatesStep1Component } from './OAData/ex-change-rates/ex-change-
 import { ExChangeRatesStep2Component } from './OAData/ex-change-rates/ex-change-rates-modal/steps/ex-change-rates-step2/ex-change-rates-step2.component';
 import {ChartComponent} from "ng-apexcharts";
 import {NgChartsModule} from "ng2-charts";
+import { LineChartComponent } from './OAAdmin/OAPF/charts/line-chart/line-chart.component';
 //import { ApprovalinvoicesComponent } from './OAAdmin/OAPF/approvalinvoices/approvalinvoices.component';
 
 function appInitializer(authService: AuthService) {
@@ -244,6 +245,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ExChangeRatesModalComponent,
     ExChangeRatesStep1Component,
     ExChangeRatesStep2Component,
+    LineChartComponent,
     //ApprovalinvoicesComponent
   ],
   imports: [
@@ -309,7 +311,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     NgSelectModule,
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
+    NgChartsModule
 
   ],
   providers: [

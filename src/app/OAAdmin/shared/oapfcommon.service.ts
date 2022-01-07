@@ -135,6 +135,53 @@ export class oapfcommonService {
     }
   }
 
+  getFilterWithPagination(data: any, methodType: any, url: any, currentPage:any, pageSize:any , sortData:any): Observable<any> {
+    this.spinner.show()
+    this._errorMessage.next('');
+    this.authToken = this.authService.getAuthFromLocalStorage();
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${this.authToken?.jwt}`,
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    });
+    if(methodType === 'filter') {
+      const f = data.value.filterOption
+
+      let httpParams = new HttpParams();
+      for(let i=0; i< f.length ;i++){
+        httpParams = httpParams.append(f[i].filterId, f[i].filterValue);
+      }
+      httpParams = httpParams.append('page', currentPage);
+      httpParams = httpParams.append('size', pageSize);
+      if(sortData !== null && sortData !== undefined)
+        httpParams = httpParams.append('sort', sortData);
+
+      return this.http.get<any>(url,  { params:httpParams , headers: httpHeaders}).pipe(
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          return of(undefined);
+        }),
+        finalize(() => this.spinner.hide())
+      );
+    }
+    else {
+      let httpParams = new HttpParams();
+      httpParams = httpParams.append('page', currentPage);
+      httpParams = httpParams.append('size', pageSize);
+      if(sortData !== null && sortData !== undefined)
+        httpParams = httpParams.append('sort', sortData);
+      return this.http.get<any>(url, {headers: httpHeaders}).pipe(
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          return of(undefined);
+        }),
+        finalize(() => this.spinner.hide())
+      );
+    }
+  }
+
   dataItem(data: any, id:any, mode: any, url: any): Observable<any> {
     this.spinner.show()
     this.authToken = this.authService.getAuthFromLocalStorage();

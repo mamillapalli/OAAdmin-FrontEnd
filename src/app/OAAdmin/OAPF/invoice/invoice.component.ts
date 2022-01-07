@@ -331,17 +331,15 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       if (result.valid && result.value.filterOption.length > 0) {
-        const sb = this.oapfcommonService.getFilter(result, 'filter', 'oapf/api/v1/invoices').subscribe((res: any) => {
-          this.dataSource.data = res;
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+        const sb = this.oapfcommonService.getFilterWithPagination(result, 'filter', 'oapf/api/v1/invoices',this.currentPage,this.pageSize,this.sortData).subscribe((res: any) => {
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
         });
         this.subscriptions.push(sb);
       } else {
-        const sb = this.oapfcommonService.getFilter(result, 'all', 'oapf/api/v1/invoices').subscribe((res: any) => {
-          this.dataSource.data = res;
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+        const sb = this.oapfcommonService.getFilterWithPagination(result, 'all', 'oapf/api/v1/invoices',this.currentPage,this.pageSize,this.sortData).subscribe((res: any) => {
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
         });
         this.subscriptions.push(sb);
       }
