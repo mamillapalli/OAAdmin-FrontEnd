@@ -62,6 +62,9 @@ import {RouterModule} from "@angular/router";
 import { BuyerapprovalinvoicesmodalComponent } from './approvalinvoicesbuyer/buyerapprovalinvoicesmodal/buyerapprovalinvoicesmodal.component';
 import { Buyerapprovalstep1Component } from './approvalinvoicesbuyer/buyerapprovalinvoicesmodal/steps/buyerapprovalstep1/buyerapprovalstep1.component';
 import { Buyerapprovalstep2Component } from './approvalinvoicesbuyer/buyerapprovalinvoicesmodal/steps/buyerapprovalstep2/buyerapprovalstep2.component';
+import { SellerApprovalInvoiceModalComponent } from './approvalinvoicesseller/seller-approval-invoice-modal/seller-approval-invoice-modal.component';
+import { SellerApprovalInvoiceStep1Component } from './approvalinvoicesseller/seller-approval-invoice-modal/steps/seller-approval-invoice-step1/seller-approval-invoice-step1.component';
+import { SellerApprovalInvoiceStep2Component } from './approvalinvoicesseller/seller-approval-invoice-modal/steps/seller-approval-invoice-step2/seller-approval-invoice-step2.component';
 @NgModule({
   declarations: [
     ApprovalinvoicesComponent,
@@ -70,6 +73,9 @@ import { Buyerapprovalstep2Component } from './approvalinvoicesbuyer/buyerapprov
     BuyerapprovalinvoicesmodalComponent,
     Buyerapprovalstep1Component,
     Buyerapprovalstep2Component,
+    SellerApprovalInvoiceModalComponent,
+    SellerApprovalInvoiceStep1Component,
+    SellerApprovalInvoiceStep2Component,
   ],
   imports: [
     CommonModule,

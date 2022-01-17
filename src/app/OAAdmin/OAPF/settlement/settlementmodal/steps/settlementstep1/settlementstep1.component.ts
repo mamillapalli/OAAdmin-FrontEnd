@@ -3,7 +3,7 @@ import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {Subscription} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
+import {MatSort, Sort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
 import {corporateUser} from "../../../../../Model/OAAdmin/Request/corporateUser";
 import {SelectionModel} from "@angular/cdk/collections";
@@ -15,6 +15,8 @@ import {FinancemodalComponent} from "../../../../common/financemodal/financemoda
 import {paymentService} from "../../../../../shared/OAPF/payment.service";
 import {oaCommonService} from "../../../../../shared/oacommon.service";
 import {oapfcommonService} from "../../../../../shared/oapfcommon.service";
+import {Invoice} from "../../../../../Model/OAPF/Request/invoice";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 @Component({
   selector: 'app-settlementstep1',
   templateUrl: './settlementstep1.component.html',
@@ -32,9 +34,7 @@ export class Settlementstep1Component implements OnInit {
   private unsubscribe: Subscription[] = [];
 
   //Invoices
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
-  @ViewChild(MatSort) sort: MatSort | any;
-  dataSource: any = new MatTableDataSource<corporateUser>();
+  dataSource: any = new MatTableDataSource<Invoice>();
   private subscriptions: Subscription[] = [];
   displayedColumns: string[] = [ 'invoiceNumber', 'currency', 'amount', 'dueDate', 'status' ];
   invoiceList: FormArray = this.fb.array([]);
@@ -43,6 +43,16 @@ export class Settlementstep1Component implements OnInit {
   invoiceSelected: boolean = false
   referenceNumber:string;
   isFinanceFetched: boolean = false;
+  isDataSource = false
+
+  //sort
+  totalRows = 0;
+  pageSize = 5;
+  currentPage = 0;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
+  @ViewChild(MatSort) sort: MatSort | any;
+  sortData : any
 
   constructor(public modalService: NgbModal,
               private fb: FormBuilder,
@@ -144,7 +154,8 @@ export class Settlementstep1Component implements OnInit {
   {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(FinancemodalComponent, this.modalOption);
     modalRef.result.then((result) => {
       this.paymentForm.patchValue(result)
@@ -177,6 +188,9 @@ export class Settlementstep1Component implements OnInit {
     }, (reason) => {
       console.log('reason is ' + reason);
     });
+  }
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
 
 }

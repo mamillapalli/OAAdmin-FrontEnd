@@ -119,7 +119,8 @@ export class Financingstep2Component implements OnInit {
   openDebitAccount() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(AccountcommonmodalComponent, this.modalOption);
     modalRef.componentInstance.accountParam = 'MASTER';
     modalRef.result.then((result) => {
@@ -135,7 +136,8 @@ export class Financingstep2Component implements OnInit {
   openCreditAccount() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(AccountcommonmodalComponent, this.modalOption);
     modalRef.componentInstance.accountParam = 'MASTER';
     modalRef.result.then((result) => {

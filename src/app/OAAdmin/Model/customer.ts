@@ -17,6 +17,7 @@ interface Customer {
   bank: string;
   transactionStatus: string;
   transactionMode: number;
+  type:string
 }
 
 const inits: Customer = {
@@ -37,7 +38,8 @@ const inits: Customer = {
   status:  '',
   bank:  '',
   transactionStatus:  '',
-  transactionMode:  0
+  transactionMode:  0,
+  type:''
 }
 
 export { Customer, inits };

@@ -53,6 +53,7 @@ export class AdminStep1Component implements OnInit, OnDestroy {
       effectiveDate: [this.defaultValues.effectiveDate, [Validators.required]],
       expiryDate: [this.defaultValues.expiryDate, [Validators.required]],
       emailAddress: [this.defaultValues.emailAddress, [Validators.required]],
+      staus: [this.defaultValues.status, [Validators.required]],
     });
 
     const formChangesSubscr = this.superAdminForm.valueChanges.subscribe((val) => {

@@ -37,7 +37,6 @@ export class cFinancing{
   diaryDueDate: Date
   diaryNarrative: string
   financeDueDate: Date
-  deleteFlag: boolean
   financeServiceChargeCurrency: string
   financeServiceChargeAmount: number
   interestCurrency: string

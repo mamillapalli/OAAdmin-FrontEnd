@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, Output, ViewChild} from '@angular/core';
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort, Sort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
@@ -10,6 +10,8 @@ import {FinancingmodalComponent} from "./financingmodal/financingmodal.component
 import {NgxSpinnerService} from "ngx-spinner";
 import {oapfcommonService} from "../../shared/oapfcommon.service";
 import {AuthService} from "../../../modules/auth";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import {FilterComponent} from "../common/filter/filter.component";
 
 @Component({
   selector: 'app-financing',
@@ -19,8 +21,8 @@ import {AuthService} from "../../../modules/auth";
 export class FinancingComponent implements OnInit {
   isLoading: any;
   dataSource: any = new MatTableDataSource<financing>();
-  displayedColumns: string[] = ['financeId', 'sbrReferenceId', 'agreementId', 'financeCurrency', 'financeAmount', 'financeDueDate', 'businessType',
-    'actions'];
+  @Output() displayedColumns: string[] = ['financeId', 'sbrReferenceId', 'agreementId', 'financeCurrency', 'financeAmount', 'financeDueDate', 'businessType','transactionStatus','actions'];
+  @Output() fDisplayedColumns: string[] = ['financeId', 'sbrReferenceId', 'agreementId', 'financeCurrency', 'financeAmount', 'financeDueDate', 'businessType','transactionStatus'];
 
   subscriptions: Subscription[] = [];
   financing: financing;
@@ -62,9 +64,12 @@ export class FinancingComponent implements OnInit {
   newFinance() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(FinancingmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log('newBankAdmin is ' + result);
     }, (reason) => {
@@ -77,10 +82,13 @@ export class FinancingComponent implements OnInit {
     console.log(element)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(FinancingmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {
@@ -127,7 +135,35 @@ export class FinancingComponent implements OnInit {
   }
 
   sortChanges(event: Sort) {
-    this.sortData = event.active
+    this.sortData = event.active+','+event.direction
     this.getFinancing(this.currentPage,this.pageSize,this.sortData);
+  }
+
+  openFilter() {
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    const modalRef = this.modalService.open(FilterComponent, this.modalOption);
+    modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      if (result.valid && result.value.filterOption.length > 0) {
+        const sb = this.oapfcommonService.getFilterWithPagination(result, 'filter', 'oapf/api/v1/finance',this.currentPage,this.pageSize,this.sortData).subscribe((res: any) => {
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
+        });
+        this.subscriptions.push(sb);
+      } else {
+        const sb = this.oapfcommonService.getFilterWithPagination(result, 'all', 'oapf/api/v1/finance',this.currentPage,this.pageSize,this.sortData).subscribe((res: any) => {
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
+        });
+        this.subscriptions.push(sb);
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
 }

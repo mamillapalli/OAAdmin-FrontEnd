@@ -93,17 +93,17 @@
         >
       </div>
     </div>
-    <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
-      <div class="menu-item">
-        <a
-          class="menu-link without-sub"
-          routerLinkActive="active"
-          routerLink="/systemmaintenance/exchangerate"
-        ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span
-        ><span class="menu-title">Exchange Rate</span></a
-        >
-      </div>
-    </div>
+    <!--    <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">-->
+    <!--      <div class="menu-item">-->
+    <!--        <a-->
+    <!--          class="menu-link without-sub"-->
+    <!--          routerLinkActive="active"-->
+    <!--          routerLink="/systemmaintenance/exchangerate"-->
+    <!--        ><span class="menu-bullet"><span class="bullet bullet-dot"></span></span-->
+    <!--        ><span class="menu-title">Exchange Rate</span></a-->
+    <!--        >-->
+    <!--      </div>-->
+    <!--    </div>-->
   </div>
 
   <!--  <div class="menu-item">-->
@@ -317,11 +317,7 @@
 
 
 <!-- Separator -->
-<div class="menu-item">
-  <div class="menu-content pt-8 pb-2">
-    <span class="menu-section text-muted text-uppercase fs-8 ls-1">Invoice Approval</span>
-  </div>
-</div>
+
 
 <!-- Chat -->
 <!--<div-->
@@ -368,6 +364,15 @@
 <!--</div>-->
 
 <!-- Chat -->
+<ng-container *ngIf="checkBankUser">
+  <div class="menu-item">
+    <div class="menu-content pt-8 pb-2">
+      <span class="menu-section text-muted text-uppercase fs-8 ls-1">Approvals</span>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngif="checkBankUser">
 <div
   class="menu-item menu-accordion"
   data-kt-menu-trigger="click"
@@ -403,6 +408,8 @@
     </div>
   </div>
 </div>
+</ng-container>
+
 
 <!-- Separator -->
 <div class="menu-item">

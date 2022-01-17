@@ -1,7 +1,7 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, Output, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
+import {MatSort, Sort} from "@angular/material/sort";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../modules/auth";
 import {NotificationService} from "../../shared/notification.service";
@@ -13,6 +13,7 @@ import {FilterComponent} from "../../OAPF/common/filter/filter.component";
 import {oaCommonService} from "../../shared/oacommon.service";
 import {corporateUser} from "../../Model/OAAdmin/Request/corporateUser";
 import Swal from "sweetalert2";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   providers: [DatePipe],
@@ -22,8 +23,8 @@ import Swal from "sweetalert2";
 })
 export class CorporateuserComponent implements OnInit {
   dataSource: any = new MatTableDataSource<corporateUser>();
-  displayedColumns: string[] = ['userId', 'firstName', 'lastName', 'expiryDate', 'transactionStatus', 'status', 'actions'];
-  fDisplayedColumns: string[] = ['userId', 'firstName', 'lastName', 'expiryDate', 'transactionStatus', 'status'];
+  @Output()  displayedColumns: string[] = ['userId', 'firstName', 'lastName', 'expiryDate', 'transactionStatus', 'status' ,'actions'];
+  @Output()  fDisplayedColumns: string[] = ['userId', 'firstName', 'lastName', 'expiryDate', 'transactionStatus' , 'status'];
   authToken: any;
   modalOption: NgbModalOptions = {};
   closeResult: string;
@@ -60,13 +61,9 @@ export class CorporateuserComponent implements OnInit {
   }
 
   public getCorporateUser() {
-    this.spinner.show();
     const sb = this.oaCommonService.getMethod('/oaadmin/api/v1/customerusers', '',).subscribe((res) => {
-      this.dataSource.data = res;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.isLoading$ = false;
-      this.spinner.hide();
+      this.dataSource.data = res.content;
+      this.totalRows = res.totalElements
     });
     this.subscriptions.push(sb);
   }
@@ -75,9 +72,11 @@ export class CorporateuserComponent implements OnInit {
   newCorporateUser() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(CorporateusermodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log('newbankadmins is ' + result);
     }, (reason) => {
@@ -90,10 +89,12 @@ export class CorporateuserComponent implements OnInit {
     console.log(element)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(CorporateusermodalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {
@@ -166,16 +167,14 @@ export class CorporateuserComponent implements OnInit {
     modalRef.result.then((result) => {
       if (result.valid && result.value.filterOption.length > 0) {
         const sb = this.oaCommonService.getFilter(result, 'filter', '/oaadmin/api/v1/customerusers').subscribe((res: any) => {
-          this.dataSource.data = res;
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
         });
         this.subscriptions.push(sb);
       } else {
         const sb = this.oaCommonService.getFilter(result, 'all', '/oaadmin/api/v1/customerusers').subscribe((res: any) => {
-          this.dataSource.data = res;
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
         });
         this.subscriptions.push(sb);
       }
@@ -184,5 +183,21 @@ export class CorporateuserComponent implements OnInit {
     });
   }
 
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
+  }
 
+  pageChanged(event: any) {
+    console.log(this.sort)
+    console.log({ event });
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.getCorporateUser();
+  }
+
+  sortChanges(event: Sort) {
+    console.log(event.direction)
+    this.sortData = event.active+','+event.direction
+    this.getCorporateUser();
+  }
 }

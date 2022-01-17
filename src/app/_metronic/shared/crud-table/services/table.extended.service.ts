@@ -9,4 +9,7 @@ export class TableExtendedService extends TableService<any> {
   constructor(@Inject(HttpClient) http:HttpClient) {
     super(http);
   }
+
+  defaultOrderBy: string;
+  entityEndpoint: string;
 }

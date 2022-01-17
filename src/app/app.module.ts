@@ -100,8 +100,6 @@ import { InvoiceComponent } from './OAAdmin/OAPF/invoice/invoice.component';
 import { InvoicemodalComponent } from './OAAdmin/OAPF/invoice/invoicemodal/invoicemodal.component';
 import { Invoicestep1Component } from './OAAdmin/OAPF/invoice/invoicemodal/steps/invoicestep1/invoicestep1.component';
 import { Invoicestep2Component } from './OAAdmin/OAPF/invoice/invoicemodal/steps/invoicestep2/invoicestep2.component';
-import { Invoicestep3Component } from './OAAdmin/OAPF/invoice/invoicemodal/steps/invoicestep3/invoicestep3.component';
-import { Invoicestep4Component } from './OAAdmin/OAPF/invoice/invoicemodal/steps/invoicestep4/invoicestep4.component';
 import { AccountsComponent } from './OAAdmin/Admin/accounts/accounts.component';
 import { AccountmodalComponent } from './OAAdmin/Admin/accounts/accountmodal/accountmodal.component';
 import { Accountstep1Component } from './OAAdmin/Admin/accounts/accountmodal/steps/accountstep1/accountstep1.component';
@@ -136,8 +134,11 @@ import { ExChangeRatesStep1Component } from './OAData/ex-change-rates/ex-change-
 import { ExChangeRatesStep2Component } from './OAData/ex-change-rates/ex-change-rates-modal/steps/ex-change-rates-step2/ex-change-rates-step2.component';
 import {ChartComponent} from "ng-apexcharts";
 import {NgChartsModule} from "ng2-charts";
-import { LineChartComponent } from './OAAdmin/OAPF/charts/line-chart/line-chart.component';
+import {CRUDTableModule} from "./_metronic/shared/crud-table";
+import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 //import { ApprovalinvoicesComponent } from './OAAdmin/OAPF/approvalinvoices/approvalinvoices.component';
+import "reflect-metadata";
+import { CopyAsModalComponent } from './OAAdmin/OAPF/common/copy-as-modal/copy-as-modal.component';
 
 function appInitializer(authService: AuthService) {
   return () => {
@@ -215,8 +216,6 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     InvoicemodalComponent,
     Invoicestep1Component,
     Invoicestep2Component,
-    Invoicestep3Component,
-    Invoicestep4Component,
     AccountsComponent,
     AccountmodalComponent,
     Accountstep1Component,
@@ -245,7 +244,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ExChangeRatesModalComponent,
     ExChangeRatesStep1Component,
     ExChangeRatesStep2Component,
-    LineChartComponent,
+    CopyAsModalComponent,
     //ApprovalinvoicesComponent
   ],
   imports: [
@@ -312,8 +311,9 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ToastrModule.forRoot(),
     NgSelectModule,
     NgMultiSelectDropDownModule.forRoot(),
-    NgChartsModule
-
+    NgChartsModule,
+    CRUDTableModule,
+    NgxMatSelectSearchModule,
   ],
   providers: [
     {

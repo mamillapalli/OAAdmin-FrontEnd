@@ -1,6 +1,6 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {BehaviorSubject, Subscription} from "rxjs";
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {ModalDismissReasons, NgbActiveModal, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../modules/auth";
 import {DatePipe} from "@angular/common";
 import {bankuser,inits} from "../../../Model/OAAdmin/Request/bankuser";
@@ -8,6 +8,9 @@ import {cbankuser} from "../../../Model/OAAdmin/CRequest/cbankuser";
 import {NotificationService} from "../../../shared/notification.service";
 import Swal from "sweetalert2";
 import {oaCommonService} from "../../../shared/oacommon.service";
+import {CopyAsModalComponent} from "../../../OAPF/common/copy-as-modal/copy-as-modal.component";
+import {Bankuserstep1Component} from "./bankusersteps/bankuserstep1/bankuserstep1.component";
+import {Bankuserstep2Component} from "./bankusersteps/bankuserstep2/bankuserstep2.component";
 
 @Component({
   selector: 'app-bankusermodal',
@@ -26,12 +29,21 @@ export class BankusermodalComponent implements OnInit {
   fromParent: any;
   cbankuser: cbankuser
   checkNextStage: boolean;
+  closeResult: string;
+
+  modalOption: NgbModalOptions = {};
+
+  @ViewChild(Bankuserstep1Component) Bankuserstep1Component: Bankuserstep1Component;
+  @ViewChild(Bankuserstep2Component) Bankuserstep2Component: Bankuserstep2Component;
+  @Output('displayedColumns') displayedColumns: any
+  @Output('fDisplayedColumns') fDisplayedColumns: any
 
   constructor(public activeModal: NgbActiveModal,
               private authService: AuthService,
               public notifyService: NotificationService,
               public oaCommonService: oaCommonService,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,
+              public modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -59,8 +71,8 @@ export class BankusermodalComponent implements OnInit {
       if( this.checkBusinessValidation()){
         return;
       }
-      this.cbankuser = new cbankuser();
-      this.cbankuser = this.account$.value;
+      //this.cbankuser = new cbankuser();
+      this.cbankuser = new cbankuser(this.account$.value);
       //this.cbankuser.customers = this.account$.value.customerId
       const rmNewRequest = this.cbankuser;
       console.log('json '+ JSON.stringify(rmNewRequest))
@@ -181,5 +193,44 @@ export class BankusermodalComponent implements OnInit {
       return true;
     }
     return false
+  }
+
+  copyAs() {
+    console.log(this.displayedColumns)
+    console.log(this.fDisplayedColumns)
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
+    const modalRef = this.modalService.open(CopyAsModalComponent, this.modalOption);
+    modalRef.componentInstance.mode = 'copy';
+    modalRef.componentInstance.functionType = 'admin';
+    modalRef.componentInstance.url = '/oaadmin/api/v1/bankusers';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      const refNo = this.Bankuserstep1Component.bankUserForm.value.userId;
+      console.log('Result is ' + result);
+      //this.updateAccount(result, true)
+      this.formValue = result
+      console.log(this.formValue)
+      //this.Invoicestep1Component.updateForm()
+      this.formValue.userId = refNo
+      this.Bankuserstep1Component.bankUserForm.patchValue(this.formValue)
+      this.Bankuserstep1Component.bankUserForm.value.userId = refNo;
+      //this.Invoicestep1Component.updateReferenceNumber();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 }

@@ -1,10 +1,8 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {AuthModel} from "../../../modules/auth/models/auth.model";
-import {environment} from "../../../../environments/environment";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../../modules/auth";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
-import {Subject, Subscription, throwError} from "rxjs";
+import {Subscription, throwError} from "rxjs";
 import {SuperAdminModalComponent} from "./super-admin-modal/super-admin-modal.component";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
@@ -15,12 +13,16 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {FilterComponent} from "../../OAPF/common/filter/filter.component";
 import {oaCommonService} from "../../shared/oacommon.service";
 import {superAdmin} from "../../Model/super-admin";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-super-admin-module',
   templateUrl: './super-admin-module.component.html',
   styleUrls: ['./super-admin-module.component.scss']
 })
+
+
+
 export class SuperAdminModuleComponent implements OnInit {
   dataSource: any = new MatTableDataSource<superAdmin>();
   displayedColumns: string[] = ['userId', 'firstName', 'lastName', 'expiryDate', 'emailAddress', 'transactionStatus', 'actions'];
@@ -67,9 +69,11 @@ export class SuperAdminModuleComponent implements OnInit {
   newSuperAdmin() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(SuperAdminModalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log('newSuperAdmin is ' + result);
     }, (reason) => {
@@ -82,10 +86,12 @@ export class SuperAdminModuleComponent implements OnInit {
     console.log(element)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(SuperAdminModalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {
@@ -181,4 +187,9 @@ export class SuperAdminModuleComponent implements OnInit {
     this.sortData = event.active + ',' + event.direction
     this.getSuperAdmin();
   }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
+  }
+
 }

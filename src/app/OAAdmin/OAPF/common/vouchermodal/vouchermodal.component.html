@@ -58,47 +58,49 @@
     </div>
   </div>
   <div class="card">
-    <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
-               class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-      <ng-container matColumnDef="accountNumber" class="min-w-150px">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Account Number</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.accountNumber}} </mat-cell>
+    <table mat-table [dataSource]="dataSource" class="" cdkDropList
+           cdkDropListOrientation="horizontal"
+           (cdkDropListDropped)="drop($event)"
+           matSort
+           style="overflow-x: scroll; overflow-y: scroll"
+    >
+
+      <ng-container matColumnDef="accountNumber">
+        <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header > Account Number </th>
+        <td mat-cell *matCellDef="let element"> {{element.accountNumber}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="accountCurrency" class="min-w-150px">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Account Currency
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.accountCurrency}} </mat-cell>
+      <ng-container matColumnDef="accountCurrency">
+        <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header > Account Currency </th>
+        <td mat-cell *matCellDef="let element"> {{element.accountCurrency}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="amount" class="min-w-150px">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Amount
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.amount}} </mat-cell>
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header > Amount </th>
+        <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="accountDescription" class="min-w-150px">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Account Description
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.accountDescription}} </mat-cell>
+      <ng-container matColumnDef="accountDescription">
+        <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header > Description </th>
+        <td mat-cell *matCellDef="let element"> {{element.accountDescription}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="debitCreditFlag" class="min-w-150px">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Debit/Credit Flag
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.debitCreditFlag}} </mat-cell>
+      <ng-container matColumnDef="debitCreditFlag">
+        <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header > Flag </th>
+        <td mat-cell *matCellDef="let element"> {{element.debitCreditFlag}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="exchangeRate" class="min-w-150px">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Exchange Rate
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.exchangeRate}} </mat-cell>
+      <ng-container matColumnDef="exchangeRate">
+        <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header > Rate </th>
+        <td mat-cell *matCellDef="let element"> {{element.exchangeRate}} </td>
       </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;">
-      </mat-row>
-    </mat-table>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          [ngClass]="{hovered: row.hovered, highlighted: row.highlighted}"
+          (click)="row.highlighted = !row.highlighted" (mouseover)="row.hovered = true"
+          (mouseout)="row.hovered = false"></tr>
+    </table>
     <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
     </mat-paginator>
   </div>

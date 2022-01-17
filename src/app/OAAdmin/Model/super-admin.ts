@@ -4,7 +4,7 @@ interface superAdmin {
   lastName: string;
   effectiveDate: string;
   expiryDate: string;
-  status: string;
+  status: boolean;
   emailAddress : string;
 }
 
@@ -14,7 +14,7 @@ const inits: superAdmin = {
   lastName: '',
   effectiveDate: '',
   expiryDate: '',
-  status: '',
+  status: true,
   emailAddress : '',
 };
 

@@ -1,186 +1,182 @@
-<div class="card card-custom gutter-b">
-  <div class="card-header">
-    <div class="card-title">
-      <h3 class="card-label">Finance Dashboard</h3>
+<div class="card">
+  <div class="toolBar card-header">
+    <div class="toolBarTitle card-title">
+      Finance Dashboard
     </div>
-    <div class="d-flex align-items-center py-1">
-      <div class="me-4">
-        <a
-          class="btn btn-sm btn-flex btn-light-warning btn-active-primary fw-bolder cursor-pointer"
-          data-kt-menu-trigger="click"
-          data-kt-menu-placement="bottom-end"
-          data-kt-menu-flip="top-end"
-        >
+  </div>
+  <div class="card">
+    <div class="d-flex align-items-sm-start py-1">
+      <div class="card-header" style="vertical-align: middle;">
+        <div class="me-4">
+          <a
+            class="btn btn-sm btn-flex btn-light-warning btn-active-light fw-bolder cursor-pointer"
+            data-kt-menu-trigger="click"
+            data-kt-menu-placement="bottom-end"
+            data-kt-menu-flip="top-end" (click)="openFilter()"
+          >
         <span
           [inlineSVG]="'./assets/media/icons/duotune/general/gen031.svg'"
           class="svg-icon svg-icon-5 svg-icon-gray-500 me-1"
         ></span>
-          Filter
-        </a>
+            Filter
+          </a>
+          <a
+            class="btn btn-sm btn-flex btn-light-success btn-active-light fw-bolder cursor-pointer"
+            data-bs-toggle="modal"
+            data-bs-target="#kt_modal_create_app"
+            (click)="newFinance()"
+          >
+            Create Finance
+          </a>
+        </div>
       </div>
-      <a
-        class="btn btn-sm btn-flex btn-light-success btn-active-primary fw-bolder cursor-pointer"
-        data-bs-toggle="modal"
-        data-bs-target="#kt_modal_create_app"
-        (click)="newFinance()"
-        style="margin-right: 16px"
-      >
-        Create Finance
-      </a>
     </div>
-  </div>
-  <div class="card-body py-3">
-    <div class="table-responsive">
-      <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortChanges($event)" style="width: 100%;"
-                 class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+    <div class="card">
+      <div>
+        <table mat-table [dataSource]="dataSource" class="" cdkDropList
+               cdkDropListOrientation="horizontal"
+               (cdkDropListDropped)="drop($event)"
+               matSort (matSortChange)="sortChanges($event)"
+               style="overflow-x: scroll; overflow-y: scroll"
+        >
 
-        <ng-container matColumnDef="financeId" class="min-w-150px">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Finance Id
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.financeId}} </mat-cell>
-        </ng-container>
+          <!--        &lt;!&ndash; Checkbox Column &ndash;&gt;-->
+          <!--        <ng-container matColumnDef="select">-->
+          <!--          <th mat-header-cell *matHeaderCellDef   mat-sort-header>-->
+          <!--            <mat-checkbox (change)="$event ? masterToggle() : null"-->
+          <!--                          [checked]="selection.hasValue() && isAllSelected()"-->
+          <!--                          [indeterminate]="selection.hasValue() && !isAllSelected()"-->
+          <!--                          [aria-label]="checkboxLabel()">-->
+          <!--            </mat-checkbox>-->
+          <!--          </th>-->
+          <!--          <td mat-cell *matCellDef="let row">-->
+          <!--            <mat-checkbox (click)="$event.stopPropagation()"-->
+          <!--                          (change)="$event ? selection.toggle(row) : null"-->
+          <!--                          [checked]="selection.isSelected(row)"-->
+          <!--                          [aria-label]="checkboxLabel(row)">-->
+          <!--            </mat-checkbox>-->
+          <!--          </td>-->
+          <!--        </ng-container>-->
 
-        <ng-container matColumnDef="sbrReferenceId">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">SBR No
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.sbrReferenceId}} </mat-cell>
-        </ng-container>
 
-        <ng-container matColumnDef="agreementId">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Agreement No
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.agreementId}}
-          </mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="financeId">
+            <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header > FinanceId </th>
+            <td mat-cell *matCellDef="let element"> {{element.financeId}} </td>
+          </ng-container>
 
-        <ng-container matColumnDef="financeCurrency">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Currency
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.financeCurrency}} </mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="sbrReferenceId">
+            <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header> SBR No</th>
+            <td mat-cell *matCellDef="let element"> {{element.sbrReferenceId}} </td>
+          </ng-container>
 
-        <ng-container matColumnDef="financeAmount">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Amount
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.financeAmount | number:'1.0-3' }} </mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="agreementId">
+            <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header> Agreement No</th>
+            <td mat-cell *matCellDef="let element"> {{element.agreementId}} </td>
+          </ng-container>
 
-        <ng-container matColumnDef="financeDueDate">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Due Date
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.financeDueDate | date: 'MM/dd/YYY' }} </mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="financeCurrency">
+            <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header> Currency</th>
+            <td mat-cell *matCellDef="let element"> {{element.financeCurrency}} </td>
+          </ng-container>
 
-        <ng-container matColumnDef="businessType">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Business Type
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.businessType  }} </mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="financeAmount">
+            <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header> Amount</th>
+            <td mat-cell *matCellDef="let element"> {{element.financeAmount}} </td>
+          </ng-container>
 
-        <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions
-          </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="action-link">
-            <ng-container *ngIf="(authRoles.includes('BANK_USER_MAKER')
+          <ng-container matColumnDef="financeDueDate">
+            <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header> Due Date</th>
+            <td mat-cell *matCellDef="let element"> {{element.financeDueDate | date: 'MM/dd/YYYY'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="businessType">
+            <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header> Business Type</th>
+            <td mat-cell *matCellDef="let element"> {{element.businessType}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="transactionStatus">
+            <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header> Trx Status </th>
+            <td mat-cell *matCellDef="let element"> {{element.transactionStatus}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header> Actions</th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="(authRoles.includes('SUPER_ADMIN')
+          || authRoles.includes('BANK_USER_MAKER')
           || authRoles.includes('BANK_ADMIN_MAKER')) && element.transactionStatus != 'MASTER'">
-              <a (click)="openFinanceDialog(element,'edit')" title="Edit Transaction"
-                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <a (click)="openFinanceDialog(element,'edit')" title="Edit Transaction"
+                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                 <span [inlineSVG]="'./assets/media/svg/icons/Communication/Write.svg'"
                       class="svg-icon svg-icon-md svg-icon-primary">
                 </span>
-              </a>
-            </ng-container>
-            <ng-container *ngIf="authRoles.includes('BANK_USER_MAKER')
+                </a>
+              </ng-container>
+              <ng-container *ngIf="authRoles.includes('SUPER_ADMIN')
+          || authRoles.includes('BANK_USER_MAKER')
           || authRoles.includes('BANK_USER_CHECKER')
           || authRoles.includes('BANK_USER_VIEWER')
           || authRoles.includes('BANK_ADMIN_MAKER')
           || authRoles.includes('BANK_ADMIN_CHECKER')
           || authRoles.includes('BANK_ADMIN_VIEWER')">
-              <a title="View Transaction"
-                 (click)="openFinanceDialog(element,'view')"
-                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <a ng-if="(this.authRoles.includes('SUPER_ADMIN')" title="View Transaction"
+                   (click)="openFinanceDialog(element,'view')"
+                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                 <span [inlineSVG]="'./assets/media/svg/icons/Code/Compiling.svg'"
                       class="svg-icon svg-icon-md svg-icon-success"></span>
-              </a>
-            </ng-container>
-            <ng-container *ngIf="(authRoles.includes('BANK_USER_MAKER')
+                </a>
+              </ng-container>
+              <ng-container *ngIf="(authRoles.includes('SUPER_ADMIN')
+          || authRoles.includes('BANK_USER_MAKER')
           || authRoles.includes('BANK_USER_CHECKER')
           || authRoles.includes('BANK_USER_VIEWER')
           || authRoles.includes('BANK_ADMIN_MAKER')
           || authRoles.includes('BANK_ADMIN_CHECKER')
           || authRoles.includes('BANK_ADMIN_VIEWER' )) && element.transactionStatus === 'PENDING' ">
-              <a
-                title="Authorize Transaction" (click)="openFinanceDialog(element,'auth')"
-                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <a
+                  title="Authorize Transaction" (click)="openFinanceDialog(element,'auth')"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                 <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'"
                       class="svg-icon svg-icon-md svg-icon-warning"></span>
-              </a>
-            </ng-container>
-            <ng-container *ngIf="(authRoles.includes('SUPER_ADMIN')
+                </a>
+              </ng-container>
+              <ng-container *ngIf="(authRoles.includes('SUPER_ADMIN')
           || authRoles.includes('BANK_ADMIN_VIEWER')
           || authRoles.includes('BANK_USER_VIEWER'))
           && element.transactionStatus === 'PENDING' ">
-              <a title="Delete customer" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
-                 (click)="openFinanceDialog(deleteContent, element)">
+                <a title="Delete customer" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+                   (click)="openFinanceDialog(deleteContent, element)">
                 <span [inlineSVG]="'./assets/media/svg/icons/General/Trash.svg'"
                       fill="#2DB757" class="svg-icon svg-icon-md svg-icon-danger">
                 </span>
-              </a>
-            </ng-container>
-          </mat-cell>
-        </ng-container>
+                </a>
+              </ng-container>
+              <ng-container *ngIf="(authRoles.includes('SUPER_ADMIN')
+          || authRoles.includes('BANK_ADMIN_VIEWER')
+          || authRoles.includes('BANK_USER_VIEWER')) ">
+                <a title="View History" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+                   (click)="openFinanceDialog(element,'viewHistory')">
+                <span [inlineSVG]="'./assets/media/svg/icons/Communication/Clipboard-list.svg'"
+                      class="svg-icon svg-icon-md svg-icon-primary">
+                </span>
+                </a>
+              </ng-container>
+            </td>
+          </ng-container>
 
-        <!--        <ng-container matColumnDef="actions" class="d-flex justify-content-end flex-shrink-0">-->
-        <!--          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions-->
-        <!--          </mat-header-cell>-->
-        <!--          <mat-cell *matCellDef="let element">-->
-        <!--        <span>-->
-        <!--          <a title="modify" (click)="openFinanceDialog(element,'edit')"-->
-        <!--             *ngIf="element.transactionStatus !== 'MASTER'"-->
-        <!--             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">-->
-        <!--                <span-->
-        <!--                  [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"-->
-        <!--                  class="svg-icon svg-icon-3"-->
-        <!--                ></span>-->
-        <!--              </a>-->
-        <!--        </span>-->
-        <!--            <span>-->
-        <!--          <a title="view" (click)="openFinanceDialog(element,'view')"-->
-        <!--             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">-->
-        <!--                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen019.svg'"-->
-        <!--                      class="svg-icon svg-icon-3"></span>-->
-        <!--              </a>-->
-        <!--        </span>-->
-        <!--            <span>-->
-        <!--          <a title="Authorize" (click)="openFinanceDialog(element,'auth')"-->
-        <!--             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">-->
-        <!--                <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'" class="svg-icon svg-icon-2"></span>-->
-        <!--              </a>-->
-        <!--        </span>-->
-        <!--            <span>-->
-        <!--            <a title="Delete" (click)="openInvoiceDelete(deleteContent, element)"-->
-        <!--               *ngIf="element.transactionStatus !== 'MASTER'"-->
-        <!--               class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"-->
-        <!--            >-->
-        <!--                <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"-->
-        <!--                      class="svg-icon svg-icon-3"></span>-->
-        <!--              </a>-->
-        <!--          </span>-->
-        <!--          </mat-cell>-->
-        <!--        </ng-container>-->
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;"
-                 [style.background-color]="row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'">
-        </mat-row>
-
-      </mat-table>
-      <!--      <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]" showFirstLastButtons></mat-paginator>-->
-      <mat-paginator #paginator [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize"
-                     [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)" aria-label="Select page">
-      </mat-paginator>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+              [ngClass]="{hovered: row.hovered, highlighted: row.highlighted}"
+              (click)="row.highlighted = !row.highlighted" (mouseover)="row.hovered = true"
+              (mouseout)="row.hovered = false"></tr>
+        </table>
+        <mat-paginator #paginator [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize"
+                       [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)" aria-label="Select page">
+        </mat-paginator>
+      </div>
     </div>
   </div>
+
   <ng-template #deleteContent let-c="close" let-d="dismiss">
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
@@ -196,5 +192,5 @@
       <button type="button" class="btn btn-outline-dark" (click)="c('yes')">Yes</button>
     </div>
   </ng-template>
+  <!-- begin::Body -->
 </div>
-

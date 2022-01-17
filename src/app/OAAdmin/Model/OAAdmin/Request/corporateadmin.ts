@@ -6,7 +6,7 @@ interface corporateadmin {
   lastName: string;
   effectiveDate: string;
   expiryDate: string;
-  status: string;
+  status: boolean;
   emailAddress : string;
   roles: [];
   customers: [corporates];
@@ -18,7 +18,7 @@ const inits: corporateadmin = {
   lastName: '',
   effectiveDate: '',
   expiryDate: '',
-  status: '',
+  status: true,
   emailAddress : '',
   roles: [],
   customers: {} as [corporates]

@@ -1,6 +1,6 @@
-import {Component, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {NgbActiveModal, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
+import {ModalDismissReasons, NgbActiveModal, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {financing, inits} from "../../../Model/OAPF/Request/financing";
 import {cFinancing} from "../../../Model/OAPF/CRequest/cFinancing";
 import Swal from "sweetalert2";
@@ -9,6 +9,10 @@ import {FormGroup} from "@angular/forms";
 import {NotificationService} from "../../../shared/notification.service";
 import {CorporateadminmodalComponent} from "../../../Admin/corporateadmin/corporateadminmodal/corporateadminmodal.component";
 import {VouchermodalComponent} from "../../common/vouchermodal/vouchermodal.component";
+import {InvoiceDOComponent} from "../../common/invoice-do/invoice-do.component";
+import {Financingstep2Component} from "./steps/financingstep2/financingstep2.component";
+import {Financingstep1Component} from "./steps/financingstep1/financingstep1.component";
+import {CopyAsModalComponent} from "../../common/copy-as-modal/copy-as-modal.component";
 
 @Component({
   selector: 'app-financingmodal',
@@ -28,7 +32,12 @@ export class FinancingmodalComponent implements OnInit {
   cFinancing: cFinancing;
   @Output() calculatedDetails: any
   modalOption: NgbModalOptions = {};
-
+  @ViewChild(Financingstep1Component) Financingstep1Component: Financingstep1Component;
+  @ViewChild(Financingstep2Component) Financingstep2Component: Financingstep2Component;
+  @Output('displayedColumns') displayedColumns: any
+  @Output('fDisplayedColumns') fDisplayedColumns: any
+  @Output('functionType') functionType: any
+  closeResult: string;
 
   constructor(public activeModal: NgbActiveModal,
               public financingService: financingService,
@@ -190,7 +199,7 @@ export class FinancingmodalComponent implements OnInit {
 
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(VouchermodalComponent, this.modalOption);
     modalRef.componentInstance.voucherData = this.account$.value;
     modalRef.result.then((result) => {
@@ -198,4 +207,43 @@ export class FinancingmodalComponent implements OnInit {
     });
 
   }
+
+  copyAs() {
+    console.log('display column is :'+this.displayedColumns)
+    console.log('display column is :'+this.fDisplayedColumns)
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
+    const modalRef = this.modalService.open(CopyAsModalComponent, this.modalOption);
+    modalRef.componentInstance.mode = 'copy';
+    modalRef.componentInstance.functionType = 'finances';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      const refNo = this.Financingstep1Component.financingForm.value.financeId;
+      console.log('Result is ' + result);
+      //this.updateAccount(result, true)
+      this.formValue = result
+      console.log(this.formValue)
+      //this.Invoicestep1Component.updateForm()
+      this.formValue.financeId = refNo
+      this.Financingstep1Component.financingForm.patchValue(this.formValue)
+      this.Financingstep1Component.financingForm.value.financeId = refNo;
+      //this.Invoicestep1Component.updateReferenceNumber();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
 }

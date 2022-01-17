@@ -1,9 +1,9 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {BehaviorSubject, Observable, Subscription, throwError} from "rxjs";
 import {inits, superAdmin} from "../../../Model/super-admin";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {ModalDismissReasons, NgbActiveModal, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {catchError, retry} from "rxjs/operators";
 import {AuthService} from "../../../../modules/auth";
 import {environment} from "../../../../../environments/environment";
@@ -12,6 +12,9 @@ import Swal from "sweetalert2";
 import {csuperAdmin} from "../../../Model/OAAdmin/CRequest/csuper-admin";
 import {oaCommonService} from "../../../shared/oacommon.service";
 import {DatePipe} from "@angular/common";
+import {CopyAsModalComponent} from "../../../OAPF/common/copy-as-modal/copy-as-modal.component";
+import {Bankadminstep1Component} from "../../bankadmin-maintenance/bankadminmodal/bankadminstep/bankadminstep1/bankadminstep1.component";
+import {AdminStep1Component} from "./steps/adminstep1/adminstep1.component";
 
 @Component({
   selector: 'app-super-admin-modal',
@@ -36,6 +39,14 @@ export class SuperAdminModalComponent implements OnInit {
   cSuperAdmin: csuperAdmin
   checkNextStage: boolean;
 
+  closeResult: string;
+
+  modalOption: NgbModalOptions = {};
+
+  @ViewChild(AdminStep1Component) AdminStep1Component: AdminStep1Component;
+  @Output('displayedColumns') displayedColumns: any
+  @Output('fDisplayedColumns') fDisplayedColumns: any
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private http: HttpClient,
@@ -43,7 +54,8 @@ export class SuperAdminModalComponent implements OnInit {
               private authService: AuthService,
               public notifyService: NotificationService,
               public oaCommonService: oaCommonService,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,
+              public modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -204,5 +216,44 @@ export class SuperAdminModalComponent implements OnInit {
       return true;
     }
     return false
+  }
+
+  copyAs() {
+    console.log(this.displayedColumns)
+    console.log(this.fDisplayedColumns)
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
+    const modalRef = this.modalService.open(CopyAsModalComponent, this.modalOption);
+    modalRef.componentInstance.mode = 'copy';
+    modalRef.componentInstance.functionType = 'admin';
+    modalRef.componentInstance.url = '/oaadmin/api/v1/superadmins';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      const refNo = this.AdminStep1Component.superAdminForm.value.userId;
+      console.log('Result is ' + result);
+      //this.updateAccount(result, true)
+      this.formValue = result
+      console.log(this.formValue)
+      //this.Invoicestep1Component.updateForm()
+      this.formValue.userId = refNo
+      this.AdminStep1Component.superAdminForm.patchValue(this.formValue)
+      this.AdminStep1Component.superAdminForm.value.userId = refNo;
+      //this.Invoicestep1Component.updateReferenceNumber();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 }

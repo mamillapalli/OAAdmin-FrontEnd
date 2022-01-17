@@ -1,16 +1,21 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {BehaviorSubject, Observable, Subscription, throwError} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {ModalDismissReasons, NgbActiveModal, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../modules/auth";
 import {formatDate} from "@angular/common";
 import {catchError, retry} from "rxjs/operators";
 import Swal from "sweetalert2";
 import {invoiceService} from "../../../shared/OAPF/invoice.service";
-import {Invoice,inits} from "../../../Model/OAPF/Request/invoice";
+import {Invoice, inits} from "../../../Model/OAPF/Request/invoice";
 import {cInvoice} from "../../../Model/OAPF/CRequest/cinvoice";
 import {oapfcommonService} from "../../../shared/oapfcommon.service";
+import {InvoiceDOComponent} from "../../common/invoice-do/invoice-do.component";
+import {Invoicestep1Component} from "./steps/invoicestep1/invoicestep1.component";
+import {Invoicestep2Component} from "./steps/invoicestep2/invoicestep2.component";
+import {ObjectMapper} from "json-object-mapper";
+import {JsonConvert} from "json2typescript";
 
 @Component({
   selector: 'app-invoicemodal',
@@ -27,16 +32,22 @@ export class InvoicemodalComponent implements OnInit {
     false
   );
   private unsubscribe: Subscription[] = [];
-  cInvoice: cInvoice
+  cInvoice: any
   @Output() mode: any;
   @Output() formValue: any
   @Output() formElement: any
   fromParent: any;
   checkNextStage = true;
+  modalOption: NgbModalOptions = {};
+  closeResult: string;
+  @ViewChild(Invoicestep1Component) Invoicestep1Component: Invoicestep1Component;
+  @ViewChild(Invoicestep2Component) Invoicestep2Component: Invoicestep2Component;
 
   constructor(public activeModal: NgbActiveModal,
               public invoiceServices: invoiceService,
-              public oapfcommonService: oapfcommonService) {}
+              public oapfcommonService: oapfcommonService,
+              public modalService: NgbModal) {
+  }
 
   ngOnInit(): void {
     if (this.mode !== 'new') {
@@ -47,7 +58,7 @@ export class InvoicemodalComponent implements OnInit {
   updateAccount = (part: Partial<Invoice>, isFormValid: boolean) => {
     this.formElement = this.account$;
     const currentAccount = this.account$.value;
-    const updatedAccount = { ...currentAccount, ...part };
+    const updatedAccount = {...currentAccount, ...part};
     this.account$.next(updatedAccount);
     this.isCurrentFormValid$.next(isFormValid);
   };
@@ -58,10 +69,9 @@ export class InvoicemodalComponent implements OnInit {
     if (nextStep > this.formsCount) {
       return;
     }
-    console.log('this is form next step element is '+this.formElement)
+    console.log('this is form next step element is ' + this.formElement)
     if (this.currentStep$.value === this.formsCount - 1) {
-      this.cInvoice = new cInvoice();
-      this.cInvoice = this.account$.value;
+
 
       // this.cInvoice.invoiceNumber = this.account$.value.invoiceNumber
       // this.cInvoice.sbrReferenceId = this.account$.value.sbrReferenceId
@@ -97,25 +107,28 @@ export class InvoicemodalComponent implements OnInit {
       //this.cInvoice.status = this.account$.value.status
 
       //const rmNewRequest = JSON.stringify(this.cInvoice)
+      //this.cInvoice = ObjectMapper.deserialize(cInvoice,this.account$.value);
+      //this.cInvoice = this.account$.value;
+      this.cInvoice = new cInvoice(this.account$.value);
       const rmNewRequest = this.cInvoice;
       console.log(rmNewRequest);
       if (this.mode === 'new') {
         this.checkNextStage = false;
-        this.oapfcommonService.dataItem(rmNewRequest,'',this.mode,'/oapf/api/v1/invoices').subscribe(res => {
+        this.oapfcommonService.dataItem(rmNewRequest, '', this.mode, '/oapf/api/v1/invoices').subscribe(res => {
           if (res !== undefined) {
-              this.checkNextStage = true;
-              Swal.fire({
-                title: 'Add Record Successfully',
-                icon: 'success'
-              });
-            } else {
-              Swal.fire({
-                title: 'Error is occurred.',
-                icon: 'error'
-              });
-            }
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Add Record Successfully',
+              icon: 'success'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
           if (res !== undefined) {
-            if(this.checkNextStage) {
+            if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
           }
@@ -124,11 +137,10 @@ export class InvoicemodalComponent implements OnInit {
           console.error('There was an error!', error);
           return;
         });
-      }
-      else if (this.mode === 'edit') {
+      } else if (this.mode === 'edit') {
         this.checkNextStage = false;
-        this.oapfcommonService.dataItem(rmNewRequest,'',this.mode,'/oapf/api/v1/invoices').subscribe(res => {
-          console.log('Response is : '+res)
+        this.oapfcommonService.dataItem(rmNewRequest, '', this.mode, '/oapf/api/v1/invoices').subscribe(res => {
+          console.log('Response is : ' + res)
           if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
@@ -142,7 +154,7 @@ export class InvoicemodalComponent implements OnInit {
             });
           }
           if (res !== undefined) {
-            if(this.checkNextStage) {
+            if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
           }
@@ -151,10 +163,9 @@ export class InvoicemodalComponent implements OnInit {
           console.error('There was an error!', error);
           return;
         });
-      }
-      else if (this.mode === 'auth') {
+      } else if (this.mode === 'auth') {
         this.checkNextStage = false;
-        this.oapfcommonService.dataItem(rmNewRequest,'',this.mode,'/oapf/api/v1/invoices').subscribe(res => {
+        this.oapfcommonService.dataItem(rmNewRequest, '', this.mode, '/oapf/api/v1/invoices').subscribe(res => {
           if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
@@ -168,7 +179,7 @@ export class InvoicemodalComponent implements OnInit {
             });
           }
           if (res !== undefined) {
-            if(this.checkNextStage) {
+            if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
           }
@@ -179,7 +190,7 @@ export class InvoicemodalComponent implements OnInit {
         });
       }
     }
-    if(this.checkNextStage) {
+    if (this.checkNextStage) {
       this.currentStep$.next(nextStep);
     }
   }
@@ -213,5 +224,38 @@ export class InvoicemodalComponent implements OnInit {
   closeModal() {
     console.log('close modal');
     this.activeModal.dismiss();
+  }
+
+  copyAs() {
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
+    const modalRef = this.modalService.open(InvoiceDOComponent, this.modalOption);
+    modalRef.componentInstance.mode = 'copy';
+    modalRef.result.then((result) => {
+      const refNo = this.Invoicestep1Component.invoiceForm.value.invoiceNumber;
+      console.log('Result is ' + result);
+      //this.updateAccount(result, true)
+      this.formValue = result
+      console.log(this.formValue)
+      //this.Invoicestep1Component.updateForm()
+      this.formValue.invoiceNumber = refNo
+      this.Invoicestep1Component.invoiceForm.patchValue(this.formValue)
+      this.Invoicestep1Component.invoiceForm.value.invoiceNumber = refNo;
+      //this.Invoicestep1Component.updateReferenceNumber();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 }

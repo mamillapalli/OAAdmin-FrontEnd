@@ -1,10 +1,13 @@
+import {corporates} from "./corporates";
+
 interface Accounts {
-  "accountId": string,
-  "name": string,
-  "type": string,
-  "description": string,
-  "currency": string,
-  "status": boolean
+  accountId : string
+  name: string
+  type: string
+  description: string
+  currency: string
+  debitCreditFlag: string
+  customers: [corporates]
 }
 const inits: Accounts = {
   "accountId": "",
@@ -12,7 +15,8 @@ const inits: Accounts = {
   "type": "",
   "description": "",
   "currency": "",
-  "status": true
+  "debitCreditFlag": "",
+  customers: {} as [corporates]
 }
 
 export { Accounts, inits };

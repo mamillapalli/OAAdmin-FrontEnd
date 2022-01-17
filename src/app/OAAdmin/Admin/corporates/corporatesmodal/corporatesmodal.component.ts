@@ -1,5 +1,5 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {ModalDismissReasons, NgbActiveModal, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../modules/auth";
 import {BehaviorSubject, Subscription} from "rxjs";
 import {corporates, inits} from "../../../Model/OAAdmin/Request/corporates";
@@ -9,6 +9,9 @@ import {DatePipe} from "@angular/common";
 import Swal from "sweetalert2";
 import {oaCommonService} from "../../../shared/oacommon.service";
 import {CCorporates} from "../../../Model/OAAdmin/CRequest/c-corporates";
+import {CopyAsModalComponent} from "../../../OAPF/common/copy-as-modal/copy-as-modal.component";
+import {Corporatesstep1Component} from "./corporatesmodalsteps/corporatesstep1/corporatesstep1.component";
+import {Corporatesstep2Component} from "./corporatesmodalsteps/corporatesstep2/corporatesstep2.component";
 @Component({
   selector: 'app-corporatesmodal',
   templateUrl: './corporatesmodal.component.html',
@@ -26,12 +29,20 @@ export class CorporatesmodalComponent implements OnInit {
   fromParent: any;
   CCorporates: CCorporates
   checkNextStage: boolean;
+  modalOption: NgbModalOptions = {};
+  closeResult: string;
+
+  @ViewChild(Corporatesstep1Component) Corporatesstep1Component: Corporatesstep1Component;
+  @ViewChild(Corporatesstep2Component) Corporatesstep2Component: Corporatesstep2Component;
+  @Input() displayedColumns: any
+  @Input() fDisplayedColumns: any
 
   constructor(public activeModal: NgbActiveModal,
               private authService: AuthService,
               public notifyService: NotificationService,
               public oaCommonService: oaCommonService,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,
+              public modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -179,5 +190,44 @@ export class CorporatesmodalComponent implements OnInit {
       return true;
     }
     return false
+  }
+
+  copyAs() {
+    console.log(this.displayedColumns)
+    console.log(this.fDisplayedColumns)
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
+    const modalRef = this.modalService.open(CopyAsModalComponent, this.modalOption);
+    modalRef.componentInstance.mode = 'copy';
+    modalRef.componentInstance.functionType = 'admin';
+    modalRef.componentInstance.url = 'oaadmin/api/v1/customers';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      const refNo = this.Corporatesstep1Component.corporatesform.value.customerId;
+      console.log('Result is ' + result);
+      //this.updateAccount(result, true)
+      this.formValue = result
+      console.log(this.formValue)
+      //this.Invoicestep1Component.updateForm()
+      this.formValue.customerId = refNo
+      this.Corporatesstep1Component.corporatesform.patchValue(this.formValue)
+      this.Corporatesstep1Component.corporatesform.value.customerId = refNo;
+      //this.Invoicestep1Component.updateReferenceNumber();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 }

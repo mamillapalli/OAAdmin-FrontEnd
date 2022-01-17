@@ -18,10 +18,25 @@ export class cInvoice {
   "financeId": string;
   "invoiceServiceChargeCurrency": string
   "invoiceServiceChargeAmount": number;
-  // "anchorPartyApprovalRequired": boolean;
-  // "counterPartyApprovalRequired": boolean;
-  // "anchorPartyApproved": boolean;
-  // "counterPartyApproved": boolean;
-  // "autoFinance": boolean;
-  // "autoSettlement": boolean;
+  constructor(d: any) {
+    this.invoiceNumber = d.invoiceNumber;
+    this.sbrReferenceId = d.sbrReferenceId;
+    this.agreementId = d.agreementId;
+    this.anchorId = d.anchorId;
+    this.counterPartyId = d.counterPartyId;
+    this.documentType = d.documentType;
+    this.documentNumber = d.documentNumber;
+    this.currency = d.currency;
+    this.amount = d.amount;
+    this.date = d.date;
+    this.valueDate = d.valueDate;
+    this.dueDate = d.dueDate;
+    this.portOfLoading = d.portOfLoading;
+    this.portOfDischarge = d.portOfDischarge;
+    this.shipmentCorporation = d.shipmentCorporation;
+    this.realBeneficiary = d.realBeneficiary;
+    this.financeId = d.financeId;
+    this.invoiceServiceChargeCurrency = d.invoiceServiceChargeCurrency;
+    this.invoiceServiceChargeAmount = d.invoiceServiceChargeAmount;
+  }
 }

@@ -15,6 +15,8 @@ import {InvoicemodalComponent} from "../../invoice/invoicemodal/invoicemodal.com
 import {oapfcommonService} from "../../../shared/oapfcommon.service";
 import {FilterComponent} from "../../common/filter/filter.component";
 import {Invoice} from "../../../Model/OAPF/Request/invoice";
+import {SellerApprovalInvoiceModalComponent} from "./seller-approval-invoice-modal/seller-approval-invoice-modal.component";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-approvalinvoicesseller',
@@ -102,8 +104,8 @@ export class ApprovalinvoicessellerComponent implements OnInit {
     console.log(element)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
-    const modalRef = this.modalService.open(InvoicemodalComponent, this.modalOption);
+    this.modalOption.size = 'xl'
+    const modalRef = this.modalService.open(SellerApprovalInvoiceModalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
     modalRef.result.then((result) => {
@@ -183,6 +185,10 @@ export class ApprovalinvoicessellerComponent implements OnInit {
     console.log(event.direction)
     this.sortData = event.active+','+event.direction
     this.getInvoices();
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
 
 }
