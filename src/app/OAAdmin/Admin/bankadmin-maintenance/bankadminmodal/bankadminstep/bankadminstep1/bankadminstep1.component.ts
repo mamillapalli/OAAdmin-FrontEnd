@@ -24,8 +24,8 @@ export class Bankadminstep1Component implements OnInit {
     textField: 'name',
     selectAllText: 'Select All',
     unSelectAllText: 'UnSelect All',
-    itemsShowLimit: 3,
-    allowSearchFilter: true
+    itemsShowLimit: 2,
+    allowSearchFilter: false
   };
   selectedItems: any = [];
   rolesList: any = ['BANK_ADMIN_MAKER','BANK_ADMIN_CHECKER','BANK_ADMIN_VIEWER'];

@@ -1,0 +1,190 @@
+<div class="card-body">
+  <div [formGroup]="invoiceForm" id="form">
+    <div class="form-group row">
+      <h3 class="fw-bolder text-dark">Invoice Info</h3>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label_readonly">
+            <input class="floating-input_readonly" type="text" name="invoiceNumber" id="invoiceNumber"
+                   formControlName="invoiceNumber" placeholder=" " readonly>
+            <label class="label_OA required">Invoice Number</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <div class="input-group mb-3">
+              <!--              <mat-form-field>-->
+              <!--                <mat-select formControlName="sbrReferenceId" (focusout)="getSBRChange()">-->
+              <!--                  &lt;!&ndash; place ngx-mat-select-search inside mat-option to allow opening without initial selection &ndash;&gt;-->
+              <!--                  <mat-option>-->
+              <!--                    <ngx-mat-select-search [formControl]="bankServerSideFilteringCtrl" [searching]="searching"></ngx-mat-select-search>-->
+              <!--                  </mat-option>-->
+              <!--                  <mat-option *ngFor="let bank of filteredServerSideBanks | async" [value]="bank">-->
+              <!--                    {{bank.sbrId}}-->
+              <!--                  </mat-option>-->
+              <!--                </mat-select>-->
+              <!--              </mat-form-field>-->
+
+              <!--              -->
+              <input class="floating-input_mandatory input-group mb-3" type="text" name="sbrReferenceId"
+                     id="sbrReferenceId"
+                     formControlName="sbrReferenceId" placeholder=""
+                     [class.is-invalid]="isControlInvalid('sbrReferenceId')"
+                     [class.is-valid]="isControlValid('sbrReferenceId')">
+              <!--            <button class="btn btn-search button_OA" type="button" (click)="openSBRDialog()"><i-->
+              <!--              class="fa fa-search fa-fw"></i></button>-->
+              <label class="label_OA_mandatory">SBR Reference Number</label>
+              <span class="input-group-text_OA" (click)="openSBRDialog()"><i class="fa fa-search fa-fw"></i></span>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_readonly">
+            <input class="floating-input_readonly" type="text" name="agreementId" id="agreementId"
+                   formControlName="agreementId"
+                   placeholder=" ">
+            <label class="label_OA">Agreement Number</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_readonly" type="text" name="anchorId" id="anchorId" formControlName="anchorId"
+                   placeholder=" ">
+            <label class="label_OA">Anchor Id</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_readonly" type="text" name="counterPartyId" id="counterPartyId"
+                   formControlName="counterPartyId" placeholder=" ">
+            <label class="label_OA">Counter Party Id</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <select class="floating-select_readonly" name="documentType" id="documentType"
+                    formControlName="documentType">
+              <option value="INVOICE" selected>Invoice</option>
+            </select>
+            <label class="label_OA">Document Type</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" id="documentNumber" name="documentNumber"
+                   [class.is-invalid]="isControlInvalid('documentNumber')"
+                   [class.is-valid]="isControlValid('documentNumber')" formControlName="documentNumber" placeholder=" ">
+            <label class="label_OA">Document Number</label>
+          </div>
+        </div>
+        <div class="col-1 ">
+          <div class="floating-label">
+            <select class="floating-select_mandatory" name="currency" id="currency"
+                    formControlName="currency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="col-2 ">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" type="text" id="Amount" name="amount"
+                   [class.is-invalid]="isControlInvalid('amount')"
+                   [class.is-valid]="isControlValid('amount')" formControlName="amount" placeholder="Amount"
+                   currencyMask placeholder=" ">
+            <label class="label_OA">Amount</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12 col-md-12 form-group row">
+      <h3 class="fw-bolder text-dark">Document Info</h3>
+    </div>
+    <div class="container mt-5">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" type="date" autocomplete="off"
+                   name="date" [class.is-invalid]="isControlInvalid('date')"
+                   [class.is-valid]="isControlValid('date')" formControlName="date" placeholder=" ">
+            <label class="label_OA">Invoice Date</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" type="date" autocomplete="off"
+                   name="valueDate" [class.is-invalid]="isControlInvalid('valueDate')"
+                   [class.is-valid]="isControlValid('valueDate')" formControlName="valueDate" placeholder=" ">
+            <label class="label_OA">Value Date</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" type="date" autocomplete="off"
+                   name="dueDate" [class.is-invalid]="isControlInvalid('dueDate')"
+                   [class.is-valid]="isControlValid('dueDate')" formControlName="dueDate" placeholder=" ">
+            <label class="label_OA">Due Date</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" autocomplete="off"
+                   name="portOfLoading" formControlName="portOfLoading" placeholder=" ">
+            <label class="label_OA">Port Of Loading</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" autocomplete="off"
+                   name="portOfDischarge" formControlName="portOfDischarge" placeholder=" ">
+            <label class="label_OA">Port Of Discharge</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" autocomplete="off"
+                   name="shipmentCorporation" formControlName="shipmentCorporation" placeholder=" ">
+            <label class="label_OA">Shipment Corporation</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" autocomplete="off"
+                   name="realBeneficiary" formControlName="realBeneficiary" placeholder=" ">
+            <label class="label_OA">Real Beneficiary</label>
+          </div>
+        </div>
+        <div class="col-1 ">
+          <div class="floating-label">
+            <select class="floating-select" name="invoiceServiceChargeCurrency" id="invoiceServiceChargeCurrency"
+                    formControlName="invoiceServiceChargeCurrency">
+              <option value="{{invoiceServiceChargeCurrency.code}}"
+                      *ngFor="let invoiceServiceChargeCurrency of currencyList">{{invoiceServiceChargeCurrency.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="col-2 ">
+          <div class="floating-label">
+            <input class="floating-input" autocomplete="off"
+                   name="invoiceServiceChargeAmount" formControlName="invoiceServiceChargeAmount" placeholder=" "
+                   currencyMask>
+            <label class="label_OA">Charges Amount</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
