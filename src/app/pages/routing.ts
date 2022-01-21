@@ -14,6 +14,12 @@ import {FinancingComponent} from "../OAAdmin/OAPF/financing/financing.component"
 import {SettlementComponent} from "../OAAdmin/OAPF/settlement/settlement.component";
 import {ApprovalinvoicesModule} from "../OAAdmin/OAPF/approvalinvoices/approvalinvoices.module";
 import {ExChangeRatesComponent} from "../OAData/ex-change-rates/ex-change-rates.component";
+import {AgreementComponent} from "../OAAdmin/Customer/agreement/agreement.component";
+import {SBRComponent} from "../OAAdmin/Customer/sbr/sbr.component";
+import { CurrencyComponent } from '../OAData/StanData/currency/currency.component';
+import { InterestRateComponent } from '../OAData/StanData/interest-rate/interest-rate.component';
+import { ExchangeRateComponent } from '../OAData/StanData/exchange-rate/exchange-rate.component';
+import { HolidayComponent } from '../OAData/StanData/holiday/holiday.component';
 
 const Routing: Routes = [
   {
@@ -124,6 +130,30 @@ const Routing: Routes = [
     path: 'systemmaintenance',
     loadChildren: () =>
       import('../OAAdmin/Admin/system-maintenance/system-maintenance.module').then((m) => m.SystemMaintenanceModule),
+  },
+  {
+    path: 'currency', // <= Page URL
+    component: CurrencyComponent // <= Page component registration
+  },
+  {
+    path: 'interestrate', // <= Page URL
+    component: InterestRateComponent // <= Page component registration
+  },
+  {
+    path: 'exchangerate', // <= Page URL
+    component: ExchangeRateComponent // <= Page component registration
+  },
+  {
+    path: 'holiday', // <= Page URL
+    component: HolidayComponent // <= Page component registration
+  },
+  {
+    path: 'Customer/agreement', // <= Page URL
+    component: AgreementComponent // <= Page component registration
+  },
+  {
+    path: 'Customer/sbr', // <= Page URL
+    component: SBRComponent // <= Page component registration
   },
 
 
