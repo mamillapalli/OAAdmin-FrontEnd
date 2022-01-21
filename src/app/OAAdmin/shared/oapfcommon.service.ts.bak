@@ -34,20 +34,6 @@ export class oapfcommonService {
       finalize(() => this._isLoading$.next(false))
     );
   }
-  
-    getAdminReferenceNumber(refType: any) {
-    this._isLoading$.next(true);
-    this.authToken = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${this.authToken?.jwt}`,
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    });
-    return this.http.get<any>('/oaadmin/api/v1/'+refType+'/getNewReference', {headers: httpHeaders , responseType:this.responseType}).pipe(
-      catchError(this.handleError),
-      finalize(() => this._isLoading$.next(false))
-    );
-  }
 
   getMethod(type: any, param: any, statusType: any) {
     this._isLoading$.next(true);
