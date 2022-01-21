@@ -1,0 +1,58 @@
+<div class="pb-10 pb-lg-12">
+  <h2 class="fw-bolder text-dark">Currency Information</h2>
+</div>
+<div [formGroup]="CurrencyForm">
+  <div class="form-group row">
+    <div class="col-xl-6">
+      <label class="form-label required">Currency Code</label>
+      <input type="text" class="input_QA form-control form-control-lg form-control-solid" name="isoCode" autocomplete="off"
+        placeholder="isoCode" [class.is-invalid]="isControlInvalid('isoCode')"
+        [class.is-valid]="isControlValid('isoCode')" formControlName="isoCode" />
+    </div>
+    <div class="col-xl-6">
+      <label class="form-label required">Currency Description</label><input type="text"
+        class="input_QA form-control form-control-lg form-control-solid" name="description" autocomplete="off"
+        placeholder="Description" [class.is-invalid]="isControlInvalid('description')"
+        [class.is-valid]="isControlValid('description')" formControlName="description" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-xl-6">
+      <label class="form-label required">Country</label>
+      <input type="text" class="input_QA form-control form-control-lg form-control-solid" name="country" autocomplete="off"
+        placeholder="country" [class.is-invalid]="isControlInvalid('country')"
+        [class.is-valid]="isControlValid('country')" formControlName="country" />
+    </div>
+    <div class="col-xl-6">
+      <label class="form-label">Minor Name</label><input type="text"
+        class="input_QA form-control form-control-lg form-control-solid" name="minorName" autocomplete="off"
+        placeholder="minorName" [class.is-invalid]="isControlInvalid('minorName')"
+        [class.is-valid]="isControlValid('minorName')" formControlName="minorName" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-xl-6">
+      <label class="form-label">Major Name</label><input type="text"
+        class="input_QA form-control form-control-lg form-control-solid" name="majorName" autocomplete="off"
+        placeholder="majorName" [class.is-invalid]="isControlInvalid('majorName')"
+        [class.is-valid]="isControlValid('majorName')" formControlName="majorName" />
+    </div>
+    <div class="col-xl-6">
+      <label class="form-label">Decimal</label> <select class="input_QA form-control form-control-lg form-control-solid"
+        name="decimal" formControlName="decimal">
+        <option value="0">0</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+      </select>
+    </div>
+
+  </div>
+  <div class="form-group row">
+    <div class="col-xl-6">
+      <label class="form-label">Base Days</label><input type="text"
+        class="input_QA form-control form-control-lg form-control-solid" name="baseDays" autocomplete="off"
+        placeholder="baseDays" [class.is-invalid]="isControlInvalid('baseDays')"
+        [class.is-valid]="isControlValid('baseDays')" formControlName="baseDays" />
+    </div>
+  </div>
+</div>

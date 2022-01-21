@@ -1,0 +1,33 @@
+<div class="pb-10 pb-lg-12">
+    <h2 class="fw-bolder text-dark">Holiday Information</h2>
+  </div>
+  <div [formGroup]="HolidayForm">
+    <div class="form-group row">
+      <div class="col-xl-6">
+        <label class="form-label required">Holiday Name</label>
+        <input type="text" class="form-control form-control-lg form-control-solid" name="name" autocomplete="off"
+          placeholder="name" [class.is-invalid]="isControlInvalid('name')" [class.is-valid]="isControlValid('name')"
+          formControlName="name" />
+      </div>
+      <div class="col-xl-6">
+        <label class="form-label required">Description</label><input type="text"
+          class="form-control form-control-lg form-control-solid" name="description" autocomplete="off"
+          placeholder="Description" [class.is-invalid]="isControlInvalid('description')"
+          [class.is-valid]="isControlValid('description')" formControlName="description" />
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-xl-6">
+        <label class="form-label required">Business Unit</label>
+        <input type="text" class="form-control form-control-lg form-control-solid" name="businessUnit" autocomplete="off"
+          placeholder="businessUnit" [class.is-invalid]="isControlInvalid('businessUnit')"
+          [class.is-valid]="isControlValid('businessUnit')" formControlName="businessUnit" />
+      </div>
+      <div class="col-xl-6">
+        <label class="form-label">Transaction Date</label><input type="date"
+          class="form-control form-control-lg form-control-solid" name="date" autocomplete="off"
+          placeholder="date" [class.is-invalid]="isControlInvalid('date')"
+          [class.is-valid]="isControlValid('date')" formControlName="date" />
+      </div>
+    </div>
+  </div>
