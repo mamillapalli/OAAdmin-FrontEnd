@@ -132,6 +132,40 @@ import { ExChangeRatesComponent } from './OAData/ex-change-rates/ex-change-rates
 import { ExChangeRatesModalComponent } from './OAData/ex-change-rates/ex-change-rates-modal/ex-change-rates-modal.component';
 import { ExChangeRatesStep1Component } from './OAData/ex-change-rates/ex-change-rates-modal/steps/ex-change-rates-step1/ex-change-rates-step1.component';
 import { ExChangeRatesStep2Component } from './OAData/ex-change-rates/ex-change-rates-modal/steps/ex-change-rates-step2/ex-change-rates-step2.component';
+import { AgreementComponent} from "./OAAdmin/Customer/agreement/agreement.component";
+import { AgreementMainComponent } from './OAAdmin/Customer/agreement/agreementmodal/agreement-main/agreement-main.component';
+import { AgreementLimitComponent } from './OAAdmin/Customer/agreement/agreementmodal/agreement-limit/agreement-limit.component';
+import { AgreementEndComponent } from './OAAdmin/Customer/agreement/agreementmodal/agreement-end/agreement-end.component';
+import { AgreementmodalComponent } from './OAAdmin/Customer/agreement/agreementmodal/agreementmodal.component';
+import { SBRComponent} from "./OAAdmin/Customer/sbr/sbr.component";
+import {SbrmodalComponent} from "./OAAdmin/Customer/sbr/sbrmodal/sbrmodal.component";
+import { SbrMainComponent } from './OAAdmin/Customer/sbr/sbrmodal/sbr-main/sbr-main.component';
+import { SbrCustomerComponent } from './OAAdmin/Customer/sbr/sbrmodal/sbr-customer/sbr-customer.component';
+import { SbrAmtInfoComponent } from './OAAdmin/Customer/sbr/sbrmodal/sbr-amt-info/sbr-amt-info.component';
+import { SbrEndComponent } from './OAAdmin/Customer/sbr/sbrmodal/sbr-end/sbr-end.component';
+import { CustomerDOComponent } from './OAAdmin/common/customer-do/customer-do.component';
+import { RmDoComponent } from './OAAdmin/common/rm-do/rm-do.component';
+import { CurrencyComponent } from './OAData/StanData/currency/currency.component';
+import { HolidayComponent } from './OAData/StanData/holiday/holiday.component';
+import { ExchangeRateComponent } from './OAData/StanData/exchange-rate/exchange-rate.component';
+import { InterestRateComponent } from './OAData/StanData/interest-rate/interest-rate.component';
+import { WeekEndComponent } from './OAData/StanData/week-end/week-end.component';
+import { CurrencyModalComponent } from './OAData/StanData/currency/currency-modal/currency-modal.component';
+import { MainComponent } from './OAData/StanData/currency/currency-modal/main/main.component';
+import { EndComponent } from './OAData/StanData/currency/currency-modal/end/end.component';
+import { ExchangeEndComponent } from './OAData/StanData/exchange-rate/exchange-rate-modal/exchange-end/exchange-end.component';
+import { ExchangeMainComponent } from './OAData/StanData/exchange-rate/exchange-rate-modal/exchange-main/exchange-main.component';
+import { ExchangeRateModalComponent } from './OAData/StanData/exchange-rate/exchange-rate-modal/exchange-rate-modal.component';
+import { InterestRateModalComponent } from './OAData/StanData/interest-rate/interest-rate-modal/interest-rate-modal.component';
+import { InterestRateMainComponent } from './OAData/StanData/interest-rate/interest-rate-modal/interest-rate-main/interest-rate-main.component';
+import { InterestRateEndComponent } from './OAData/StanData/interest-rate/interest-rate-modal/interest-rate-end/interest-rate-end.component';
+import { HolidayModalComponent } from './OAData/StanData/holiday/holiday-modal/holiday-modal.component';
+import { HolidayMainComponent } from './OAData/StanData/holiday/holiday-modal/holiday-main/holiday-main.component';
+import { HolidayEndComponent } from './OAData/StanData/holiday/holiday-modal/holiday-end/holiday-end.component';
+import { HolidayInfoComponent } from './OAData/StanData/holiday/holiday-modal/holiday-info/holiday-info.component';
+import { SbrDataModalComponent } from './OAAdmin/OAPF/common/sbr-data-modal/sbr-data-modal.component'; 
+import { CreditAdviseComponent } from './OAAdmin/credit-advise/credit-advise.component';
+
 import {ChartComponent} from "ng-apexcharts";
 import {NgChartsModule} from "ng2-charts";
 import {CRUDTableModule} from "./_metronic/shared/crud-table";
@@ -139,6 +173,7 @@ import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 //import { ApprovalinvoicesComponent } from './OAAdmin/OAPF/approvalinvoices/approvalinvoices.component';
 import "reflect-metadata";
 import { CopyAsModalComponent } from './OAAdmin/OAPF/common/copy-as-modal/copy-as-modal.component';
+import { AgreementDoComponent } from './OAAdmin/common/agreement-do/agreement-do.component';
 
 function appInitializer(authService: AuthService) {
   return () => {
@@ -245,6 +280,40 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ExChangeRatesStep1Component,
     ExChangeRatesStep2Component,
     CopyAsModalComponent,
+    AgreementComponent,
+    AgreementmodalComponent,
+    AgreementMainComponent,
+    AgreementLimitComponent,
+    AgreementEndComponent,
+    SBRComponent,
+    SbrmodalComponent,
+    SbrMainComponent,
+    SbrCustomerComponent,
+    SbrAmtInfoComponent,
+    SbrEndComponent,
+    CustomerDOComponent,
+    RmDoComponent,
+    CurrencyComponent,
+    HolidayComponent,
+    ExchangeRateComponent,
+    InterestRateComponent,
+    WeekEndComponent,
+    CurrencyModalComponent,
+    MainComponent,
+    EndComponent,
+    ExchangeMainComponent,
+    ExchangeEndComponent,
+    InterestRateMainComponent,
+    InterestRateEndComponent,
+    ExchangeRateModalComponent,
+    InterestRateModalComponent,
+    HolidayModalComponent,
+    HolidayMainComponent,
+    HolidayEndComponent,
+    HolidayInfoComponent,
+    SbrDataModalComponent,
+    CreditAdviseComponent,
+    AgreementDoComponent
     //ApprovalinvoicesComponent
   ],
   imports: [
@@ -288,7 +357,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     MatSelectModule,
     MatSidenavModule,
     MatSliderModule,
-    MatSlideToggleModule,
+    MatSlideToggleModule, 
     MatSnackBarModule,
     MatSortModule,
     MatTableModule,
