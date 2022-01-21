@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Customer Information</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+    <div class="modal-body">
+      <div class="table-responsive">
+        <!-- begin::Table -->
+        <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+                   class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-3">
+  
+         <!-- ID Column -->
+          <ng-container matColumnDef="customerId" class="min-w-150px">
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Customer Id</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.customerId}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="name" class="min-w-150px">
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Customer Name
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="addressLine1" class="min-w-150px">
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Customer Address
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.addressLine1}} </mat-cell>
+          </ng-container>
+  
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;" (click)="passRow(row)">
+          </mat-row>
+        </mat-table>
+        <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+        </mat-paginator>
+        <!-- end::Table -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>
+      </div>
+    </div>
