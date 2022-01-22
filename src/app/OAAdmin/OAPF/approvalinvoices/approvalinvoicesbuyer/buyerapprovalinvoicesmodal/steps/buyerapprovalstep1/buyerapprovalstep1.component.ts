@@ -12,6 +12,7 @@ import {HttpClient} from "@angular/common/http";
 import {DatePipe} from "@angular/common";
 import {invoiceService} from "../../../../../../shared/OAPF/invoice.service";
 import { currencyList } from 'src/app/OAAdmin/shared/currency';
+import {SbrdatamodalComponent} from "../../../../../common/sbrdatamodal/sbrdatamodal.component";
 
 @Component({
   selector: 'app-buyerapprovalstep1',
@@ -24,7 +25,7 @@ export class Buyerapprovalstep1Component implements OnInit {
     part: Partial<Invoice>,
     isFormValid: boolean
   ) => void;
-  form: FormGroup;
+  invoiceForm: FormGroup;
   @Input() defaultValues: Partial<Invoice>;
 
   private unsubscribe: Subscription[] = [];
@@ -51,7 +52,7 @@ export class Buyerapprovalstep1Component implements OnInit {
     this.initForm();
     if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view' || this.mode === 'authBuyer')
     {
-      this.form.disable()
+      this.invoiceForm.disable()
     }
     if(this.mode !== 'new') {
       this.f.invoiceNumber.disabled
@@ -61,28 +62,28 @@ export class Buyerapprovalstep1Component implements OnInit {
   }
 
   initForm() {
-    this.form = this.fb.group({
-      invoiceNumber: [this.defaultValues.invoiceNumber,[Validators.required]],
-      sbrReferenceId: [this.defaultValues.sbrReferenceId,[Validators.required]],
-      agreementId: [this.defaultValues.agreementId,[Validators.required]],
-      anchorId: [this.defaultValues.anchorId,[Validators.required]],
-      counterPartyId: [this.defaultValues.counterPartyId,[Validators.required]],
-      documentType: [this.defaultValues.documentType,[Validators.required]],
-      documentNumber: [this.defaultValues.documentNumber,[Validators.required]],
-      currency: [this.defaultValues.currency,[Validators.required]],
-      amount: [this.defaultValues.amount,[Validators.required]],
-      date: [this.defaultValues.date,[Validators.required]],
-      valueDate: [this.defaultValues.valueDate,[Validators.required]],
-      dueDate: [this.defaultValues.dueDate,[Validators.required]],
-      portOfLoading: [this.defaultValues.portOfLoading,[Validators.required]],
-      portOfDischarge: [this.defaultValues.portOfDischarge,[Validators.required]],
-      shipmentCorporation: [this.defaultValues.shipmentCorporation,[Validators.required]],
-      realBeneficiary: [this.defaultValues.realBeneficiary,[Validators.required]],
-      invoiceServiceChargeCurrency: [this.defaultValues.invoiceServiceChargeCurrency,[Validators.required]],
-      invoiceServiceChargeAmount: [this.defaultValues.invoiceServiceChargeAmount,[Validators.required]],
+    this.invoiceForm = this.fb.group({
+      invoiceNumber: [this.defaultValues.invoiceNumber, [Validators.required]],
+      sbrReferenceId: [this.defaultValues.sbrReferenceId, [Validators.required]],
+      agreementId: [this.defaultValues.agreementId, [Validators.required]],
+      anchorId: [this.defaultValues.anchorId, [Validators.required]],
+      counterPartyId: [this.defaultValues.counterPartyId, [Validators.required]],
+      documentType: [this.defaultValues.documentType, [Validators.required]],
+      documentNumber: [this.defaultValues.documentNumber, [Validators.required]],
+      currency: [this.defaultValues.currency, [Validators.required]],
+      amount: [this.defaultValues.amount, [Validators.required]],
+      date: [this.defaultValues.date, [Validators.required]],
+      valueDate: [this.defaultValues.valueDate, [Validators.required]],
+      dueDate: [this.defaultValues.dueDate, [Validators.required]],
+      portOfLoading: [this.defaultValues.portOfLoading, [Validators.required]],
+      portOfDischarge: [this.defaultValues.portOfDischarge, [Validators.required]],
+      shipmentCorporation: [this.defaultValues.shipmentCorporation, [Validators.required]],
+      realBeneficiary: [this.defaultValues.realBeneficiary, [Validators.required]],
+      invoiceServiceChargeCurrency: [this.defaultValues.invoiceServiceChargeCurrency, [Validators.required]],
+      invoiceServiceChargeAmount: [this.defaultValues.invoiceServiceChargeAmount, [Validators.required]]
     });
 
-    const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
+    const formChangesSubscr = this.invoiceForm.valueChanges.subscribe((val) => {
       let formE = document.getElementById('form');
       this.updateParentModel(val, this.checkForm());
     });
@@ -91,7 +92,7 @@ export class Buyerapprovalstep1Component implements OnInit {
 
   checkForm() {
     return !(
-      this.form.get('invoiceNumber')?.hasError('required')
+      this.invoiceForm.get('invoiceNumber')?.hasError('required')
     );
   }
 
@@ -101,11 +102,11 @@ export class Buyerapprovalstep1Component implements OnInit {
 
   updateForm()
   {
-    this.form.patchValue(this.formValue)
+    this.invoiceForm.patchValue(this.formValue)
   }
 
   get f() {
-    return this.form.controls;
+    return this.invoiceForm.controls;
   }
 
   public getSBRList() {
@@ -130,17 +131,17 @@ export class Buyerapprovalstep1Component implements OnInit {
   }
 
   isControlValid(controlName: string): boolean {
-    const control = this.form.controls[controlName];
+    const control = this.invoiceForm.controls[controlName];
     return control.valid && (control.dirty || control.touched);
   }
 
   isControlInvalid(controlName: string): boolean {
-    const control = this.form.controls[controlName];
+    const control = this.invoiceForm.controls[controlName];
     return control.invalid && (control.dirty || control.touched);
   }
 
   controlHasError(validation: string, controlName: string) {
-    const control = this.form.controls[controlName];
+    const control = this.invoiceForm.controls[controlName];
     return control.hasError(validation) && (control.dirty || control.touched);
   }
 
@@ -165,4 +166,26 @@ export class Buyerapprovalstep1Component implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  openSBRDialog() {
+    console.log(this.dataSource.data)
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalOption.size = 'xl';
+    this.modalOption.animation = true
+    const modalRef = this.modalService.open(SbrdatamodalComponent, this.modalOption);
+    modalRef.result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+      if (result) {
+        console.log("row result is " + result)
+        this.f.sbrReferenceId.setValue(result.sbrId);
+        this.f.anchorId.setValue(result.anchorCustomer['customerId']);
+        this.f.counterPartyId.setValue(result.counterParty['customerId']);
+        this.f.agreementId.setValue(result.agreement['contractReferenceNumber']);
+      }
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
 }

@@ -1,13 +1,16 @@
-import {Component, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {BehaviorSubject, Subscription} from "rxjs";
 import {inits, rm} from "../../../Model/OAAdmin/Request/rm";
 import {crm} from "../../../Model/OAAdmin/CRequest/crm";
 import {DatePipe} from "@angular/common";
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {ModalDismissReasons, NgbActiveModal, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../modules/auth";
 import Swal from 'sweetalert2';
 import {NotificationService} from "../../../shared/notification.service";
 import {oaCommonService} from "../../../shared/oacommon.service";
+import {CopyAsModalComponent} from "../../../OAPF/common/copy-as-modal/copy-as-modal.component";
+import {Relationshipmanagerstep1Component} from "./steps/relationshipmanagerstep1/relationshipmanagerstep1.component";
+import {Relationshipmanagerstep2Component} from "./steps/relationshipmanagerstep2/relationshipmanagerstep2.component";
 
 @Component({
   selector: 'app-relationshipmanagermodal',
@@ -27,12 +30,19 @@ export class RelationshipmanagermodalComponent implements OnInit, OnDestroy {
   fromParent: any;
   crm: crm
   checkNextStage: boolean;
+  modalOption: NgbModalOptions = {};
+  closeResult: string;
+  @ViewChild(Relationshipmanagerstep1Component) Relationshipmanagerstep1Component: Relationshipmanagerstep1Component;
+  @ViewChild(Relationshipmanagerstep2Component) Relationshipmanagerstep2Component: Relationshipmanagerstep2Component;
+  @Output('displayedColumns') displayedColumns: any
+  @Output('fDisplayedColumns') fDisplayedColumns: any
 
   constructor(public activeModal: NgbActiveModal,
               private authService: AuthService,
               public notifyService: NotificationService,
               public oaCommonService: oaCommonService,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,
+              public modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -182,4 +192,41 @@ export class RelationshipmanagermodalComponent implements OnInit, OnDestroy {
     return false
   }
 
+  copyAs() {
+    console.log(this.displayedColumns)
+    console.log(this.fDisplayedColumns)
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
+    const modalRef = this.modalService.open(CopyAsModalComponent, this.modalOption);
+    modalRef.componentInstance.mode = 'copy';
+    modalRef.componentInstance.functionType = 'rms';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      const refNo = this.Relationshipmanagerstep1Component.rmForm.value.rmId;
+      console.log('Result is ' + result);
+      //this.updateAccount(result, true)
+      this.formValue = result
+      console.log(this.formValue)
+      //this.Invoicestep1Component.updateForm()
+      this.formValue.rmId = refNo
+      this.Relationshipmanagerstep1Component.rmForm.patchValue(this.formValue)
+      this.Relationshipmanagerstep1Component.rmForm.value.rmId = refNo;
+      //this.Invoicestep1Component.updateReferenceNumber();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 }

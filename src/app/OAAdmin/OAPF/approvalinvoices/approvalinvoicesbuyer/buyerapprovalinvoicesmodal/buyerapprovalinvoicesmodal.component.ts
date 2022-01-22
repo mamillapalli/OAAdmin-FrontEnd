@@ -62,8 +62,8 @@ export class BuyerapprovalinvoicesmodalComponent implements OnInit {
     }
     console.log('this is form next step elemet is ' + this.formElement)
     if (this.currentStep$.value === this.formsCount - 1) {
-      this.cInvoice = new cInvoice();
-      this.cInvoice = this.account$.value;
+
+
 
       // this.cInvoice.invoiceNumber = this.account$.value.invoiceNumber
       // this.cInvoice.sbrReferenceId = this.account$.value.sbrReferenceId
@@ -99,6 +99,8 @@ export class BuyerapprovalinvoicesmodalComponent implements OnInit {
       //this.cInvoice.status = this.account$.value.status
 
       //const rmNewRequest = JSON.stringify(this.cInvoice)
+      //this.cInvoice = this.account$.value;
+      this.cInvoice = new cInvoice(this.account$.value);
       const rmNewRequest = this.cInvoice;
       console.log(rmNewRequest);
       if (this.mode === 'authBuyer') {

@@ -5,40 +5,55 @@
   </button>
 </div>
 <div class="modal-body">
-  <div class="table-responsive">
-    <!-- begin::Table -->
-    <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
-               class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
-      <ng-container matColumnDef="accountId" class="min-w-150px">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Account Id</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.accountId}} </mat-cell>
-      </ng-container>
+  <div class="card">
+    <div>
+      <!-- begin::Table -->
+      <!--    <mat-table [dataSource]="dataSource" matSort style="width: 100%;"-->
+      <!--               class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">-->
+      <table mat-table [dataSource]="dataSource" class="" cdkDropList
+             cdkDropListOrientation="horizontal"
+             (cdkDropListDropped)="drop($event)"
+             matSort (matSortChange)="sortChanges($event)"
+             style="overflow-x: scroll; overflow-y: scroll"
+      >
 
-      <ng-container matColumnDef="name" class="min-w-150px">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Name
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="invoiceNumber">
+          <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header > INV No </th>
+          <td mat-cell *matCellDef="let element"> {{element.invoiceNumber}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="type" class="min-w-150px">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Type
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.type}} </mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="accountId">
+          <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header > Account Id </th>
+          <td mat-cell *matCellDef="let element"> {{element.accountId}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="currency" class="min-w-150px">
-        <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Currency
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.currency}} </mat-cell>
-      </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header > Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;" (click)="passRow(row)">
-      </mat-row>
-    </mat-table>
-    <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
-    </mat-paginator>
-    <!-- end::Table -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header > Type </th>
+          <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="currency">
+          <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header > Currency </th>
+          <td mat-cell *matCellDef="let element"> {{element.currency}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            [ngClass]="{hovered: row.hovered, highlighted: row.highlighted}"
+            (click)="row.highlighted = !row.highlighted" (mouseover)="row.hovered = true"
+            (mouseout)="row.hovered = false" (click)="passRow(row)"></tr>
+
+      </table>
+      <mat-paginator #paginator [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize"
+                     [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)" aria-label="Select page">
+      </mat-paginator>
+      <!-- end::Table -->
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>

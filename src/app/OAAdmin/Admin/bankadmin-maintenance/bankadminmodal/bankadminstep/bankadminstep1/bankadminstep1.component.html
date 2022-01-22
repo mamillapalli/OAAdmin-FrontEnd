@@ -1,64 +1,108 @@
-<div class="pb-15 pb-lg-8">
-  <h3 class="fw-bolder text-dark">Super Admin Info</h3>
-</div>
-<div [formGroup]="bankAdminForm" id="form">
-  <div class="form-group row">
-    <div class="col-xl-6">
-      <label class="form-label required">User Id</label>
-      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
-             placeholder="User Id" name="userId" [class.is-invalid]="isControlInvalid('userId')"
-             [class.is-valid]="isControlValid('userId')" formControlName="userId"/>
+<div class="card-body">
+  <div [formGroup]="bankAdminForm" id="form">
+    <div class="form-group row">
+      <h3 class="fw-bolder text-dark">Bank Admin Info</h3>
     </div>
-    <div class="col-xl-6">
-      <label class="form-label required">Email Address</label>
-      <input type="email" class="form-control form-control-sm form-control-solid" autocomplete="off"
-             placeholder="Email Address" name="emailAddress" [class.is-invalid]="isControlInvalid('emailAddress')"
-             [class.is-valid]="isControlValid('emailAddress')" formControlName="emailAddress"/>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label_readonly">
+            <input class="floating-input_readonly" type="text" name="userId" id="userId"
+                   formControlName="userId" readonly>
+            <label class="label_OA required">User Id</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <input type="email" class="floating-input_mandatory" autocomplete="off"
+                   name="emailAddress"
+                   [class.is-invalid]="isControlInvalid('emailAddress')"
+                   [class.is-valid]="isControlValid('emailAddress')"
+                   formControlName="emailAddress"/>
+            <label class="label_OA_mandatory">Email Address</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <input type="text" class="floating-input_mandatory" autocomplete="off"
+                   name="firstName"
+                   formControlName="firstName"
+                   [class.is-invalid]="isControlInvalid('firstName')"
+                   [class.is-valid]="isControlValid('firstName')"
+            />
+            <label class="label_OA_mandatory">First Name</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <input type="text" class="floating-input_mandatory" autocomplete="off"
+                   name="lastName"
+                   formControlName="lastName"
+                   [class.is-invalid]="isControlInvalid('lastName')"
+                   [class.is-valid]="isControlValid('lastName')"
+            />
+            <label class="label_OA_mandatory"> Last Name </label>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-xl-6">
-      <label class="form-label required">First Name</label>
-      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
-             placeholder="First Name" name="firstName" [class.is-invalid]="isControlInvalid('firstName')"
-             [class.is-valid]="isControlValid('firstName')" formControlName="firstName"/>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" type="date" name="effectiveDate" id="effectiveDate"
+                   formControlName="effectiveDate" name="effectiveDate"
+                   [class.is-invalid]="isControlInvalid('effectiveDate')"
+                   [class.is-valid]="isControlValid('effectiveDate')">
+            <label class="label_OA required">Effective Date</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="date" name="expiryDate" id="expiryDate"
+                   formControlName="expiryDate" name="expiryDate" [class.is-invalid]="isControlInvalid('expiryDate')"
+                   [class.is-valid]="isControlValid('expiryDate')">
+            <label class="label_OA required">Expiry Date</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <div>
+              <ng-multiselect-dropdown
+                [settings]="dropdownSettings"
+                [data]="dropdownList"
+                formControlName="roles"
+              >
+              </ng-multiselect-dropdown>
+              <label class="label_OA_mandatory required">Roles</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory form-switch">
+            <input class="floating-input form-check-input" type="checkbox" id="status" name="status" value="yes"
+                   checked>
+            <label class="label_OA_mandatory form-check-label required">Status</label>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="col-xl-6">
-      <label class="form-label required">Last Name</label>
-      <input type="text" class="form-control form-control-sm form-control-solid" autocomplete="off"
-             placeholder="Last Name" name="lastName" [class.is-invalid]="isControlInvalid('lastName')"
-             [class.is-valid]="isControlValid('lastName')" formControlName="lastName"/>
-    </div>
-
-  </div>
-  <div class="form-group row">
-    <div class="col-xl-6">
-      <label class="form-label required">Effective Date</label>
-      <input type="date" class="form-control form-control-sm form-control-solid" autocomplete="off"
-             placeholder="Effective Date" name="effectiveDate" [class.is-invalid]="isControlInvalid('effectiveDate')"
-             [class.is-valid]="isControlValid('effectiveDate')" formControlName="effectiveDate"/>
-    </div>
-    <div class="col-xl-6">
-      <label class="form-label required">Expiry Date</label>
-      <input type="date" class="form-control form-control-sm form-control-solid" autocomplete="off"
-             placeholder="Expiry Date" name="expiryDate" [class.is-invalid]="isControlInvalid('expiryDate')"
-             [class.is-valid]="isControlValid('expiryDate')" formControlName="expiryDate"/>
-    </div>
-  </div>
-  <div class="form-group row">
-<!--    <label class="form-label required">Roles</label>-->
-<!--    <div class="col-xl-6">-->
-<!--      <ng-multiselect-dropdown-->
-<!--        [settings]="dropdownSettings"-->
-<!--        [data]="dropdownList"-->
-<!--        formControlName="roles"-->
-<!--      >-->
-<!--      </ng-multiselect-dropdown>-->
-<!--    </div>-->
-    <mat-form-field>
-      <mat-select matNativeControl placeholder="roles"   formControlName="roles" multiple>
-        <mat-option *ngFor="let roles of rolesList" [value]="roles">{{roles}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <!--    <div class="container mt-5 ">-->
+    <!--      <div class="form-group row">-->
+    <!--        <div class="col-3">-->
+    <!--          <div class="floating-label_mandatory">-->
+    <!--            <div class="input-group mb-3">-->
+    <!--              <input class="floating-input_mandatory input-group mb-3" type="text" name="customerId"-->
+    <!--                     id="customerId"-->
+    <!--                     formControlName="customerId"-->
+    <!--                     [class.is-invalid]="isControlInvalid('customerId')"-->
+    <!--                     [class.is-valid]="isControlValid('customerId')">-->
+    <!--              <label class="label_OA_mandatory">Corporate User</label>-->
+    <!--              <span class="input-group-text_OA" (click)="openCustomerDialog()"><i class="fa fa-search fa-fw"></i></span>-->
+    <!--            </div>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </div>
 </div>

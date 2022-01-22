@@ -4,7 +4,7 @@ interface corporateUser {
   lastName: string;
   effectiveDate: string | any;
   expiryDate: string | any;
-  status: string;
+  status: boolean;
   emailAddress : string;
   roles: [];
   customers: [];
@@ -16,7 +16,7 @@ const inits: corporateUser = {
   lastName: '',
   effectiveDate: '',
   expiryDate: '',
-  status: '',
+  status: true,
   emailAddress : '',
   roles: [],
   customers: []

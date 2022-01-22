@@ -1,5 +1,5 @@
 // tslint:disable:variable-name
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { PaginatorState } from '../models/paginator.model';
@@ -8,6 +8,7 @@ import { BaseModel } from '../models/base.model';
 import { SortState } from '../models/sort.model';
 import { GroupingState } from '../models/grouping.model';
 import { environment } from '../../../../../environments/environment';
+import {AuthModel} from "../../../../modules/auth/models/auth.model";
 
 const DEFAULT_STATE: ITableState = {
   filter: {},
@@ -83,16 +84,48 @@ export abstract class TableService<T> {
   }
 
   // READ (Returning filtered list of entities)
-  find(tableState: ITableState): Observable<TableResponseModel<T>> {
-    const url = this.API_URL + '/find';
+  find(): Observable<any> {
+    const url = '';
     this._errorMessage.next('');
-    return this.http.post<TableResponseModel<T>>(url, tableState).pipe(
+    console.log(this.getHeaderToken())
+    return this.http.get<any>(url,this.getHeaderToken() ).pipe(
       catchError(err => {
         this._errorMessage.next(err);
         console.error('FIND ITEMS', err);
         return of({ items: [], total: 0 });
       })
     );
+  }
+
+  getHeaderToken(): object {
+    const authModel = this.getAuthFromLocalStorage();
+    console.log(authModel)
+    if (authModel) {
+      return {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${authModel.jwt}`
+        }),
+        // params: new HttpParams({
+        //     fromObject: {
+        //         $orderBy: (this.defaultOrderBy ? this.defaultOrderBy : 'id desc'),
+        //         $filter: filter
+        //     }
+        // })
+      };
+    }
+
+    return []
+  }
+  protected getAuthFromLocalStorage(): AuthModel {
+    try {
+      const authData = JSON.parse(
+        <string>localStorage.getItem('user')
+      );
+      return authData;
+    } catch (error) {
+      console.error(error);
+      return new AuthModel();
+    }
   }
 
   getItemById(id: number): Observable<BaseModel> {
@@ -172,17 +205,14 @@ export abstract class TableService<T> {
   }
 
   public fetch() {
+    console.log('fetch')
     this._isLoading$.next(true);
     this._errorMessage.next('');
-    const request = this.find(this._tableState$.value)
+    const request = this.find()
       .pipe(
-        tap((res: TableResponseModel<T>) => {
-          this._items$.next(res.items);
-          this.patchStateWithoutFetch({
-            paginator: this._tableState$.value.paginator.recalculatePaginator(
-              res.total
-            ),
-          });
+        tap((res: any) => {
+          console.log(res)
+          this._items$.next(res.content);
         }),
         catchError((err) => {
           this._errorMessage.next(err);
@@ -193,13 +223,6 @@ export abstract class TableService<T> {
         }),
         finalize(() => {
           this._isLoading$.next(false);
-          const itemIds = this._items$.value.map((el: T) => {
-            const item = (el as unknown) as BaseModel;
-            return item.id;
-          });
-          this.patchStateWithoutFetch({
-            grouping: this._tableState$.value.grouping.clearRows(itemIds),
-          });
         })
       )
       .subscribe();

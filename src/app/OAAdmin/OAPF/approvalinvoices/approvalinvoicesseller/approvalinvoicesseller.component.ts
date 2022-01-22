@@ -1,7 +1,7 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, Output, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
+import {MatSort, Sort} from "@angular/material/sort";
 import {NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl} from "@angular/forms";
 import {Subscription, throwError} from "rxjs";
@@ -15,6 +15,8 @@ import {InvoicemodalComponent} from "../../invoice/invoicemodal/invoicemodal.com
 import {oapfcommonService} from "../../../shared/oapfcommon.service";
 import {FilterComponent} from "../../common/filter/filter.component";
 import {Invoice} from "../../../Model/OAPF/Request/invoice";
+import {SellerApprovalInvoiceModalComponent} from "./seller-approval-invoice-modal/seller-approval-invoice-modal.component";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-approvalinvoicesseller',
@@ -26,9 +28,9 @@ export class ApprovalinvoicessellerComponent implements OnInit {
   dataSource: any = new MatTableDataSource<Invoice>();
   displayedColumns: string[] = ['invoiceNumber', 'sbrReferenceId', 'agreementId', 'currency', 'amount', 'dueDate', 'status',
     'actions'];
+  @Output() fDisplayedColumns: string[] = ['invoiceNumber', 'sbrReferenceId', 'agreementId', 'currency', 'amount', 'dueDate', 'status',
+    'actions'];
   authToken: any;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
-  @ViewChild(MatSort) sort: MatSort | any;
   modalOption: NgbModalOptions = {}; // not null!
   closeResult: string;
   colorCode: string;
@@ -54,6 +56,15 @@ export class ApprovalinvoicessellerComponent implements OnInit {
   isLoading$: any;
   private API_USERS_URL: string;
 
+  //soring
+  totalRows = 0;
+  pageSize = 5;
+  currentPage = 0;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
+  @ViewChild(MatSort) sort: MatSort | any;
+  sortData: any
+  authRoles : any
 
   constructor(public http: HttpClient,
               public authService: AuthService,
@@ -63,6 +74,8 @@ export class ApprovalinvoicessellerComponent implements OnInit {
               private datePipe: DatePipe,
               private spinner: NgxSpinnerService,
               private oapfcommonService:oapfcommonService) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    this.authRoles = auth?.aRoles
   }
 
   ngOnInit(): void {
@@ -71,14 +84,10 @@ export class ApprovalinvoicessellerComponent implements OnInit {
 
   public getInvoices() {
     console.log('Get Approval Invoices')
-    this.spinner.show();
-    const sb = this.oapfcommonService.getMethod('invoices/forCounterPartyApproval', null, 'all').subscribe((res:any) => {
-      this.dataSource.data = res;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.isLoading$ =false;
-      this.spinner.hide();
-      this.dataSource.filterPredicate = this.createFilter();
+    const sb = this.oapfcommonService.getDataWithPagination('oapf/api/v1/invoices/forCounterPartyApproval', this.currentPage, this.pageSize, this.sortData).subscribe((res:any) => {
+      this.dataSource.data = res.content;
+      this.totalRows = res.totalElements
+      console.log(this.totalRows)
     });
     this.subscriptions.push(sb);
   }
@@ -95,8 +104,8 @@ export class ApprovalinvoicessellerComponent implements OnInit {
     console.log(element)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
-    const modalRef = this.modalService.open(InvoicemodalComponent, this.modalOption);
+    this.modalOption.size = 'xl'
+    const modalRef = this.modalService.open(SellerApprovalInvoiceModalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
     modalRef.result.then((result) => {
@@ -137,28 +146,23 @@ export class ApprovalinvoicessellerComponent implements OnInit {
   openFilter() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalService.open(FilterComponent, this.modalOption).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-      if (result) {
-        console.log("row result is "+result)
-        console.log('test'+result.value)
-        // if (this.productForm.valid && this.productForm.value.quantities.length > 0) {
-        //   const sb = this.oaadminService.getAccounts(this.productForm, '', 'filter').subscribe((res) => {
-        //     this.dataSource.data = res;
-        //     this.dataSource.sort = this.sort;
-        //     this.dataSource.paginator = this.paginator;
-        //     this.dataSource.filterPredicate = this.createFilter();
-        //   });
-        //   this.subscriptions.push(sb);
-        // } else {
-        //   const sb = this.oaadminService.getAccounts(this.productForm, '', 'all').subscribe((res) => {
-        //     this.dataSource.data = res;
-        //     this.dataSource.sort = this.sort;
-        //     this.dataSource.paginator = this.paginator;
-        //     this.dataSource.filterPredicate = this.createFilter();
-        //   });
-        //   this.subscriptions.push(sb);
-        // }
+    const modalRef = this.modalService.open(FilterComponent, this.modalOption);
+    modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      console.log(result);
+      console.log('test' + result.value.filterOption)
+      if (result.valid && result.value.filterOption.length > 0) {
+        const sb = this.oapfcommonService.getFilterWithPagination(result, 'filter', 'oapf/api/v1/invoices/forCounterPartyApproval',this.currentPage,this.pageSize,this.sortData).subscribe((res) => {
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
+        });
+        this.subscriptions.push(sb);
+      } else {
+        const sb = this.oapfcommonService.getFilterWithPagination(result, 'all', 'oapf/api/v1/invoices/forCounterPartyApproval',this.currentPage,this.pageSize,this.sortData).subscribe((res) => {
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
+        });
+        this.subscriptions.push(sb);
       }
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -167,6 +171,24 @@ export class ApprovalinvoicessellerComponent implements OnInit {
 
   private getDismissReason(reason: any) {
 
+  }
+
+  pageChanged(event: any) {
+    console.log(this.sort)
+    console.log({ event });
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.getInvoices();
+  }
+
+  sortChanges(event: Sort) {
+    console.log(event.direction)
+    this.sortData = event.active+','+event.direction
+    this.getInvoices();
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
 
 }

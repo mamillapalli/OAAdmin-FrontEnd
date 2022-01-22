@@ -23,6 +23,7 @@ import {BankusermodalComponent} from "../bankuser/bankusermodal/bankusermodal.co
 import {FilterComponent} from "../../OAPF/common/filter/filter.component";
 import { oaCommonService } from "../../shared/oacommon.service";
 import {Accounts} from "../../Model/OAAdmin/Request/accounts";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-accounts',
@@ -44,7 +45,7 @@ export class AccountsComponent implements OnInit {
 
   //sort
   totalRows = 0;
-  pageSize = 5;
+  pageSize =  5;
   currentPage = 0;
   pageSizeOptions: number[] = [5, 10, 25, 100];
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
@@ -181,16 +182,14 @@ export class AccountsComponent implements OnInit {
     modalRef.result.then((result) => {
       if (result.valid && result.value.filterOption.length > 0) {
         const sb = this.oaCommonService.getFilterWithPagination(result, 'filter', '/oaadmin/api/v1/accounts',this.currentPage,this.pageSize,this.sortData).subscribe((res: any) => {
-          this.dataSource.data = res;
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
         });
         this.subscriptions.push(sb);
       } else {
         const sb = this.oaCommonService.getFilterWithPagination(result, 'all', '/oaadmin/api/v1/accounts',this.currentPage,this.pageSize,this.sortData).subscribe((res: any) => {
-          this.dataSource.data = res;
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
         });
         this.subscriptions.push(sb);
       }
@@ -209,6 +208,10 @@ export class AccountsComponent implements OnInit {
   sortChanges(event: Sort) {
     this.sortData = event.active
     this.getAccounts();
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
 
 

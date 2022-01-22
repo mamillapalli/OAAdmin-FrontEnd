@@ -11,4 +11,18 @@ export class cbankuser {
   emailAddress : string;
   roles: [];
   customers: [corporates]
+
+  constructor(d:any) {
+    this.userId =  d.userId;
+    this.firstName = d.firstName;
+    this.lastName = d.lastName;
+    this.effectiveDate = d.effectiveDate
+    this.expiryDate = d.expiryDate
+    this.status = d.boolean;
+    this.emailAddress =  d.emailAddress;
+    this.roles = d.roles;
+    this.customers = d.customers
+  }
 }
+
+

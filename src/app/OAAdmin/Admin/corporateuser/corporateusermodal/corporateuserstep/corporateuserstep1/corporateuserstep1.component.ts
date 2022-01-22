@@ -21,7 +21,7 @@ export class Corporateuserstep1Component implements OnInit {
   @Input('updateParentModel') updateParentModel: (part: Partial<corporateUser>, isFormValid: boolean) => void;
   @Input() defaultValues: Partial<corporateUser>;
   private unsubscribe: Subscription[] = [];
-  corporateAdminForm: FormGroup;
+  corporateUserForm: FormGroup;
   @Input() mode: any;
   @Input('formValue') formValue: any;
   dropdownList: any = [];
@@ -63,25 +63,25 @@ export class Corporateuserstep1Component implements OnInit {
     } else {
       this.updateForm();
       if (this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view') {
-        this.corporateAdminForm.disable()
+        this.corporateUserForm.disable()
       }
     }
     this.updateParentModel({}, this.checkForm());
   }
 
   get f() {
-    return this.corporateAdminForm.controls;
+    return this.corporateUserForm.controls;
   }
 
   updateForm() {
-    this.corporateAdminForm.patchValue(this.formValue)
+    this.corporateUserForm.patchValue(this.formValue)
     this.dropdownList = this.formValue.roles
     const customerList = this.formValue.customers
     this.f.customerId.setValue(customerList[0].customerId)
   }
 
   initForm() {
-    this.corporateAdminForm = this.fb.group({
+    this.corporateUserForm = this.fb.group({
       userId: [this.defaultValues.userId, [Validators.required]],
       firstName: [this.defaultValues.firstName, [Validators.required]],
       lastName: [this.defaultValues.lastName, [Validators.required]],
@@ -94,7 +94,7 @@ export class Corporateuserstep1Component implements OnInit {
       status:[this.defaultValues.status,[Validators.required]]
     });
 
-    const formChangesSubscr = this.corporateAdminForm.valueChanges.subscribe((val) => {
+    const formChangesSubscr = this.corporateUserForm.valueChanges.subscribe((val) => {
       this.updateParentModel(val, true);
     });
     this.unsubscribe.push(formChangesSubscr);
@@ -105,17 +105,17 @@ export class Corporateuserstep1Component implements OnInit {
   }
 
   isControlValid(controlName: string): boolean {
-    const control = this.corporateAdminForm.controls[controlName];
+    const control = this.corporateUserForm.controls[controlName];
     return control.valid && (control.dirty || control.touched);
   }
 
   isControlInvalid(controlName: string): boolean {
-    const control = this.corporateAdminForm.controls[controlName];
+    const control = this.corporateUserForm.controls[controlName];
     return control.invalid && (control.dirty || control.touched);
   }
 
   controlHasError(validation: string, controlName: string) {
-    const control = this.corporateAdminForm.controls[controlName];
+    const control = this.corporateUserForm.controls[controlName];
     return control.hasError(validation) && (control.dirty || control.touched);
   }
 
@@ -125,11 +125,11 @@ export class Corporateuserstep1Component implements OnInit {
 
   checkForm() {
     return !(
-      this.corporateAdminForm.get('userId')?.hasError('required') ||
-      this.corporateAdminForm.get('firstName')?.hasError('required') ||
-      this.corporateAdminForm.get('lastName')?.hasError('required') ||
-      this.corporateAdminForm.get('emailAddress')?.hasError('required') ||
-      this.corporateAdminForm.get('emailAddress')?.hasError('email')
+      this.corporateUserForm.get('userId')?.hasError('required') ||
+      this.corporateUserForm.get('firstName')?.hasError('required') ||
+      this.corporateUserForm.get('lastName')?.hasError('required') ||
+      this.corporateUserForm.get('emailAddress')?.hasError('required') ||
+      this.corporateUserForm.get('emailAddress')?.hasError('email')
     );
   }
 

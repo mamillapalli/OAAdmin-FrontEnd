@@ -5,7 +5,8 @@ interface BankAdmin {
   effectiveDate: string;
   expiryDate: string;
   emailAddress : string;
-  roles: []
+  roles: [],
+  status : boolean
 }
 
 const inits: BankAdmin = {
@@ -15,7 +16,8 @@ const inits: BankAdmin = {
   effectiveDate: '',
   expiryDate: '',
   emailAddress : '',
-  roles: []
+  roles: [],
+  status : true
 };
 
 export { BankAdmin, inits };

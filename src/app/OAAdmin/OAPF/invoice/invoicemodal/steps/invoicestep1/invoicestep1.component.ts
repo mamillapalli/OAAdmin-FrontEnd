@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Subscription} from "rxjs";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {ReplaySubject, Subscription} from "rxjs";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {MatTableDataSource} from "@angular/material/table";
 import {HttpClient} from "@angular/common/http";
@@ -14,6 +14,28 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {oapfcommonService} from "../../../../../shared/oapfcommon.service";
 import {SbrdatamodalComponent} from "../../../../common/sbrdatamodal/sbrdatamodal.component";
+import {debounceTime, delay, filter, map, takeUntil, tap} from "rxjs/operators";
+
+export interface agreement {
+  contractReferenceNumber: string
+}
+
+export interface counterParty {
+  customerId: string
+}
+
+export interface anchorCustomer {
+  customerId: string
+}
+
+export interface SBRObject {
+  sbrId: string;
+  agreement: agreement;
+  counterParty: counterParty;
+  anchorCustomer: anchorCustomer;
+}
+
+export const SBRS: SBRObject[] = [];
 
 @Component({
   selector: 'app-invoicestep1',
@@ -46,6 +68,12 @@ export class Invoicestep1Component implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
 
+  //mat select
+  public banks: SBRObject[];
+  public searching: boolean = false;
+  public filteredServerSideBanks: ReplaySubject<SBRObject[]> = new ReplaySubject<SBRObject[]>(1);
+  public bankServerSideFilteringCtrl: FormControl = new FormControl();
+
   constructor(private http: HttpClient,
               private fb: FormBuilder,
               public modalService: NgbModal,
@@ -57,9 +85,7 @@ export class Invoicestep1Component implements OnInit {
   ngOnInit() {
     this.initForm();
     if (this.mode === 'new') {
-      this.oapfcommonService.getReferenceNumber('invoices').subscribe((res) => {
-        this.f.invoiceNumber.setValue(res);
-      });
+      this.updateReferenceNumber()
     } else {
       this.updateForm();
       if (this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view') {
@@ -67,6 +93,33 @@ export class Invoicestep1Component implements OnInit {
       }
     }
     this.updateParentModel({}, this.checkForm());
+    this.getSBR();
+    this.bankServerSideFilteringCtrl.valueChanges
+      .pipe(
+        filter(search => !!search),
+        tap(() => this.searching = true),
+        debounceTime(200),
+        map(search => {
+          if (!this.banks) {
+            return [];
+          }
+          this.f.anchorId.setValue(this.banks[0].anchorCustomer.customerId);
+          this.f.counterPartyId.setValue(this.banks[0].counterParty.customerId);
+          this.f.agreementId.setValue(this.banks[0].agreement.contractReferenceNumber);
+          // simulate server fetching and filtering data
+          return this.banks.filter(bank => bank.sbrId.toLowerCase().indexOf(search) > -1);
+        }),
+        delay(500)
+      )
+      .subscribe(filteredBanks => {
+          this.searching = false;
+          this.filteredServerSideBanks.next(filteredBanks);
+        },
+        error => {
+          // no errors in our simulated example
+          this.searching = false;
+          // handle error...
+        });
   }
 
   initForm() {
@@ -89,7 +142,7 @@ export class Invoicestep1Component implements OnInit {
       shipmentCorporation: [this.defaultValues.shipmentCorporation, [Validators.required]],
       realBeneficiary: [this.defaultValues.realBeneficiary, [Validators.required]],
       invoiceServiceChargeCurrency: [this.defaultValues.invoiceServiceChargeCurrency, [Validators.required]],
-      invoiceServiceChargeAmount: [this.defaultValues.invoiceServiceChargeAmount, [Validators.required]],
+      invoiceServiceChargeAmount: [this.defaultValues.invoiceServiceChargeAmount, [Validators.required]]
     });
 
     const formChangesSubscr = this.invoiceForm.valueChanges.subscribe((val) => {
@@ -97,6 +150,12 @@ export class Invoicestep1Component implements OnInit {
       this.updateParentModel(val, this.checkForm());
     });
     this.unsubscribe.push(formChangesSubscr);
+  }
+
+  updateReferenceNumber() {
+    this.oapfcommonService.getReferenceNumber('invoices').subscribe((res) => {
+      this.f.invoiceNumber.setValue(res);
+    });
   }
 
   checkForm() {
@@ -131,7 +190,8 @@ export class Invoicestep1Component implements OnInit {
     console.log(this.dataSource.data)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl';
+    this.modalOption.animation = true
     const modalRef = this.modalService.open(SbrdatamodalComponent, this.modalOption);
     modalRef.result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -195,11 +255,21 @@ export class Invoicestep1Component implements OnInit {
   }
 
   getSBRChange() {
-    const sb = this.oapfcommonService.getMethodByValue('oaadmin/api/v1/sbrs', 'sbrId,', this.invoiceForm.value.sbrReferenceId+',').subscribe((result) => {
-      this.f.sbrReferenceId.setValue(result[0].sbrId);
-      this.f.anchorId.setValue(result[0].anchorCustomer.customerId);
-      this.f.counterPartyId.setValue(result[0].counterParty.customerId);
-      this.f.agreementId.setValue(result[0].agreement.contractReferenceNumber);
-    })
+   // console.log(this.banks)
+
+    // const sb = this.oapfcommonService.getMethodByValue('oaadmin/api/v1/sbrs', 'sbrId,', this.invoiceForm.value.sbrReferenceId + ',').subscribe((result) => {
+    //   this.f.sbrReferenceId.setValue(result[0].sbrId);
+    //   this.f.anchorId.setValue(result[0].anchorCustomer.customerId);
+    //   this.f.counterPartyId.setValue(result[0].counterParty.customerId);
+    //   this.f.agreementId.setValue(result[0].agreement.contractReferenceNumber);
+    // })
+
+  }
+
+  private getSBR() {
+    this.invoiceServices.loadSBR().subscribe((res) => {
+      this.banks = res
+      console.log(this.banks)
+    });
   }
 }

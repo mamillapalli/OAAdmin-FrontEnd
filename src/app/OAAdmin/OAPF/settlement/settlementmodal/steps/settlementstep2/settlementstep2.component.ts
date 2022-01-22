@@ -9,6 +9,7 @@ import {FinancemodalComponent} from "../../../../common/financemodal/financemoda
 import {AccountcommonmodalComponent} from "../../../../common/accountcommonmodal/accountcommonmodal.component";
 import {NotificationService} from "../../../../../shared/notification.service";
 import {paymentService} from "../../../../../shared/OAPF/payment.service";
+import {cPayment} from "../../../../../Model/OAPF/CRequest/cPayment";
 @Component({
   selector: 'app-settlementstep2',
   templateUrl: './settlementstep2.component.html',
@@ -29,7 +30,7 @@ export class Settlementstep2Component implements OnInit {
   modalOption: NgbModalOptions = {};
   @Output() accountParam: any
   @Input('calculatedDetails') calculatedDetails: any
-
+  cPayment: cPayment;
 
   constructor(private fb: FormBuilder,
               public modalService: NgbModal,
@@ -115,11 +116,15 @@ export class Settlementstep2Component implements OnInit {
   openDebitAccount() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(AccountcommonmodalComponent, this.modalOption);
     modalRef.componentInstance.accountParam = 'MASTER';
     modalRef.result.then((result) => {
       console.log('result is ' + result);
+      if(result != null) {
+        this.f.debitAccount.setValue(result.accountId)
+      }
     }, (reason) => {
       console.log('reason is ' + reason);
     });
@@ -128,20 +133,26 @@ export class Settlementstep2Component implements OnInit {
   openCreditAccount() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(AccountcommonmodalComponent, this.modalOption);
     modalRef.componentInstance.accountParam = 'MASTER';
     modalRef.result.then((result) => {
       console.log('result is ' + result);
+      if(result != null) {
+        this.f.creditAccount.setValue(result.accountId)
+      }
     }, (reason) => {
       console.log('reason is ' + reason);
     });
   }
 
-  calculateFinanceDetails() {
+  calculatePaymentDetails() {
     //this.checkBusinessValidation()
     console.log('Calaculate details object is '+ JSON.stringify(this.calculatedDetails))
-    this.paymentService.CalculatePaymentDetails(this.calculatedDetails).subscribe((res: any) => {
+    this.cPayment = new cPayment(this.calculatedDetails);
+    const rmNewRequest = this.cPayment;
+    this.paymentService.CalculatePaymentDetails(rmNewRequest).subscribe((res: any) => {
         console.log('response invoice calculate details is '+res)
         this.calculatedDetails = res
         this.paymentForm.patchValue(res)

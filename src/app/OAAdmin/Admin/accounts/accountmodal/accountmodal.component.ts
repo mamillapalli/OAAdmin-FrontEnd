@@ -55,8 +55,8 @@ export class AccountmodalComponent implements OnInit {
       return;
     }
     if (this.currentStep$.value === this.formsCount - 1) {
-      this.cAccounts = new caccounts();
-      this.cAccounts = this.account$.value
+      this.cAccounts = new caccounts(this.account$.value);
+      //this.cAccounts = this.account$.value
       // this.cAccounts.name = this.account$.value.name
       // this.cAccounts.type = this.account$.value.type
       // this.cAccounts.description = this.account$.value.description
@@ -183,4 +183,7 @@ export class AccountmodalComponent implements OnInit {
     this.activeModal.dismiss();
   }
 
+  copyAs() {
+
+  }
 }

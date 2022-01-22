@@ -1,0 +1,47 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Agreement Information</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+    <div class="modal-body">
+      <div class="table-responsive">
+        <!-- begin::Table -->
+        <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+                   class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-3">
+  
+         <!-- ID Column -->
+         <ng-container matColumnDef="contractReferenceNumber" class="min-w-150px">
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Contract No</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.contractReferenceNumber}} </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="contractDocumentNumber">
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Contract Doc No</mat-header-cell>
+            <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.contractDocumentNumber}} </mat-cell>
+          </ng-container>
+    
+          <!-- Name Column -->
+          <ng-container matColumnDef="validDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Valid Date</mat-header-cell>
+            <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.validDate| date: 'MM/dd/YYY' }}
+            </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="expiryDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Expiry Date</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{ row.expiryDate | date: 'MM/dd/YYY' }} </mat-cell>
+          </ng-container>
+  
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;" (click)="passRow(row)">
+          </mat-row>
+        </mat-table>
+        <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+        </mat-paginator>
+        <!-- end::Table -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>
+      </div>
+    </div>

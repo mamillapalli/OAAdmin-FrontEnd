@@ -1,65 +1,132 @@
-<div class="pb-10 pb-lg-12">
-  <h2 class="fw-bolder text-dark">Accounts Information</h2>
-</div>
-<div [formGroup]="form">
-  <div class="row">
-    <div class="col-xl-6">
-      <div class="form-group">
-        <label class="form-label required">Account Id</label>
-        <input
-          type="text"
-          class="form-control form-control-lg form-control-solid"
-          name="accountId" autocomplete="off"
-          placeholder="accountId" [class.is-invalid]="isControlInvalid('accountId')"
-          [class.is-valid]="isControlValid('accountId')" formControlName="accountId"
-        />
+  <div class="card-body">
+    <div [formGroup]="accountsForm" id="form">
+      <div class="form-group row">
+        <h3 class="fw-bolder text-dark">RM Info</h3>
+      </div>
+      <div class="container mt-5 ">
+        <div class="form-group row">
+          <div class="col">
+            <div class="floating-label_readonly">
+              <input class="floating-input_readonly" type="text" name="accountId" id="accountId"
+                     formControlName="accountId" readonly>
+              <label class="label_OA required">Account Id</label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="floating-label_mandatory">
+              <input type="text" class="floating-input" autocomplete="off"
+                     name="name"
+                     [class.is-invalid]="isControlInvalid('name')"
+                     [class.is-valid]="isControlValid('name')"
+                     formControlName="name"/>
+              <label class="label_OA_mandatory">Name</label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="floating-label_mandatory">
+              <input type="text" class="floating-input_mandatory" autocomplete="off"
+                     name="type"
+                     formControlName="type"
+                     [class.is-invalid]="isControlInvalid('type')"
+                     [class.is-valid]="isControlValid('type')"
+              />
+              <label class="label_OA_mandatory">Account Type</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container mt-5">
+        <div class="form-group row">
+          <div class="col-4">
+            <div class="floating-label">
+              <input type="text" class="floating-input" autocomplete="off"
+                     name="description"
+                     formControlName="description"
+                     [class.is-invalid]="isControlInvalid('description')"
+                     [class.is-valid]="isControlValid('description')"
+              />
+              <label class="label_OA"> Description </label>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="floating-label_mandatory">
+              <select
+                class="floating-select_mandatory"
+                name="currency"
+                formControlName="currency" [class.is-invalid]="isControlInvalid('currency')"
+                [class.is-valid]="isControlValid('currency')">
+                <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+              </select>
+              <label class="label_OA_mandatory"> Currency </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="col-xl-6">
+          <label class="form-label required">Customer Info</label>
+        </div>
+        <div>
+        <span>
+            <button class="btn btn-light-success" (click)="openCustomerDialog()">Add</button>
+        </span>
+          <div class="form-group row" *ngIf="isFinanceFetched">No records found</div>
+          <div class="form-group row" *ngIf="isFinanceFetched">
+            <div>
+              <table mat-table [dataSource]="dataSource" class="" cdkDropList
+                     cdkDropListOrientation="horizontal"
+                     (cdkDropListDropped)="drop($event)"
+                     matSort
+                     style="overflow-x: scroll; overflow-y: scroll"
+              >
+                <ng-container matColumnDef="customerId">
+                  <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> Customer Id</th>
+                  <td mat-cell *matCellDef="let element"> {{element.customerId}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> Name</th>
+                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="emailAddress">
+                  <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> EmailAddress</th>
+                  <td mat-cell *matCellDef="let element"> {{element.emailAddress}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="effectiveDate">
+                  <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> Effective Date</th>
+                  <td mat-cell *matCellDef="let element"> {{element.effectiveDate | date: 'MM/dd/YYY'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="expiryDate">
+                  <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> Expiry Date</th>
+                  <td mat-cell *matCellDef="let element"> {{element.expiryDate | date: 'MM/dd/YYY'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> Actions</th>
+                  <td mat-cell *matCellDef="let element">
+                    <a title="Delete" (click)="openRMDelete(element)"
+                       class="btn btn-light-danger btn-active-color-primary">
+                      <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                            class="svg-icon svg-icon-3"></span>
+                    </a>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                    [ngClass]="{hovered: row.hovered, highlighted: row.highlighted}"
+                    (click)="row.highlighted = !row.highlighted" (mouseover)="row.hovered = true"
+                    (mouseout)="row.hovered = false"></tr>
+              </table>
+
+              <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-xl-6">
-      <label class="form-label required">Name</label
-      ><input
-      type="text"
-      class="form-control form-control-lg form-control-solid"
-      name="name" autocomplete="off"
-      placeholder="Name" [class.is-invalid]="isControlInvalid('name')"
-      [class.is-valid]="isControlValid('name')" formControlName="name"
-    />
-    </div>
   </div>
-  <div class="row">
-    <div class="col-xl-6">
-      <div class="form-group">
-        <label class="form-label required">type</label>
-        <input
-          type="text"
-          class="form-control form-control-lg form-control-solid"
-          name="type" autocomplete="off"
-          placeholder="type" [class.is-invalid]="isControlInvalid('type')"
-          [class.is-valid]="isControlValid('type')" formControlName="type"
-        />
-      </div>
-    </div>
-    <div class="col-xl-6">
-      <label class="form-label">Description</label
-      ><textarea
-      class="form-control form-control-lg form-control-solid"
-      name="description" autocomplete="off"
-      formControlName="description"
-      placeholder="Description"></textarea>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xl-6">
-      <div class="form-group">
-        <label class="form-label required">Currency</label>
-        <select
-          class="form-control form-control-lg form-control-solid"
-          name="currency"
-          formControlName="currency" [class.is-invalid]="isControlInvalid('currency')"
-          [class.is-valid]="isControlValid('currency')">
-          <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
-        </select>
-      </div>
-    </div>
-  </div>
-</div>

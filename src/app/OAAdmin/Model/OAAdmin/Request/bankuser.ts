@@ -19,7 +19,7 @@ const inits: bankuser = {
   lastName: '',
   effectiveDate: '',
   expiryDate: '',
-  status: false,
+  status: true,
   emailAddress : '',
   roles: [],
   customers: {} as [corporates]

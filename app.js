@@ -1,3 +1,4 @@
+import "@fontsource/montserrat";
 app.use((req, res, next) => {
   // Website you wish to allow to connect
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -16,3 +17,6 @@ app.use((req, res, next) => {
   next();
 });
 require('angular-dynamic-number');
+require('typeface-montserrat')
+var objectMapper = require('object-mapper');
+import "reflect-metadata";

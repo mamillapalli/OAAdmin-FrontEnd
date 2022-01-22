@@ -9,6 +9,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {corporates} from "../../../../../Model/OAAdmin/Request/corporates";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-relationshipmanagerstep1',
@@ -26,10 +27,11 @@ export class Relationshipmanagerstep1Component implements OnInit {
   private closeResult: string;
   modalOption: NgbModalOptions = {};
   dataSource: any = new MatTableDataSource<corporates>();
-  displayedColumns: string[] = ['customerId', 'name', 'emailAddress', 'effectiveDate', 'expiryDate', 'status' , 'actions'];
+  displayedColumns: string[] = ['customerId', 'name', 'emailAddress', 'effectiveDate', 'expiryDate', 'status', 'transactionStatus', 'actions'];
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
   customers: FormArray = this.fb.array([]);
+  isFinanceFetched: boolean
 
   constructor(private fb: FormBuilder,
               public oaCommonService: oaCommonService,
@@ -39,7 +41,7 @@ export class Relationshipmanagerstep1Component implements OnInit {
   ngOnInit() {
     this.initForm();
     if (this.mode === 'new') {
-      this.oaCommonService.getReferenceNumber('customeradmins').subscribe((res) => {
+      this.oaCommonService.getReferenceNumber('rms').subscribe((res) => {
         this.f.rmId.setValue(res);
       });
     } else {
@@ -74,12 +76,12 @@ export class Relationshipmanagerstep1Component implements OnInit {
 
   updateForm() {
     this.rmForm.patchValue(this.formValue)
-    console.log('Invoice List '+this.formValue.customers)
-    if(this.formValue.customers.length > 0)
-    {
+    console.log('Invoice List ' + this.formValue.customers)
+    if (this.formValue.customers.length > 0) {
       this.dataSource.data = this.formValue.customers;
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+      this.isFinanceFetched = true
     }
   }
 
@@ -124,8 +126,8 @@ export class Relationshipmanagerstep1Component implements OnInit {
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
       const idx: number = this.dataSource.data.findIndex((obj: { customerId: any; }) => obj.customerId === result.customerId);
-      console.log('idx----------------->'+idx)
-      if(idx === -1) {
+      console.log('idx----------------->' + idx)
+      if (idx === -1) {
         this.dataSource.data.push(result);
         const cust = this.fb.group({
           customerId: [result.customerId, '']
@@ -133,9 +135,11 @@ export class Relationshipmanagerstep1Component implements OnInit {
         this.customers.push(cust)
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+        this.isFinanceFetched = true
       }
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      this.isFinanceFetched = false
     });
   }
 
@@ -165,11 +169,12 @@ export class Relationshipmanagerstep1Component implements OnInit {
     }
   }
 
-  openRMDialog(element:any, edit: any) {
-
-  }
 
   get array(): FormArray {
     return this.rmForm.get('customers') as FormArray;
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
 }

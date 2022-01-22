@@ -13,6 +13,7 @@ import {invoiceService} from "../../../../../shared/OAPF/invoice.service";
 import {SelectionModel} from "@angular/cdk/collections";
 import {oapfcommonService} from "../../../../../shared/oapfcommon.service";
 import {NgxSpinnerService} from "ngx-spinner";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-financingstep1',
@@ -32,7 +33,7 @@ export class Financingstep1Component implements OnInit {
   //Invoices
   dataSource: any = new MatTableDataSource<corporateUser>();
   private subscriptions: Subscription[] = [];
-  displayedColumns: string[] = ['checked','invoiceNumber', 'currency', 'amount', 'dueDate', 'status' ,'actions'];
+  displayedColumns: string[] = ['invoiceNumber', 'currency', 'amount', 'dueDate', 'status' , 'transactionStatus' ,'actions'];
   invoiceList: FormArray = this.fb.array([]);
   //checkbox
   selection = new SelectionModel<Element>(true, []);
@@ -141,7 +142,8 @@ export class Financingstep1Component implements OnInit {
   openSBRDialog() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(SbrdatamodalComponent, this.modalOption);
     modalRef.result.then((result) => {
       this.financingForm.patchValue(result)
@@ -177,7 +179,7 @@ export class Financingstep1Component implements OnInit {
     this.spinner.show();
     //const sb = this.invoiceServices.getInvoice(this.financingForm.value.financeDueDate, '', 'loanDueDate').subscribe((res) => {
     const sb = this.oapfcommonService.getDataWithPaginationLoan('/oapf/api/v1/invoices/',this.currentPage,this.pageSize,this.sortData,this.financingForm.value.financeDueDate).subscribe((res) => {
-      console.log(res)
+      console.log(res.content)
       if(res.content.length > 0) {
         for (let i = 0; i < res.content.length; i++) {
           console.log(res.content[i].invoiceNumber)
@@ -188,9 +190,11 @@ export class Financingstep1Component implements OnInit {
         }
         this.dataSource.data = res.content;
         this.totalRows = res.totalElements;
-        this.spinner.hide();
+        this.invoiceSelected = true
+        this.isDataSource = false
       } else {
         this.isDataSource = true
+        this.invoiceSelected = false
       }
     });
     console.log("Form is "+this.financingForm)
@@ -246,6 +250,10 @@ export class Financingstep1Component implements OnInit {
   sortChanges(event: Sort) {
     this.sortData = event.active
     this.getInvoicesDate();
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
 
 }

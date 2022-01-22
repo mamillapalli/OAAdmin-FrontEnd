@@ -22,7 +22,7 @@ export class GroupingState implements IGroupingState {
     return this.selectedRowIds.size === this.itemIds.length;
   }
 
-  selectRow(id: number): GroupingState {
+  selectRow(id: any): GroupingState {
     if (this.selectedRowIds.has(id)) {
       this.selectedRowIds.delete(id);
     } else {
@@ -38,7 +38,7 @@ export class GroupingState implements IGroupingState {
     return this;
   }
 
-  isRowSelected(id: number | string): boolean {
+  isRowSelected(id:any): boolean {
     return this.selectedRowIds.has(id);
   }
 

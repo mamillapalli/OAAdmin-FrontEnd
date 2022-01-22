@@ -51,7 +51,8 @@ export class invoiceService {
         }),
         finalize(() => this._isLoading$.next(false))
       );
-    } else if(methodType === 'loanDueDate') {
+    }
+    else if(methodType === 'loanDueDate') {
       let httpParams = new HttpParams();
       httpParams = httpParams.append('page', currentPage);
       httpParams = httpParams.append('size', pageSize);
@@ -67,14 +68,32 @@ export class invoiceService {
         }),
         finalize(() => this._isLoading$.next(false))
       );
-    } else {
+    }
+    else if(methodType === 'copy') {
       let httpParams = new HttpParams();
       httpParams = httpParams.append('page', currentPage);
       httpParams = httpParams.append('size', pageSize);
       console.log(sortData)
       if (sortData !== null && sortData !== undefined)
         httpParams = httpParams.append('sort', sortData);
-      //httpParams = httpParams.append('direction', sortData);
+      httpParams = httpParams.append('transactionStatus', 'MASTER');
+      return this.http.get<any>(url, {headers: httpHeaders, params: httpParams}).pipe(
+        catchError(err => {
+          this._errorMessage.next(err);
+          console.error(err);
+          return of({id: undefined});
+        }),
+        finalize(() => this._isLoading$.next(false))
+      );
+    }
+    else {
+      let httpParams = new HttpParams();
+      httpParams = httpParams.append('page', currentPage);
+      httpParams = httpParams.append('size', pageSize);
+      console.log(sortData)
+      if (sortData !== null && sortData !== undefined)
+        httpParams = httpParams.append('sort', sortData);
+      httpParams = httpParams.append('transactionStatus', 'MASTER');
       return this.http.get<any>(url, {headers: httpHeaders, params: httpParams}).pipe(
         catchError(err => {
           this._errorMessage.next(err);
@@ -104,7 +123,8 @@ export class invoiceService {
         }),
         finalize(() => this.spinner.hide())
       );
-    } else if (methodType === 'filter') {
+    }
+    else if (methodType === 'filter') {
       let httpParams = new HttpParams();
       return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
         delay(100),
@@ -115,7 +135,8 @@ export class invoiceService {
         }),
         finalize(() => this.spinner.hide())
       );
-    } else if (methodType === 'loanDueDate') {
+    }
+    else if (methodType === 'loanDueDate') {
       let httpParams = new HttpParams();
       httpParams = httpParams.append('dueDate', data);
       httpParams = httpParams.append('transactionStatus', 'MASTER');
@@ -156,7 +177,8 @@ export class invoiceService {
         }),
         finalize(() => this.spinner.hide())
       );
-    } else {
+    }
+    else {
       return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {

@@ -1,0 +1,161 @@
+<div class="card-body">
+  <div [formGroup]="form" id="form">
+    <div class="form-group row">
+      <h3 class="fw-bolder text-dark">Agreement Info</h3>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label_readonly">
+            <input class="floating-input_readonly" type="text" name="contractReferenceNumber" id="contractReferenceNumber"
+                   formControlName="contractReferenceNumber" placeholder=" " readonly>
+            <label class="label_OA required">Contract Reference No</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_readonly">
+            <input class="floating-input_readonly" type="text" name="contractDocumentNumber" id="contractDocumentNumber"
+                   formControlName="contractDocumentNumber"
+                   placeholder=" ">
+            <label class="label_OA">Contract Document Number</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <div class="input-group mb-3">
+              <input class="floating-input_mandatory input-group mb-3" type="text" name="anchorCustomerId"
+                     id="anchorCustomerId"
+                     formControlName="anchorCustomerId" placeholder=""
+                     [class.is-invalid]="isControlInvalid('anchorCustomerId')"
+                     [class.is-valid]="isControlValid('anchorCustomerId')">
+              <label class="label_OA_mandatory">Anchor Customer Id</label>
+              <span class="input-group-text_OA" (click)="openCustomerDialog()"><i class="fa fa-search fa-fw"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <div class="input-group mb-3">
+              <input class="floating-input_mandatory input-group mb-3" type="text" name="rmId"
+                     id="rmId"
+                     formControlName="rmId" placeholder=""
+                     [class.is-invalid]="isControlInvalid('rmId')"
+                     [class.is-valid]="isControlValid('rmId')">
+              <label class="label_OA_mandatory">RM Id</label>
+              <span class="input-group-text_OA" (click)="openRMDialog()"><i class="fa fa-search fa-fw"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label_readonly">
+          <select class="floating-select" name="businessTypeId" formControlName="businessTypeId"
+            (change)="onBusinessTypeChange($event)">
+            <option value="Receivable Finance">Receivable Finance</option>
+            <option value="Payable Finance">Payable Finance</option>
+          </select>
+            <label class="label_OA required">Product Type</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" id="remarks" name="remarks"
+                   [class.is-invalid]="isControlInvalid('remarks')"
+                   [class.is-valid]="isControlValid('remarks')" formControlName="remarks" placeholder=" ">
+            <label class="label_OA">Remarks</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" type="date" autocomplete="off"
+                   name="validDate" [class.is-invalid]="isControlInvalid('validDate')"
+                   [class.is-valid]="isControlValid('validDate')" formControlName="validDate" placeholder=" ">
+            <label class="label_OA">Valid Date</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" type="date" autocomplete="off"
+                   name="transactionDate" [class.is-invalid]="isControlInvalid('transactionDate')"
+                   [class.is-valid]="isControlValid('transactionDate')" formControlName="transactionDate" placeholder=" ">
+            <label class="label_OA">Transaction Date</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-5">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" type="date" autocomplete="off"
+                   name="expiryDate" [class.is-invalid]="isControlInvalid('expiryDate')"
+                   [class.is-valid]="isControlValid('expiryDate')" formControlName="date" placeholder=" ">
+            <label class="label_OA">Expiry Date</label>
+          </div>
+        </div>
+        <div class="col-3">
+         <label class="label_OA required"></label>
+          <div>
+            <a class="btn btn-sm btn-primary fw-bolder" (click)="openCounterPrtyDialog()">Add Counter Party</a>
+          </div>
+        </div>
+
+        <div class="col-3">
+         <label class="label_OA required"></label>
+          <div>
+            <a class="btn btn-sm btn-primary fw-bolder" (click)="openAdvicePdf('open')">Advice pdf</a>
+          </div>
+        </div>
+      </div>
+    </div>
+        <div class="container mt-5">
+          <div class="form-group row">
+        <ng-container>
+          <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+            class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+            <ng-container matColumnDef="customerId" class="min-w-150px">
+              <mat-header-cell *matHeaderCellDef mat-sort-header class="min-w-150px">Customer Id</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.customerId}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Customer Name</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="emailAddress">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Email Address</mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.emailAddress}}
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="expiryDate">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Expiry Date</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.expiryDate | date: 'MM/dd/yyyy'}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Status</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{ row.status }} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="actions" class="d-flex justify-content-end flex-shrink-0">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Actions</mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <a title="Delete" (click)="openCounterPrtyDelete(element)"
+                  class="btn btn-light-danger btn-sm btn-active-color-primary">
+                  <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+                    class="svg-icon svg-icon-3"></span>
+                </a>
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;"
+              [style.background-color]="row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'">
+            </mat-row>
+          </mat-table>
+          <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+          </mat-paginator>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

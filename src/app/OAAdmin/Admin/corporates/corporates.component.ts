@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {AuthService} from "../../../modules/auth";
 import {MatPaginator} from "@angular/material/paginator";
@@ -12,6 +12,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {FilterComponent} from "../../OAPF/common/filter/filter.component";
 import {oaCommonService} from "../../shared/oacommon.service";
 import {corporates} from "../../Model/OAAdmin/Request/corporates";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-corporates',
@@ -20,8 +21,8 @@ import {corporates} from "../../Model/OAAdmin/Request/corporates";
 })
 export class CorporatesComponent implements OnInit {
   dataSource: any = new MatTableDataSource<corporates>();
-  displayedColumns:  string[] = ['customerId', 'name', 'emailAddress', 'transactionStatus', 'status', 'actions'];
-  fDisplayedColumns: string[] = ['customerId', 'name', 'emailAddress', 'transactionStatus', 'status'];
+  @Output() displayedColumns:  string[] = ['customerId', 'name', 'emailAddress', 'transactionStatus', 'status', 'actions'];
+  @Output() fDisplayedColumns: string[] = ['customerId', 'name', 'emailAddress', 'transactionStatus', 'status'];
   authToken: any;
   modalOption: NgbModalOptions = {};
   closeResult: string;
@@ -69,9 +70,11 @@ export class CorporatesComponent implements OnInit {
   newCorporates() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(CorporatesmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
+    modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
     modalRef.result.then((result) => {
       console.log('newbankadmins is ' + result);
     }, (reason) => {
@@ -80,14 +83,16 @@ export class CorporatesComponent implements OnInit {
     });
   }
 
-  openBankUserDialog(element: any, mode: any) {
+  openCorporatesDialog(element: any, mode: any) {
     console.log(element)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(CorporatesmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
+    modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {
@@ -185,4 +190,7 @@ export class CorporatesComponent implements OnInit {
   }
 
 
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
+  }
 }

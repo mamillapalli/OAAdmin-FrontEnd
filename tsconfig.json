@@ -28,5 +28,10 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
     "enableIvy": true
+  },
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   }
+
 }

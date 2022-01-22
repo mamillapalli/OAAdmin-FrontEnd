@@ -19,18 +19,22 @@ import {FilterComponent} from "../common/filter/filter.component";
 import {oapfcommonService} from "../../shared/oapfcommon.service";
 import {InvoicehistroyComponent} from "../common/invoicehistroy/invoicehistroy.component";
 import {Invoice} from "../../Model/OAPF/Request/invoice";
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { rowsAnimation } from './template.animations';
+import {SelectionModel} from "@angular/cdk/collections";
 
 const API_USERS_URL = `${environment.apiUrl}`;
 
 @Component({
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
-  styleUrls: ['./invoice.component.scss']
+  styleUrls: ['./invoice.component.scss'],
+  animations: [rowsAnimation],
 })
 export class InvoiceComponent implements OnInit, OnDestroy {
 
   dataSource: any = new MatTableDataSource<Invoice>();
-  displayedColumns: string[] = ['invoiceNumber', 'sbrReferenceId', 'agreementId', 'currency', 'amount', 'dueDate', 'status',
+  displayedColumns: string[] = [ 'invoiceNumber', 'sbrReferenceId', 'agreementId', 'currency', 'amount', 'dueDate', 'status',
     'actions'];
   fDisplayedColumns: string[] = ['invoiceNumber', 'sbrReferenceId', 'agreementId', 'currency', 'amount', 'dueDate', 'status']
     authToken: any;
@@ -69,6 +73,8 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort | any;
   sortData : any
 
+  selection = new SelectionModel<Invoice>(true, []);
+
   constructor(public http: HttpClient,
               public authService: AuthService,
               public modalService: NgbModal,
@@ -79,6 +85,34 @@ export class InvoiceComponent implements OnInit, OnDestroy {
               public oapfcommonService: oapfcommonService) {
     const auth = this.authService.getAuthFromLocalStorage();
     this.authRoles = auth?.aRoles
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+
+    this.selection.select(...this.dataSource.data);
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: Invoice): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.invoiceNumber + 1}`;
   }
 
   ngOnInit(): void {
@@ -331,17 +365,15 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     modalRef.componentInstance.fDisplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       if (result.valid && result.value.filterOption.length > 0) {
-        const sb = this.oapfcommonService.getFilter(result, 'filter', 'oapf/api/v1/invoices').subscribe((res: any) => {
-          this.dataSource.data = res;
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+        const sb = this.oapfcommonService.getFilterWithPagination(result, 'filter', 'oapf/api/v1/invoices',this.currentPage,this.pageSize,this.sortData).subscribe((res: any) => {
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
         });
         this.subscriptions.push(sb);
       } else {
-        const sb = this.oapfcommonService.getFilter(result, 'all', 'oapf/api/v1/invoices').subscribe((res: any) => {
-          this.dataSource.data = res;
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+        const sb = this.oapfcommonService.getFilterWithPagination(result, 'all', 'oapf/api/v1/invoices',this.currentPage,this.pageSize,this.sortData).subscribe((res: any) => {
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
         });
         this.subscriptions.push(sb);
       }
@@ -363,5 +395,4 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     this.sortData = event.active+','+event.direction
     this.getInvoices(this.currentPage,this.pageSize,event.active);
   }
-
 }

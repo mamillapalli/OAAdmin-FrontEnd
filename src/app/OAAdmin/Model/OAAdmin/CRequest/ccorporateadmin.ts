@@ -6,7 +6,7 @@ export class ccorporateadmin {
   lastName: string;
   effectiveDate: string;
   expiryDate: string;
-  status: string;
+  status: boolean;
   emailAddress : string;
   roles: [];
   customers: [corporates];

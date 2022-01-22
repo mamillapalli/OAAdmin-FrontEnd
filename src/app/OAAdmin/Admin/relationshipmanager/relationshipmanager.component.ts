@@ -1,6 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, Output, ViewChild} from '@angular/core';
 import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
+import {MatSort, Sort} from "@angular/material/sort";
 import {ModalDismissReasons, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../modules/auth";
 import {MatTableDataSource} from "@angular/material/table";
@@ -12,6 +12,7 @@ import {FilterComponent} from "../../OAPF/common/filter/filter.component";
 import {oaCommonService} from "../../shared/oacommon.service";
 import {rm} from "../../Model/OAAdmin/Request/rm"
 import {RelationshipmanagermodalComponent} from "./relationshipmanagermodal/relationshipmanagermodal.component";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-relationshipmanager',
@@ -20,11 +21,9 @@ import {RelationshipmanagermodalComponent} from "./relationshipmanagermodal/rela
 })
 export class RelationshipmanagerComponent implements OnInit {
   dataSource: any = new MatTableDataSource<rm>();
-  displayedColumns:  string[] = ['rmId', 'firstName', 'lastName','expiryDate', 'transactionStatus', 'status', 'actions'];
-  fDisplayedColumns: string[] = ['rmId', 'firstName', 'lastName','expiryDate', 'transactionStatus', 'status'];
+  @Output()  displayedColumns:  string[] = ['rmId', 'firstName', 'lastName' , 'emailAddress', 'expiryDate', 'transactionStatus','actions'];
+  @Output()  fDisplayedColumns: string[] = ['rmId', 'firstName', 'lastName' , 'emailAddress', 'lastName','expiryDate', 'transactionStatus'];
   authToken: any;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
-  @ViewChild(MatSort) sort: MatSort | any;
   modalOption: NgbModalOptions = {};
   closeResult: string;
   isLoading: any;
@@ -32,6 +31,15 @@ export class RelationshipmanagerComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   isLoading$: any;
   authRoles : any
+
+  //sort
+  totalRows = 0;
+  pageSize = 5;
+  currentPage = 0;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
+  @ViewChild(MatSort) sort: MatSort | any;
+  sortData : any
 
   constructor(
     public authService: AuthService,
@@ -51,13 +59,9 @@ export class RelationshipmanagerComponent implements OnInit {
   }
 
   public getRM() {
-    this.spinner.show();
-    const sb = this.oaCommonService.getMethod('/oaadmin/api/v1/rms', '', ).subscribe((res) => {
-      this.dataSource.data = res;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.isLoading$ =false;
-      this.spinner.hide();
+    const sb = this.oaCommonService.getMethodWithPagination('/oaadmin/api/v1/rms', '', this.currentPage, this.pageSize, this.sortData ).subscribe((res) => {
+      this.dataSource.data = res.content;
+      this.totalRows = res.totalElements
     });
     this.subscriptions.push(sb);
   }
@@ -66,7 +70,7 @@ export class RelationshipmanagerComponent implements OnInit {
   rm() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(RelationshipmanagermodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
@@ -81,7 +85,7 @@ export class RelationshipmanagerComponent implements OnInit {
     console.log(element)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(RelationshipmanagermodalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
@@ -151,16 +155,14 @@ export class RelationshipmanagerComponent implements OnInit {
     modalRef.result.then((result) => {
       if (result.valid && result.value.filterOption.length > 0) {
         const sb = this.oaCommonService.getFilter(result, 'filter', '/oaadmin/api/v1/rms').subscribe((res: any) => {
-          this.dataSource.data = res;
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
         });
         this.subscriptions.push(sb);
       } else {
         const sb = this.oaCommonService.getFilter(result, 'all', '/oaadmin/api/v1/rms').subscribe((res: any) => {
-          this.dataSource.data = res;
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
         });
         this.subscriptions.push(sb);
       }
@@ -168,4 +170,23 @@ export class RelationshipmanagerComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
+  }
+
+  pageChanged(event: any) {
+    console.log(this.sort)
+    console.log({ event });
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.getRM();
+  }
+
+  sortChanges(event: Sort) {
+    console.log(event.direction)
+    this.sortData = event.active+','+event.direction
+    this.getRM();
+  }
+
 }

@@ -146,7 +146,7 @@ export class financingService {
     }
   }
 
-  getVoucherEntries(data: any): Observable<any> {
+  getVoucherEntries(url:any,data: any): Observable<any> {
     this._isLoading$.next(true);
     this._errorMessage.next('');
     this.authToken = this.authService.getAuthFromLocalStorage();
@@ -164,7 +164,7 @@ export class financingService {
     };
     const myObj2 = removeEmptyOrNull(data);
     const dataConvertPost = JSON.stringify(myObj2)
-    return this.http.post<any>('/oapf/api/v1/finances/voucher', dataConvertPost, {
+    return this.http.post<any>(url, dataConvertPost, {
       headers: httpHeaders
     }).pipe(
       catchError(this.handleError),

@@ -1,6 +1,6 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {BehaviorSubject, Subscription} from "rxjs";
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {ModalDismissReasons, NgbActiveModal, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../modules/auth";
 import {cbankadmin} from "../../../Model/OAAdmin/CRequest/cbankadmin";
 import {NotificationService} from "../../../shared/notification.service";
@@ -8,6 +8,8 @@ import {DatePipe} from "@angular/common";
 import Swal from "sweetalert2";
 import {oaCommonService} from "../../../shared/oacommon.service";
 import {BankAdmin,inits} from "../../../Model/OAAdmin/Request/bankadmin";
+import {CopyAsModalComponent} from "../../../OAPF/common/copy-as-modal/copy-as-modal.component";
+import {Bankadminstep1Component} from "./bankadminstep/bankadminstep1/bankadminstep1.component";
 
 @Component({
   selector: 'app-bankadminmodal',
@@ -27,11 +29,19 @@ export class BankadminmodalComponent implements OnInit {
   cbankadmin: cbankadmin
   checkNextStage: boolean;
 
+  closeResult: string;
+
+  modalOption: NgbModalOptions = {};
+
+  @ViewChild(Bankadminstep1Component) Bankuserstep1Component: Bankadminstep1Component;
+  @Output('displayedColumns') displayedColumns: any
+  @Output('fDisplayedColumns') fDisplayedColumns: any
+
   constructor(public activeModal: NgbActiveModal,
               private authService: AuthService,
               public notifyService: NotificationService,
               public oaCommonService: oaCommonService,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,public modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -59,8 +69,8 @@ export class BankadminmodalComponent implements OnInit {
       if( this.checkBusinessValidation()){
         return;
       }
-      this.cbankadmin = new cbankadmin();
-      this.cbankadmin = this.account$.value;
+      this.cbankadmin = new cbankadmin(this.account$.value);
+      //this.cbankadmin = this.account$.value;
       const rmNewRequest = this.cbankadmin;
       if (this.mode === 'new') {
         this.checkNextStage = false;
@@ -181,4 +191,42 @@ export class BankadminmodalComponent implements OnInit {
     return false
   }
 
+  copyAs() {
+    console.log(this.displayedColumns)
+    console.log(this.fDisplayedColumns)
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
+    const modalRef = this.modalService.open(CopyAsModalComponent, this.modalOption);
+    modalRef.componentInstance.mode = 'copy';
+    modalRef.componentInstance.functionType = 'admin';
+    modalRef.componentInstance.url = '/oaadmin/api/v1/bankadmins';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      const refNo = this.Bankuserstep1Component.bankAdminForm.value.userId;
+      console.log('Result is ' + result);
+      //this.updateAccount(result, true)
+      this.formValue = result
+      console.log(this.formValue)
+      //this.Invoicestep1Component.updateForm()
+      this.formValue.userId = refNo
+      this.Bankuserstep1Component.bankAdminForm.patchValue(this.formValue)
+      this.Bankuserstep1Component.bankAdminForm.value.userId = refNo;
+      //this.Invoicestep1Component.updateReferenceNumber();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 }

@@ -1,0 +1,211 @@
+<div class="pb-15 pb-lg-8">
+  <h3 class="fw-bolder text-dark">SBR Info</h3>
+</div>
+<div [formGroup]="form">
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Sbr Reference Number</label>
+      <input type="text" class="input_QA form-control" placeholder="Sbr Reference Number" name="sbrId"
+        [class.is-invalid]="isControlInvalid('sbrId')" [class.is-valid]="isControlValid('sbrId')"
+        formControlName="sbrId" readonly />
+    </div>
+    <div class="col-lg-3">
+      <label>Anchor Customer Id</label>
+
+      <div class="input-group mb-3">
+        <!-- <div class="input-group-prepend">
+          <button
+            class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5 btn rounded-pill border-0 ml-n5"
+            type="button" (click)="openCustomerDialog()">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>-->
+        <input type="text" class="input_QA form-control" id="anchorCustomerId" name="anchorCustomerId"
+          placeholder="Anchor Customer" formControlName="anchorCustomerId"
+          [class.is-invalid]="isControlInvalid('anchorCustomerId')"
+          [class.is-valid]="isControlValid('anchorCustomerId')">
+      </div>
+    </div>
+    <!--<div class="col-lg-3">
+      <label>Direct Contact Flag</label>
+      <input type="text" class="input_QA form-control " autocomplete="off"
+        placeholder="Direct Contact Flag" name="directContactFlag"
+        [class.is-invalid]="isControlInvalid('directContactFlag')"
+        [class.is-valid]="isControlValid('directContactFlag')" formControlName="directContactFlag" />
+    </div>-->
+    <div class="col-lg-3">
+      <label>Agreement No</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <button
+            class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5 btn rounded-pill border-0 ml-n5"
+            type="button" (click)="  openAgreementModal()">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+        <input type="text" class="input_QA form-control " autocomplete="off" placeholder="Agreeement" name="agreementId"
+          [class.is-invalid]="isControlInvalid('agreementId')" [class.is-valid]="isControlValid('agreementId')"
+          formControlName="agreementId" />
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <label>RM ID</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="RM ID" name="rmId"
+        [class.is-invalid]="isControlInvalid('rmId')" [class.is-valid]="isControlValid('rmId')"
+        formControlName="rmId" />
+    </div>
+
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Counter Party ID</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="Counter Party ID"
+        name="counterPartyId" [class.is-invalid]="isControlInvalid('counterPartyId')"
+        [class.is-valid]="isControlValid('counterPartyId')" formControlName="counterPartyId" />
+    </div>
+    <div class="col-lg-3">
+      <label>Limit Type Flag</label>
+      <select class="input_QA form-control " name="limitTypeFlag" formControlName="limitTypeFlag"
+        [class.is-invalid]="isControlInvalid('limitTypeFlag')" [class.is-valid]="isControlValid('limitTypeFlag')">
+        <option value="REVOLVING">REVOLVING</option>
+        <option value="NONREVOLVING">NONREVOLVING</option>
+      </select>
+    </div>
+    <div class="col-lg-3">
+      <label>Goods Description</label>
+      <input type="goodsDescription" class="input_QA form-control " autocomplete="off" placeholder="goodsDescription"
+        name="goodsDescription" [class.is-invalid]="isControlInvalid('goodsDescription')"
+        [class.is-valid]="isControlValid('goodsDescription')" formControlName="goodsDescription" />
+    </div>
+    <div class="col-lg-3">
+      <label>Applied Limit Currency & Amount</label>
+      <div class="row fv-row">
+        <div class="col-4">
+          <select class="input_QA form-control " name="limitCurrency" formControlName="limitCurrency"
+            [class.is-invalid]="isControlInvalid('limitCurrency')"
+            [class.is-valid]="isControlValid('limitCurrency')">
+            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+          </select>
+        </div>
+        <div class="col-8">
+          <input type="number" class="input_QA form-control " autocomplete="off" placeholder="limitAmount"
+            name="limitAmount" [class.is-invalid]="isControlInvalid('limitAmount')"
+            [class.is-valid]="isControlValid('limitAmount')" formControlName="limitAmount" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Transaction Date</label>
+      <input type="date" class="input_QA form-control " autocomplete="off" placeholder="Transaction Date"
+        name="transactionDate" [class.is-invalid]="isControlInvalid('transactionDate')"
+        [class.is-valid]="isControlValid('transactionDate')" formControlName="transactionDate" />
+    </div>
+    <div class="col-lg-3">
+      <label>Payment Term Condition </label>
+      <select class="input_QA form-control " name="paymentTermsCondition" formControlName="paymentTermsCondition"
+        [class.is-invalid]="isControlInvalid('paymentTermsCondition')" [class.is-valid]="isControlValid('paymentTermsCondition')">
+        <option value="FROMINVOICEISSUEDATE">FROMINVOICEISSUEDATE</option>
+      </select>
+    </div>
+    <div class="col-lg-3">
+      <label>Auto Financing Availability</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="autoFinanceAvailability"
+        name="autoFinanceAvailability" [class.is-invalid]="isControlInvalid('autoFinanceAvailability')"
+        [class.is-valid]="isControlValid('autoFinanceAvailability')" formControlName="autoFinanceAvailability" />
+    </div>
+    <div class="col-lg-3">
+      <label>Auto Financing</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="autoFinancing"
+        name="autoFinancing" [class.is-invalid]="isControlInvalid('autoFinancing')"
+        [class.is-valid]="isControlValid('autoFinancing')" formControlName="autoFinancing" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Anchor Party Account Id</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="anchorPartyAccountId"
+        name="anchorPartyAccountId" [class.is-invalid]="isControlInvalid('anchorPartyAccountId')"
+        [class.is-valid]="isControlValid('anchorPartyAccountId')" formControlName="anchorPartyAccountId" />
+    </div>
+    <div class="col-lg-3">
+      <label>Counter Party Account Id</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="counterPartyAccountId"
+        name="counterPartyAccountId" [class.is-invalid]="isControlInvalid('counterPartyAccountId')"
+        [class.is-valid]="isControlValid('counterPartyAccountId')" formControlName="counterPartyAccountId" />
+    </div>
+    <div class="col-lg-3">
+      <label>Payment Terms Days</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="paymentTermsDays"
+        name="paymentTermsDays" [class.is-invalid]="isControlInvalid('paymentTermsDays')"
+        [class.is-valid]="isControlValid('paymentTermsDays')" formControlName="paymentTermsDays" />
+    </div>
+    <div class="col-lg-3">
+      <label>Commercial Contract Details</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="commercialContractDetails"
+        name="commercialContractDetails" [class.is-invalid]="isControlInvalid('commercialContractDetails')"
+        [class.is-valid]="isControlValid('commercialContractDetails')" formControlName="commercialContractDetails" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Interest Rate Type</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="interestRateType"
+        name="interestRateType" [class.is-invalid]="isControlInvalid('interestChargeType')"
+        [class.is-valid]="isControlValid('interestRateType')" formControlName="interestRateType" />
+    </div>
+    <div class="col-lg-3">
+      <label>Interest Charge Type</label>
+      <select class="input_QA form-control " name="interestChargeType" formControlName="interestChargeType"
+        [class.is-invalid]="isControlInvalid('interestChargeType')" [class.is-valid]="isControlValid('interestChargeType')">
+        <option value="UPFRONT">UPFRONT</option>
+        <option value="SETTLEMENT">SETTLEMENT</option>
+      </select>
+    </div>
+    <div class="col-lg-3">
+      <label>Interest Rate</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="interestRate"
+        name="interestRate" [class.is-invalid]="isControlInvalid('interestRate')"
+        [class.is-valid]="isControlValid('interestRate')" formControlName="interestRate" />
+    </div>
+    <div class="col-lg-3">
+      <label>Interest Margin</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="interestMargin"
+        name="interestMargin" [class.is-invalid]="isControlInvalid('interestMargin')"
+        [class.is-valid]="isControlValid('interestMargin')" formControlName="interestMargin" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-3">
+      <label>Recourse Flag</label>
+      <select class="input_QA form-control " name="recourseFlag" formControlName="recourseFlag"
+        [class.is-invalid]="isControlInvalid('recourseFlag')" [class.is-valid]="isControlValid('recourseFlag')">
+        <option value="RECOURSE">RECOURSE</option>
+        <option value="NONRECOURSE">NONRECOURSE</option>
+        <option value="COLLECTIONONLY">COLLECTIONONLY</option>
+      </select>
+    </div>
+    <div class="col-lg-3">
+      <label>Nature of Business</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="natureOfBusiness"
+        name="natureOfBusiness" [class.is-invalid]="isControlInvalid('natureOfBusiness')"
+        [class.is-valid]="isControlValid('natureOfBusiness')" formControlName="natureOfBusiness" />
+    </div>
+    <div class="col-lg-3">
+      <label>Direct Contact Flag</label>
+      <select class="input_QA form-control " name="directContactFlag" formControlName="directContactFlag"
+        [class.is-invalid]="isControlInvalid('directContactFlag')"
+        [class.is-valid]="isControlValid('directContactFlag')">
+        <option value="ALLOWED">ALLOWED</option>
+        <option value="NOTALLOWED">NOTALLOWED</option>
+      </select>
+    </div>
+    <div class="col-lg-3">
+      <label>Expiry Date</label>
+      <input type="text" class="input_QA form-control " autocomplete="off" placeholder="expiryDate" name="expiryDate"
+        [class.is-invalid]="isControlInvalid('expiryDate')" [class.is-valid]="isControlValid('expiryDate')"
+        formControlName="expiryDate" />
+    </div>
+  </div>
+</div>

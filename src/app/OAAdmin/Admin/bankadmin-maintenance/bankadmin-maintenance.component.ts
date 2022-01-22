@@ -13,6 +13,7 @@ import {DatePipe} from "@angular/common";
 import {NgxSpinnerService} from "ngx-spinner";
 import {FilterComponent} from "../../OAPF/common/filter/filter.component";
 import {oaCommonService} from "../../shared/oacommon.service";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 @Component({
   selector: 'app-bankadmin-maintenance',
   templateUrl: './bankadmin-maintenance.component.html',
@@ -73,9 +74,11 @@ export class BankadminMaintenanceComponent implements OnInit {
   newBankAdmin() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(BankadminmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log('newbankadmins is ' + result);
     }, (reason) => {
@@ -88,10 +91,12 @@ export class BankadminMaintenanceComponent implements OnInit {
     console.log(element)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(BankadminmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {
@@ -187,4 +192,9 @@ export class BankadminMaintenanceComponent implements OnInit {
     this.sortData = event.active + ',' + event.direction
     this.getBankAdmin();
   }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
+  }
+
 }

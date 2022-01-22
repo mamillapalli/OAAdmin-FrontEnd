@@ -1,164 +1,154 @@
-<div class="pb-15 pb-lg-8">
-  <h3 class="fw-bolder text-dark">Finance Info</h3>
-</div>
-<div [formGroup]="paymentForm">
-  <div class="form-group row">
-    <div class="col-lg-3">
-      <div class="row fv-row">
-        <div class="col-4">
-          <label>Payment Currency</label>
-          <select
-            class="form-control form-control-lg form-control-solid"
-            name="paymentCurrency"
-            formControlName="paymentCurrency" [class.is-invalid]="isControlInvalid('paymentCurrency')"
-            [class.is-valid]="isControlValid('paymentCurrency')">
-            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
-          </select>
+<div class="card-body">
+  <div [formGroup]="paymentForm" id="form">
+    <div class="form-group row">
+      <h3 class="fw-bolder text-dark">Business Info</h3>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-1 ">
+          <div class="floating-label">
+            <select class="floating-select_mandatory" name="paymentCurrency" id="paymentCurrency"
+                    formControlName="paymentCurrency">
+              <option value="{{paymentCurrency.code}}"
+                      *ngFor="let paymentCurrency of currencyList">{{paymentCurrency.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
         </div>
-        <div class="col-8">
-          <label>Payment Amount</label>
-          <input class="form-control form-control-lg form-control-solid" autocomplete="off"
-                 placeholder="Payment Amount" name="paymentAmount"
-                 [class.is-invalid]="isControlInvalid('paymentAmount')"
-                 [class.is-valid]="isControlValid('paymentAmount')" formControlName="paymentAmount"
-                 currencyMask
-          />
+        <div class="col-2 ">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" autocomplete="off"
+                   name="paymentAmount" formControlName="paymentAmount" placeholder=" "
+                   currencyMask (focusout)="calculatePaymentDetails()">
+            <label class="label_OA">Payment Amount</label>
+          </div>
+        </div>
+        <div class="col-1 ">
+          <div class="floating-label">
+            <select class="floating-select_mandatory" name="financeCurrency" id="financeCurrency"
+                    formControlName="financeCurrency">
+              <option value="{{financeCurrency.code}}"
+                      *ngFor="let financeCurrency of currencyList">{{financeCurrency.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="col-2 ">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" autocomplete="off"
+                   name="financeTotalDue" financeTotalDue="financeTotalDue" placeholder=" "
+                   currencyMask>
+            <label class="label_OA">Finance Total Due</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" autocomplete="off"
+                   name="paymentTotalDue"
+                   formControlName="paymentTotalDue"
+                   [class.is-invalid]="isControlInvalid('paymentTotalDue')"
+                   [class.is-valid]="isControlValid('paymentTotalDue')" formControlName="paymentTotalDue"
+                   currencyMask/>
+            <label class="label_OA">Payment Total Due</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input type="number" class="floating-input_mandatory" autocomplete="off"
+                   name="interestRefunded"
+                   formControlName="interestRefunded"
+                   [class.is-invalid]="isControlInvalid('interestRefunded')"
+                   [class.is-valid]="isControlValid('interestRefunded')"
+                   formControlName="interestRefunded" (focusout)="calculatePaymentDetails()"/>
+            <label class="label_OA">Interest Refunded</label>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-3">
-      <div class="row fv-row">
-        <div class="col-4">
-          <label>Finance Currency</label>
-          <select
-            class="form-control form-control-lg form-control-solid"
-            name="financeCurrency"
-            formControlName="financeCurrency" [class.is-invalid]="isControlInvalid('financeCurrency')"
-            [class.is-valid]="isControlValid('financeCurrency')">
-            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
-          </select>
+    <div class="container mt-5">
+      <div class="form-group row">
+        <div class="col-1 ">
+          <div class="floating-label">
+            <select class="floating-select" name="cableChargeCurrency" id="cableChargeCurrency"
+                    formControlName="cableChargeCurrency">
+              <option value="{{cableChargeCurrency.code}}"
+                      *ngFor="let cableChargeCurrency of currencyList">{{cableChargeCurrency.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
         </div>
-        <div class="col-8">
-          <label>Finance Total Due</label>
-          <input class="form-control form-control-lg form-control-solid" autocomplete="off"
-                 placeholder="Finance Total Due" name="financeTotalDue"
-                 [class.is-invalid]="isControlInvalid('financeTotalDue')"
-                 [class.is-valid]="isControlValid('financeTotalDue')" formControlName="financeTotalDue"
-                 currencyMask/>
+        <div class="col-2 ">
+          <div class="floating-label">
+            <input class="floating-input" autocomplete="off"
+                   name="cableChargeAmount" formControlName="cableChargeAmount" placeholder=" "
+                   currencyMask (focusout)="calculatePaymentDetails()">
+            <label class="label_OA">Cable Charge Amount</label>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="col-lg-3">
-      <label>Payment Total Due</label>
-      <input class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="Payment Total Due" name="paymentTotalDue"
-             [class.is-invalid]="isControlInvalid('paymentTotalDue')"
-             [class.is-valid]="isControlValid('paymentTotalDue')" formControlName="paymentTotalDue"
-             currencyMask
-      />
-    </div>
-    <div class="col-lg-3">
-      <label>Interest Refunded</label>
-      <input type="interestRefunded" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="Interest Refunded" name="interestRefunded"
-             [class.is-invalid]="isControlInvalid('interestRefunded')"
-             [class.is-valid]="isControlValid('interestRefunded')" formControlName="interestRefunded"
-      />
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-lg-3">
-      <label>Currency & Amount</label>
-      <div class="row fv-row">
-        <div class="col-4">
-          <select
-            class="form-control form-control-lg form-control-solid"
-            name="cableChargeCurrency"
-            formControlName="cableChargeCurrency" [class.is-invalid]="isControlInvalid('cableChargeCurrency')"
-            [class.is-valid]="isControlValid('cableChargeCurrency')">
-            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
-          </select>
+        <div class="col-1 ">
+          <div class="floating-label">
+            <select class="floating-select" name="communicationChargeCurrency" id="communicationChargeCurrency"
+                    formControlName="communicationChargeCurrency">
+              <option value="{{communicationChargeCurrency.code}}"
+                      *ngFor="let communicationChargeCurrency of currencyList">{{communicationChargeCurrency.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
         </div>
-        <div class="col-8">
-          <input class="form-control form-control-lg form-control-solid" autocomplete="off"
-                 placeholder="Cable Charge Amount" name="cableChargeAmount"
-                 [class.is-invalid]="isControlInvalid('cableChargeAmount')"
-                 [class.is-valid]="isControlValid('cableChargeAmount')" formControlName="cableChargeAmount"
-                 currencyMask
-          />
+        <div class="col-2 ">
+          <div class="floating-label">
+            <input class="floating-input" autocomplete="off"
+                   name="communicationChargeAmount" formControlName="communicationChargeAmount" placeholder=" "
+                   currencyMask (focusout)="calculatePaymentDetails()">
+            <label class="label_OA">Communication Charge Amount</label>
+          </div>
+        </div>
+        <div class="col-3 ">
+          <div class="floating-label">
+            <input class="floating-input" autocomplete="off"
+                   name="paymentNotes" formControlName="paymentNotes" placeholder=" "
+            >
+            <label class="label_OA">Payment Notes</label>
+          </div>
+        </div>
+        <div class="col-3 ">
+          <div class="floating-label">
+            <input class="floating-input" autocomplete="off"
+                   name="refundInterestDetails" formControlName="refundInterestDetails" placeholder=" "
+            >
+            <label class="label_OA">Refund Interest Details</label>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-3">
-      <label>Communication Charge Currency & Amount</label>
-      <div class="row fv-row">
-        <div class="col-4">
-          <select
-            class="form-control form-control-lg form-control-solid"
-            name="communicationChargeCurrency"
-            formControlName="communicationChargeCurrency"
-            [class.is-invalid]="isControlInvalid('communicationChargeCurrency')"
-            [class.is-valid]="isControlValid('communicationChargeCurrency')">
-            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
-          </select>
+    <div class="container mt-5">
+      <div class="form-group row">
+        <div class="col-3 ">
+          <div class="floating-label_mandatory">
+            <div class="input-group mb-3">
+              <input class="floating-input_mandatory input-group mb-3" type="text" name="debitAccount"
+                     id="debitAccount"
+                     formControlName="debitAccount"
+                     [class.is-invalid]="isControlInvalid('debitAccount')"
+                     [class.is-valid]="isControlValid('debitAccount')">
+              <label class="label_OA_mandatory">Debit Account</label>
+              <span class="input-group-text_OA" (click)="openDebitAccount()"><i class="fa fa-search fa-fw"></i></span>
+            </div>
+          </div>
         </div>
-        <div class="col-8">
-          <input class="form-control form-control-lg form-control-solid" autocomplete="off"
-                 placeholder="Communication ChargeAmount" name="communicationChargeAmount"
-                 [class.is-invalid]="isControlInvalid('communicationChargeAmount')"
-                 [class.is-valid]="isControlValid('communicationChargeAmount')"
-                 formControlName="communicationChargeAmount"
-                 currencyMask
-          />
+        <div class="col-3 ">
+          <div class="floating-label_mandatory">
+            <div class="input-group mb-3">
+              <input class="floating-input_mandatory input-group mb-3" type="text" name="debitAccount"
+                     id="creditAccount"
+                     formControlName="creditAccount"
+                     [class.is-invalid]="isControlInvalid('creditAccount')"
+                     [class.is-valid]="isControlValid('creditAccount')">
+              <label class="label_OA_mandatory">Credit Account</label>
+              <span class="input-group-text_OA" (click)="openCreditAccount()"><i class="fa fa-search fa-fw"></i></span>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="col-lg-3">
-      <label>Payment Notes</label>
-      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="PaymentNotes" name="paymentNotes"
-             [class.is-invalid]="isControlInvalid('paymentNotes')"
-             [class.is-valid]="isControlValid('paymentNotes')" formControlName="paymentNotes"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Refund Interest Details</label>
-      <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
-             placeholder="refundInterestDetails" name="refundInterestDetails"
-             [class.is-invalid]="isControlInvalid('refundInterestDetails')"
-             [class.is-valid]="isControlValid('refundInterestDetails')" formControlName="refundInterestDetails"/>
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-lg-3">
-      <label>Debit Account</label>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <button
-            class="btn btn-outline-secondary"
-            type="button"
-            (click)="openDebitAccount()">
-            <i class="fa fa-search"></i>
-          </button>
-        </div>
-        <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
-               placeholder="Debit Account" name="debitAccount" [class.is-invalid]="isControlInvalid('debitAccount')"
-               [class.is-valid]="isControlValid('debitAccount')" formControlName="debitAccount"/>
-      </div>
-    </div>
-    <div class="col-lg-3">
-      <label>Credit Account</label>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <button
-            class="btn btn-outline-secondary"
-            type="button"
-            (click)="openCreditAccount()">
-            <i class="fa fa-search"></i>
-          </button>
-        </div>
-        <input type="text" class="form-control form-control-lg form-control-solid" autocomplete="off"
-               placeholder="Credit Account" name="creditAccount" [class.is-invalid]="isControlInvalid('creditAccount')"
-               [class.is-valid]="isControlValid('creditAccount')" formControlName="creditAccount"/>
       </div>
     </div>
   </div>

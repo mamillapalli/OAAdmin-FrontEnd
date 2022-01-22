@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, Output, ViewChild} from '@angular/core';
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort, Sort} from "@angular/material/sort";
@@ -12,6 +12,7 @@ import {DatePipe} from "@angular/common";
 import {NgxSpinnerService} from "ngx-spinner";
 import {FilterComponent} from "../../OAPF/common/filter/filter.component";
 import {oaCommonService} from "../../shared/oacommon.service";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-corporateadmin',
@@ -21,8 +22,8 @@ import {oaCommonService} from "../../shared/oacommon.service";
 export class CorporateadminComponent implements OnInit {
 
   dataSource: any = new MatTableDataSource<corporateadmin>();
-  displayedColumns:  string[] = ['userId', 'firstName', 'lastName','expiryDate', 'transactionStatus', 'status', 'actions'];
-  fDisplayedColumns: string[] = ['userId', 'firstName', 'lastName','expiryDate', 'transactionStatus', 'status'];
+  @Output() displayedColumns:  string[] = ['userId', 'firstName', 'lastName','expiryDate', 'transactionStatus', 'status', 'actions'];
+  @Output() fDisplayedColumns: string[] = ['userId', 'firstName', 'lastName','expiryDate', 'transactionStatus', 'status'];
   authToken: any;
   modalOption: NgbModalOptions = {};
   closeResult: string;
@@ -70,7 +71,7 @@ export class CorporateadminComponent implements OnInit {
   newCorporateAdmin() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(CorporateadminmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
@@ -85,7 +86,7 @@ export class CorporateadminComponent implements OnInit {
     console.log(element)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.size = 'lg'
+    this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(CorporateadminmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
@@ -185,4 +186,7 @@ export class CorporateadminComponent implements OnInit {
     this.getCorporateAdmin();
   }
 
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
+  }
 }

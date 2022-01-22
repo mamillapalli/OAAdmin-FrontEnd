@@ -1,8 +1,8 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {BehaviorSubject, Observable, Subscription, throwError} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
+import {ModalDismissReasons, NgbActiveModal, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../modules/auth";
 import {catchError, retry} from "rxjs/operators";
 import {environment} from "../../../../../environments/environment";
@@ -14,6 +14,9 @@ import {NotificationService} from "../../../shared/notification.service";
 import Swal from "sweetalert2";
 import {ccorporateUser} from "../../../Model/OAAdmin/CRequest/ccorporateuser";
 import { oaCommonService } from "../../../shared/oacommon.service";
+import {CopyAsModalComponent} from "../../../OAPF/common/copy-as-modal/copy-as-modal.component";
+import {Corporateuserstep1Component} from "./corporateuserstep/corporateuserstep1/corporateuserstep1.component";
+import {Corporateuserstep2Component} from "./corporateuserstep/corporateuserstep2/corporateuserstep2.component";
 
 @Component({
   selector: 'app-corporateusermodal',
@@ -33,12 +36,21 @@ export class CorporateusermodalComponent implements OnInit {
   fromParent: any;
   ccorporateUser: ccorporateUser
   checkNextStage: boolean = true;
+  closeResult: string;
+
+  modalOption: NgbModalOptions = {};
+
+  @ViewChild(Corporateuserstep1Component) Corporateuserstep1Component: Corporateuserstep1Component;
+  @ViewChild(Corporateuserstep2Component) Corporateuserstep2Component: Corporateuserstep2Component;
+  @Output('displayedColumns') displayedColumns: any
+  @Output('fDisplayedColumns') fDisplayedColumns: any
 
   constructor(public activeModal: NgbActiveModal,
               private authService: AuthService,
               public notifyService: NotificationService,
               public oaCommonService: oaCommonService,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,
+              public modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -189,4 +201,41 @@ export class CorporateusermodalComponent implements OnInit {
   }
 
 
+  copyAs() {
+    console.log(this.displayedColumns)
+    console.log(this.fDisplayedColumns)
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
+    const modalRef = this.modalService.open(CopyAsModalComponent, this.modalOption);
+    modalRef.componentInstance.mode = 'copy';
+    modalRef.componentInstance.functionType = 'rms';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      const refNo = this.Corporateuserstep1Component.corporateUserForm.value.userId;
+      console.log('Result is ' + result);
+      //this.updateAccount(result, true)
+      this.formValue = result
+      console.log(this.formValue)
+      //this.Invoicestep1Component.updateForm()
+      this.formValue.userId = refNo
+      this.Corporateuserstep1Component.corporateUserForm.patchValue(this.formValue)
+      this.Corporateuserstep1Component.corporateUserForm.value.userId = refNo;
+      //this.Invoicestep1Component.updateReferenceNumber();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 }
