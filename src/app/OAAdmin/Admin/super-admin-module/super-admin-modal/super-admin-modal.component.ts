@@ -23,7 +23,7 @@ import {AdminStep1Component} from "./steps/adminstep1/adminstep1.component";
 })
 export class SuperAdminModalComponent implements OnInit {
 
-  formsCount = 2;
+  formsCount = 1;
   account$: BehaviorSubject<any> =
     new BehaviorSubject<superAdmin>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
@@ -75,25 +75,30 @@ export class SuperAdminModalComponent implements OnInit {
 
   nextStep() {
     console.log('check validation')
-    const nextStep = this.currentStep$.value + 1;
+    const nextStep = this.currentStep$.value;
     if (nextStep > this.formsCount) {
       return;
     }
-    if (this.currentStep$.value === this.formsCount - 1) {
+    if (this.currentStep$.value === this.formsCount) {
       if( this.checkBusinessValidation()){
         return;
       }
-      this.cSuperAdmin = new csuperAdmin();
-      this.cSuperAdmin = this.account$.value;
+      this.cSuperAdmin = new csuperAdmin(this.account$.value);
       const rmNewRequest = this.cSuperAdmin;
       if (this.mode === 'new') {
         this.checkNextStage = false;
         this.oaCommonService.dataItem(rmNewRequest,'',this.mode,'oaadmin/api/v1/superadmins').subscribe(res => {
-          if (res !== null) {
+          if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Add Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -120,6 +125,12 @@ export class SuperAdminModalComponent implements OnInit {
             Swal.fire({
               title: 'Edit Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -145,6 +156,12 @@ export class SuperAdminModalComponent implements OnInit {
             Swal.fire({
               title: 'Authorize Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({

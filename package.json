@@ -52,6 +52,7 @@
     "datatables.net": "^1.11.3",
     "datatables.net-dt": "^1.11.3",
     "html2canvas": "^1.4.0",
+    "jasmine": "^4.0.2",
     "jquery": "^3.6.0",
     "json-object-mapper": "^1.7.1",
     "json2typescript": "^1.5.0-rc.0",

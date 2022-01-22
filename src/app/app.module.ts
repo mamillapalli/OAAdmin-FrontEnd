@@ -381,7 +381,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     NgMultiSelectDropDownModule.forRoot(),
     NgChartsModule,
     CRUDTableModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    MatTableExporterModule
   ],
   providers: [
     {

@@ -16,6 +16,7 @@ export class AdminStep1Component implements OnInit, OnDestroy {
   superAdminForm: FormGroup;
   @Input() mode: any;
   @Input('formValue') formValue :  any;
+  ReadOnlyCheckBox: boolean;
 
   constructor(private fb: FormBuilder,public oaCommonService: oaCommonService) {}
 
@@ -31,6 +32,8 @@ export class AdminStep1Component implements OnInit, OnDestroy {
       if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view')
       {
         this.superAdminForm.disable()
+        this.ReadOnlyCheckBox = true;
+
       }
     }
     this.updateParentModel({}, this.checkForm());
@@ -53,7 +56,7 @@ export class AdminStep1Component implements OnInit, OnDestroy {
       effectiveDate: [this.defaultValues.effectiveDate, [Validators.required]],
       expiryDate: [this.defaultValues.expiryDate, [Validators.required]],
       emailAddress: [this.defaultValues.emailAddress, [Validators.required]],
-      staus: [this.defaultValues.status, [Validators.required]],
+      status: [this.defaultValues.status, [Validators.required]],
     });
 
     const formChangesSubscr = this.superAdminForm.valueChanges.subscribe((val) => {

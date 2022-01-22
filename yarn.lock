@@ -4240,6 +4240,19 @@
   "resolved" "https://registry.npmjs.org/jasmine-core/-/jasmine-core-3.8.0.tgz"
   "version" "3.8.0"
 
+"jasmine-core@^4.0.0":
+  "integrity" "sha512-tq24OCqHElgU9KDpb/8O21r1IfotgjIzalfW9eCmRR40LZpvwXT68iariIyayMwi0m98RDt16aljdbwK0sBMmQ=="
+  "resolved" "https://registry.npmjs.org/jasmine-core/-/jasmine-core-4.0.0.tgz"
+  "version" "4.0.0"
+
+"jasmine@^4.0.2":
+  "integrity" "sha512-YsrgxJQEggxzByYe4j68eQLOiQeSrPDYGv4sHhGBp3c6HHdq+uPXeAQ73kOAQpdLZ3/0zN7x/TZTloqeE1/qIA=="
+  "resolved" "https://registry.npmjs.org/jasmine/-/jasmine-4.0.2.tgz"
+  "version" "4.0.2"
+  dependencies:
+    "glob" "^7.1.6"
+    "jasmine-core" "^4.0.0"
+
 "jest-worker@^27.4.1":
   "integrity" "sha512-gHWJF/6Xi5CTG5QCvROr6GcmpIqNYpDJyc8A1h/DyXqH1tD6SnRCM0d3U5msV31D2LB/U+E0M+W4oyvKV44oNw=="
   "resolved" "https://registry.npmjs.org/jest-worker/-/jest-worker-27.4.6.tgz"
