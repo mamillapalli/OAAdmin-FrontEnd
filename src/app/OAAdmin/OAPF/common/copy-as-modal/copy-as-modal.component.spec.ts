@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HolidayInfoComponent } from './holiday-info.component';
+import { CopyAsModalComponent } from './copy-as-modal.component';
 
-describe('HolidayInfoComponent', () => {
-  let component: HolidayInfoComponent;
-  let fixture: ComponentFixture<HolidayInfoComponent>;
+describe('CopyAsModalComponent', () => {
+  let component: CopyAsModalComponent;
+  let fixture: ComponentFixture<CopyAsModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HolidayInfoComponent ]
+      declarations: [ CopyAsModalComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HolidayInfoComponent);
+    fixture = TestBed.createComponent(CopyAsModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -162,8 +162,6 @@ import { InterestRateEndComponent } from './OAData/StanData/interest-rate/intere
 import { HolidayModalComponent } from './OAData/StanData/holiday/holiday-modal/holiday-modal.component';
 import { HolidayMainComponent } from './OAData/StanData/holiday/holiday-modal/holiday-main/holiday-main.component';
 import { HolidayEndComponent } from './OAData/StanData/holiday/holiday-modal/holiday-end/holiday-end.component';
-import { HolidayInfoComponent } from './OAData/StanData/holiday/holiday-modal/holiday-info/holiday-info.component';
-import { SbrDataModalComponent } from './OAAdmin/OAPF/common/sbr-data-modal/sbr-data-modal.component'; 
 import { CreditAdviseComponent } from './OAAdmin/credit-advise/credit-advise.component';
 
 import {ChartComponent} from "ng-apexcharts";
@@ -174,6 +172,7 @@ import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import "reflect-metadata";
 import { CopyAsModalComponent } from './OAAdmin/OAPF/common/copy-as-modal/copy-as-modal.component';
 import { AgreementDoComponent } from './OAAdmin/common/agreement-do/agreement-do.component';
+import {HolidayInfoComponent} from "./OAData/StanData/holiday/holiday-modal/holiday-info/holiday-info.component";
 
 function appInitializer(authService: AuthService) {
   return () => {
@@ -310,10 +309,10 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     HolidayModalComponent,
     HolidayMainComponent,
     HolidayEndComponent,
-    HolidayInfoComponent,
-    SbrDataModalComponent,
     CreditAdviseComponent,
-    AgreementDoComponent
+    AgreementDoComponent,
+    SbrdatamodalComponent,
+    HolidayInfoComponent
     //ApprovalinvoicesComponent
   ],
   imports: [
@@ -357,7 +356,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     MatSelectModule,
     MatSidenavModule,
     MatSliderModule,
-    MatSlideToggleModule, 
+    MatSlideToggleModule,
     MatSnackBarModule,
     MatSortModule,
     MatTableModule,

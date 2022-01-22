@@ -1,0 +1,230 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Copy As </h4>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="table-responsive">
+  <!-- begin::Table -->
+  <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
+             class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+
+    <!-- ID Column -->
+    <ng-container [matColumnDef]="col" *ngFor="let col of  displayedColumns">
+      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">{{col | uppercase}}</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element[col]}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;"
+             [style.background-color]="row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'" (click)="passRow(row)">
+    </mat-row>
+  </mat-table>
+  <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+  </mat-paginator>
+  <!-- end::Table -->
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>
+</div>
+
+
+<!--<div class="modal-header">-->
+<!--  <h4 class="modal-title" id="modal-basic-title">Finance Information</h4>-->
+<!--  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">-->
+<!--    <span aria-hidden="true">&times;</span>-->
+<!--  </button>-->
+<!--</div>-->
+<!--<div class="table-responsive">-->
+<!--  &lt;!&ndash; begin::Table &ndash;&gt;-->
+<!--  <mat-table [dataSource]="dataSource" matSort style="width: 100%;"-->
+<!--             class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">-->
+
+<!--    &lt;!&ndash; ID Column &ndash;&gt;-->
+<!--    <ng-container matColumnDef="invoiceNumber" class="min-w-150px">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">INV No</mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row"> {{row.invoiceNumber}} </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container matColumnDef="sbrReferenceId">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">SBR No</mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.sbrReferenceId}} </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    &lt;!&ndash; Name Column &ndash;&gt;-->
+<!--    <ng-container matColumnDef="agreementId">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Agreement No-->
+<!--      </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.agreementId}}-->
+<!--      </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    &lt;!&ndash; Name Column &ndash;&gt;-->
+<!--    <ng-container matColumnDef="currency">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">CCY</mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.currency}} </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container matColumnDef="amount">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Amount</mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row"> {{row.amount }} </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container matColumnDef="dueDate">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Due Date-->
+<!--      </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row"> {{ row.dueDate | date: 'MM/dd/YYY' }} </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container matColumnDef="status">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Status</mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row"> {{ row.status }} </mat-cell>-->
+<!--    </ng-container>-->
+
+
+<!--    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>-->
+<!--    <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;"-->
+<!--             [style.background-color]="row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'" (click)="passRow(row)">-->
+<!--    </mat-row>-->
+<!--  </mat-table>-->
+<!--  <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">-->
+<!--  </mat-paginator>-->
+<!--  &lt;!&ndash; end::Table &ndash;&gt;-->
+<!--</div>-->
+<!--<div class="modal-footer">-->
+<!--  <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>-->
+<!--</div>-->
+
+
+<!--<div class="modal-header">-->
+<!--  <h4 class="modal-title" id="modal-basic-title">Finance Information</h4>-->
+<!--  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">-->
+<!--    <span aria-hidden="true">&times;</span>-->
+<!--  </button>-->
+<!--</div>-->
+<!--<div class="table-responsive">-->
+<!--  &lt;!&ndash; begin::Table &ndash;&gt;-->
+<!--  <mat-table [dataSource]="dataSource" matSort style="width: 100%;"-->
+<!--             class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">-->
+
+<!--    &lt;!&ndash; ID Column &ndash;&gt;-->
+<!--    <ng-container matColumnDef="invoiceNumber" class="min-w-150px">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">INV No</mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row"> {{row.invoiceNumber}} </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container matColumnDef="sbrReferenceId">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">SBR No</mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.sbrReferenceId}} </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    &lt;!&ndash; Name Column &ndash;&gt;-->
+<!--    <ng-container matColumnDef="agreementId">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Agreement No-->
+<!--      </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.agreementId}}-->
+<!--      </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    &lt;!&ndash; Name Column &ndash;&gt;-->
+<!--    <ng-container matColumnDef="currency">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">CCY</mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.currency}} </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container matColumnDef="amount">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Amount</mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row"> {{row.amount }} </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container matColumnDef="dueDate">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Due Date-->
+<!--      </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row"> {{ row.dueDate | date: 'MM/dd/YYY' }} </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container matColumnDef="status">-->
+<!--      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Status</mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row"> {{ row.status }} </mat-cell>-->
+<!--    </ng-container>-->
+
+
+<!--    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>-->
+<!--    <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;"-->
+<!--             [style.background-color]="row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'" (click)="passRow(row)">-->
+<!--    </mat-row>-->
+<!--  </mat-table>-->
+<!--  <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">-->
+<!--  </mat-paginator>-->
+<!--  &lt;!&ndash; end::Table &ndash;&gt;-->
+<!--</div>-->
+<!--<div class="modal-footer">-->
+<!--  <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>-->
+<!--</div>-->
+
+
+<!--&lt;!&ndash;<div class="modal-header">&ndash;&gt;-->
+<!--&lt;!&ndash;  <h4 class="modal-title" id="modal-basic-title">Finance Information</h4>&ndash;&gt;-->
+<!--&lt;!&ndash;  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">&ndash;&gt;-->
+<!--&lt;!&ndash;    <span aria-hidden="true">&times;</span>&ndash;&gt;-->
+<!--&lt;!&ndash;  </button>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="table-responsive">&ndash;&gt;-->
+<!--&lt;!&ndash;  &lt;!&ndash; begin::Table &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;  <mat-table [dataSource]="dataSource" matSort style="width: 100%;"&ndash;&gt;-->
+<!--&lt;!&ndash;             class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; ID Column &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <ng-container matColumnDef="invoiceNumber" class="min-w-150px">&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">INV No</mat-header-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-cell *matCellDef="let row"> {{row.invoiceNumber}} </mat-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;    </ng-container>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <ng-container matColumnDef="sbrReferenceId">&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">SBR No</mat-header-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.sbrReferenceId}} </mat-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;    </ng-container>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Name Column &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <ng-container matColumnDef="agreementId">&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Agreement No&ndash;&gt;-->
+<!--&lt;!&ndash;      </mat-header-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.agreementId}}&ndash;&gt;-->
+<!--&lt;!&ndash;      </mat-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;    </ng-container>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Name Column &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <ng-container matColumnDef="currency">&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">CCY</mat-header-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.currency}} </mat-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;    </ng-container>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <ng-container matColumnDef="amount">&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Amount</mat-header-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-cell *matCellDef="let row"> {{row.amount }} </mat-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;    </ng-container>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <ng-container matColumnDef="dueDate">&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Due Date&ndash;&gt;-->
+<!--&lt;!&ndash;      </mat-header-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-cell *matCellDef="let row"> {{ row.dueDate | date: 'MM/dd/YYY' }} </mat-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;    </ng-container>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <ng-container matColumnDef="status">&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Status</mat-header-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;      <mat-cell *matCellDef="let row"> {{ row.status }} </mat-cell>&ndash;&gt;-->
+<!--&lt;!&ndash;    </ng-container>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>&ndash;&gt;-->
+<!--&lt;!&ndash;    <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;"&ndash;&gt;-->
+<!--&lt;!&ndash;             [style.background-color]="row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'" (click)="passRow(row)">&ndash;&gt;-->
+<!--&lt;!&ndash;    </mat-row>&ndash;&gt;-->
+<!--&lt;!&ndash;  </mat-table>&ndash;&gt;-->
+<!--&lt;!&ndash;  <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">&ndash;&gt;-->
+<!--&lt;!&ndash;  </mat-paginator>&ndash;&gt;-->
+<!--&lt;!&ndash;  &lt;!&ndash; end::Table &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="modal-footer">&ndash;&gt;-->
+<!--&lt;!&ndash;  <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
