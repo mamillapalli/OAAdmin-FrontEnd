@@ -1,3 +1,5 @@
+// @ts-ignore
+
 import {Component, NgModule, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormsModule} from "@angular/forms";
 import {Subscription} from "rxjs";
@@ -18,8 +20,22 @@ export class Bankadminstep1Component implements OnInit {
   bankAdminForm: FormGroup;
   @Input() mode: any;
   @Input('formValue') formValue: any;
-  dropdownList: any = [];
-  dropdownSettings: IDropdownSettings = {
+  // dropdownList: any = [];
+  // dropdownSettings: IDropdownSettings = {
+  //   singleSelection: false,
+  //   textField: 'name',
+  //   selectAllText: 'Select All',
+  //   unSelectAllText: 'UnSelect All',
+  //   itemsShowLimit: 2,
+  //   allowSearchFilter: false
+  // };
+  selectedItems: any = [];
+
+
+  dropdownList:any = []
+
+
+  dropdownSettings = {
     singleSelection: false,
     textField: 'name',
     selectAllText: 'Select All',

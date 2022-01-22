@@ -15,24 +15,24 @@
         <div class="col-3">
           <div class="floating-label_mandatory">
             <div class="input-group mb-3">
-<!--              <mat-form-field>-->
-<!--                <mat-select formControlName="sbrReferenceId" (focusout)="getSBRChange()">-->
-<!--                  &lt;!&ndash; place ngx-mat-select-search inside mat-option to allow opening without initial selection &ndash;&gt;-->
-<!--                  <mat-option>-->
-<!--                    <ngx-mat-select-search [formControl]="bankServerSideFilteringCtrl" [searching]="searching"></ngx-mat-select-search>-->
-<!--                  </mat-option>-->
-<!--                  <mat-option *ngFor="let bank of filteredServerSideBanks | async" [value]="bank">-->
-<!--                    {{bank.sbrId}}-->
-<!--                  </mat-option>-->
-<!--                </mat-select>-->
-<!--              </mat-form-field>-->
+              <mat-form-field>
+                <mat-select formControlName="sbrReferenceId" (focusout)="getSBRChange()">
+                  <!-- place ngx-mat-select-search inside mat-option to allow opening without initial selection -->
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="bankServerSideFilteringCtrl" [searching]="searching"></ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let bank of filteredServerSideBanks | async" [value]="bank">
+                    {{bank.sbrId}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
 
 <!--              -->
-              <input class="floating-input_mandatory input-group mb-3" type="text" name="sbrReferenceId"
-                     id="sbrReferenceId"
-                     formControlName="sbrReferenceId" placeholder=""
-                     [class.is-invalid]="isControlInvalid('sbrReferenceId')"
-                     [class.is-valid]="isControlValid('sbrReferenceId')">
+<!--              <input class="floating-input_mandatory input-group mb-3" type="text" name="sbrReferenceId"-->
+<!--                     id="sbrReferenceId"-->
+<!--                     formControlName="sbrReferenceId" placeholder=""-->
+<!--                     [class.is-invalid]="isControlInvalid('sbrReferenceId')"-->
+<!--                     [class.is-valid]="isControlValid('sbrReferenceId')">-->
               <!--            <button class="btn btn-search button_OA" type="button" (click)="openSBRDialog()"><i-->
               <!--              class="fa fa-search fa-fw"></i></button>-->
               <label class="label_OA_mandatory">SBR Reference Number</label>
@@ -45,7 +45,7 @@
           <div class="floating-label_readonly">
             <input class="floating-input_readonly" type="text" name="agreementId" id="agreementId"
                    formControlName="agreementId"
-                   placeholder=" ">
+                   placeholder="">
             <label class="label_OA">Agreement Number</label>
           </div>
         </div>
