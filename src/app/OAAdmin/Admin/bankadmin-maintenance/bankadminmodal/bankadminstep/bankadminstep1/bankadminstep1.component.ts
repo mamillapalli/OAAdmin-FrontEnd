@@ -37,14 +37,19 @@ export class Bankadminstep1Component implements OnInit {
 
   dropdownSettings = {
     singleSelection: false,
-    textField: 'name',
+    text: "Select Roles",
     selectAllText: 'Select All',
     unSelectAllText: 'UnSelect All',
-    itemsShowLimit: 2,
-    allowSearchFilter: false
+    enableSearchFilter: true,
+    classes: "myclass custom-class",
+    autoPosition: true,
+    badgeShowLimit: 3,
+    lazyLoading: true,
+    showCheckbox: true,
+    maxHeight: 120
+
   };
-  selectedItems: any = [];
-  rolesList: any = ['BANK_ADMIN_MAKER','BANK_ADMIN_CHECKER','BANK_ADMIN_VIEWER'];
+  rolesList: any = ['BANK_ADMIN_MAKER', 'BANK_ADMIN_CHECKER', 'BANK_ADMIN_VIEWER'];
 
   constructor(private fb: FormBuilder, public oaCommonService: oaCommonService) {
 
@@ -56,16 +61,25 @@ export class Bankadminstep1Component implements OnInit {
       this.oaCommonService.getReferenceNumber('bankadmins').subscribe((res) => {
         this.f.userId.setValue(res);
       });
+
+      this.dropdownList = [
+        {"id": 0, "itemName": "Bank Admin Maker", "name": "BANK_ADMIN_MAKER"},
+        {"id": 1, "itemName": "Bank Admin Checker", "name": "BANK_ADMIN_CHECKER"},
+        {"id": 2, "itemName": "Bank Admin Viewer", "name": "BANK_ADMIN_VIEWER"}
+      ]
+
+
       // this.roles = [
       //   { name: "BANK_ADMIN_MAKER" },
       //   { name: "BANK_ADMIN_CHECKER" },
       //   { name: "BANK_ADMIN_VIEWER" },
       // ];
-      this.dropdownList = [
-        {name: "BANK_ADMIN_MAKER"},
-        {name: "BANK_ADMIN_CHECKER"},
-        {name: "BANK_ADMIN_VIEWER"}
-      ];
+      // this.dropdownList = [
+      //   {name: "BANK_ADMIN_MAKER"},
+      //   {name: "BANK_ADMIN_CHECKER"},
+      //   {name: "BANK_ADMIN_VIEWER"}
+      // ];
+
 
     } else {
       this.updateForm();
@@ -82,7 +96,19 @@ export class Bankadminstep1Component implements OnInit {
 
   updateForm() {
     this.bankAdminForm.patchValue(this.formValue)
-    this.dropdownList = this.formValue.roles
+    //this.dropdownList.clear();
+    let va = this.formValue.roles
+    console.log('va'+va[0].name)
+    console.log('va'+va.length)
+    for (let i = 0; i < va.length; i++) {
+      var tempObj = {"id": 0, "itemName": "", "name": ""};
+       tempObj.id = i;
+       tempObj.itemName = va[i].name;
+       tempObj.name = va[i].name;
+       console.log(tempObj)
+      this.selectedItems.push(tempObj);
+      this.dropdownList.push(tempObj);
+    }
   }
 
   initForm() {
@@ -106,22 +132,37 @@ export class Bankadminstep1Component implements OnInit {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 
-  isControlValid(controlName: string): boolean {
+  isControlValid(controlName
+                   :
+                   string
+  ):
+    boolean {
     const control = this.bankAdminForm.controls[controlName];
     return control.valid && (control.dirty || control.touched);
   }
 
-  isControlInvalid(controlName: string): boolean {
+  isControlInvalid(controlName
+                     :
+                     string
+  ):
+    boolean {
     const control = this.bankAdminForm.controls[controlName];
     return control.invalid && (control.dirty || control.touched);
   }
 
-  controlHasError(validation: string, controlName: string) {
+  controlHasError(validation:string, controlName
+                    :
+                    string
+  ) {
     const control = this.bankAdminForm.controls[controlName];
     return control.hasError(validation) && (control.dirty || control.touched);
   }
 
-  isControlTouched(controlName: string): boolean {
+  isControlTouched(controlName
+                     :
+                     string
+  ):
+    boolean {
     return false;
   }
 
@@ -133,6 +174,34 @@ export class Bankadminstep1Component implements OnInit {
       this.bankAdminForm.get('emailAddress')?.hasError('required') ||
       this.bankAdminForm.get('emailAddress')?.hasError('email')
     );
+  }
+
+  onItemSelect(item
+                 :
+                 any
+  ) {
+    console.log(item);
+  }
+
+  OnItemDeSelect(item
+                   :
+                   any
+  ) {
+    console.log(item);
+  }
+
+  onSelectAll(items
+                :
+                any
+  ) {
+    console.log(items);
+  }
+
+  onDeSelectAll(items
+                  :
+                  any
+  ) {
+    console.log(items);
   }
 
 }
