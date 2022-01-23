@@ -20,6 +20,8 @@ export class Corporatesstep1Component implements OnInit {
   @Input() mode :  any;
   private unsubscribe: Subscription[] = [];
   public countries:any = countries;
+  bankCheck: boolean
+  statusCheck: boolean
 
   constructor(private fb: FormBuilder,public oaCommonService: oaCommonService,) { }
 
@@ -33,7 +35,9 @@ export class Corporatesstep1Component implements OnInit {
       this.updateForm();
       if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view')
       {
-        this.corporatesform.disable()
+        this.corporatesform.disable();
+        this.bankCheck = true;
+        this.statusCheck = true;
       }
     }
     this.updateParentModel({}, this.checkForm());

@@ -101,6 +101,7 @@ export class BankuserComponent implements OnInit {
     modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log('newbankadmins is ' + result);
+      this.getBankUsers();
     }, (reason) => {
       this.getBankUsers();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -119,6 +120,7 @@ export class BankuserComponent implements OnInit {
     modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log(result);
+      this.getBankUsers();
     }, (reason) => {
       this.getBankUsers();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -130,6 +132,7 @@ export class BankuserComponent implements OnInit {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
         this.deleteModal(element);
+        this.getBankUsers();
       }
     }, (reason) => {
       this.getBankUsers();
@@ -271,6 +274,4 @@ export class BankuserComponent implements OnInit {
     this.applyFilter(null,null);
     this.getBankUsers()
   }
-
-
 }

@@ -106,13 +106,14 @@
         <div class="col-3">
           <div class="floating-label_mandatory form-switch">
             <input class="floating-input form-check-input" type="checkbox" id="status" name="status" value="yes"
-                   checked>
+                   checked [disabled]="statusCheck">
             <label class="label_OA_mandatory form-check-label required">Status</label>
           </div>
         </div>
         <div class="col-3">
           <div class="floating-label_mandatory form-switch">
-            <input class="floating-input form-check-input" type="checkbox" id="bank" name="bank" value="yes" checked>
+            <input class="floating-input form-check-input" type="checkbox" id="bank" name="bank" value="yes"
+                   checked [disabled]="bankCheck">
             <label class="label_OA_mandatory form-check-label required">Is Bank</label>
           </div>
         </div>

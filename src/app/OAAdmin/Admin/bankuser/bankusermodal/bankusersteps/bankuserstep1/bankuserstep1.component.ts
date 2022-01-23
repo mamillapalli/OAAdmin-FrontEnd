@@ -78,6 +78,7 @@ export class Bankuserstep1Component implements OnInit {
       this.updateForm();
       if (this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view') {
         this.bankUserForm.disable()
+        this.ReadOnlyCheckBox = true;
       }
     }
     this.updateParentModel({}, this.checkForm());
@@ -102,7 +103,7 @@ export class Bankuserstep1Component implements OnInit {
       this.selectedItems.push(tempObj);
       this.dropdownList.push(tempObj);
     }
-    this.ReadOnlyCheckBox = true;
+
   }
 
   initForm() {

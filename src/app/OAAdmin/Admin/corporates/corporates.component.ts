@@ -13,6 +13,8 @@ import {FilterComponent} from "../../OAPF/common/filter/filter.component";
 import {oaCommonService} from "../../shared/oacommon.service";
 import {corporates} from "../../Model/OAAdmin/Request/corporates";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import { CustomColumn } from '../../Model/CustomColumn';
+import {CONDITIONS_FUNCTIONS, CONDITIONS_LIST } from '../super-admin-module/super-admin-module.component';
 
 @Component({
   selector: 'app-corporates',
@@ -21,7 +23,7 @@ import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 })
 export class CorporatesComponent implements OnInit {
   dataSource: any = new MatTableDataSource<corporates>();
-  @Output() displayedColumns:  string[] = ['customerId', 'name', 'emailAddress', 'transactionStatus', 'status', 'actions'];
+  @Output() displayedColumns:  string[] = ['columnSetting','customerId', 'name', 'emailAddress', 'transactionStatus', 'status', 'actions'];
   @Output() fDisplayedColumns: string[] = ['customerId', 'name', 'emailAddress', 'transactionStatus', 'status'];
   authToken: any;
   modalOption: NgbModalOptions = {};
@@ -41,6 +43,18 @@ export class CorporatesComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort | any;
   sortData: any
 
+  //filter &
+  public columnShowHideList: CustomColumn[] = []
+  color = 'accent';
+  //inside filter
+  public conditionsList = CONDITIONS_LIST;
+  public searchValue: any = {};
+  public searchLabel: any = {};
+  public searchCondition: any = {};
+  private _filterMethods = CONDITIONS_FUNCTIONS;
+  searchFilter: any = {};
+  columns: { columnDef: string; header: string; }[];
+
   constructor(
     public authService: AuthService,
     public modalService: NgbModal,
@@ -53,12 +67,19 @@ export class CorporatesComponent implements OnInit {
 
   }
 
-
   ngOnInit(): void {
-    this.getBankUsers();
+    this.initializeColumnProperties();
+    this.getCorporates();
+    this.columns = [
+      { columnDef: 'customerId', header: 'Customer Id' },
+      { columnDef: 'name', header: 'Name' },
+      { columnDef: 'emailAddress', header: 'Email Address' },
+      { columnDef: 'transactionStatus', header: 'Trx Status' },
+      { columnDef: 'status', header: 'Status' },
+    ]
   }
 
-  public getBankUsers() {
+  public getCorporates() {
     const sb = this.oaCommonService.getMethodWithPagination('/oaadmin/api/v1/customers', '', this.currentPage, this.pageSize, this.sortData ).subscribe((res) => {
       this.dataSource.data = res.content;
       this.totalRows = res.totalElements
@@ -77,8 +98,9 @@ export class CorporatesComponent implements OnInit {
     modalRef.componentInstance.displayedColumns = this.displayedColumns;
     modalRef.result.then((result) => {
       console.log('newbankadmins is ' + result);
+      this.getCorporates();
     }, (reason) => {
-      this.getBankUsers();
+      this.getCorporates();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -95,8 +117,9 @@ export class CorporatesComponent implements OnInit {
     modalRef.componentInstance.displayedColumns = this.displayedColumns;
     modalRef.result.then((result) => {
       console.log(result);
+      this.getCorporates();
     }, (reason) => {
-      this.getBankUsers();
+      this.getCorporates();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -108,7 +131,7 @@ export class CorporatesComponent implements OnInit {
         this.deleteModal(element);
       }
     }, (reason) => {
-      this.getBankUsers();
+      this.getCorporates();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -180,17 +203,72 @@ export class CorporatesComponent implements OnInit {
     console.log({event});
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
-    this.getBankUsers();
+    this.getCorporates();
   }
 
   sortChanges(event: Sort) {
     console.log(event.direction)
     this.sortData = event.active + ',' + event.direction
-    this.getBankUsers();
+    this.getCorporates();
   }
 
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
+
+  initializeColumnProperties() {
+    this.displayedColumns.forEach((element, index) => {
+      this.columnShowHideList.push(
+        {
+          possition: index, name: element, isActive: true
+        }
+      );
+    });
+  }
+
+  toggleColumn(column: any) {
+    if (column.isActive && column.name !== 'columnSetting') {
+      if (column.possition > this.displayedColumns.length - 1) {
+        this.displayedColumns.push(column.name);
+      } else {
+        this.displayedColumns.splice(column.possition, 0, column.name);
+      }
+    } else {
+      let i = this.displayedColumns.indexOf(column.name);
+      let opr = i > -1 ? this.displayedColumns.splice(i, 1) : undefined;
+    }
+  }
+
+  public applyFilter(event: any,label:any) {
+    console.log('apply filter')
+    this.searchFilter = {
+      values: this.searchValue,
+      conditions: this.searchCondition,
+      methods: this._filterMethods,
+      label: label,
+    };
+    if(this.searchFilter.values !== null) {
+      let htp = {
+        filterId : this.searchFilter.label,
+        filterValue : this.searchFilter.values.field
+      }
+      const sb = this.oaCommonService.getFilterWithPagination(htp, 'filterByData', '/oaadmin/api/v1/customers', this.currentPage, this.pageSize, this.sortData).subscribe((res: any) => {
+        this.dataSource.data = res.content;
+        this.totalRows = res.totalElements
+      });
+      this.subscriptions.push(sb);
+    }
+
+    //this.dataSource.filter = searchFilter;
+  }
+
+  clearColumn(event:any,columnKey: string): void {
+    console.log(columnKey)
+    this.searchValue[columnKey] = null;
+    this.searchCondition[columnKey] = "none";
+    this.applyFilter(null,null);
+    this.getCorporates()
+  }
+
 }

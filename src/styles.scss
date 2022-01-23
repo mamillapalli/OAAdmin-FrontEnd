@@ -267,6 +267,12 @@
   color: #9a8f8f;
 }
 
+.floating-select:disabled ~ label , .floating-select:not([value=""]):valid ~ label {
+  top:-18px;
+  font-size:12px;
+  color: #9a8f8f;
+}
+
 .floating-select_readonly:focus ~ label , .floating-select_readonly:not([value=""]):valid ~ label {
   top:-18px;
   font-size:12px;
