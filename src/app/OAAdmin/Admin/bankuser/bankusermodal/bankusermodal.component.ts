@@ -18,7 +18,7 @@ import {Bankuserstep2Component} from "./bankusersteps/bankuserstep2/bankuserstep
   styleUrls: ['./bankusermodal.component.scss']
 })
 export class BankusermodalComponent implements OnInit {
-  formsCount = 2;
+  formsCount = 1;
   account$: BehaviorSubject<any> = new BehaviorSubject<bankuser>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
   isCurrentFormValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -44,6 +44,7 @@ export class BankusermodalComponent implements OnInit {
               public oaCommonService: oaCommonService,
               private datePipe: DatePipe,
               public modalService: NgbModal) {
+
   }
 
   ngOnInit(): void {
@@ -63,11 +64,11 @@ export class BankusermodalComponent implements OnInit {
 
   nextStep() {
     console.log('check validation')
-    const nextStep = this.currentStep$.value + 1;
+    const nextStep = this.currentStep$.value;
     if (nextStep > this.formsCount) {
       return;
     }
-    if (this.currentStep$.value === this.formsCount - 1) {
+    if (this.currentStep$.value === this.formsCount) {
       if( this.checkBusinessValidation()){
         return;
       }

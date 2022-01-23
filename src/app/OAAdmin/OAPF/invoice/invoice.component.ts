@@ -154,7 +154,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     // };
   }
 
-  applyFilter(event: any,label:any) {
+  public applyFilter(event: any,label:any) {
     this.searchFilter = {
         values: this.searchValue,
         conditions: this.searchCondition,
@@ -174,7 +174,6 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     }
 
     //this.dataSource.filter = searchFilter;
-    event.closeMenu()
   }
 
   clearColumn(event:any,columnKey: string): void {
@@ -183,7 +182,6 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     this.searchCondition[columnKey] = "none";
     this.applyFilter(null,null);
     this.getInvoices()
-    event.close()
   }
 
   public getInvoices() {

@@ -34,7 +34,7 @@ export class oapfcommonService {
       finalize(() => this._isLoading$.next(false))
     );
   }
-  
+
     getAdminReferenceNumber(refType: any) {
     this._isLoading$.next(true);
     this.authToken = this.authService.getAuthFromLocalStorage();
@@ -151,6 +151,7 @@ export class oapfcommonService {
 
   getFilterWithPagination(data: any, methodType: any, url: any, currentPage:any, pageSize:any , sortData:any): Observable<any> {
     this.spinner.show()
+    console.log(data)
     this._errorMessage.next('');
     this.authToken = this.authService.getAuthFromLocalStorage();
     const httpHeaders = new HttpHeaders({
@@ -165,6 +166,24 @@ export class oapfcommonService {
       for(let i=0; i< f.length ;i++){
         httpParams = httpParams.append(f[i].filterId, f[i].filterValue);
       }
+
+      httpParams = httpParams.append('page', currentPage);
+      httpParams = httpParams.append('size', pageSize);
+      if(sortData !== null && sortData !== undefined)
+        httpParams = httpParams.append('sort', sortData);
+
+      return this.http.get<any>(url,  { params:httpParams , headers: httpHeaders}).pipe(
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          return of(undefined);
+        }),
+        finalize(() => this.spinner.hide())
+      );
+    }
+    if(methodType === 'filterByData') {
+      let httpParams = new HttpParams();
+      httpParams = httpParams.append(data.filterId, data.filterValue);
       httpParams = httpParams.append('page', currentPage);
       httpParams = httpParams.append('size', pageSize);
       if(sortData !== null && sortData !== undefined)

@@ -44,10 +44,9 @@
             <a ngbDropdownToggle class="btn btn-sm btn-flex btn-light-info btn-active-primary fw-bolder cursor-pointer"
                type="button" id="dropdownMenuButton1" aria-expanded="false"><i class="fas fa-file-export"></i></a>
             <ul ngbDropdownMenu aria-labelledby="dropdownMenuButton1">
-                <li><a ngbDropdownItem (click)="exporter.exportTable('csv')"><i class="fas fa-file-csv" style="background-color: #ac2bac;"></i>CSV</a></li>
-                <li><a ngbDropdownItem (click)="exporter.exportTable('xls')"><i class="fas fa-file-excel" style="background-color: #ac2bac;"></i>XLS</a></li>
-                <li><a ngbDropdownItem (click)="exporter.exportTable('json')"><i class="fas fa-file-signature"></i>JSON</a></li>
-                <li><a ngbDropdownItem (click)="exporter.exportTable('txt')"><i class="fas fa-file-alt "></i>Text</a></li>
+                <li><a ngbDropdownItem><i class="fas fa-file-csv " style="background-color: #ac2bac;"></i>CSV</a></li>
+                <li><a ngbDropdownItem><i class="fas fa-file-signature "></i>JSON</a></li>
+                <li><a ngbDropdownItem><i class="fas fa-file-alt "></i>Text</a></li>
             </ul>
           </span>
         </div>
@@ -55,11 +54,11 @@
     </div>
     <div class="card">
       <div>
-        <table matTableExporter  #exporter="matTableExporter" mat-table [dataSource]="dataSource" class="" cdkDropList
+        <table mat-table [dataSource]="dataSource" class="" cdkDropList
                cdkDropListOrientation="horizontal"
                (cdkDropListDropped)="drop($event)"
                matSort (matSortChange)="sortChanges($event)"
-
+               style="overflow-x: scroll; overflow-y: scroll"
         >
 
           <!--        &lt;!&ndash; Checkbox Column &ndash;&gt;-->
@@ -117,7 +116,7 @@
                 [matMenuTriggerFor]="menu">filter_list
               </mat-icon>
               <mat-menu #menu>
-                <div mat-menu-item mat-filter-item>
+                <div mat-menu-item mat-filter-item  (click)="$event.stopPropagation()">
                   <mat-form-field>
                     <mat-select [panelClass]="'mat-elevation-z10'" placeholder='Conditions'
                                 [(value)]="searchCondition.field">
@@ -126,7 +125,7 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div mat-menu-item mat-filter-item>
+                <div mat-menu-item mat-filter-item  (click)="$event.stopPropagation()">
                   <mat-form-field>
                     <input matInput placeholder="Value" [(ngModel)]="searchValue.field">
                   </mat-form-field>
@@ -455,5 +454,4 @@
     </div>
   </ng-template>
   <!-- begin::Body -->
-
 </div>

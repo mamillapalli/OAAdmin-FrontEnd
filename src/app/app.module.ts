@@ -173,6 +173,8 @@ import "reflect-metadata";
 import { CopyAsModalComponent } from './OAAdmin/OAPF/common/copy-as-modal/copy-as-modal.component';
 import { AgreementDoComponent } from './OAAdmin/common/agreement-do/agreement-do.component';
 import {HolidayInfoComponent} from "./OAData/StanData/holiday/holiday-modal/holiday-info/holiday-info.component";
+import {AngularMultiSelectModule} from "angular2-multiselect-dropdown";
+import { TriDataTablesComponent } from './OAAdmin/OAPF/common/tri-data-tables/tri-data-tables.component';
 
 function appInitializer(authService: AuthService) {
   return () => {
@@ -312,7 +314,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     CreditAdviseComponent,
     AgreementDoComponent,
     SbrdatamodalComponent,
-    HolidayInfoComponent
+    HolidayInfoComponent,
+    TriDataTablesComponent
     //ApprovalinvoicesComponent
   ],
   imports: [
@@ -382,7 +385,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     NgChartsModule,
     CRUDTableModule,
     NgxMatSelectSearchModule,
-    MatTableExporterModule
+    AngularMultiSelectModule
   ],
   providers: [
     {

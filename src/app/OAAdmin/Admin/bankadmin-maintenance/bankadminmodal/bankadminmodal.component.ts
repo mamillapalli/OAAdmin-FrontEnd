@@ -17,7 +17,7 @@ import {Bankadminstep1Component} from "./bankadminstep/bankadminstep1/bankadmins
   styleUrls: ['./bankadminmodal.component.scss']
 })
 export class BankadminmodalComponent implements OnInit {
-  formsCount = 2;
+  formsCount = 1;
   account$: BehaviorSubject<any> = new BehaviorSubject<BankAdmin>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
   isCurrentFormValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -61,11 +61,11 @@ export class BankadminmodalComponent implements OnInit {
 
   nextStep() {
     console.log('check validation')
-    const nextStep = this.currentStep$.value + 1;
+    const nextStep = this.currentStep$.value;
     if (nextStep > this.formsCount) {
       return;
     }
-    if (this.currentStep$.value === this.formsCount - 1) {
+    if (this.currentStep$.value === this.formsCount) {
       if( this.checkBusinessValidation()){
         return;
       }
@@ -76,7 +76,7 @@ export class BankadminmodalComponent implements OnInit {
         this.checkNextStage = false;
         this.oaCommonService.dataItem(rmNewRequest,'',this.mode,'oaadmin/api/v1/bankadmins').subscribe(res => {
           console.log('Response is : ' + res)
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Add Record Successfully',
@@ -88,7 +88,7 @@ export class BankadminmodalComponent implements OnInit {
               icon: 'error'
             });
           }
-          if (res !== null) {
+          if (res !== undefined) {
             if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
@@ -102,11 +102,17 @@ export class BankadminmodalComponent implements OnInit {
         this.checkNextStage = false;
         this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.userId,this.mode,'oaadmin/api/v1/bankadmins').subscribe(res => {
           console.log('Response is : ' + res)
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Edit Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -114,7 +120,7 @@ export class BankadminmodalComponent implements OnInit {
               icon: 'error'
             });
           }
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
@@ -127,11 +133,17 @@ export class BankadminmodalComponent implements OnInit {
       } else if (this.mode === 'auth') {
         this.checkNextStage = false;
         this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.userId,this.mode,'oaadmin/api/v1/bankadmins').subscribe(res => {
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Authorize Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -139,7 +151,7 @@ export class BankadminmodalComponent implements OnInit {
               icon: 'error'
             });
           }
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }

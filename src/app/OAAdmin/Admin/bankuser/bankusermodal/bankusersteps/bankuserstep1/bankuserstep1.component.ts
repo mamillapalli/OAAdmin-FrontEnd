@@ -22,19 +22,28 @@ export class Bankuserstep1Component implements OnInit {
   bankUserForm: FormGroup;
   @Input() mode: any;
   @Input('formValue') formValue: any;
-  dropdownList: any = [];
-  dropdownSettings: IDropdownSettings = {
+  dropdownList:any = [];
+  dropdownSettings = {
     singleSelection: false,
-    textField: 'name',
+    text: "Select Roles",
     selectAllText: 'Select All',
     unSelectAllText: 'UnSelect All',
-    itemsShowLimit: 3,
-    allowSearchFilter: true
+    enableSearchFilter: true,
+    classes: "myclass custom-class",
+    autoPosition: true,
+    badgeShowLimit: 3,
+    lazyLoading: true,
+    showCheckbox: true,
+    maxHeight: 120
   };
   selectedItems: any = [];
   modalOption: NgbModalOptions = {}; // not null!
   closeResult: string;
-  CCorporates:CCorporates
+  CCorporates:CCorporates;
+
+
+  rolesList: any = ['BANK_USER_MAKER', 'BANK_USER_CHECKER', 'BANK_USER_VIEWER'];
+  ReadOnlyCheckBox: boolean;
 
   constructor(private fb: FormBuilder,
               public oaCommonService: oaCommonService,
@@ -54,11 +63,16 @@ export class Bankuserstep1Component implements OnInit {
       //   { name: "BANK_ADMIN_CHECKER" },
       //   { name: "BANK_ADMIN_VIEWER" },
       // ];
+      // this.dropdownList = [
+      //   {name: "BANK_USER_MAKER"},
+      //   {name: "BANK_USER_CHECKER"},
+      //   {name: "BANK_USER_VIEWER"}
+      // ];
       this.dropdownList = [
-        {name: "BANK_USER_MAKER"},
-        {name: "BANK_USER_CHECKER"},
-        {name: "BANK_USER_VIEWER"}
-      ];
+        {"id": 0, "itemName": "Bank User Maker", "name": "BANK_USER_MAKER"},
+        {"id": 1, "itemName": "Bank User Checker", "name": "BANK_USER_CHECKER"},
+        {"id": 2, "itemName": "Bank User Viewer", "name": "BANK_USER_VIEWER"}
+      ]
 
     } else {
       this.updateForm();
@@ -75,11 +89,20 @@ export class Bankuserstep1Component implements OnInit {
 
   updateForm() {
     this.bankUserForm.patchValue(this.formValue)
-    this.dropdownList = this.formValue.roles
-    const customerList = this.formValue.customers
-    if(customerList.length > 0) {
-      this.f.customerId.setValue(customerList[0].customerId)
+    //this.dropdownList.clear();
+    let va = this.formValue.roles
+    console.log('va'+va[0].name)
+    console.log('va'+va.length)
+    for (let i = 0; i < va.length; i++) {
+      var tempObj = {"id": 0, "itemName": "", "name": ""};
+      tempObj.id = i;
+      tempObj.itemName = va[i].name;
+      tempObj.name = va[i].name;
+      console.log(tempObj)
+      this.selectedItems.push(tempObj);
+      this.dropdownList.push(tempObj);
     }
+    this.ReadOnlyCheckBox = true;
   }
 
   initForm() {
@@ -163,6 +186,28 @@ export class Bankuserstep1Component implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  onItemSelect(item:any) {
+    console.log(item);
+  }
+
+  OnItemDeSelect(item:any) {
+    console.log(item);
+  }
+
+  onSelectAll(items
+                :
+                any
+  ) {
+    console.log(items);
+  }
+
+  onDeSelectAll(items
+                  :
+                  any
+  ) {
+    console.log(items);
   }
 
 

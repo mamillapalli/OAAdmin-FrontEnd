@@ -252,6 +252,21 @@ export class oaCommonService {
         }),
         finalize(() => this.spinner.hide())
       );
+    } else if(methodType === 'filterByData') {
+      let httpParams = new HttpParams();
+      httpParams = httpParams.append(data.filterId, data.filterValue);
+      httpParams = httpParams.append('page', currentPage);
+      httpParams = httpParams.append('size', pageSize);
+      if(sortData !== null && sortData !== undefined)
+        httpParams = httpParams.append('sort', sortData);
+      return this.http.get<any>(url,  { params:httpParams , headers: httpHeaders}).pipe(
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          return of(undefined);
+        }),
+        finalize(() => this.spinner.hide())
+      );
     }
     else {
       let httpParams = new HttpParams();

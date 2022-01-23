@@ -50,6 +50,7 @@ export class Bankadminstep1Component implements OnInit {
 
   };
   rolesList: any = ['BANK_ADMIN_MAKER', 'BANK_ADMIN_CHECKER', 'BANK_ADMIN_VIEWER'];
+  ReadOnlyCheckBox: boolean;
 
   constructor(private fb: FormBuilder, public oaCommonService: oaCommonService) {
 
@@ -109,6 +110,7 @@ export class Bankadminstep1Component implements OnInit {
       this.selectedItems.push(tempObj);
       this.dropdownList.push(tempObj);
     }
+    this.ReadOnlyCheckBox = true;
   }
 
   initForm() {
