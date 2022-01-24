@@ -1,5 +1,6 @@
 import {corporates} from "./corporates";
 
+
 interface Accounts {
   accountId : string
   name: string
@@ -7,7 +8,8 @@ interface Accounts {
   description: string
   currency: string
   debitCreditFlag: string
-  customers: [corporates]
+  businessType: string
+  customer: corporates
 }
 const inits: Accounts = {
   "accountId": "",
@@ -16,7 +18,8 @@ const inits: Accounts = {
   "description": "",
   "currency": "",
   "debitCreditFlag": "",
-  customers: {} as [corporates]
+  "businessType": "Payable Finance",
+  customer: {} as corporates
 }
 
 export { Accounts, inits };

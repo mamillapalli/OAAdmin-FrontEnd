@@ -46,7 +46,7 @@ export class CurrencyModalComponent implements OnInit {
     this.account$.next(updatedAccount);
     this.isCurrentFormValid$.next(isFormValid);
   };
-  
+
   nextStep() {
     const nextStep = this.currentStep$.value + 1;
     if (nextStep > this.formsCount) {
@@ -83,7 +83,7 @@ export class CurrencyModalComponent implements OnInit {
               icon: 'error'
             });
           }
-          if (res !== null && res !== '') { 
+          if (res !== null && res !== '') {
             if(this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
@@ -162,4 +162,32 @@ export class CurrencyModalComponent implements OnInit {
     this.activeModal.dismiss();
   }
 
-}
+    copyAs() {
+      console.log(this.displayedColumns)
+      console.log(this.fDisplayedColumns)
+      this.modalOption.backdrop = 'static';
+      this.modalOption.keyboard = false;
+      //this.modalOption.windowClass = 'my-class'
+      this.modalOption.size = 'xl'
+      const modalRef = this.modalService.open(CopyAsModalComponent, this.modalOption);
+      modalRef.componentInstance.mode = 'copy';
+      modalRef.componentInstance.functionType = 'admin';
+      modalRef.componentInstance.url = '/oaadmin/api/v1/accounts';
+      modalRef.componentInstance.displayedColumns = this.displayedColumns;
+      modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
+      modalRef.result.then((result) => {
+        const refNo = this.Accountstep1Component.accountsForm.value.userId;
+        console.log('Result is ' + result);
+        //this.updateAccount(result, true)
+        this.formValue = result
+        console.log(this.formValue)
+        //this.Invoicestep1Component.updateForm()
+        this.formValue.accountId = refNo
+        this.Accountstep1Component.accountsForm.patchValue(this.formValue)
+        this.Accountstep1Component.accountsForm.value.accountId = refNo;
+        //this.Invoicestep1Component.updateReferenceNumber();
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    }
+  }

@@ -115,7 +115,7 @@ export class Bankuserstep1Component implements OnInit {
       expiryDate: [this.defaultValues.expiryDate, [Validators.required]],
       emailAddress: [this.defaultValues.emailAddress, [Validators.required]],
       roles: [this.defaultValues.roles, [Validators.required]],
-      customerId:[this.defaultValues.roles,[Validators.required]],
+      customerId:[,[Validators.required]],
       customers:[[Validators.required]],
       status:[this.defaultValues.status,[Validators.required]]
     });

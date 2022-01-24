@@ -14,6 +14,8 @@ import {DatePipe} from "@angular/common";
 import {ReterivecustomersmodalComponent} from "../../../../common/reterivecustomersmodal/reterivecustomersmodal.component";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {oaCommonService} from '../../../../../shared/oacommon.service'
+import { BusinessTypeReq } from 'src/app/OAAdmin/Model/businessTypeReq';
+import { corporates } from 'src/app/OAAdmin/Model/OAAdmin/Request/corporates';
 
 @Component({
   selector: 'app-accountstep1',
@@ -45,9 +47,12 @@ export class Accountstep1Component implements OnInit {
   @ViewChild(MatSort) sort: MatSort | any;
   constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal,public oaCommonService: oaCommonService) { }
   isFinanceFetched = false;
-  customers: FormArray = this.fb.array([]);
+  customer: FormArray = this.fb.array([]);
+  businessTypeReq: BusinessTypeReq;
+  corporates: corporates;
 
   ngOnInit(): void {
+    this.businessTypeReq = new BusinessTypeReq();
     this.initForm();
     if (this.mode === 'new') {
       this.oaCommonService.getReferenceNumber('accounts').subscribe((res) => {
@@ -70,6 +75,10 @@ export class Accountstep1Component implements OnInit {
       currency: [this.defaultValues.currency,[Validators.required]],
       description: [this.defaultValues.description,[Validators.required]],
       debitCreditFlag: [this.defaultValues.debitCreditFlag,[Validators.required]],
+      businessType: [[Validators.required]],
+      businessTypeId: [],
+      customerId:[,[Validators.required]],
+      customer:[[Validators.required]],
     });
 
     const formChangesSubscr = this.accountsForm.valueChanges.subscribe((val) => {
@@ -78,12 +87,22 @@ export class Accountstep1Component implements OnInit {
     this.unsubscribe.push(formChangesSubscr);
   }
 
+  onBusinessTypeChange(event: any): any {
+    console.log(event.target.value);
+    this.businessTypeReq.name = event.target.value;
+    this.f.businessType.setValue(this.businessTypeReq);
+    console.log(this.f.businessType);
+    //this.businessType.name(this.formValue.businessTypeId);
+  }
+
   checkForm() {
     return !(
       this.accountsForm.get('accountId')?.hasError('required') ||
       this.accountsForm.get('name')?.hasError('required') ||
       this.accountsForm.get('type')?.hasError('required') ||
       this.accountsForm.get('description')?.hasError('required') ||
+      this.accountsForm.get('debitCreditFlag')?.hasError('required') ||
+      this.accountsForm.get('businessType')?.hasError('required') ||
       this.accountsForm.get('currency')?.hasError('required')
     );
   }
@@ -94,12 +113,9 @@ export class Accountstep1Component implements OnInit {
 
   updateForm()
   {
-    this.f.accountId.setValue(this.formValue.accountId);
-    this.f.name.setValue(this.formValue.name);
-    this.f.type.setValue(this.formValue.type);
-    this.f.description.setValue(this.formValue.description);
-    this.f.currency.setValue(this.formValue.currency);
     this.accountsForm.patchValue(this.formValue)
+    const customerList = this.formValue.customers
+    this.f.customerId.setValue(customerList[0].customerId)
   }
 
   get f() {
@@ -150,21 +166,10 @@ export class Accountstep1Component implements OnInit {
     const modalRef = this.modalService.open(ReterivecustomersmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
-      const idx: number = this.dataSource.data.findIndex((obj: { customerId: any; }) => obj.customerId === result.customerId);
-      console.log('idx----------------->' + idx)
-      if (idx === -1) {
-        this.dataSource.data.push(result);
-        const cust = this.fb.group({
-          customerId: [result.customerId, '']
-        });
-        this.customers.push(cust)
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.isFinanceFetched = true
-      }
+      this.f.customer.setValue([result])
+      this.f.customerId.setValue(result.customerId)
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      this.isFinanceFetched = false
     });
   }
 
@@ -173,14 +178,14 @@ export class Accountstep1Component implements OnInit {
     const idx: number = this.dataSource.data.findIndex((obj: { customerId: any; }) => obj.customerId === element.customerId);
     this.dataSource.data.splice(idx, 1);
     this.dataSource._updateChangeSubscription();
-    this.customers.clear()
+    this.customer.clear()
     const res = this.dataSource.data
     for (let i = 0; i < res.length; i++) {
       console.log(res[i].customers)
       const inv = this.fb.group({
-        customers: [res[i].customerId, '']
+        customer: [res[i].customerId, '']
       });
-      this.customers.push(inv)
+      this.customer.push(inv)
     }
   }
 
@@ -196,7 +201,7 @@ export class Accountstep1Component implements OnInit {
 
 
   get array(): FormArray {
-    return this.accountsForm.get('customers') as FormArray;
+    return this.accountsForm.get('customer') as FormArray;
   }
 
   drop(event: CdkDragDrop<string[]>) {
