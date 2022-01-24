@@ -84,24 +84,18 @@ export class CurrencyComponent implements OnInit {
   }
 
   public getCurrency() {
-    this.isLoading = true;
-    this.authToken = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${this.authToken?.jwt}`,
+    const sb = this.oaCommonService.getMethodWithPagination('/oadata/api/v1/currencies', '', this.currentPage, this.pageSize, this.sortData ).subscribe((res) => {
+      this.dataSource.data = res.content;
+      this.totalRows = res.totalElements
     });
-    return this.http.get('oadata/api/v1/currencies', {
-      headers: httpHeaders,
-    }).subscribe(data => {
-      this.dataSource.data = data;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    });
+    this.subscriptions.push(sb);
+
   }
 
   newCurrency() {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'lg'
     const modalRef = this.modalService.open(CurrencyModalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
     modalRef.componentInstance.displayedColumns = this.displayedColumns;
@@ -118,7 +112,7 @@ export class CurrencyComponent implements OnInit {
     console.log('Anil',element)
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
-    this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'lg'
     const modalRef = this.modalService.open(CurrencyModalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;

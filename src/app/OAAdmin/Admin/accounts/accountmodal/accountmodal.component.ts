@@ -81,7 +81,7 @@ export class AccountmodalComponent implements OnInit {
       if (this.mode === 'new') {
         this.checkNextStage = false;
         this.oaadminService.dataItem(this.cAccounts,this.mode).subscribe(res => {
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Add Record Successfully',
@@ -114,7 +114,7 @@ export class AccountmodalComponent implements OnInit {
         this.checkNextStage = false;
         this.oaadminService.dataItem(this.cAccounts,this.mode).subscribe(res => {
           console.log('Response is : '+res)
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Edit Record Successfully',

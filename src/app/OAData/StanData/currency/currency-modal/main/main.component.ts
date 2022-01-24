@@ -9,6 +9,7 @@ import { currencyList } from 'src/app/OAAdmin/shared/currency';
 import {HttpClient} from "@angular/common/http";
 import {DatePipe} from "@angular/common";
 import { Currency } from 'src/app/ReqModal/currency';
+import { countries } from 'src/app/OAAdmin/Model/country-data-store';
 
 @Component({
   selector: 'app-main',
@@ -37,6 +38,7 @@ export class MainComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
   constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal) { }
+  public countries:any = countries;
 
   ngOnInit(): void {
     this.initForm();

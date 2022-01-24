@@ -1,58 +1,79 @@
-<div class="pb-10 pb-lg-12">
-  <h2 class="fw-bolder text-dark">Currency Information</h2>
-</div>
-<div [formGroup]="CurrencyForm">
-  <div class="form-group row">
-    <div class="col-xl-6">
-      <label class="form-label required">Currency Code</label>
-      <input type="text" class="input_QA form-control form-control-lg form-control-solid" name="isoCode" autocomplete="off"
-        placeholder="isoCode" [class.is-invalid]="isControlInvalid('isoCode')"
-        [class.is-valid]="isControlValid('isoCode')" formControlName="isoCode" />
+<div class="card-body">
+  <div [formGroup]="CurrencyForm" id="form">
+    <div class="form-group row">
+      <h3 class="fw-bolder text-dark">Currency Info</h3>
     </div>
-    <div class="col-xl-6">
-      <label class="form-label required">Currency Description</label><input type="text"
-        class="input_QA form-control form-control-lg form-control-solid" name="description" autocomplete="off"
-        placeholder="Description" [class.is-invalid]="isControlInvalid('description')"
-        [class.is-valid]="isControlValid('description')" formControlName="description" />
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-4">
+          <div class="floating-label_readonly">
+            <input class="floating-input_readonly" type="text" name="isoCode" id="isoCode"
+                   formControlName="isoCode">
+            <label class="label_OA required">ISO Code</label>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="floating-label_mandatory">
+            <input type="text" class="floating-input" autocomplete="off"
+                   name="description"
+                   [class.is-invalid]="isControlInvalid('description')"
+                   [class.is-valid]="isControlValid('description')"
+                   formControlName="description"/>
+            <label class="label_OA_mandatory">Description</label>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="floating-label_mandatory">
+            <select class="floating-select" name="country" id="country"
+                    formControlName="country">
+              <option *ngFor="let country of countries" [value]="country.code">{{country.name}}</option>
+            </select>
+            <label class="label_OA">Country</label>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-xl-6">
-      <label class="form-label required">Country</label>
-      <input type="text" class="input_QA form-control form-control-lg form-control-solid" name="country" autocomplete="off"
-        placeholder="country" [class.is-invalid]="isControlInvalid('country')"
-        [class.is-valid]="isControlValid('country')" formControlName="country" />
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-4">
+          <div class="floating-label_readonly">
+            <input class="floating-input_readonly" type="text" name="minorName" id="minorName"
+                   formControlName="minorName">
+            <label class="label_OA required">Minor Name</label>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="floating-label_mandatory">
+            <input type="text" class="floating-input" autocomplete="off"
+                   name="majorName"
+                   [class.is-invalid]="isControlInvalid('majorName')"
+                   [class.is-valid]="isControlValid('majorName')"
+                   formControlName="majorName"/>
+            <label class="label_OA_mandatory">Major Name</label>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="floating-label_mandatory">
+            <input type="text" class="floating-input" autocomplete="off"
+                   name="decimal"
+                   [class.is-invalid]="isControlInvalid('decimal')"
+                   [class.is-valid]="isControlValid('decimal')"
+                   formControlName="decimal"/>
+            <label class="label_OA_mandatory">Decimal</label>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="col-xl-6">
-      <label class="form-label">Minor Name</label><input type="text"
-        class="input_QA form-control form-control-lg form-control-solid" name="minorName" autocomplete="off"
-        placeholder="minorName" [class.is-invalid]="isControlInvalid('minorName')"
-        [class.is-valid]="isControlValid('minorName')" formControlName="minorName" />
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-xl-6">
-      <label class="form-label">Major Name</label><input type="text"
-        class="input_QA form-control form-control-lg form-control-solid" name="majorName" autocomplete="off"
-        placeholder="majorName" [class.is-invalid]="isControlInvalid('majorName')"
-        [class.is-valid]="isControlValid('majorName')" formControlName="majorName" />
-    </div>
-    <div class="col-xl-6">
-      <label class="form-label">Decimal</label> <select class="input_QA form-control form-control-lg form-control-solid"
-        name="decimal" formControlName="decimal">
-        <option value="0">0</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-      </select>
-    </div>
-
-  </div>
-  <div class="form-group row">
-    <div class="col-xl-6">
-      <label class="form-label">Base Days</label><input type="text"
-        class="input_QA form-control form-control-lg form-control-solid" name="baseDays" autocomplete="off"
-        placeholder="baseDays" [class.is-invalid]="isControlInvalid('baseDays')"
-        [class.is-valid]="isControlValid('baseDays')" formControlName="baseDays" />
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-4">
+          <div class="floating-label_readonly">
+            <input class="floating-input_readonly" type="text" name="baseDays" id="baseDays"
+                   formControlName="baseDays">
+            <label class="label_OA required">Base Days</label>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

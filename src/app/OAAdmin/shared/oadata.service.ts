@@ -2,9 +2,11 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AuthService } from "../../modules/auth";
 import { BehaviorSubject, Observable, of, throwError } from "rxjs";
-import { catchError, finalize, retry } from "rxjs/operators";
+import { catchError, delay, finalize, retry } from "rxjs/operators";
 import { AuthModel } from "../../modules/auth/models/auth.model";
 import { environment } from "../../../environments/environment";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NotificationService } from "./notification.service";
 const API_USERS_URL = `${environment.apiUrl}`;
 
 @Injectable({
@@ -16,12 +18,11 @@ export class OODataServce {
   private url: any;
   protected _isLoading$ = new BehaviorSubject<boolean>(false);
   protected _errorMessage = new BehaviorSubject<string>('');
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService,private spinner: NgxSpinnerService, public notifyService: NotificationService,) { }
 
   //create method
   OODataCall(data: any, mode: any, type: any): Observable<any> {
-    this._isLoading$.next(true);
-    this._errorMessage.next('');
+    this.spinner.show()
     this.authToken = this.authService.getAuthFromLocalStorage();
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${this.authToken?.jwt}`,
@@ -39,51 +40,61 @@ export class OODataServce {
       return this.http.post<any>(this.url, data, {
         headers: httpHeaders
       }).pipe(
-        catchError(err => {
-          this._errorMessage.next(err);
-          return of([]);
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          this.spinner.hide()
+          return of([undefined]);
         }),
-        finalize(() => this._isLoading$.next(false))
+        finalize(() => this.spinner.hide())
       );
     } else if (mode === 'edit') {
-      return this.http.post<any>(this.url + data.isoCode, data, {
+      return this.http.put<any>(this.url, data, {
         headers: httpHeaders
       }).pipe(
-        catchError(err => {
-          this._errorMessage.next(err);
-          return of([]);
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          this.spinner.hide()
+          return of([undefined]);
         }),
-        finalize(() => this._isLoading$.next(false))
+        finalize(() => this.spinner.hide())
       );
     } else if (mode === 'auth') {
       return this.http.post<any>(this.url, data, {
         headers: httpHeaders
       }).pipe(
-        catchError(err => {
-          this._errorMessage.next(err);
-          return of([]);
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          this.spinner.hide()
+          return of([undefined]);
         }),
-        finalize(() => this._isLoading$.next(false))
+        finalize(() => this.spinner.hide())
       );
     } else if (mode === 'delete') {
       return this.http.post<any>(this.url + data.isoCode, data, {
         headers: httpHeaders
       }).pipe(
-        catchError(err => {
-          this._errorMessage.next(err);
-          return of([]);
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          this.spinner.hide()
+          return of([undefined]);
         }),
-        finalize(() => this._isLoading$.next(false))
+        finalize(() => this.spinner.hide())
       );
     } else {
       return this.http.post<any>(this.url + data.rmId, data, {
         headers: httpHeaders
       }).pipe(
-        catchError(err => {
-          this._errorMessage.next(err);
+        delay(100),
+        catchError((err) => {
+          this.notifyService.showError(err.message, 'Error')
+          this.spinner.hide()
           return of([]);
         }),
-        finalize(() => this._isLoading$.next(false))
+        finalize(() => this.spinner.hide())
       );
     }
   }
