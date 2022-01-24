@@ -19,7 +19,7 @@ import {Relationshipmanagerstep2Component} from "./steps/relationshipmanagerstep
 })
 export class RelationshipmanagermodalComponent implements OnInit, OnDestroy {
 
-  formsCount = 2;
+  formsCount = 1;
   account$: BehaviorSubject<any> = new BehaviorSubject<rm>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
   isCurrentFormValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -62,16 +62,15 @@ export class RelationshipmanagermodalComponent implements OnInit, OnDestroy {
 
   nextStep() {
     console.log('check validation')
-    const nextStep = this.currentStep$.value + 1;
+    const nextStep = this.currentStep$.value;
     if (nextStep > this.formsCount) {
       return;
     }
-    if (this.currentStep$.value === this.formsCount - 1) {
+    if (this.currentStep$.value === this.formsCount) {
       if( this.checkBusinessValidation()){
         return;
       }
-      this.crm = new crm();
-      this.crm = this.account$.value;
+      this.crm = new crm(this.account$.value);
       const rmNewRequest = this.crm;
       if (this.mode === 'new') {
         this.checkNextStage = false;
@@ -82,6 +81,12 @@ export class RelationshipmanagermodalComponent implements OnInit, OnDestroy {
             Swal.fire({
               title: 'Add Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -108,6 +113,12 @@ export class RelationshipmanagermodalComponent implements OnInit, OnDestroy {
             Swal.fire({
               title: 'Edit Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -133,6 +144,12 @@ export class RelationshipmanagermodalComponent implements OnInit, OnDestroy {
             Swal.fire({
               title: 'Authorize Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({

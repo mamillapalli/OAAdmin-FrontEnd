@@ -86,7 +86,6 @@
           <button class="btn btn-light-success" (click)="openCustomerDialog()">Add</button>
       </span>
       </div>
-      <div class="form-group row" *ngIf="isFinanceFetched">No records found</div>
       <div class="form-group row" *ngIf="isFinanceFetched">
         <div>
           <table mat-table [dataSource]="dataSource" class="" cdkDropList

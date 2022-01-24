@@ -24,7 +24,7 @@ import {CONDITIONS_FUNCTIONS, CONDITIONS_LIST } from '../super-admin-module/supe
 export class CorporateadminComponent implements OnInit {
 
   dataSource: any = new MatTableDataSource<corporateadmin>();
-  @Output() displayedColumns:  string[] = ['userId', 'firstName', 'lastName','expiryDate', 'transactionStatus', 'status', 'actions'];
+  @Output() displayedColumns:  string[] = ['columnSetting','userId', 'firstName', 'lastName','expiryDate', 'transactionStatus', 'status', 'actions'];
   @Output() fDisplayedColumns: string[] = ['userId', 'firstName', 'lastName','expiryDate', 'transactionStatus', 'status'];
   authToken: any;
   modalOption: NgbModalOptions = {};

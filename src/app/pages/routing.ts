@@ -5,7 +5,6 @@ import {CorporateadminComponent} from "../OAAdmin/Admin/corporateadmin/corporate
 import {CorporatesComponent} from "../OAAdmin/Admin/corporates/corporates.component";
 import {CorporateuserComponent} from "../OAAdmin/Admin/corporateuser/corporateuser.component";
 import {BankuserComponent} from "../OAAdmin/Admin/bankuser/bankuser.component";
-import {RmComponent} from "../OAAdmin/Admin/rm/rm.component";
 import {RelationshipmanagerComponent} from "../OAAdmin/Admin/relationshipmanager/relationshipmanager.component";
 import {InvoiceComponent} from "../OAAdmin/OAPF/invoice/invoice.component";
 import {AccountModule} from "../modules/account/account.module";
@@ -82,10 +81,6 @@ const Routing: Routes = [
   {
     path: 'bankuser', // <= Page URL
     component: BankuserComponent // <= Page component registration
-  },
-  {
-    path: 'rm', // <= Page URL
-    component: RmComponent // <= Page component registration
   },
   {
     path: 'relationshipmanager', // <= Page URL

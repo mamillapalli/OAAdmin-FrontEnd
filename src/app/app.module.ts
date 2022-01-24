@@ -80,22 +80,10 @@ import { BankusermodalComponent } from './OAAdmin/Admin/bankuser/bankusermodal/b
 import { Bankuserstep1Component } from './OAAdmin/Admin/bankuser/bankusermodal/bankusersteps/bankuserstep1/bankuserstep1.component';
 import { Bankuserstep2Component } from './OAAdmin/Admin/bankuser/bankusermodal/bankusersteps/bankuserstep2/bankuserstep2.component';
 import { Bankuserstep3Component } from './OAAdmin/Admin/bankuser/bankusermodal/bankusersteps/bankuserstep3/bankuserstep3.component';
-import {RmComponent} from "./OAAdmin/Admin/rm/rm.component";
-import {RmmodalComponent} from "./OAAdmin/Admin/rm/rmmodal/rmmodal.component";
-import { Rmstep1Component } from './OAAdmin/Admin/rm/rmmodal/rmsteps/rmstep1/rmstep1.component';
-import { Rmstep2Component } from './OAAdmin/Admin/rm/rmmodal/rmsteps/rmstep2/rmstep2.component';
-import { Rmstep3Component } from './OAAdmin/Admin/rm/rmmodal/rmsteps/rmstep3/rmstep3.component';
-import { Rmstep4Component } from './OAAdmin/Admin/rm/rmmodal/rmsteps/rmstep4/rmstep4.component';
-import { CustomermodalComponent } from './OAAdmin/Admin/rm/rmmodal/rmsteps/rmstep3/customermodal/customermodal.component';
-import { CustomerstablemodalComponent } from './OAAdmin/Admin/rm/rmmodal/rmsteps/rmstep3/customermodal/customerstablemodal/customerstablemodal.component';
 import { RelationshipmanagerComponent } from './OAAdmin/Admin/relationshipmanager/relationshipmanager.component';
 import { RelationshipmanagermodalComponent } from './OAAdmin/Admin/relationshipmanager/relationshipmanagermodal/relationshipmanagermodal.component';
 import { Relationshipmanagerstep1Component } from './OAAdmin/Admin/relationshipmanager/relationshipmanagermodal/steps/relationshipmanagerstep1/relationshipmanagerstep1.component';
 import { Relationshipmanagerstep2Component } from './OAAdmin/Admin/relationshipmanager/relationshipmanagermodal/steps/relationshipmanagerstep2/relationshipmanagerstep2.component';
-import { Relationshipmanagerstep3Component } from './OAAdmin/Admin/relationshipmanager/relationshipmanagermodal/steps/relationshipmanagerstep3/relationshipmanagerstep3.component';
-import { Relationshipmanagerstep4Component } from './OAAdmin/Admin/relationshipmanager/relationshipmanagermodal/steps/relationshipmanagerstep4/relationshipmanagerstep4.component';
-import { RelcustmodalComponent } from './OAAdmin/Admin/relationshipmanager/relationshipmanagermodal/steps/relationshipmanagerstep3/relcustmodal/relcustmodal.component';
-import { RelcustablemodalComponent } from './OAAdmin/Admin/relationshipmanager/relationshipmanagermodal/steps/relationshipmanagerstep3/relcustmodal/relcustablemodal/relcustablemodal.component';
 import { InvoiceComponent } from './OAAdmin/OAPF/invoice/invoice.component';
 import { InvoicemodalComponent } from './OAAdmin/OAPF/invoice/invoicemodal/invoicemodal.component';
 import { Invoicestep1Component } from './OAAdmin/OAPF/invoice/invoicemodal/steps/invoicestep1/invoicestep1.component';
@@ -230,24 +218,10 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     Bankuserstep1Component,
     Bankuserstep2Component,
     Bankuserstep3Component,
-    RmComponent,
-    RmmodalComponent,
-    Rmstep1Component,
-    Rmstep2Component,
-    Rmstep3Component,
-    Rmstep4Component,
-    CustomermodalComponent,
-    CustomerstablemodalComponent,
     RelationshipmanagerComponent,
     RelationshipmanagermodalComponent,
     Relationshipmanagerstep1Component,
     Relationshipmanagerstep2Component,
-    Relationshipmanagerstep3Component,
-    Relationshipmanagerstep4Component,
-    CustomermodalComponent,
-    CustomerstablemodalComponent,
-    RelcustmodalComponent,
-    RelcustablemodalComponent,
     InvoiceComponent,
     InvoicemodalComponent,
     Invoicestep1Component,

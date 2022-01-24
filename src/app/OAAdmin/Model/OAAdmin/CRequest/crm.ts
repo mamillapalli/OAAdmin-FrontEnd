@@ -8,5 +8,17 @@ export class crm {
   joiningDate: Date
   effectiveDate: Date
   expiryDate: Date;
-  customers: [corporates]
+  customers: corporates
+
+  constructor(d:any) {
+    this.rmId =  d.rmId;
+    this.firstName=  d.firstName;;
+    this.lastName=  d.lastName;;
+    this.emailAddress=  d.emailAddress;;
+    this.joiningDate=  new Date(d.joiningDate);
+    this.effectiveDate=  new Date(d.effectiveDate);
+    this.expiryDate=  new Date(d.expiryDate);
+    this.customers=  d.customers
+  }
+
 }

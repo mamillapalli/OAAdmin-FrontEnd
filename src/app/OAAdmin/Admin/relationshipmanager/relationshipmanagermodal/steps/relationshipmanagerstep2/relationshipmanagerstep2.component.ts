@@ -8,7 +8,6 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
 import {corporates} from "../../../../../Model/OAAdmin/Request/corporates";
-import {CustomermodalComponent} from "../../../../rm/rmmodal/rmsteps/rmstep3/customermodal/customermodal.component";
 
 @Component({
   selector: 'app-relationshipmanagerstep2',
