@@ -73,7 +73,7 @@ export class CorporateadminComponent implements OnInit {
     this.initializeColumnProperties();
     this.getCorporateAdmin();
     this.columns = [
-      { columnDef: 'userId', header: 'Customer Id' },
+      { columnDef: 'userId', header: 'User Id' },
       { columnDef: 'firstName', header: 'First Name' },
       { columnDef: 'lastName', header: 'Last Name' },
       { columnDef: 'expiryDate', header: 'Expiry Date' },

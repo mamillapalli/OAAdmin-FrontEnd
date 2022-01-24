@@ -38,6 +38,7 @@ export class Corporateadminstep1Component implements OnInit {
 
   modalOption: NgbModalOptions = {}; // not null!
   private closeResult: string;
+  ReadOnlyCheckBox: boolean
 
   constructor(private fb: FormBuilder,
               public oaCommonService: oaCommonService,
@@ -61,6 +62,7 @@ export class Corporateadminstep1Component implements OnInit {
       this.updateForm();
       if (this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view') {
         this.corporateAdminForm.disable()
+        this.ReadOnlyCheckBox = true;
       }
     }
     this.updateParentModel({}, this.checkForm());

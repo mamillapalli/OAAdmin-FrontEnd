@@ -264,7 +264,7 @@ export class CorporateuserComponent implements OnInit {
         filterId : this.searchFilter.label,
         filterValue : this.searchFilter.values.field
       }
-      const sb = this.oaCommonService.getFilterWithPagination(htp, 'filterByData', '/oaadmin/api/v1/customeradmins', this.currentPage, this.pageSize, this.sortData).subscribe((res: any) => {
+      const sb = this.oaCommonService.getFilterWithPagination(htp, 'filterByData', '/oaadmin/api/v1/customerusers', this.currentPage, this.pageSize, this.sortData).subscribe((res: any) => {
         this.dataSource.data = res.content;
         this.totalRows = res.totalElements
       });

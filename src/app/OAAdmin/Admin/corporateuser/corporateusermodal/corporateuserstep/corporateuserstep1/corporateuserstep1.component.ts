@@ -24,23 +24,29 @@ export class Corporateuserstep1Component implements OnInit {
   corporateUserForm: FormGroup;
   @Input() mode: any;
   @Input('formValue') formValue: any;
-  dropdownList: any = [];
-  dropdownSettings: IDropdownSettings = {
+  selectedItems: any = [];
+  dropdownList:any = []
+  dropdownSettings = {
     singleSelection: false,
-    textField: 'name',
+    text: "Select Roles",
     selectAllText: 'Select All',
     unSelectAllText: 'UnSelect All',
-    itemsShowLimit: 3,
-    allowSearchFilter: true
+    enableSearchFilter: true,
+    classes: "myclass custom-class",
+    autoPosition: true,
+    badgeShowLimit: 3,
+    lazyLoading: true,
+    showCheckbox: true,
+    maxHeight: 120
   };
-  selectedItems: any = [];
+  rolesList: any = ['CORPORATE_USER_MAKER', 'CORPORATE_USER_CHECKER', 'CORPORATE_USER_VIEWER'];
   modalOption: NgbModalOptions = {}; // not null!
   private closeResult: string;
+  ReadOnlyCheckBox:boolean
 
   constructor(private fb: FormBuilder,
               public oaCommonService: oaCommonService,
               public modalService: NgbModal) {
-
   }
 
   ngOnInit() {
@@ -49,21 +55,17 @@ export class Corporateuserstep1Component implements OnInit {
       this.oaCommonService.getReferenceNumber('customeradmins').subscribe((res) => {
         this.f.userId.setValue(res);
       });
-      // this.roles = [
-      //   { name: "BANK_ADMIN_MAKER" },
-      //   { name: "BANK_ADMIN_CHECKER" },
-      //   { name: "BANK_ADMIN_VIEWER" },
-      // ];
       this.dropdownList = [
-        {name: "CORPORATE_USER_MAKER"},
-        {name: "CORPORATE_USER_CHECKER"},
-        {name: "CORPORATE_USER_VIEWER"}
-      ];
+        {"id": 0, "itemName": "Corporate User Maker", "name": "CORPORATE_USER_MAKER"},
+        {"id": 1, "itemName": "Corporate User Checker", "name": "CORPORATE_USER_CHECKER"},
+        {"id": 2, "itemName": "Corporate User Viewer", "name": "CORPORATE_USER_VIEWER"}
+      ]
 
     } else {
       this.updateForm();
       if (this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view') {
         this.corporateUserForm.disable()
+        this.ReadOnlyCheckBox= true;
       }
     }
     this.updateParentModel({}, this.checkForm());
@@ -75,7 +77,18 @@ export class Corporateuserstep1Component implements OnInit {
 
   updateForm() {
     this.corporateUserForm.patchValue(this.formValue)
-    this.dropdownList = this.formValue.roles
+    let va = this.formValue.roles
+    console.log('va'+va[0].name)
+    console.log('va'+va.length)
+    for (let i = 0; i < va.length; i++) {
+      var tempObj = {"id": 0, "itemName": "", "name": ""};
+      tempObj.id = i;
+      tempObj.itemName = va[i].name.replace('_',' ').replace('_', '').toLowerCase();
+      tempObj.name = va[i].name;
+      console.log(tempObj)
+      this.selectedItems.push(tempObj);
+      this.dropdownList.push(tempObj);
+    }
     const customerList = this.formValue.customers
     this.f.customerId.setValue(customerList[0].customerId)
   }
@@ -156,4 +169,33 @@ export class Corporateuserstep1Component implements OnInit {
       return `with: ${reason}`;
     }
   }
+
+  onItemSelect(item
+                 :
+                 any
+  ) {
+    console.log(item);
+  }
+
+  OnItemDeSelect(item
+                   :
+                   any
+  ) {
+    console.log(item);
+  }
+
+  onSelectAll(items
+                :
+                any
+  ) {
+    console.log(items);
+  }
+
+  onDeSelectAll(items
+                  :
+                  any
+  ) {
+    console.log(items);
+  }
+
 }

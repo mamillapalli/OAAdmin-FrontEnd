@@ -25,7 +25,7 @@ import {Corporateuserstep2Component} from "./corporateuserstep/corporateuserstep
 })
 export class CorporateusermodalComponent implements OnInit {
 
-  formsCount = 2;
+  formsCount = 1;
   account$: BehaviorSubject<any> = new BehaviorSubject<corporateUser>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
   isCurrentFormValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -70,16 +70,15 @@ export class CorporateusermodalComponent implements OnInit {
 
   nextStep() {
     console.log('check validation')
-    const nextStep = this.currentStep$.value + 1;
+    const nextStep = this.currentStep$.value;
     if (nextStep > this.formsCount) {
       return;
     }
-    if (this.currentStep$.value === this.formsCount - 1) {
+    if (this.currentStep$.value === this.formsCount) {
       if( this.checkBusinessValidation()){
         return;
       }
-      this.ccorporateUser = new ccorporateUser();
-      this.ccorporateUser = this.account$.value;
+      this.ccorporateUser = new ccorporateUser(this.account$.value);
       const rmNewRequest = this.ccorporateUser;
       if (this.mode === 'new') {
         this.checkNextStage = false;
@@ -90,6 +89,12 @@ export class CorporateusermodalComponent implements OnInit {
             Swal.fire({
               title: 'Add Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -116,6 +121,12 @@ export class CorporateusermodalComponent implements OnInit {
             Swal.fire({
               title: 'Edit Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -141,6 +152,12 @@ export class CorporateusermodalComponent implements OnInit {
             Swal.fire({
               title: 'Authorize Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
