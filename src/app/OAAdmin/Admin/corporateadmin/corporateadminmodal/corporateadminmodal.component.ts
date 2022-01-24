@@ -20,7 +20,7 @@ import {Corporateadminstep2Component} from "./coporateadminstep/corporateadminst
 })
 export class CorporateadminmodalComponent implements OnInit {
 
-  formsCount = 2;
+  formsCount = 1;
   account$: BehaviorSubject<any> = new BehaviorSubject<corporateadmin>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
   isCurrentFormValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -64,11 +64,11 @@ export class CorporateadminmodalComponent implements OnInit {
 
   nextStep() {
     console.log('check validation')
-    const nextStep = this.currentStep$.value + 1;
+    const nextStep = this.currentStep$.value;
     if (nextStep > this.formsCount) {
       return;
     }
-    if (this.currentStep$.value === this.formsCount - 1) {
+    if (this.currentStep$.value === this.formsCount) {
       if( this.checkBusinessValidation()){
         return;
       }
@@ -77,13 +77,19 @@ export class CorporateadminmodalComponent implements OnInit {
       const rmNewRequest = this.ccorporateadmin;
       if (this.mode === 'new') {
         this.checkNextStage = false;
-        this.oaCommonService.dataItem(rmNewRequest,'',this.mode,'oaadmin/api/v1/bankusers').subscribe(res => {
+        this.oaCommonService.dataItem(rmNewRequest,'',this.mode,'oaadmin/api/v1/customeradmins').subscribe(res => {
           console.log('Response is : ' + res)
           if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Add Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -103,13 +109,19 @@ export class CorporateadminmodalComponent implements OnInit {
         });
       } else if (this.mode === 'edit') {
         this.checkNextStage = false;
-        this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.userId,this.mode,'oaadmin/api/v1/bankusers').subscribe(res => {
+        this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.userId,this.mode,'oaadmin/api/v1/customeradmins').subscribe(res => {
           console.log('Response is : ' + res)
           if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Edit Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -129,12 +141,18 @@ export class CorporateadminmodalComponent implements OnInit {
         });
       } else if (this.mode === 'auth') {
         this.checkNextStage = false;
-        this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.userId,this.mode,'oaadmin/api/v1/bankusers').subscribe(res => {
+        this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.userId,this.mode,'oaadmin/api/v1/customeradmins').subscribe(res => {
           if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Authorize Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({

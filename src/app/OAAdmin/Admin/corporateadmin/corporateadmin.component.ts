@@ -13,6 +13,8 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {FilterComponent} from "../../OAPF/common/filter/filter.component";
 import {oaCommonService} from "../../shared/oacommon.service";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import { CustomColumn } from '../../Model/CustomColumn';
+import {CONDITIONS_FUNCTIONS, CONDITIONS_LIST } from '../super-admin-module/super-admin-module.component';
 
 @Component({
   selector: 'app-corporateadmin',
@@ -42,6 +44,18 @@ export class CorporateadminComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort | any;
   sortData: any
 
+  //filter &
+  public columnShowHideList: CustomColumn[] = []
+  color = 'accent';
+  //inside filter
+  public conditionsList = CONDITIONS_LIST;
+  public searchValue: any = {};
+  public searchLabel: any = {};
+  public searchCondition: any = {};
+  private _filterMethods = CONDITIONS_FUNCTIONS;
+  searchFilter: any = {};
+  columns: { columnDef: string; header: string; }[];
+
   constructor(
     public authService: AuthService,
     public modalService: NgbModal,
@@ -56,7 +70,17 @@ export class CorporateadminComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.initializeColumnProperties();
     this.getCorporateAdmin();
+    this.columns = [
+      { columnDef: 'userId', header: 'Customer Id' },
+      { columnDef: 'firstName', header: 'First Name' },
+      { columnDef: 'lastName', header: 'Last Name' },
+      { columnDef: 'expiryDate', header: 'Expiry Date' },
+      { columnDef: 'emailAddress', header: 'Email Address' },
+      { columnDef: 'transactionStatus', header: 'Trx Status' },
+      { columnDef: 'status', header: 'Status' },
+    ]
   }
 
   public getCorporateAdmin() {
@@ -76,6 +100,7 @@ export class CorporateadminComponent implements OnInit {
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
       console.log('newbankadmins is ' + result);
+      this.getCorporateAdmin();
     }, (reason) => {
       this.getCorporateAdmin();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -92,6 +117,7 @@ export class CorporateadminComponent implements OnInit {
     modalRef.componentInstance.fromParent = element;
     modalRef.result.then((result) => {
       console.log(result);
+      this.getCorporateAdmin();
     }, (reason) => {
       this.getCorporateAdmin();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -103,6 +129,7 @@ export class CorporateadminComponent implements OnInit {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
         this.deleteModal(element);
+        this.getCorporateAdmin();
       }
     }, (reason) => {
       this.getCorporateAdmin();
@@ -189,4 +216,59 @@ export class CorporateadminComponent implements OnInit {
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
+
+  initializeColumnProperties() {
+    this.displayedColumns.forEach((element, index) => {
+      this.columnShowHideList.push(
+        {
+          possition: index, name: element, isActive: true
+        }
+      );
+    });
+  }
+
+  toggleColumn(column: any) {
+    if (column.isActive && column.name !== 'columnSetting') {
+      if (column.possition > this.displayedColumns.length - 1) {
+        this.displayedColumns.push(column.name);
+      } else {
+        this.displayedColumns.splice(column.possition, 0, column.name);
+      }
+    } else {
+      let i = this.displayedColumns.indexOf(column.name);
+      let opr = i > -1 ? this.displayedColumns.splice(i, 1) : undefined;
+    }
+  }
+
+  public applyFilter(event: any,label:any) {
+    console.log('apply filter')
+    this.searchFilter = {
+      values: this.searchValue,
+      conditions: this.searchCondition,
+      methods: this._filterMethods,
+      label: label,
+    };
+    if(this.searchFilter.values !== null) {
+      let htp = {
+        filterId : this.searchFilter.label,
+        filterValue : this.searchFilter.values.field
+      }
+      const sb = this.oaCommonService.getFilterWithPagination(htp, 'filterByData', '/oaadmin/api/v1/customeradmins', this.currentPage, this.pageSize, this.sortData).subscribe((res: any) => {
+        this.dataSource.data = res.content;
+        this.totalRows = res.totalElements
+      });
+      this.subscriptions.push(sb);
+    }
+
+    //this.dataSource.filter = searchFilter;
+  }
+
+  clearColumn(event:any,columnKey: string): void {
+    console.log(columnKey)
+    this.searchValue[columnKey] = null;
+    this.searchCondition[columnKey] = "none";
+    this.applyFilter(null,null);
+    this.getCorporateAdmin()
+  }
+
 }
