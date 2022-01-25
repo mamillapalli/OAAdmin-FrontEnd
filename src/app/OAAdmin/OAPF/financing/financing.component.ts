@@ -12,6 +12,8 @@ import {oapfcommonService} from "../../shared/oapfcommon.service";
 import {AuthService} from "../../../modules/auth";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {FilterComponent} from "../common/filter/filter.component";
+import { CustomColumn } from '../../Model/CustomColumn';
+import {CONDITIONS_FUNCTIONS, CONDITIONS_LIST } from '../invoice/invoice.component';
 
 @Component({
   selector: 'app-financing',
@@ -21,7 +23,7 @@ import {FilterComponent} from "../common/filter/filter.component";
 export class FinancingComponent implements OnInit {
   isLoading: any;
   dataSource: any = new MatTableDataSource<financing>();
-  @Output() displayedColumns: string[] = ['financeId', 'sbrReferenceId', 'agreementId', 'financeCurrency', 'financeAmount', 'financeDueDate', 'businessType','transactionStatus','actions'];
+  @Output() displayedColumns: string[] = ['columnSetting','financeId', 'sbrReferenceId', 'agreementId', 'financeCurrency', 'financeAmount', 'financeDueDate', 'businessType','transactionStatus','actions'];
   @Output() fDisplayedColumns: string[] = ['financeId', 'sbrReferenceId', 'agreementId', 'financeCurrency', 'financeAmount', 'financeDueDate', 'businessType','transactionStatus'];
 
   subscriptions: Subscription[] = [];
@@ -39,6 +41,17 @@ export class FinancingComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort | any;
   sortData : any
 
+  //inside filter
+  public columnShowHideList: CustomColumn[] = [];
+  color = 'accent';
+  public conditionsList = CONDITIONS_LIST;
+  public searchValue: any = {};
+  public searchLabel: any = {};
+  public searchCondition: any = {};
+  private _filterMethods = CONDITIONS_FUNCTIONS;
+  searchFilter: any = {};
+  columns: { columnDef: string; header: string; }[];
+
   constructor(public financingService: financingService,
               public modalService: NgbModal,
               private spinner: NgxSpinnerService,
@@ -49,10 +62,21 @@ export class FinancingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getFinancing(this.currentPage,this.pageSize,this.sortData);
+    this.initializeColumnProperties();
+    this.columns = [
+      { columnDef: 'financeId', header: 'User Id' },
+      { columnDef: 'sbrReferenceId', header: 'SBR Id' },
+      { columnDef: 'agreementId', header: 'Agreement Id' },
+      { columnDef: 'financeCurrency', header: 'Currency' },
+      { columnDef: 'financeAmount', header: 'Amount' },
+      { columnDef: 'financeDueDate', header: 'Due Date' },
+      { columnDef: 'businessType', header: 'Business Type' },
+      { columnDef: 'transactionStatus', header: 'Trx Status' },
+    ]
+    this.getFinancing();
   }
 
-  public getFinancing(currentPage: number, pageSize: number, sortData: any) {
+  public getFinancing() {
     console.log('Get Invoices')
     this.spinner.show();
     const sb = this.oapfcommonService.getDataWithPagination('/oapf/api/v1/finances/', this.currentPage, this.pageSize,this.sortData).subscribe((res) => {
@@ -73,7 +97,7 @@ export class FinancingComponent implements OnInit {
     modalRef.result.then((result) => {
       console.log('newBankAdmin is ' + result);
     }, (reason) => {
-      this.getFinancing(this.currentPage,this.pageSize,this.sortData);
+      this.getFinancing();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -92,7 +116,7 @@ export class FinancingComponent implements OnInit {
     modalRef.result.then((result) => {
       console.log(result);
     }, (reason) => {
-      this.getFinancing(this.currentPage,this.pageSize,this.sortData);
+      this.getFinancing();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -104,7 +128,7 @@ export class FinancingComponent implements OnInit {
         this.deleteModal(element);
       }
     }, (reason) => {
-      this.getFinancing(this.currentPage,this.pageSize,this.sortData);
+      this.getFinancing();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -131,12 +155,12 @@ export class FinancingComponent implements OnInit {
     console.log({ event });
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
-    this.getFinancing(this.currentPage,this.pageSize,this.sortData);
+    this.getFinancing();
   }
 
   sortChanges(event: Sort) {
     this.sortData = event.active+','+event.direction
-    this.getFinancing(this.currentPage,this.pageSize,this.sortData);
+    this.getFinancing();
   }
 
   openFilter() {
@@ -166,4 +190,58 @@ export class FinancingComponent implements OnInit {
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
+
+  initializeColumnProperties() {
+    this.displayedColumns.forEach((element, index) => {
+      this.columnShowHideList.push(
+        {
+          possition: index, name: element, isActive: true
+        }
+      );
+    });
+  }
+
+  toggleColumn(column: any) {
+    if (column.isActive && column.name !== 'columnSetting') {
+      if (column.possition > this.displayedColumns.length - 1) {
+        this.displayedColumns.push(column.name);
+      } else {
+        this.displayedColumns.splice(column.possition, 0, column.name);
+      }
+    } else {
+      let i = this.displayedColumns.indexOf(column.name);
+      let opr = i > -1 ? this.displayedColumns.splice(i, 1) : undefined;
+    }
+  }
+
+  public applyFilter(event: any,label:any) {
+    console.log('apply filter')
+    this.searchFilter = {
+      values: this.searchValue,
+      conditions: this.searchCondition,
+      methods: this._filterMethods,
+      label: label,
+    };
+    if(this.searchFilter.values !== null) {
+      let htp = {
+        filterId : this.searchFilter.label,
+        filterValue : this.searchFilter.values.field
+      }
+      const sb = this.oapfcommonService.getFilterWithPagination(htp, 'filterByData', '/oapf/api/v1/finances/', this.currentPage, this.pageSize, this.sortData).subscribe((res: any) => {
+        this.dataSource.data = res.content;
+        this.totalRows = res.totalElements
+      });
+      this.subscriptions.push(sb);
+    }
+  }
+
+  clearColumn(event:any,columnKey: string): void {
+    console.log(columnKey)
+    this.searchValue[columnKey] = null;
+    this.searchCondition[columnKey] = "none";
+    this.applyFilter(null,null);
+    this.getFinancing()
+  }
+
+
 }

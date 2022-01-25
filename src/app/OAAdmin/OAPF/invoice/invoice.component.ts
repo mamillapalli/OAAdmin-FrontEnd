@@ -212,6 +212,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
       console.log('newBankAdmin is ' + result);
+      this.getInvoices()
     }, (reason) => {
       this.getInvoices();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -228,6 +229,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
       modalRef.componentInstance.invoiceNumber = element.invoiceNumber;
       modalRef.result.then((result) => {
         console.log(result);
+        this.getInvoices()
       }, (reason) => {
         this.getInvoices();
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -242,6 +244,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
       modalRef.componentInstance.fromParent = element;
       modalRef.result.then((result) => {
         console.log(result);
+        this.getInvoices()
       }, (reason) => {
         this.getInvoices();
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -254,6 +257,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
         this.deleteModal(element);
+        this.getInvoices()
       }
     }, (reason) => {
       this.getInvoices();

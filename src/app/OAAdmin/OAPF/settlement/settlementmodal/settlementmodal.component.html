@@ -55,14 +55,16 @@
         <div class="d-flex justify-content-end py-1">
           <div class="card-header">
             <div class="me-4">
-              <a
-                class="btn btn-sm btn-flex btn-light-info btn-active-light fw-bolder cursor-pointer"
-                data-kt-menu-trigger="click"
-                data-kt-menu-placement="bottom-end"
-                data-kt-menu-flip="top-end" (click)="copyAs()"
-              >
-                <span><i class="bi bi-clipboard"></i></span>
-              </a>
+              <ng-container *ngIf="this.mode === 'new'">
+                <a
+                  class="btn btn-sm btn-flex btn-light-info btn-active-light fw-bolder cursor-pointer"
+                  data-kt-menu-trigger="click"
+                  data-kt-menu-placement="bottom-end"
+                  data-kt-menu-flip="top-end" (click)="copyAs()"
+                >
+                  <span><i class="bi bi-clipboard"></i></span>
+                </a>
+              </ng-container>
               <a
                 class="btn btn-sm btn-flex btn-light-primary btn-active-primary fw-bolder cursor-pointer"
                 data-kt-menu-trigger="click"

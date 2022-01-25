@@ -263,13 +263,13 @@
 
 .floating-select:focus ~ label , .floating-select:not([value=""]):valid ~ label {
   top:-18px;
-  font-size:12px;
+  font-size:11px;
   color: #9a8f8f;
 }
 
 .floating-select:disabled ~ label , .floating-select:not([value=""]):valid ~ label {
   top:-18px;
-  font-size:12px;
+  font-size:11px;
   color: #9a8f8f;
 }
 
@@ -279,15 +279,27 @@
   color: rgb(154, 143, 143);
 }
 
+.floating-select_readonly:disabled ~ label , .floating-select_readonly:not([value=""]):valid ~ label {
+  top:-18px;
+  font-size:11px;
+  color: #9a8f8f;
+}
+
 .floating-select_mandatory:focus ~ label , .floating-select_mandatory:not([value=""]):valid ~ label {
   top:-18px;
-  font-size:12px;
+  font-size:11px;
   color: rgb(154, 143, 143);
+}
+
+.floating-select_mandatory:disabled ~ label , .floating-select_mandatory:not([value=""]):valid ~ label {
+  top:-18px;
+  font-size:11px;
+  color: #9a8f8f;
 }
 
 /* active state */
 .floating-input:focus ~ .bar:before, .floating-input:focus ~ .bar:after, .floating-select:focus ~ .bar:before, .floating-select:focus ~ .bar:after {
-  width:50%;
+  width:60%;
 }
 
 *, *:before, *:after {
@@ -458,4 +470,14 @@ td.mat-cell{
 
 .example-margin {
   margin: 10px;
+}
+
+.ccol1_OA{
+  flex: 0 0 auto;
+  width: 9.2%;
+}
+
+.acol1_OA{
+  flex: 0 0 auto;
+  width: 15.8%;
 }

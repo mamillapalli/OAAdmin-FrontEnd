@@ -24,7 +24,7 @@ import {JsonConvert} from "json2typescript";
 })
 export class InvoicemodalComponent implements OnInit {
 
-  formsCount = 2;
+  formsCount = 1;
   account$: BehaviorSubject<Invoice> =
     new BehaviorSubject<Invoice>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
@@ -33,7 +33,7 @@ export class InvoicemodalComponent implements OnInit {
   );
   private unsubscribe: Subscription[] = [];
   cInvoice: any
-  @Output() mode: any;
+  @Input() mode: any;
   @Output() formValue: any
   @Output() formElement: any
   fromParent: any;
@@ -50,6 +50,7 @@ export class InvoicemodalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.mode)
     if (this.mode !== 'new') {
       this.formValue = this.fromParent;
     }
@@ -65,12 +66,12 @@ export class InvoicemodalComponent implements OnInit {
 
   nextStep() {
 
-    const nextStep = this.currentStep$.value + 1;
+    const nextStep = this.currentStep$.value ;
     if (nextStep > this.formsCount) {
       return;
     }
     console.log('this is form next step element is ' + this.formElement)
-    if (this.currentStep$.value === this.formsCount - 1) {
+    if (this.currentStep$.value === this.formsCount) {
 
 
       // this.cInvoice.invoiceNumber = this.account$.value.invoiceNumber
@@ -120,6 +121,12 @@ export class InvoicemodalComponent implements OnInit {
             Swal.fire({
               title: 'Add Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -146,6 +153,12 @@ export class InvoicemodalComponent implements OnInit {
             Swal.fire({
               title: 'Edit Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -171,6 +184,12 @@ export class InvoicemodalComponent implements OnInit {
             Swal.fire({
               title: 'Authorize Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({

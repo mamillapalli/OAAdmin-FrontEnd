@@ -14,6 +14,8 @@ import {oapfcommonService} from "../../shared/oapfcommon.service";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {FilterComponent} from "../common/filter/filter.component";
 import {AuthService} from "../../../modules/auth";
+import { CustomColumn } from '../../Model/CustomColumn';
+import {CONDITIONS_FUNCTIONS, CONDITIONS_LIST } from '../invoice/invoice.component';
 
 @Component({
   selector: 'app-settlement',
@@ -23,7 +25,7 @@ import {AuthService} from "../../../modules/auth";
 export class SettlementComponent implements OnInit {
 
   dataSource: any = new MatTableDataSource<Payment>();
-  @Output() displayedColumns: string[] = ['paymentId', 'financeId', 'sbrReferenceId', 'paymentCurrency', 'paymentAmount', 'valueDate', 'businessType',
+  @Output() displayedColumns: string[] = ['columnSetting','paymentId', 'financeId', 'sbrReferenceId', 'paymentCurrency', 'paymentAmount', 'valueDate', 'businessType',
     'transactionStatus','actions'];
   @Output() fDisplayedColumns: string[] = ['paymentId', 'financeId', 'sbrReferenceId', 'paymentCurrency', 'paymentAmount', 'valueDate', 'businessType',
     'transactionStatus'];
@@ -41,6 +43,18 @@ export class SettlementComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort | any;
   sortData : any
 
+  //inside filter
+  public columnShowHideList: CustomColumn[] = [];
+  color = 'accent';
+  public conditionsList = CONDITIONS_LIST;
+  public searchValue: any = {};
+  public searchLabel: any = {};
+  public searchCondition: any = {};
+  private _filterMethods = CONDITIONS_FUNCTIONS;
+  searchFilter: any = {};
+  columns: { columnDef: string; header: string; }[];
+
+
   constructor(public paymentService: paymentService,
               public modalService: NgbModal,
               private spinner: NgxSpinnerService,
@@ -51,10 +65,21 @@ export class SettlementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPayments(this.currentPage,this.pageSize,this.sortData);
+    this.initializeColumnProperties();
+    this.columns = [
+      { columnDef: 'paymentId', header: 'Payment Id' },
+      { columnDef: 'financeId', header: 'Finance Id' },
+      { columnDef: 'sbrReferenceId', header: 'SBR Id' },
+      { columnDef: 'paymentCurrency', header: 'Currency' },
+      { columnDef: 'paymentAmount', header: 'Amount' },
+      { columnDef: 'valueDate', header: 'Value Date' },
+      { columnDef: 'businessType', header: 'Business Type' },
+      { columnDef: 'transactionStatus', header: 'Trx Status' },
+    ]
+    this.getPayments();
   }
 
-  public getPayments(currentPage: number, pageSize: number, sortData: any) {
+  public getPayments() {
     const sb = this.oapfCommonService.getDataWithPagination('/oapf/api/v1/payments/', this.currentPage, this.pageSize,this.sortData).subscribe((res) => {
       this.dataSource.data = res.content;
       this.totalRows = res.totalElements
@@ -74,7 +99,7 @@ export class SettlementComponent implements OnInit {
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
     }, (reason) => {
-      this.getPayments(this.currentPage,this.pageSize,this.sortData);
+      this.getPayments();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -90,7 +115,7 @@ export class SettlementComponent implements OnInit {
     modalRef.componentInstance.fromParent = element;
     modalRef.result.then((result) => {
     }, (reason) => {
-      this.getPayments(this.currentPage,this.pageSize,this.sortData);
+      this.getPayments();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -102,7 +127,7 @@ export class SettlementComponent implements OnInit {
         this.deleteModal(element);
       }
     }, (reason) => {
-      this.getPayments(this.currentPage,this.pageSize,this.sortData);
+      this.getPayments();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -129,12 +154,12 @@ export class SettlementComponent implements OnInit {
     console.log({ event });
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
-    this.getPayments(this.currentPage,this.pageSize,this.sortData);
+    this.getPayments();
   }
 
   sortChanges(event: Sort) {
     this.sortData = event.active+','+event.direction
-    this.getPayments(this.currentPage,this.pageSize,this.sortData);
+    this.getPayments();
   }
 
   openFilter() {
@@ -164,4 +189,57 @@ export class SettlementComponent implements OnInit {
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
+
+  initializeColumnProperties() {
+    this.displayedColumns.forEach((element, index) => {
+      this.columnShowHideList.push(
+        {
+          possition: index, name: element, isActive: true
+        }
+      );
+    });
+  }
+
+  toggleColumn(column: any) {
+    if (column.isActive && column.name !== 'columnSetting') {
+      if (column.possition > this.displayedColumns.length - 1) {
+        this.displayedColumns.push(column.name);
+      } else {
+        this.displayedColumns.splice(column.possition, 0, column.name);
+      }
+    } else {
+      let i = this.displayedColumns.indexOf(column.name);
+      let opr = i > -1 ? this.displayedColumns.splice(i, 1) : undefined;
+    }
+  }
+
+  public applyFilter(event: any,label:any) {
+    console.log('apply filter')
+    this.searchFilter = {
+      values: this.searchValue,
+      conditions: this.searchCondition,
+      methods: this._filterMethods,
+      label: label,
+    };
+    if(this.searchFilter.values !== null) {
+      let htp = {
+        filterId : this.searchFilter.label,
+        filterValue : this.searchFilter.values.field
+      }
+      const sb = this.oapfCommonService.getFilterWithPagination(htp, 'filterByData', '/oapf/api/v1/payments/', this.currentPage, this.pageSize, this.sortData).subscribe((res: any) => {
+        this.dataSource.data = res.content;
+        this.totalRows = res.totalElements
+      });
+      this.subscriptions.push(sb);
+    }
+  }
+
+  clearColumn(event:any,columnKey: string): void {
+    console.log(columnKey)
+    this.searchValue[columnKey] = null;
+    this.searchCondition[columnKey] = "none";
+    this.applyFilter(null,null);
+    this.getPayments()
+  }
+
 }
