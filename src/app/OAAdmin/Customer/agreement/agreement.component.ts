@@ -17,6 +17,9 @@ import { FilterComponent } from "../../../OAAdmin/OAPF/common/filter/filter.comp
 import { oapfcommonService } from "../../shared/oapfcommon.service";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Subscription } from "rxjs";
+import { CustomColumn } from '../../Model/CustomColumn';
+import { CONDITIONS_LIST } from '../../shared/condition_list';
+import { CONDITIONS_FUNCTIONS } from '../../shared/condition_function';
 @Component({
   selector: 'app-agreement',
   templateUrl: './agreement.component.html',
@@ -40,6 +43,19 @@ export class AgreementComponent implements OnInit {
   subscriptions: Subscription[] = [];
   sortData: any;
   authRoles: any;
+
+  //filter &
+  public columnShowHideList: CustomColumn[] = []
+  color = 'accent';
+  //inside filter
+  public conditionsList = CONDITIONS_LIST;
+  public searchValue: any = {};
+  public searchLabel: any = {};
+  public searchCondition: any = {};
+  private _filterMethods = CONDITIONS_FUNCTIONS;
+  searchFilter: any = {};
+  columns: { columnDef: string; header: string; }[];
+
   constructor(public http: HttpClient,
     public authService: AuthService,
     public modalService: NgbModal,
@@ -52,6 +68,14 @@ export class AgreementComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initializeColumnProperties();
+    this.columns = [
+      { columnDef: 'contractReferenceNumber', header: 'Contract Id' },
+      { columnDef: 'contractDocumentNumber', header: 'Contract Doc No' },
+      { columnDef: 'validDate', header: 'Valid Date' },
+      { columnDef: 'expiryDate', header: 'Expiry Date' },
+      { columnDef: 'transactionStatus', header: 'Trx Status' },
+    ]
     this.getAgreements();
   }
 
@@ -73,6 +97,7 @@ export class AgreementComponent implements OnInit {
     modalRef.componentInstance.mode = 'new';
     modalRef.result.then((result) => {
       console.log('newBankAdmin is ' + result);
+      this.getAgreements();
     }, (reason) => {
       this.getAgreements();
       this.closeResult = `Dismissed ${AgreementComponent.getDismissReason(reason)}`;
@@ -90,6 +115,7 @@ export class AgreementComponent implements OnInit {
     modalRef.componentInstance.fromParent = element;
     modalRef.result.then((result) => {
       console.log(result);
+      this.getAgreements();
     }, (reason) => {
       this.getAgreements();
       this.closeResult = `Dismissed ${AgreementComponent.getDismissReason(reason)}`;
@@ -101,6 +127,7 @@ export class AgreementComponent implements OnInit {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
         this.deleteModal(element.contractReferenceNumber);
+        this.getAgreements();
       }
     }, (reason) => {
       this.getAgreements();
@@ -167,14 +194,6 @@ export class AgreementComponent implements OnInit {
       return this.colorCode;
     }
   }
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
 
   openFilter() {
     this.modalOption.backdrop = 'static';
@@ -233,4 +252,57 @@ export class AgreementComponent implements OnInit {
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
+
+  initializeColumnProperties() {
+    this.displayedColumns.forEach((element, index) => {
+      this.columnShowHideList.push(
+        {
+          possition: index, name: element, isActive: true
+        }
+      );
+    });
+  }
+
+  toggleColumn(column: any) {
+    if (column.isActive && column.name !== 'columnSetting') {
+      if (column.possition > this.displayedColumns.length - 1) {
+        this.displayedColumns.push(column.name);
+      } else {
+        this.displayedColumns.splice(column.possition, 0, column.name);
+      }
+    } else {
+      let i = this.displayedColumns.indexOf(column.name);
+      let opr = i > -1 ? this.displayedColumns.splice(i, 1) : undefined;
+    }
+  }
+
+  public applyFilter(event: any,label:any) {
+    console.log('apply filter')
+    this.searchFilter = {
+      values: this.searchValue,
+      conditions: this.searchCondition,
+      methods: this._filterMethods,
+      label: label,
+    };
+    if(this.searchFilter.values !== null) {
+      let htp = {
+        filterId : this.searchFilter.label,
+        filterValue : this.searchFilter.values.field
+      }
+      const sb = this.oapfCommonService.getFilterWithPagination(htp, 'filterByData', '/oaadmin/api/v1/agreements', this.currentPage, this.pageSize, this.sortData).subscribe((res: any) => {
+        this.dataSource.data = res.content;
+        this.totalRows = res.totalElements
+      });
+      this.subscriptions.push(sb);
+    }
+  }
+
+  clearColumn(event:any,columnKey: string): void {
+    console.log(columnKey)
+    this.searchValue[columnKey] = null;
+    this.searchCondition[columnKey] = "none";
+    this.applyFilter(null,null);
+    this.getAgreements()
+  }
+
 }

@@ -18,7 +18,7 @@ export class cbankuser {
     this.lastName = d.lastName;
     this.effectiveDate = d.effectiveDate
     this.expiryDate = d.expiryDate
-    this.status = d.boolean;
+    this.status = d.status;
     this.emailAddress =  d.emailAddress;
     this.roles = d.roles;
     this.customers = d.customers

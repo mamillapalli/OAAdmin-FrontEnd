@@ -12,7 +12,9 @@ import {CopyAsModalComponent} from "../../../OAPF/common/copy-as-modal/copy-as-m
 import {environment} from "../../../../../environments/environment";
 import { AgreementMainComponent } from './agreement-main/agreement-main.component';
 import { AgreementEndComponent } from './agreement-end/agreement-end.component';
-const API_USERS_URL = `${environment.apiUrl}`;
+import { CreditAdviseComponent } from 'src/app/OAAdmin/credit-advise/credit-advise.component';
+import {oapfcommonService} from "../../../shared/oapfcommon.service";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-agreementmodal',
@@ -36,12 +38,15 @@ export class AgreementmodalComponent implements OnInit {
   errorMsg: string;
   fromParent: any;
   reqAgreementReq: Agreementreq;
+  checkNextStage = true;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
               private http: HttpClient,
               public activeModal: NgbActiveModal,
-              private authService: AuthService,public modalService: NgbModal) {
+              private authService: AuthService,
+              public modalService: NgbModal,
+              public oapfcommonService: oapfcommonService) {
   }
 
   ngOnInit(): void {
@@ -63,7 +68,7 @@ export class AgreementmodalComponent implements OnInit {
     const nextStep = this.currentStep$.value + 1;
     if (nextStep > this.formsCount) {
       return;
-    }    
+    }
     if (this.currentStep$.value === this.formsCount - 1) {
       this.reqAgreementReq = new Agreementreq();
      /* this.reqAgreementReq.contractReferenceNumber = this.account$.value.contractReferenceNumber
@@ -81,40 +86,139 @@ export class AgreementmodalComponent implements OnInit {
       this.reqAgreementReq.anchorCustomer = this.account$.value.anchorCustomer
       this.reqAgreementReq.rm = this.account$.value.rm
       this.reqAgreementReq.counterParties = this.account$.value.cntrPrtyList*/
-       this.reqAgreementReq =  this.account$.value;
+      this.reqAgreementReq =  this.account$.value;
 
-      const agreementReq = JSON.stringify(this.reqAgreementReq)
-  
-      console.log('new is :'+agreementReq)
+      //const agreementReq = JSON.stringify(this.reqAgreementReq)
+
+      console.log('new is :'+this.reqAgreementReq)
       if (this.mode === 'new') {
-        this.CreateAgreement(agreementReq).subscribe(res => {
-          if(res) {
-            this.currentStep$.next(nextStep);
+        this.checkNextStage = false;
+        this.oapfcommonService.dataItem(this.reqAgreementReq, '', this.mode, 'oaadmin/api/v1/agreements').subscribe(res => {
+          if (res !== undefined) {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Add Record Successfully',
+              icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                //Swal.close();
+                //this.activeModal.close();
+              }
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== undefined) {
+            if (this.checkNextStage) {
+              this.currentStep$.next(nextStep);
+            }
           }
         }, (error: { message: any }) => {
-          console.error('There was an error!', error);
-          return;
-        });
-      } else if (this.mode === 'edit') {
-
-        this.modifyAgreement(agreementReq).subscribe(res => {
-          if(res) {
-            this.currentStep$.next(nextStep);
-          }
-        }, (error: { message: any }) => {
-          console.error('There was an error!', error);
-          return;
-        });
-      } else if (this.mode === 'auth') {
-        this.authAgreement().subscribe(res => {
-          if(res) {
-            this.currentStep$.next(nextStep);
-          }
-        }, (error: { message: any }) => {
+          this.checkNextStage = false
           console.error('There was an error!', error);
           return;
         });
       }
+      else if (this.mode === 'edit') {
+        this.checkNextStage = false;
+        this.oapfcommonService.dataItem(this.reqAgreementReq, '', this.mode, 'oaadmin/api/v1/agreements').subscribe(res => {
+          console.log('Response is : ' + res)
+          if (res !== undefined) {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Edit Record Successfully',
+              icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                //Swal.close();
+                //this.activeModal.close();
+              }
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== undefined) {
+            if (this.checkNextStage) {
+              this.currentStep$.next(nextStep);
+            }
+          }
+        }, (error: { message: any }) => {
+          this.checkNextStage = false
+          console.error('There was an error!', error);
+          return;
+        });
+      }
+      else if (this.mode === 'auth') {
+        this.checkNextStage = false;
+        this.oapfcommonService.dataItem(this.reqAgreementReq, '', this.mode, 'oaadmin/api/v1/agreements').subscribe(res => {
+          if (res !== undefined) {
+            this.checkNextStage = true;
+            Swal.fire({
+              title: 'Authorize Record Successfully',
+              icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                //Swal.close();
+                //this.activeModal.close();
+              }
+            });
+          } else {
+            Swal.fire({
+              title: 'Error is occurred.',
+              icon: 'error'
+            });
+          }
+          if (res !== undefined) {
+            if (this.checkNextStage) {
+              this.currentStep$.next(nextStep);
+            }
+          }
+        }, (error: { message: any }) => {
+          this.checkNextStage = false
+          console.error('There was an error!', error);
+          return;
+        });
+      }
+      // if (this.mode === 'new') {
+      //   this.CreateAgreement(agreementReq).subscribe(res => {
+      //     if(res) {
+      //       this.currentStep$.next(nextStep);
+      //     }
+      //   }, (error: { message: any }) => {
+      //     console.error('There was an error!', error);
+      //     return;
+      //   });
+      // }
+      // else if (this.mode === 'edit') {
+      //
+      //   this.modifyAgreement(agreementReq).subscribe(res => {
+      //     if(res) {
+      //       this.currentStep$.next(nextStep);
+      //     }
+      //   }, (error: { message: any }) => {
+      //     console.error('There was an error!', error);
+      //     return;
+      //   });
+      // }
+      // else if (this.mode === 'auth') {
+      //   this.authAgreement().subscribe(res => {
+      //     if(res) {
+      //       this.currentStep$.next(nextStep);
+      //     }
+      //   }, (error: { message: any }) => {
+      //     console.error('There was an error!', error);
+      //     return;
+      //   });
+      // }
     }
     this.currentStep$.next(nextStep);
   }
@@ -148,68 +252,68 @@ export class AgreementmodalComponent implements OnInit {
     console.log(errorMessage);
     return throwError(errorMessage);
   }
-  CreateAgreement(data: any): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.post<any>(API_USERS_URL + '/api/v1/agreements/', data, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  modifyAgreement(data: any): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/agreements/', data, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  public authAgreement(): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/agreements/authorise/' + this.account$.value.userId, {}, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  deleteAgreement(): Observable<any> {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${auth?.jwt}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<any>(API_USERS_URL + '/api/v1/agreements/delete' + this.account$.value.userId, {}, {headers: httpHeaders})
-      .pipe(
-        retry(1),
-        catchError(this.errorHandle)
-      );
-  }
-
-  deleteModal() {
-    this.deleteAgreement().subscribe(res => {
-      if(res){
-        this.activeModal.dismiss();
-      }
-    }, (error: { message: any }) => {
-      console.error('There was an error!', error);
-      return;
-    });
-  }
+  // CreateAgreement(data: any): Observable<any> {
+  //   const auth = this.authService.getAuthFromLocalStorage();
+  //   const httpHeaders = new HttpHeaders({
+  //     Authorization: `Bearer ${auth?.jwt}`,
+  //     'Content-Type': 'application/json'
+  //   });
+  //   return this.http.post<any>(API_USERS_URL + '/api/v1/agreements/', data, {headers: httpHeaders})
+  //     .pipe(
+  //       retry(1),
+  //       catchError(this.errorHandle)
+  //     );
+  // }
+  //
+  // modifyAgreement(data: any): Observable<any> {
+  //   const auth = this.authService.getAuthFromLocalStorage();
+  //   const httpHeaders = new HttpHeaders({
+  //     Authorization: `Bearer ${auth?.jwt}`,
+  //     'Content-Type': 'application/json'
+  //   });
+  //   return this.http.put<any>(API_USERS_URL + '/api/v1/agreements/', data, {headers: httpHeaders})
+  //     .pipe(
+  //       retry(1),
+  //       catchError(this.errorHandle)
+  //     );
+  // }
+  //
+  // public authAgreement(): Observable<any> {
+  //   const auth = this.authService.getAuthFromLocalStorage();
+  //   const httpHeaders = new HttpHeaders({
+  //     Authorization: `Bearer ${auth?.jwt}`,
+  //     'Content-Type': 'application/json'
+  //   });
+  //   return this.http.put<any>(API_USERS_URL + '/api/v1/agreements/authorise/' + this.account$.value.userId, {}, {headers: httpHeaders})
+  //     .pipe(
+  //       retry(1),
+  //       catchError(this.errorHandle)
+  //     );
+  // }
+  //
+  // deleteAgreement(): Observable<any> {
+  //   const auth = this.authService.getAuthFromLocalStorage();
+  //   const httpHeaders = new HttpHeaders({
+  //     Authorization: `Bearer ${auth?.jwt}`,
+  //     'Content-Type': 'application/json'
+  //   });
+  //   return this.http.put<any>(API_USERS_URL + '/api/v1/agreements/delete' + this.account$.value.userId, {}, {headers: httpHeaders})
+  //     .pipe(
+  //       retry(1),
+  //       catchError(this.errorHandle)
+  //     );
+  // }
+  //
+  // deleteModal() {
+  //   this.deleteAgreement().subscribe(res => {
+  //     if(res){
+  //       this.activeModal.dismiss();
+  //     }
+  //   }, (error: { message: any }) => {
+  //     console.error('There was an error!', error);
+  //     return;
+  //   });
+  // }
 
   copyAs() {
     this.modalOption.backdrop = 'static';
@@ -245,5 +349,20 @@ export class AgreementmodalComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  openAdvicePdf( mode: any) {
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    //  this.modalOption.windowClass = 'my-class'
+    this.modalOption.size='lg';
+    const modalRef = this.modalService.open(CreditAdviseComponent, this.modalOption);
+    modalRef.componentInstance.mode = mode;
+    //  modalRef.componentInstance.fromParent = element;
+    modalRef.result.then((result) => {
+      console.log(result);
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
 }

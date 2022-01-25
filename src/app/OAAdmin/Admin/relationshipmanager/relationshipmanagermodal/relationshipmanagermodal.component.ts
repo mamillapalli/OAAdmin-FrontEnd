@@ -104,7 +104,8 @@ export class RelationshipmanagermodalComponent implements OnInit, OnDestroy {
           console.error('There was an error!', error);
           return;
         });
-      } else if (this.mode === 'edit') {
+      }
+      else if (this.mode === 'edit') {
         this.checkNextStage = false;
         this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.rmId,this.mode,'oaadmin/api/v1/rms').subscribe(res => {
           console.log('Response is : ' + res)
@@ -136,7 +137,8 @@ export class RelationshipmanagermodalComponent implements OnInit, OnDestroy {
           console.error('There was an error!', error);
           return;
         });
-      } else if (this.mode === 'auth') {
+      }
+      else if (this.mode === 'auth') {
         this.checkNextStage = false;
         this.oaCommonService.dataItem(rmNewRequest,rmNewRequest.rmId,this.mode,'oaadmin/api/v1/rms').subscribe(res => {
           if (res !== undefined) {

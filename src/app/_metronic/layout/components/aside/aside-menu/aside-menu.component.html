@@ -216,6 +216,25 @@
     </div>
   </div>
   <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/Customer/agreement" routerLinkActive="active">
+      <span class="menu-icon">
+         <span class="svg-icon svg-icon-2">
+           <i class='fas fa-handshake' style='font-size:15px'></i>
+         </span>
+      </span>
+      <span class="menu-title">Agreement</span></a>
+  </div>
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLink="/Customer/sbr" routerLinkActive="active">
+      <span class="menu-icon">
+        <span class="svg-icon svg-icon-2">
+          <i class='fas fa-users' style='font-size:15px'></i>
+        </span>
+      </span>
+      <span class="menu-title">SBR</span>
+    </a>
+  </div>
+  <div class="menu-item">
     <a
       class="menu-link without-sub"
       routerLink="/OAPF/invoice"
@@ -251,24 +270,7 @@
     ><span class="menu-title">Payments</span></a
     >
   </div>
-  <div class="menu-item">
-    <a class="menu-link without-sub" routerLink="/Customer/agreement" routerLinkActive="active">
-      <span class="menu-icon">
-        <span [inlineSVG]="'./assets/media/icons/duotune/finance/invoice.png'" class="svg-icon svg-icon-2"></span></span>
-      <span class="menu-title">Agreement</span></a>
-  </div>
-  <div class="menu-item">
-    <a class="menu-link without-sub" routerLink="/Customer/sbr" routerLinkActive="active">
-      <span class="menu-icon">
-        <span [inlineSVG]="'./assets/media/icons/duotune/finance/invoice.png'" class="svg-icon svg-icon-2"></span></span>
-      <span class="menu-title">SBR</span></a>
-  </div>
   <!-- Separator -->
-  <div class="menu-item">
-    <div class="menu-content pt-8 pb-2">
-      <span class="menu-section text-muted text-uppercase fs-8 ls-1">Invoice Approval</span>
-    </div>
-  </div>
 </ng-container>
 <!-- begin::1 Level -->
 

@@ -144,7 +144,8 @@ export class InvoicemodalComponent implements OnInit {
           console.error('There was an error!', error);
           return;
         });
-      } else if (this.mode === 'edit') {
+      }
+      else if (this.mode === 'edit') {
         this.checkNextStage = false;
         this.oapfcommonService.dataItem(rmNewRequest, '', this.mode, '/oapf/api/v1/invoices').subscribe(res => {
           console.log('Response is : ' + res)
@@ -176,7 +177,8 @@ export class InvoicemodalComponent implements OnInit {
           console.error('There was an error!', error);
           return;
         });
-      } else if (this.mode === 'auth') {
+      }
+      else if (this.mode === 'auth') {
         this.checkNextStage = false;
         this.oapfcommonService.dataItem(rmNewRequest, '', this.mode, '/oapf/api/v1/invoices').subscribe(res => {
           if (res !== undefined) {

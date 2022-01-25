@@ -19,6 +19,7 @@ import { SelectionModel } from "@angular/cdk/collections";
 import { oapfcommonService } from 'src/app/OAAdmin/shared/oapfcommon.service';
 import { BusinessTypeReq } from 'src/app/OAAdmin/Model/businessTypeReq';
 import { CreditAdviseComponent } from 'src/app/OAAdmin/credit-advise/credit-advise.component';
+import {CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -35,7 +36,7 @@ export class AgreementMainComponent implements OnInit {
   form: FormGroup;
   isPrintable = false;
   @Input() defaultValues: Partial<Agreement>;
-  selection = new SelectionModel<Element>(true, []); 
+  selection = new SelectionModel<Element>(true, []);
   private unsubscribe: Subscription[] = [];
   @Input('formValue') formValue: any;
   @Input() mode: any;
@@ -121,22 +122,23 @@ export class AgreementMainComponent implements OnInit {
   }
 
   updateForm() {
-    this.f.contractReferenceNumber.setValue(this.formValue.contractReferenceNumber);
-    this.f.businessType.setValue(this.formValue.businessType);
-    this.f.anchorCustomer.setValue(this.formValue.anchorCustomer);
-    this.f.contractDocumentNumber.setValue(this.formValue.contractDocumentNumber);
-    this.f.rmId.setValue(this.formValue.rm.rmId);
-    this.f.remarks.setValue(this.formValue.remarks);
-    const evalidDate = this.datePipe.transform(new Date(this.formValue.validDate), "yyyy-MM-dd");
-    this.f.validDate.setValue(evalidDate);
-    const eTransDate = this.datePipe.transform(new Date(this.formValue.transactionDate), "yyyy-MM-dd");
-    this.f.transactionDate.setValue(eTransDate);
-    const expDate = this.datePipe.transform(new Date(this.formValue.expiryDate), "yyyy-MM-dd");
-    this.f.expiryDate.setValue(expDate);
-    const customerList = this.formValue.anchorCustomer;
-    this.f.anchorCustomerId.setValue(customerList.customerId);
-    this.f.rm.setValue(this.formValue.rm);
-    this.f.businessTypeId.setValue(this.formValue.businessType.name);
+    this.form.patchValue(this.formValue)
+    // this.f.contractReferenceNumber.setValue(this.formValue.contractReferenceNumber);
+    // this.f.businessType.setValue(this.formValue.businessType);
+    // this.f.anchorCustomer.setValue(this.formValue.anchorCustomer);
+    // this.f.contractDocumentNumber.setValue(this.formValue.contractDocumentNumber);
+    // this.f.rmId.setValue(this.formValue.rm.rmId);
+    // this.f.remarks.setValue(this.formValue.remarks);
+    // const evalidDate = this.datePipe.transform(new Date(this.formValue.validDate), "yyyy-MM-dd");
+    // this.f.validDate.setValue(evalidDate);
+    // const eTransDate = this.datePipe.transform(new Date(this.formValue.transactionDate), "yyyy-MM-dd");
+    // this.f.transactionDate.setValue(eTransDate);
+    // const expDate = this.datePipe.transform(new Date(this.formValue.expiryDate), "yyyy-MM-dd");
+    // this.f.expiryDate.setValue(expDate);
+    // const customerList = this.formValue.anchorCustomer;
+    // this.f.anchorCustomerId.setValue(customerList.customerId);
+    // this.f.rm.setValue(this.formValue.rm);
+    // this.f.businessTypeId.setValue(this.formValue.businessType.name);
     if (this.formValue.counterParties.length > 0) {
       this.dataSource.data = this.formValue.counterParties;
       this.dataSource.sort = this.sort;
@@ -210,7 +212,7 @@ export class AgreementMainComponent implements OnInit {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
    // this.modalOption.windowClass = 'my-class'
-   this.modalOption.size='lg'; 
+   this.modalOption.size='lg';
     const modalRef = this.modalService.open(CustomerDOComponent, this.modalOption);
     modalRef.result.then((result) => {
       this.form.patchValue(result);
@@ -351,7 +353,7 @@ export class AgreementMainComponent implements OnInit {
     }
   }
 
-    
+
   /*exportpdf = () => {
     const doc = new jsPDF({
       orientation: 'landscape',
@@ -362,7 +364,7 @@ export class AgreementMainComponent implements OnInit {
     doc.text('<div><h1 align=\'middle\'> THIS IS TEST ADVICE </h1> <br><h3 align=\'right\'>09/01/2022</h3><h3 align=\'left\'>Buyer1,<br>Trishanu Consulting,<br>SP Road,<br>Mumbai<h3><DIV id=\"id1_2\"><DIV id=\"id1_2_1\"><P class=\"p2 ft7\">OUR BILL REF OUR REF ISSUING BANK\' ISSUING BANK\'S REF APPLICANT</P><P class=\"p3 ft8\">L/C AMOUNT</P><P class=\"p4 ft8\">BILL AMOUNT</P><P class=\"p4 ft8\">TENOR</P></DIV><DIV id=\"id1_2_2\"><P class=\"p5 ft11\"><SPAN class=\"ft9\">:</SPAN><NOBR><SPAN class=\"ft10\">EPDAE-1819000045</SPAN></NOBR><SPAN class=\"ft0\"> </SPAN>(PLEASE QUOTE OUR REFERENCE ON ALL CORRESPONDENCE)</P><P class=\"p4 ft0\"><SPAN class=\"ft9\">:</SPAN><NOBR><SPAN class=\"ft10\">ELC55-181041</SPAN></NOBR></P><P class=\"p4 ft0\"><SPAN class=\"ft9\">:</SPAN><SPAN class=\"ft10\">UNITED ARAB </SPAN><NOBR>BANK-SHARJAH</NOBR></P><P class=\"p4 ft0\"><SPAN class=\"ft9\">:</SPAN><SPAN class=\"ft10\">ILC1011/18/66789</SPAN></P><P class=\"p6 ft0\"><SPAN class=\"ft9\">:</SPAN><SPAN class=\"ft10\">PIVOT ENGINEERING AND GENERAL</SPAN></P><P class=\"p4 ft0\"><SPAN class=\"ft9\">:</SPAN><SPAN class=\"ft10\">AED 1,529,264.10</SPAN></P><P class=\"p4 ft0\"><SPAN class=\"ft9\">:</SPAN><SPAN class=\"ft10\">AED 100.00</SPAN></P><P class=\"p4 ft0\"><SPAN class=\"ft9\">:</SPAN><SPAN class=\"ft10\">105 DAYS FROM DATE OF DELIVERY OF</SPAN></P><P class=\"p7 ft0\">GOODS</P></DIV></DIV><DIV id=\"id1_3\"><P class=\"p8 ft0\">We refer to your letter dated <NOBR>2018-08-07</NOBR> and advise that as per your instructions & without any risk / responsiblity on our part we have forwarded the above documents to issuing bank/nominated bank for thier acceptance / payment on due date.</P><P class=\"p9 ft0\">We shall advise you further upon hearing from them.</P><P class=\"p10 ft8\">FOR ABU DHABI ISLAMIC BANK</P><P class=\"p11 ft8\">TRADE FINANCE DEPARTMENT , ABU DHABI</P><P class=\"p12 ft1\">Subject to the UCP for Documentary Credits (2007 Rev.) ICC Publication No.600</P></DIV></div>', 1, 1);
     doc.save('TestAdvice.pdf');
   };*/
-  
+
 
   generarPDF() {
     this.isPrintable=true;
@@ -392,7 +394,7 @@ export class AgreementMainComponent implements OnInit {
       this.isPrintable=false;
       return doc;
     }).then((doc) => {
-      doc.save('postres.pdf');  
+      doc.save('postres.pdf');
     });
   }
   openAdvicePdf( mode: any) {
@@ -409,5 +411,9 @@ export class AgreementMainComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
+  }
+
 }
