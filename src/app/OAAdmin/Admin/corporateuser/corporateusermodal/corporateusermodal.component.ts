@@ -227,7 +227,8 @@ export class CorporateusermodalComponent implements OnInit {
     this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(CopyAsModalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'copy';
-    modalRef.componentInstance.functionType = 'rms';
+    modalRef.componentInstance.functionType = 'admin';
+    modalRef.componentInstance.url = 'oaadmin/api/v1/customerusers';
     modalRef.componentInstance.displayedColumns = this.displayedColumns;
     modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {

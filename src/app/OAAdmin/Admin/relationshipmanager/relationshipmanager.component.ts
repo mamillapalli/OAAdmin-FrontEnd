@@ -94,6 +94,8 @@ export class RelationshipmanagerComponent implements OnInit {
     this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(RelationshipmanagermodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log('newbankadmins is ' + result);
       this.getRM();
@@ -111,6 +113,8 @@ export class RelationshipmanagerComponent implements OnInit {
     const modalRef = this.modalService.open(RelationshipmanagermodalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log(result);
       this.getRM();

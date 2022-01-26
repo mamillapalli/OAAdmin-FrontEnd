@@ -1,73 +1,134 @@
 <div class="card">
-    <div class="card-body">
-        <div class="stepper stepper-links d-flex flex-column pt-15" id="kt_create_account_stepper">
-            <div class="stepper-nav mb-5">
-                <div class="stepper-item" [ngClass]="{
-              current: currentStep$.value === 1,
-              completed: currentStep$.value > 1
-            }">
-                    <h3 class="stepper-title">Holiday</h3>
-                </div>
-
-
-                <div class="stepper-item" [ngClass]="{ current: currentStep$.value === 2 }">
-                    <h3 class="stepper-title">Completed</h3>
-                </div>
-            </div>
-
-            <form class="mx-auto mw-600px w-100 pt-15 pb-10" noValidate id="kt_create_account_form">
-                <div class="current">
-                    <ng-container *ngIf="currentStep$.value === 1">
-                        <app-holiday-main class="" [updateParentModel]="updateAccount" [defaultValues]="account$.value"
-                            [formValue]="formValue" [mode]=mode>
-                            </app-holiday-main>
-                    </ng-container>
-
-
-                    <ng-container *ngIf="currentStep$.value === 2">
-                        <app-holiday-end class="w-100"></app-holiday-end>
-                    </ng-container>
-                </div>
-
-                <div class="d-flex flex-stack pt-15">
-                    <div class="mr-2">
-                        <ng-container *ngIf="currentStep$.value !== 1">
-                            <button type="button" class="btn btn-lg btn-light-primary me-3" (click)="prevStep()">
-                                <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr063.svg'"
-                                    class="svg-icon svg-icon-4 me-1"></span>
-                                Back
-                            </button>
-                        </ng-container>
-                    </div>
-
-                    <div class="mr-2">
-                        <ng-container>
-                            <button type="button" class="btn btn-lg btn-light-primary me-3" (click)="closeModal()">
-                                Cancel
-                            </button>
-                        </ng-container>
-                    </div>
-
-                    <ng-container *ngIf="currentStep$.value !== formsCount">
-                        <div>
-                            <button type="button" class="btn btn-lg btn-primary me-3"
-                                [disabled]="!isCurrentFormValid$.value" (click)="nextStep()">
-                                <span class="indicator-label">
-                                    <ng-container *ngIf="currentStep$.value < formsCount - 1">
-                                        Continue {{ " " }}
-                                        <span [inlineSVG]="
-                          './assets/media/icons/duotune/arrows/arr064.svg'
-                        " class="svg-icon svg-icon-3 ms-2 me-0"></span>
-                                    </ng-container>
-                                    <ng-container *ngIf="currentStep$.value === formsCount - 1">
-                                        Submit
-                                    </ng-container>
-                                </span>
-                            </button>
-                        </div>
-                    </ng-container>
-                </div>
-            </form>
+  <div class="card-body">
+    <div
+      class="stepper stepper-links d-flex flex-column"
+      id="kt_create_account_stepper"
+    >
+      <div class="stepper-nav mb-5">
+        <div class="stepper-item"
+             [ngClass]="{
+             current: currentStep$.value === 1,
+             completed: currentStep$.value > 1
+             }"
+        >
+          <h3 class="stepper-title">Holiday Info</h3>
         </div>
+        <!--        <div class="stepper-item"-->
+        <!--             [ngClass]="{ current: currentStep$.value === 2 }">-->
+        <!--          <h3 class="stepper-title">Completed</h3>-->
+        <!--        </div>-->
+      </div>
+
+      <div class="card">
+        <div class="d-flex justify-content-end py-1">
+          <div class="card-header">
+            <div class="me-4">
+              <ng-container *ngIf="this.mode === 'new'">
+                <a
+                  class="btn btn-sm btn-flex btn-light-info btn-active-light fw-bolder cursor-pointer"
+                  data-kt-menu-trigger="click"
+                  data-kt-menu-placement="bottom-end"
+                  data-kt-menu-flip="top-end" (click)="copyAs()"
+                >
+                  <span><i class="bi bi-clipboard"></i></span>
+                </a>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <form
+        class="mx-auto mw-100 w-100"
+        noValidate
+        id="kt_create_account_form"
+      >
+        <div class="current">
+          <ng-container *ngIf="currentStep$.value === 1">
+            <app-holiday-main class="w-100"
+                                          [updateParentModel]="updateAccount"
+                                          [defaultValues]="account$.value"
+                                          [formValue]="formValue"
+                                          [mode]=mode
+            ></app-holiday-main>
+          </ng-container>
+
+          <!--          <ng-container *ngIf="currentStep$.value === 2">-->
+          <!--            <app-relationshipmanagerstep2 class="w-100"></app-relationshipmanagerstep2>-->
+          <!--          </ng-container>-->
+        </div>
+
+        <div style="justify-content: center" class="d-flex flex-stack pt-15">
+          <div class="mr-2">
+            <ng-container *ngIf="currentStep$.value !== 1">
+              <button
+                type="button"
+                class="btn btn-sm btn-color-red btn-light-primary me-2"
+                (click)="prevStep()"
+              >
+                <span
+                  [inlineSVG]="'./assets/media/icons/duotune/arrows/arr063.svg'"
+                  class="svg-icon svg-icon-4 me-1"
+                ></span>
+                Back
+              </button>
+            </ng-container>
+          </div>
+
+          <div class="mr-2">
+            <ng-container>
+              <button
+                type="button"
+                class="btn btn-sm btn-light-warning btn-light-primary me-2"
+                (click)="closeModal()"
+              >
+                Cancel
+              </button>
+            </ng-container>
+          </div>
+
+          <ng-container *ngIf="currentStep$.value !== formsCount">
+            <div>
+              <button
+                type="button"
+                class="btn btn-sm btn-light-success btn-primary me-2"
+                [disabled]="!isCurrentFormValid$.value"
+                (click)="nextStep()"
+              >
+                <span class="indicator-label">
+              <ng-container *ngIf="currentStep$.value < formsCount - 1">
+                Continue {{ " " }}
+                <span
+                  [inlineSVG]="
+                      './assets/media/icons/duotune/arrows/arr064.svg'
+                    "
+                  class="svg-icon svg-icon-3 ms-2 me-0"
+                ></span>
+              </ng-container>
+                </span>
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="this.mode !== 'view'">
+            <div>
+              <button
+                type="button"
+                class="btn btn-sm btn-light-success btn-primary me-2"
+                [disabled]="!isCurrentFormValid$.value"
+                (click)="nextStep()"
+              >
+                <span class="indicator-label">
+                  <ng-container *ngIf=" this.mode !== 'view'">
+                    Submit
+                  </ng-container>
+                </span>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+      </form>
     </div>
+  </div>
 </div>

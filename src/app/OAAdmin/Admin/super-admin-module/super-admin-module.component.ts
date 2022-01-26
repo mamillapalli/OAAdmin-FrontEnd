@@ -16,6 +16,7 @@ import {superAdmin} from "../../Model/super-admin";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import { TableColumn } from '../../OAPF/common/tri-data-tables/tableColumn';
 import { CustomColumn } from '../../Model/CustomColumn';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 
 
@@ -80,6 +81,9 @@ export class SuperAdminModuleComponent implements OnInit {
   private _filterMethods = CONDITIONS_FUNCTIONS;
   searchFilter: any = {};
   columns: { columnDef: string; header: string; }[];
+
+  @ViewChild('MatMenuTrigger') matMenuTrigger: MatMenuTrigger;
+  @ViewChild('menuTrigger') trigger: any;
 
   constructor(public http: HttpClient,
               public authService: AuthService,
@@ -267,6 +271,8 @@ export class SuperAdminModuleComponent implements OnInit {
 
   public applyFilter(event: any,label:any) {
     console.log('apply filter')
+    this.trigger.closeMenu()
+    this.matMenuTrigger.closeMenu()
     this.searchFilter = {
       values: this.searchValue,
       conditions: this.searchCondition,
