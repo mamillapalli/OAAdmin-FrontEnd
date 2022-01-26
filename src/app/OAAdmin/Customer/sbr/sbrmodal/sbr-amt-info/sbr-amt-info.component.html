@@ -1,273 +1,333 @@
-<div class="pb-5 pb-lg-8">
-  <h4 class="fw-bolder text-dark">Anchor Customer Info</h4>
-</div>
-<div [formGroup]="form">
-  <div class="form-group row">
-    <div class="col-lg-3">
-      <label>Customer Name</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Anchor Customer Contact Name" name="anchorCustomerContactName" [class.is-invalid]="isControlInvalid('anchorCustomerContactName')"
-             [class.is-valid]="isControlValid('anchorCustomerContactName')" formControlName="anchorCustomerContactName"/>
+<div class="card-body">
+  <div [formGroup]="form" id="form">
+    <div class="form-group row">
+      <h3 class="fw-bolder text-dark">Anchor Customer Info</h3>
     </div>
-    <div class="col-lg-3">
-      <label>Customer Address1</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Anchor Customer Address1" name="anchorCustomerAddressLine1" [class.is-invalid]="isControlInvalid('anchorCustomerAddressLine1')"
-             [class.is-valid]="isControlValid('anchorCustomerAddressLine1')" formControlName="anchorCustomerAddressLine1"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Customer Address2</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Anchor Customer Address2" name="anchorCustomerAddressLine2" [class.is-invalid]="isControlInvalid('anchorCustomerAddressLine1')"
-             [class.is-valid]="isControlValid('anchorCustomerAddressLine2')" formControlName="anchorCustomerAddressLine2"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Customer Address3</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Anchor Customer Address3" name="anchorCustomerAddressLine3" [class.is-invalid]="isControlInvalid('anchorCustomerAddressLine3')"
-             [class.is-valid]="isControlValid('anchorCustomerAddressLine3')" formControlName="anchorCustomerAddressLine3"/>
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-lg-3">
-      <label>PO Box No</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Anchor Customer PO Box" name="Anchor Customer PO Box" [class.is-invalid]="isControlInvalid('anchorCustomerPOBox')"
-             [class.is-valid]="isControlValid('anchorCustomerPOBox')" formControlName="anchorCustomerPOBox"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Email Address</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Email Address" name="anchorCustomerEmail" [class.is-invalid]="isControlInvalid('anchorCustomerEmail')"
-             [class.is-valid]="isControlValid('anchorCustomerEmail')" formControlName="anchorCustomerEmail"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Fax</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Anchor Customer Fax" name="anchorCustomerFax" [class.is-invalid]="isControlInvalid('anchorCustomerFax')"
-             [class.is-valid]="isControlValid('anchorCustomerFax')" formControlName="anchorCustomerFax"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Telephone</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Anchor Customer Telephone" name="anchorCustomerTelephone" [class.is-invalid]="isControlInvalid('anchorCustomerTelephone')"
-             [class.is-valid]="isControlValid('anchorCustomerTelephone')" formControlName="anchorCustomerTelephone"/>
-    </div>
-
-  </div>
-  <div class="pb-5 pb-lg-8">
-    <h4 class="fw-bolder text-dark">Counter Party Info</h4>
-  </div>
-  <div class="form-group row">
-    <div class="col-lg-3">
-      <label>Customer Name</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Counter Party Contact Name" name="counterPartyContactName" [class.is-invalid]="isControlInvalid('counterPartyContactName')"
-             [class.is-valid]="isControlValid('counterPartyContactName')" formControlName="counterPartyContactName"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Customer Address1</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Counter Party Address1" name="counterPartyAddressLine1" [class.is-invalid]="isControlInvalid('counterPartyAddressLine1')"
-             [class.is-valid]="isControlValid('counterPartyAddressLine1')" formControlName="counterPartyAddressLine1"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Customer Address2</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Counter Party Address2" name="counterPartyAddressLine2" [class.is-invalid]="isControlInvalid('counterPartyAddressLine2')"
-             [class.is-valid]="isControlValid('counterPartyAddressLine2')" formControlName="counterPartyAddressLine2"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Customer Address3</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Counter Party Address3" name="counterPartyAddressLine3" [class.is-invalid]="isControlInvalid('counterPartyAddressLine3')"
-             [class.is-valid]="isControlValid('counterPartyAddressLine3')" formControlName="counterPartyAddressLine3"/>
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-lg-3">
-      <label>PO Box No</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Counter Party PO Box" name="counterPartyPOBox" [class.is-invalid]="isControlInvalid('counterPartyPOBox')"
-             [class.is-valid]="isControlValid('counterPartyPOBox')" formControlName="counterPartyPOBox"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Email Address</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder="Counter Party Email Address" name="counterPartyEmail" [class.is-invalid]="isControlInvalid('counterPartyEmail')"
-             [class.is-valid]="isControlValid('counterPartyEmail')" formControlName="counterPartyEmail"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Fax</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder=" Counter Party Fax" name="counterPartyFax" [class.is-invalid]="isControlInvalid('counterPartyFax')"
-             [class.is-valid]="isControlValid('counterPartyFax')" formControlName="counterPartyFax"/>
-    </div>
-    <div class="col-lg-3">
-      <label>Telephone</label>
-      <input type="text" class="input_QA form-control " autocomplete="off"
-             placeholder=" Counter Party Telephone" name="counterPartyTelephone" [class.is-invalid]="isControlInvalid('counterPartyTelephone')"
-             [class.is-valid]="isControlValid('counterPartyTelephone')" formControlName="counterPartyTelephone"/>
-    </div>
-
-  </div>
-  <div class="pb-5 pb-lg-8">
-    <h4 class="fw-bolder text-dark">Financial Info</h4>
-  </div>
-  <div class="form-group row">
-      <div class="col-lg-3">
-        <label>Management Fee Currency & Amount</label>
-        <div class="row fv-row">
-          <div class="col-4">
-            <select
-              class="input_QA form-control "
-              name="managementFeeCurrency"
-              formControlName="managementFeeCurrency" [class.is-invalid]="isControlInvalid('managementFeeCurrency')"
-              [class.is-valid]="isControlValid('managementFeeCurrency')">
-              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
-            </select>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_readonly" type="text" name="anchorCustomerContactName"
+                   id="anchorCustomerContactName"
+                   formControlName="anchorCustomerContactName"
+                   >
+            <label class="label_OA required">Customer Name</label>
           </div>
-          <div class="col-8">
-            <input type="number" class="input_QA form-control " autocomplete="off"
-                   placeholder="managementFeeAmount" name="managementFeeAmount" [class.is-invalid]="isControlInvalid('managementFeeAmount')"
-                   [class.is-valid]="isControlValid('managementFeeAmount')" formControlName="managementFeeAmount"/>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_readonly" type="text" name="anchorCustomerAddressLine1"
+                   id="anchorCustomerAddressLine1"
+                   formControlName="anchorCustomerAddressLine1"
+                   placeholder=" ">
+            <label class="label_OA">Customer Address1</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_readonly" type="text" name="anchorCustomerAddressLine2"
+                   id="anchorCustomerAddressLine2"
+                   formControlName="anchorCustomerAddressLine2"
+                   placeholder=" ">
+            <label class="label_OA">Customer Address2</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_readonly" type="text" name="anchorCustomerAddressLine3"
+                   id="anchorCustomerAddressLine3"
+                   formControlName="anchorCustomerAddressLine3"
+                   placeholder=" ">
+            <label class="label_OA">Customer Address3</label>
           </div>
         </div>
       </div>
-    <div class="col-lg-3">
-      <label>Administrative Fee Currency & Amount</label>
-      <div class="row fv-row">
-        <div class="col-4">
-          <select
-            class="input_QA form-control "
-            name="administrativeFeeCurrency"
-            formControlName="administrativeFeeCurrency" [class.is-invalid]="isControlInvalid('administrativeFeeCurrency')"
-            [class.is-valid]="isControlValid('administrativeFeeCurrency')">
-            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
-          </select>
-        </div>
-        <div class="col-8">
-          <input type="number" class="input_QA form-control " autocomplete="off"
-                 placeholder="administrativeFeeAmount" name="administrativeFeeAmount" [class.is-invalid]="isControlInvalid('administrativeFeeAmount')"
-                 [class.is-valid]="isControlValid('administrativeFeeAmount')" formControlName="administrativeFeeAmount"/>
-        </div>
-      </div>
     </div>
-    <div class="col-lg-3">
-      <label>Early Payment Currency & Amount</label>
-      <div class="row fv-row">
-        <div class="col-4">
-          <select
-            class="input_QA form-control "
-            name="earlyPaymentFeeCurrency"
-            formControlName="earlyPaymentFeeCurrency" [class.is-invalid]="isControlInvalid('earlyPaymentFeeCurrency')"
-            [class.is-valid]="isControlValid('earlyPaymentFeeCurrency')">
-            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
-          </select>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="anchorCustomerPOBox"
+                   id="anchorCustomerPOBox"
+                   formControlName="anchorCustomerPOBox"
+            >
+            <label class="label_OA required">PoBox</label>
+          </div>
         </div>
-        <div class="col-8">
-          <input type="number" class="input_QA form-control " autocomplete="off"
-                 placeholder="earlyPaymentAmount" name="earlyPaymentAmount" [class.is-invalid]="isControlInvalid('earlyPaymentAmount')"
-                 [class.is-valid]="isControlValid('earlyPaymentAmount')" formControlName="earlyPaymentAmount"/>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="anchorCustomerEmail"
+                   id="anchorCustomerEmail"
+                   formControlName="anchorCustomerEmail"
+                   placeholder=" ">
+            <label class="label_OA">Email</label>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="col-lg-3">
-      <label>Invoice Service Charge Amount & CCY</label>
-      <div class="row fv-row">
-        <div class="col-4">
-          <select
-            class="input_QA form-control "
-            name="invoiceServiceChargeCurrency"
-            formControlName="invoiceServiceChargeCurrency" [class.is-invalid]="isControlInvalid('invoiceServiceChargeCurrency')"
-            [class.is-valid]="isControlValid('invoiceServiceChargeCurrency')">
-            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
-          </select>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="anchorCustomerFax"
+                   id="anchorCustomerFax"
+                   formControlName="anchorCustomerFax"
+                   placeholder=" ">
+            <label class="label_OA">Fax</label>
+          </div>
         </div>
-        <div class="col-8">
-          <input type="number" class="input_QA form-control " autocomplete="off"
-                 placeholder="invoiceServiceChargeAmount" name="invoiceServiceChargeAmount" [class.is-invalid]="isControlInvalid('invoiceServiceChargeAmount')"
-                 [class.is-valid]="isControlValid('managementFeeAmount')" formControlName="invoiceServiceChargeAmount"/>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_readonly" type="text" name="anchorCustomerTelephone"
+                   id="anchorCustomerTelephone"
+                   formControlName="anchorCustomerTelephone"
+                   placeholder=" ">
+            <label class="label_OA">Phone No</label>
+          </div>
         </div>
       </div>
     </div>
     <div class="form-group row">
-      <div class="col-lg-3">
-        <label>Finance Fee Currency & Amount</label>
-        <div class="row fv-row">
-          <div class="col-4">
-            <select
-              class="input_QA form-control "
-              name="financeServiceChargeCurrency"
-              formControlName="financeServiceChargeCurrency" [class.is-invalid]="isControlInvalid('financeServiceChargeCurrency')"
-              [class.is-valid]="isControlValid('financeServiceChargeCurrency')">
+      <h3 class="fw-bolder text-dark">Counter Customer Info</h3>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="counterPartyContactName"
+                   id="counterPartyContactName"
+                   formControlName="counterPartyContactName"
+            >
+            <label class="label_OA required">Customer Name</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="counterPartyAddressLine1"
+                   id="counterPartyAddressLine1"
+                   formControlName="counterPartyAddressLine1"
+            >
+            <label class="label_OA required">Customer Address1</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="counterPartyAddressLine2"
+                   id="counterPartyAddressLine2"
+                   formControlName="counterPartyAddressLine2"
+            >
+            <label class="label_OA required">Customer Address2</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="counterPartyAddressLine3"
+                   id="counterPartyAddressLine3"
+                   formControlName="counterPartyAddressLine3"
+            >
+            <label class="label_OA required">Customer Address3</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="counterPartyPOBox"
+                   id="counterPartyPOBox"
+                   formControlName="counterPartyPOBox"
+            >
+            <label class="label_OA required">PoBox</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="counterPartyEmail"
+                   id="counterPartyEmail"
+                   formControlName="counterPartyEmail"
+            >
+            <label class="label_OA required">Email</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="counterPartyFax"
+                   id="counterPartyFax"
+                   formControlName="counterPartyFax"
+            >
+            <label class="label_OA required">Fax</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="counterPartyTelephone"
+                   id="counterPartyTelephone"
+                   formControlName="counterPartyTelephone"
+            >
+            <label class="label_OA required">Tel</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <h3 class="fw-bolder text-dark">Financial Info</h3>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="managementFeeCurrency" id="managementFeeCurrency"
+                    formControlName="managementFeeCurrency">
               <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
             </select>
-          </div>
-          <div class="col-8">
-            <input type="number" class="input_QA form-control " autocomplete="off"
-                   placeholder="financeServiceChargeAmount" name="financeServiceChargeAmount" [class.is-invalid]="isControlInvalid('financeServiceChargeAmount')"
-                   [class.is-valid]="isControlValid('financeServiceChargeAmount')" formControlName="financeServiceChargeAmount"/>
+            <label class="label_OA">Currency</label>
           </div>
         </div>
-      </div>
-    <div class="col-lg-3">
-      <label>Settlement Service Fee Currency & Amount</label>
-      <div class="row fv-row">
-        <div class="col-4">
-          <select
-            class="input_QA form-control "
-            name="settlementServiceChargeCurrency"
-            formControlName="settlementServiceChargeCurrency" [class.is-invalid]="isControlInvalid('settlementServiceChargeCurrency')"
-            [class.is-valid]="isControlValid('settlementServiceChargeCurrency')">
-            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
-          </select>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" id="managementFeeAmount" name="managementFeeAmount"
+                   [class.is-invalid]="isControlInvalid('managementFeeAmount')"
+                   [class.is-valid]="isControlValid('managementFeeAmount')"
+                   formControlName="managementFeeAmount"
+                   currencyMask >
+            <label class="label_OA">Management Fee</label>
+          </div>
         </div>
-        <div class="col-8">
-          <input type="number" class="input_QA form-control " autocomplete="off"
-                 placeholder="settlementServiceChargeAmount" name="settlementServiceChargeAmount" [class.is-invalid]="isControlInvalid('settlementServiceChargeAmount')"
-                 [class.is-valid]="isControlValid('settlementServiceChargeAmount')" formControlName="settlementServiceChargeAmount"/>
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="administrativeFeeCurrency" id="administrativeFeeCurrency"
+                    formControlName="administrativeFeeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="administrativeFeeAmount" name="administrativeFeeAmount"
+                   [class.is-invalid]="isControlInvalid('administrativeFeeAmount')"
+                   [class.is-valid]="isControlValid('administrativeFeeAmount')"
+                   formControlName="administrativeFeeAmount"
+                   currencyMask >
+            <label class="label_OA">Administrative Fee</label>
+          </div>
+        </div>
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="earlyPaymentFeeCurrency" id="earlyPaymentFeeCurrency"
+                    formControlName="earlyPaymentFeeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="earlyPaymentAmount" name="earlyPaymentAmount"
+                   [class.is-invalid]="isControlInvalid('earlyPaymentAmount')"
+                   [class.is-valid]="isControlValid('earlyPaymentAmount')"
+                   formControlName="earlyPaymentAmount"
+                   currencyMask >
+            <label class="label_OA">Early Payment Fee</label>
+          </div>
+        </div>
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="invoiceServiceChargeCurrency" id="invoiceServiceChargeCurrency"
+                    formControlName="invoiceServiceChargeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="invoiceServiceChargeAmount" name="invoiceServiceChargeAmount"
+                   [class.is-invalid]="isControlInvalid('invoiceServiceChargeAmount')"
+                   [class.is-valid]="isControlValid('invoiceServiceChargeAmount')"
+                   formControlName="invoiceServiceChargeAmount"
+                   currencyMask >
+            <label class="label_OA">Inv Service Fee</label>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-3">
-      <label>Cable Charge Currency & Amount</label>
-      <div class="row fv-row">
-        <div class="col-4">
-          <select
-            class="input_QA form-control "
-            name="cableChargeCurrency"
-            formControlName="cableChargeCurrency" [class.is-invalid]="isControlInvalid('cableChargeCurrency')"
-            [class.is-valid]="isControlValid('cableChargeCurrency')">
-            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
-          </select>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="financeServiceChargeCurrency" id="financeServiceChargeCurrency"
+                    formControlName="financeServiceChargeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
         </div>
-        <div class="col-8">
-          <input type="number" class="input_QA form-control " autocomplete="off"
-                 placeholder="cableChargeAmount" name="cableChargeAmount" [class.is-invalid]="isControlInvalid('cableChargeAmount')"
-                 [class.is-valid]="isControlValid('cableChargeAmount')" formControlName="cableChargeAmount"/>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" id="financeServiceChargeAmount" name="financeServiceChargeAmount"
+                   [class.is-invalid]="isControlInvalid('financeServiceChargeAmount')"
+                   [class.is-valid]="isControlValid('financeServiceChargeAmount')"
+                   formControlName="financeServiceChargeAmount"
+                   currencyMask >
+            <label class="label_OA">Finance Fee</label>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="col-lg-3">
-      <label>Communication Charge Amount & CCY</label>
-      <div class="row fv-row">
-        <div class="col-4">
-          <select
-            class="input_QA form-control "
-            name="communicationChargeCurrency"
-            formControlName="communicationChargeCurrency" [class.is-invalid]="isControlInvalid('communicationChargeCurrency')"
-            [class.is-valid]="isControlValid('communicationChargeCurrency')">
-            <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
-          </select>
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="settlementServiceChargeCurrency" id="settlementServiceChargeCurrency"
+                    formControlName="settlementServiceChargeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
         </div>
-        <div class="col-8">
-          <input type="number" class="input_QA form-control " autocomplete="off"
-                 placeholder="communicationChargeAmount" name="communicationChargeAmount" [class.is-invalid]="isControlInvalid('communicationChargeAmount')"
-                 [class.is-valid]="isControlValid('communicationChargeAmount')" formControlName="communicationChargeAmount"/>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="settlementServiceChargeAmount" name="settlementServiceChargeAmount"
+                   [class.is-invalid]="isControlInvalid('settlementServiceChargeAmount')"
+                   [class.is-valid]="isControlValid('settlementServiceChargeAmount')"
+                   formControlName="settlementServiceChargeAmount"
+                   currencyMask >
+            <label class="label_OA">Settlement Fee</label>
+          </div>
+        </div>
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="cableChargeCurrency" id="cableChargeCurrency"
+                    formControlName="cableChargeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="cableChargeAmount" name="cableChargeAmount"
+                   [class.is-invalid]="isControlInvalid('cableChargeAmount')"
+                   [class.is-valid]="isControlValid('cableChargeAmount')"
+                   formControlName="cableChargeAmount"
+                   currencyMask >
+            <label class="label_OA">Cable Charge Fee</label>
+          </div>
+        </div>
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="communicationChargeCurrency" id="communicationChargeCurrency"
+                    formControlName="communicationChargeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="communicationChargeAmount" name="communicationChargeAmount"
+                   [class.is-invalid]="isControlInvalid('communicationChargeAmount')"
+                   [class.is-valid]="isControlValid('communicationChargeAmount')"
+                   formControlName="communicationChargeAmount"
+                   currencyMask >
+            <label class="label_OA">Communication Fee</label>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-
+</div>

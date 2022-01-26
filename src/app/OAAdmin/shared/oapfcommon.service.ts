@@ -310,6 +310,34 @@ export class oapfcommonService {
     );
   }
 
+  getDataWithPaginationMaster(url:any ,currentPage: any, pageSize: any, sortData:any): Observable<any> {
+    this.spinner.show();
+    this.authToken = this.authService.getAuthFromLocalStorage();
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${this.authToken?.jwt}`,
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    });
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('transactionStatus', 'MASTER');
+    httpParams = httpParams.append('page', currentPage);
+    httpParams = httpParams.append('size', pageSize);
+    console.log(sortData)
+    if(sortData !== null && sortData !== undefined)
+      httpParams = httpParams.append('sort', sortData);
+
+    //httpParams = httpParams.append('direction', sortData);
+    return this.http.get<any>(url, {headers: httpHeaders, params:httpParams}).pipe(
+      delay(100),
+      catchError((err) => {
+        this.notifyService.showError(err.message, 'Error')
+        this.spinner.hide()
+        return of([]);
+      }),
+      finalize(() => this.spinner.hide())
+    );
+  }
+
   getDataWithPaginationLoan(url:any ,currentPage: any, pageSize: any, sortData:any,loanDueDate: any): Observable<any> {
     this.spinner.show();
     this.authToken = this.authService.getAuthFromLocalStorage();

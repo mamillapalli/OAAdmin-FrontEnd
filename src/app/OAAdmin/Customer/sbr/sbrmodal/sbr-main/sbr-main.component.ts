@@ -48,6 +48,7 @@ export class SbrMainComponent implements OnInit {
   public closeResult: string;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
+  ReadOnlyCheckBox: boolean;
 
   constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal,
     private datePipe: DatePipe,public sbragreementServices: sbragreementService,

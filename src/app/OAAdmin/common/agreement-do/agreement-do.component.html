@@ -7,37 +7,53 @@
     <div class="modal-body">
       <div class="table-responsive">
         <!-- begin::Table -->
-        <mat-table [dataSource]="dataSource" matSort style="width: 100%;"
-                   class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-3">
-  
-         <!-- ID Column -->
-         <ng-container matColumnDef="contractReferenceNumber" class="min-w-150px">
-            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Contract No</mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.contractReferenceNumber}} </mat-cell>
+        <table matTableExporter  #exporter="matTableExporter" mat-table [dataSource]="dataSource" class="" cdkDropList
+               cdkDropListOrientation="horizontal"
+               (cdkDropListDropped)="drop($event)"
+               matSort (matSortChange)="sortChanges($event)"
+               style="overflow-x: scroll; overflow-y: scroll"
+        >
+
+          <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{column.header}}</th>
+            <td mat-cell *matCellDef="let row"> {{row[column.columnDef]}} </td>
           </ng-container>
-    
-          <ng-container matColumnDef="contractDocumentNumber">
-            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Contract Doc No</mat-header-cell>
-            <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.contractDocumentNumber}} </mat-cell>
-          </ng-container>
-    
-          <!-- Name Column -->
-          <ng-container matColumnDef="validDate">
-            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Valid Date</mat-header-cell>
-            <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.validDate| date: 'MM/dd/YYY' }}
-            </mat-cell>
-          </ng-container>
-    
-          <ng-container matColumnDef="expiryDate">
-            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Expiry Date</mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{ row.expiryDate | date: 'MM/dd/YYY' }} </mat-cell>
-          </ng-container>
-  
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;" (click)="passRow(row)">
-          </mat-row>
-        </mat-table>
-        <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+
+<!--         &lt;!&ndash; ID Column &ndash;&gt;-->
+<!--         <ng-container matColumnDef="contractReferenceNumber" class="min-w-150px">-->
+<!--            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Contract No</mat-header-cell>-->
+<!--            <mat-cell *matCellDef="let row"> {{row.contractReferenceNumber}} </mat-cell>-->
+<!--          </ng-container>-->
+
+<!--          <ng-container matColumnDef="contractDocumentNumber">-->
+<!--            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Contract Doc No</mat-header-cell>-->
+<!--            <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.contractDocumentNumber}} </mat-cell>-->
+<!--          </ng-container>-->
+
+<!--          &lt;!&ndash; Name Column &ndash;&gt;-->
+<!--          <ng-container matColumnDef="validDate">-->
+<!--            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Valid Date</mat-header-cell>-->
+<!--            <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.validDate| date: 'MM/dd/YYY' }}-->
+<!--            </mat-cell>-->
+<!--          </ng-container>-->
+
+<!--          <ng-container matColumnDef="expiryDate">-->
+<!--            <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Expiry Date</mat-header-cell>-->
+<!--            <mat-cell *matCellDef="let row"> {{ row.expiryDate | date: 'MM/dd/YYY' }} </mat-cell>-->
+<!--          </ng-container>-->
+
+<!--          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>-->
+<!--          <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;" (click)="passRow(row)">-->
+<!--          </mat-row>-->
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+              [ngClass]="{hovered: row.hovered, highlighted: row.highlighted}"
+              (click)="passRow(row);row.highlighted = !row.highlighted" (mouseover)="row.hovered = true"
+              (mouseout)="row.hovered = false"></tr>
+        </table>
+        <mat-paginator #paginator [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize"
+                       [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)" aria-label="Select page">
         </mat-paginator>
         <!-- end::Table -->
       </div>

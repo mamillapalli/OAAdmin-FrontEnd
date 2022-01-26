@@ -1,15 +1,21 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription, throwError } from "rxjs";
-import { ActivatedRoute, Router } from "@angular/router";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
-import { AuthService } from "../../../../modules/auth";
-import { environment } from "../../../../../environments/environment";
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {BehaviorSubject, Observable, Subscription, throwError} from "rxjs";
+import {ActivatedRoute, Router} from "@angular/router";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {ModalDismissReasons, NgbActiveModal, NgbModal, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
+import {AuthService} from "../../../../modules/auth";
+import {environment} from "../../../../../environments/environment";
 import Swal from "sweetalert2";
-import { sbragreementService } from "../../../shared/sbragreement.service";
-import { Sbr, inits } from "../../../Model/sbr";
-import { Sbrreq } from "../../../Model/sbrreq"
+import {sbragreementService} from "../../../shared/sbragreement.service";
+import {Sbr, inits} from "../../../Model/sbr";
+import {Sbrreq} from "../../../Model/sbrreq"
+import {SbrMainComponent} from './sbr-main/sbr-main.component';
+import {SbrAmtInfoComponent} from './sbr-amt-info/sbr-amt-info.component';
+import {CreditAdviseComponent} from 'src/app/OAAdmin/credit-advise/credit-advise.component';
+import { CopyAsModalComponent } from 'src/app/OAAdmin/OAPF/common/copy-as-modal/copy-as-modal.component';
+
 const API_USERS_URL = `${environment.apiUrl}`;
+
 @Component({
   selector: 'app-sbrmodal',
   templateUrl: './sbrmodal.component.html',
@@ -29,13 +35,21 @@ export class SbrmodalComponent implements OnInit {
   @Output() formValue: any
   fromParent: any;
   checkNextStage = true;
+  modalOption: NgbModalOptions = {};
+  @Output('displayedColumns') displayedColumns: any
+  @Output('fDisplayedColumns') fDisplayedColumns: any;
+  @ViewChild(SbrMainComponent) SbrMainComponent: SbrMainComponent;
+  @ViewChild(SbrAmtInfoComponent) SbrAmtInfoComponent: SbrAmtInfoComponent;
+  closeResult: string;
 
   constructor(private router: Router,
-    private route: ActivatedRoute,
-    private http: HttpClient,
-    public activeModal: NgbActiveModal,
-    private authService: AuthService,
-    public sbragreementServices: sbragreementService) { }
+              private route: ActivatedRoute,
+              private http: HttpClient,
+              public activeModal: NgbActiveModal,
+              private authService: AuthService,
+              public modalService: NgbModal,
+              public sbragreementServices: sbragreementService) {
+  }
 
   ngOnInit(): void {
     if (this.mode !== 'new') {
@@ -45,7 +59,7 @@ export class SbrmodalComponent implements OnInit {
 
   updateAccount = (part: Partial<Sbr>, isFormValid: boolean) => {
     const currentAccount = this.account$.value;
-    const updatedAccount = { ...currentAccount, ...part };
+    const updatedAccount = {...currentAccount, ...part};
     this.account$.next(updatedAccount);
     this.isCurrentFormValid$.next(isFormValid);
   };
@@ -117,11 +131,11 @@ export class SbrmodalComponent implements OnInit {
        this.Sbrreq.sbrId=this.account$.value.sbrId
        this.Sbrreq.counterPartyFax=this.account$.value.counterPartyFax */
       this.Sbrreq = this.account$.value;
-     // const sbrJsonStr = JSON.stringify(this.Sbrreq)
-      console.log(this.Sbrreq );
+      // const sbrJsonStr = JSON.stringify(this.Sbrreq)
+      console.log(this.Sbrreq);
       if (this.mode === 'new') {
         this.checkNextStage = false;
-        this.sbragreementServices.dataItem(this.Sbrreq , this.mode).subscribe(res => {
+        this.sbragreementServices.dataItem(this.Sbrreq, this.mode).subscribe(res => {
           if (res !== null && res !== '') {
             this.checkNextStage = true;
             Swal.fire({
@@ -144,8 +158,7 @@ export class SbrmodalComponent implements OnInit {
           console.error('There was an error!', error);
           return;
         });
-      }
-      else if (this.mode === 'edit') {
+      } else if (this.mode === 'edit') {
         this.checkNextStage = false;
         this.sbragreementServices.dataItem(this.Sbrreq, this.mode).subscribe(res => {
           console.log('Response is : ' + res)
@@ -171,8 +184,7 @@ export class SbrmodalComponent implements OnInit {
           console.error('There was an error!', error);
           return;
         });
-      }
-      else if (this.mode === 'auth') {
+      } else if (this.mode === 'auth') {
         this.checkNextStage = false;
         this.sbragreementServices.dataItem(Sbrreq, this.mode).subscribe(res => {
           if (res !== null && res !== '') {
@@ -215,9 +227,63 @@ export class SbrmodalComponent implements OnInit {
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
+
   closeModal() {
     console.log('close modal');
     this.activeModal.dismiss();
+  }
+
+  copyAs() {
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    //this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'xl'
+    const modalRef = this.modalService.open(CopyAsModalComponent, this.modalOption);
+    modalRef.componentInstance.mode = 'copy';
+    modalRef.componentInstance.functionType = 'admin';
+    modalRef.componentInstance.url = '/oaadmin/api/v1/sbrs/';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
+    modalRef.result.then((result) => {
+      const refNo = this.SbrMainComponent.form.value.sbrId;
+      console.log('Result is ' + result);
+      //this.updateAccount(result, true)
+      this.formValue = result
+      console.log(this.formValue)
+      //this.Invoicestep1Component.updateForm()
+      this.formValue.sbrId = refNo
+      this.SbrMainComponent.form.patchValue(this.formValue)
+      this.SbrAmtInfoComponent.form.patchValue(this.formValue)
+      this.SbrMainComponent.form.value.sbrId = refNo;
+      //this.Invoicestep1Component.updateReferenceNumber();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  openAdvicePdf(mode: any) {
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    //  this.modalOption.windowClass = 'my-class'
+    this.modalOption.size = 'lg';
+    const modalRef = this.modalService.open(CreditAdviseComponent, this.modalOption);
+    modalRef.componentInstance.mode = mode;
+    //  modalRef.componentInstance.fromParent = element;
+    modalRef.result.then((result) => {
+      console.log(result);
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
 }

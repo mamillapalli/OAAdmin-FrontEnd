@@ -95,6 +95,8 @@ export class AgreementComponent implements OnInit {
     this.modalOption.size = 'xl';
     const modalRef = this.modalService.open(AgreementmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log('newBankAdmin is ' + result);
       this.getAgreements();
@@ -113,6 +115,8 @@ export class AgreementComponent implements OnInit {
     const modalRef = this.modalService.open(AgreementmodalComponent, this.modalOption);
     modalRef.componentInstance.mode = mode;
     modalRef.componentInstance.fromParent = element;
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log(result);
       this.getAgreements();

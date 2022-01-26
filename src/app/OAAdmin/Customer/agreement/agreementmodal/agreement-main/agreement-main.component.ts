@@ -122,23 +122,23 @@ export class AgreementMainComponent implements OnInit {
   }
 
   updateForm() {
-    this.form.patchValue(this.formValue)
-    // this.f.contractReferenceNumber.setValue(this.formValue.contractReferenceNumber);
-    // this.f.businessType.setValue(this.formValue.businessType);
-    // this.f.anchorCustomer.setValue(this.formValue.anchorCustomer);
-    // this.f.contractDocumentNumber.setValue(this.formValue.contractDocumentNumber);
-    // this.f.rmId.setValue(this.formValue.rm.rmId);
-    // this.f.remarks.setValue(this.formValue.remarks);
-    // const evalidDate = this.datePipe.transform(new Date(this.formValue.validDate), "yyyy-MM-dd");
-    // this.f.validDate.setValue(evalidDate);
-    // const eTransDate = this.datePipe.transform(new Date(this.formValue.transactionDate), "yyyy-MM-dd");
-    // this.f.transactionDate.setValue(eTransDate);
-    // const expDate = this.datePipe.transform(new Date(this.formValue.expiryDate), "yyyy-MM-dd");
-    // this.f.expiryDate.setValue(expDate);
-    // const customerList = this.formValue.anchorCustomer;
-    // this.f.anchorCustomerId.setValue(customerList.customerId);
-    // this.f.rm.setValue(this.formValue.rm);
-    // this.f.businessTypeId.setValue(this.formValue.businessType.name);
+    //this.form.patchValue(this.formValue)
+    this.f.contractReferenceNumber.setValue(this.formValue.contractReferenceNumber);
+    this.f.businessType.setValue(this.formValue.businessType);
+    this.f.anchorCustomer.setValue(this.formValue.anchorCustomer);
+    this.f.contractDocumentNumber.setValue(this.formValue.contractDocumentNumber);
+    this.f.rmId.setValue(this.formValue.rm.rmId);
+    this.f.remarks.setValue(this.formValue.remarks);
+    const evalidDate = this.datePipe.transform(new Date(this.formValue.validDate), "yyyy-MM-dd");
+    this.f.validDate.setValue(evalidDate);
+    const eTransDate = this.datePipe.transform(new Date(this.formValue.transactionDate), "yyyy-MM-dd");
+    this.f.transactionDate.setValue(eTransDate);
+    const expDate = this.datePipe.transform(new Date(this.formValue.expiryDate), "yyyy-MM-dd");
+    this.f.expiryDate.setValue(expDate);
+    const customerList = this.formValue.anchorCustomer;
+    this.f.anchorCustomerId.setValue(customerList.customerId);
+    this.f.rm.setValue(this.formValue.rm);
+    this.f.businessTypeId.setValue(this.formValue.businessType.name);
     if (this.formValue.counterParties.length > 0) {
       this.dataSource.data = this.formValue.counterParties;
       this.dataSource.sort = this.sort;
