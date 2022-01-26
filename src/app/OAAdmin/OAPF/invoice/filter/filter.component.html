@@ -1,0 +1,24 @@
+<button mat-button class="btn-toggle" [matMenuTriggerFor]="menu">
+  <mat-icon>filter_list</mat-icon>
+</button>
+<mat-menu #menu>
+  <div mat-menu-item mat-filter-item>
+    <mat-form-field>
+      <mat-select [panelClass]="'mat-elevation-z10'" placeholder='Conditions'
+                  [(value)]="searchCondition.field">
+        <mat-option *ngFor="let  condition of conditionsList"
+                    [value]="condition.value">{{condition.label}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div mat-menu-item mat-filter-item>
+    <mat-form-field>
+      <input matInput placeholder="Value" [(ngModel)]="searchValue.field">
+    </mat-form-field>
+  </div>
+  <div mat-menu-item mat-filter-item>
+    <button mat-raised-button (click)="clearColumn($event,'field')">Clear</button>
+    <button mat-raised-button color="primary" (click)="applyFilter($event,labelId)">Search
+    </button>
+  </div>
+</mat-menu>
