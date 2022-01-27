@@ -43,7 +43,6 @@ export class InterestRateMainComponent implements OnInit {
       this.InterestForm.disable()
     }
     if(this.mode !== 'new') {
-      this.f.rateValue.disabled
       this.updateForm();
     }
     this.updateParentModel({}, this.checkForm());
@@ -53,7 +52,6 @@ export class InterestRateMainComponent implements OnInit {
     this.InterestForm = this.fb.group({
       name: [this.defaultValues.name,[Validators.required]],
       description: [this.defaultValues.description,[Validators.required]],
-      deleteFlag: [this.defaultValues.deleteFlag,[Validators.required]],
       rateValue: [this.defaultValues.rateValue,[Validators.required]],
     });
 
@@ -67,8 +65,7 @@ export class InterestRateMainComponent implements OnInit {
     return !(
       this.InterestForm.get('name')?.hasError('required') ||
       this.InterestForm.get('description')?.hasError('required') ||
-      this.InterestForm.get('deleteFlag')?.hasError('required') ||
-      this.InterestForm.get('rateValue')?.hasError('required') 
+      this.InterestForm.get('rateValue')?.hasError('required')
     );
   }
 

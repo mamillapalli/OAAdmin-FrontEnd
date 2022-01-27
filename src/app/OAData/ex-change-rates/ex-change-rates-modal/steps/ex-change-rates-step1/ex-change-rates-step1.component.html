@@ -1,1 +1,58 @@
-<p>ex-change-rates-step1 works!</p>
+<div class="card-body">
+  <div [formGroup]="ExchangeRateForm" id="form">
+    <div class="form-group row">
+      <h3 class="fw-bolder text-dark">Exchange Rate Info</h3>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="text" name="fromCurrency" id="fromCurrency"
+                   formControlName="fromCurrency">
+            <label class="label_OA required">From Currency</label>
+          </div>
+        </div>
+        <div class="col">
+          <div class="floating-label_mandatory">
+            <input type="text" class="floating-input_mandatory" autocomplete="off"
+                   name="toCurrency" id="toCurrency"
+                   formControlName="toCurrency"/>
+            <label class="label_OA_mandatory required">To Currency</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="text" name="rateType" id="rateType"
+                   formControlName="rateType">
+            <label class="label_OA_mandatory required">Rate Type</label>
+          </div>
+        </div>
+        <div class="col">
+          <div class="floating-label_mandatory">
+            <input type="text" class="floating-input_mandatory" autocomplete="off"
+                   name="rateValue" id="rateValue"
+                   formControlName="rateValue"/>
+            <label class="label_OA_mandatory required">Rate Value</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="text" name="mdFlag" id="mdFlag"
+                   formControlName="mdFlag">
+            <label class="label_OA_mandatory required">MD Flag</label>
+          </div>
+        </div>
+        <div class="col">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

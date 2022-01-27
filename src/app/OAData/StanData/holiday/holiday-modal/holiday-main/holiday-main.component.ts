@@ -24,7 +24,7 @@ export class HolidayMainComponent implements OnInit {
   ) => void;
   HolidayForm: FormGroup;
   @Input() defaultValues: Partial<Holiday>;
-  
+
   private unsubscribe: Subscription[] = [];
   @Input('formValue') formValue :  any;
   @Input() mode :  any;
@@ -40,13 +40,12 @@ export class HolidayMainComponent implements OnInit {
   constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal,public datePipe:DatePipe) { }
 
   ngOnInit(): void {
-    this.initForm(); 
+    this.initForm();
     if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view')
     {
       this.HolidayForm.disable()
     }
     if(this.mode !== 'new') {
-      this.f.name.disabled
       this.updateForm();
     }
     this.updateParentModel({}, this.checkForm());

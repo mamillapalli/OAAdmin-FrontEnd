@@ -76,7 +76,7 @@ export class CurrencyComponent implements OnInit {
     this.initializeColumnProperties();
     this.getCurrency();
     this.columns = [
-      { columnDef: 'isoCode', header: 'isoCode' },
+      { columnDef: 'isoCode', header: 'ISO Code' },
       { columnDef: 'description', header: 'description' },
       { columnDef: 'country', header: 'country' },
       { columnDef: 'transactionStatus', header: 'transactionStatus' }

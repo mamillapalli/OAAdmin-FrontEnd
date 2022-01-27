@@ -108,6 +108,7 @@ export class HolidayComponent implements OnInit {
     modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log('New IntRate is '+result);
+      this.getIntRate()
     }, (reason) => {
       this.getIntRate();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -127,6 +128,7 @@ export class HolidayComponent implements OnInit {
     modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log('result===',result);
+      this.getIntRate()
     }, (reason) => {
       this.getIntRate();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -138,6 +140,7 @@ export class HolidayComponent implements OnInit {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
         this.deleteModal(element.isoCode);
+        this.getIntRate()
       }
     }, (reason) => {
       this.getIntRate();

@@ -1,50 +1,45 @@
-<div class="pb-10 pb-lg-12">
-    <h2 class="fw-bolder text-dark">Interest Rate Information</h2>
-  </div>
-  <div [formGroup]="InterestForm">
+<div class="card-body">
+  <div [formGroup]="InterestForm" id="form">
     <div class="form-group row">
-      <div class="col-xl-6">
-          <label class="form-label required">Interest Rate Code</label>
-          <input
-            type="text"
-            class="form-control form-control-lg form-control-solid"
-            name="name" autocomplete="off"
-            placeholder="name" [class.is-invalid]="isControlInvalid('name')"
-            [class.is-valid]="isControlValid('name')" formControlName="name"
-          />
-        </div>
-      <div class="col-xl-6">
-        <label class="form-label required">Description</label
-        ><input
-        type="text"
-        class="form-control form-control-lg form-control-solid"
-        name="description" autocomplete="off"
-        placeholder="Description" [class.is-invalid]="isControlInvalid('description')"
-        [class.is-valid]="isControlValid('description')" formControlName="description"
-      />
-      </div>
+      <h3 class="fw-bolder text-dark">Interest Rate Information</h3>
     </div>
-    <div class="form-group row">
-      <div class="col-xl-6">
-          <label class="form-label required">Rate Value</label>
-          <input
-            type="text"
-            class="form-control form-control-lg form-control-solid"
-            name="rateValue" autocomplete="off"
-            placeholder="country" [class.is-invalid]="isControlInvalid('rateValue')"
-            [class.is-valid]="isControlValid('rateValue')" formControlName="rateValue"
-          />
-      </div>
-          <div class="col-xl-6">
-            <label class="form-label">Minor Name</label
-            ><input
-            type="text"
-            class="form-control form-control-lg form-control-solid"
-            name="deleteFlag" autocomplete="off"
-            placeholder="deleteFlag" [class.is-invalid]="isControlInvalid('deleteFlag')"
-            [class.is-valid]="isControlValid('deleteFlag')" formControlName="deleteFlag"
-          />
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="text" name="name" id="name"
+                   formControlName="name">
+            <label class="label_OA required">Interest Rate Code</label>
           </div>
+        </div>
+        <div class="col">
+          <div class="floating-label_mandatory">
+            <input type="text" class="floating-input_mandatory" autocomplete="off"
+                   name="description"
+                   [class.is-invalid]="isControlInvalid('description')"
+                   [class.is-valid]="isControlValid('description')"
+                   formControlName="description"/>
+            <label class="label_OA_mandatory required">Description</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="text" name="rateValue" id="rateValue"
+                   [class.is-invalid]="isControlInvalid('rateValue')"
+                   [class.is-valid]="isControlValid('rateValue')"
+                   formControlName="rateValue">
+            <label class="label_OA_mandatory required">Rate Value</label>
+          </div>
+        </div>
+        <div class="col">
+          <div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  
+</div>

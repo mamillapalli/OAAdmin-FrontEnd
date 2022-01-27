@@ -72,6 +72,14 @@ export class CopyAsModalComponent implements OnInit {
           this.totalRows = res.totalElements
           console.log(this.totalRows)
         });
+      } else if (this.functionType === 'holiday') {
+        sb = this.invoiceServices.getInvoiceWithPagination(this.url, '', '', this.currentPage, this.pageSize, this.sortData, 'copy').subscribe((res) => {
+          console.log(this.displayedColumns)
+          console.log(this.fDisplayedColumns)
+          this.dataSource.data = res;
+          this.totalRows = res.length
+          console.log(this.totalRows)
+        });
       } else {
         sb = this.invoiceServices.getInvoiceWithPagination('oapf/api/v1/invoices/', '', '', this.currentPage, this.pageSize, this.sortData, 'copy').subscribe((res) => {
           this.dataSource.data = res.content;

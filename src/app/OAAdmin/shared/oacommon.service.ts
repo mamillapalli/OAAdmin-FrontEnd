@@ -378,7 +378,7 @@ export class oaCommonService {
         catchError((err) => {
           this.notifyService.showError(err.message, 'Error')
           this.spinner.hide()
-          return of([]);
+          return of([undefined]);
         }),
         finalize(() => this.spinner.hide())
       );

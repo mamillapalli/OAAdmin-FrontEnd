@@ -19,6 +19,11 @@ import {FilterComponent} from "../../OAAdmin/OAPF/common/filter/filter.component
 import {oaCommonService} from "../../OAAdmin/shared/oacommon.service";
 import {ExChangeRatesModalComponent} from "./ex-change-rates-modal/ex-change-rates-modal.component";
 import {delay} from "rxjs/operators";
+import { CustomColumn } from 'src/app/OAAdmin/Model/CustomColumn';
+import { CONDITIONS_LIST } from 'src/app/OAAdmin/shared/condition_list';
+import { CONDITIONS_FUNCTIONS } from 'src/app/OAAdmin/shared/condition_function';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-ex-change-rates',
@@ -58,13 +63,28 @@ export class ExChangeRatesComponent implements OnInit {
   authRoles : any
 
 
+  //SORTING
   totalRows = 0;
   pageSize = 5;
   currentPage = 0;
   pageSizeOptions: number[] = [5, 10, 25, 100];
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
-  sortData : any
+  sortData: any
+
+  public columnShowHideList: CustomColumn[] = [];
+  color = 'accent';
+
+  //inside filter
+  public conditionsList = CONDITIONS_LIST;
+  public searchValue: any = {};
+  public searchLabel: any = {};
+  public searchCondition: any = {};
+  private _filterMethods = CONDITIONS_FUNCTIONS;
+  searchFilter: any = {};
+  columns: { columnDef: string; header: string; }[];
+  @ViewChild('MatMenuTrigger') matMenuTrigger: MatMenuTrigger;
+  @ViewChild('menuTrigger') trigger: any;
 
   constructor(public http: HttpClient,
               public authService: AuthService,
@@ -79,15 +99,22 @@ export class ExChangeRatesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getExchangeRate(this.currentPage, this.pageSize, this.sortData);
+    this.initializeColumnProperties();
+    this.columns = [
+      { columnDef: 'fromCurrency', header: 'From Currency' },
+      { columnDef: 'toCurrency', header: 'To Currency' },
+      { columnDef: 'rateType', header: 'Rate Type' },
+      { columnDef: 'rateValue', header:'Rate Value' },
+      { columnDef: 'mdFlag', header:'MD Flag' }
+    ]
+    this.getExchangeRate();
   }
 
-  public getExchangeRate(currentPage: number, pageSize: number, sortData: any) {
+  public getExchangeRate() {
     console.log('Get Invoices')
     const sb = this.oaCommonService.getMethod('/oadata/api/v1/exchangeRates','All' ).subscribe((res) => {
-      this.dataSource.data = res;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.data = res.content;
+      this.totalRows = res.totalElements
     });
     this.subscriptions.push(sb);
   }
@@ -104,13 +131,16 @@ export class ExChangeRatesComponent implements OnInit {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
     //this.modalOption.windowClass = 'my-class'
-    this.modalOption.size = 'xl'
+    this.modalOption.size = 'lg'
     const modalRef = this.modalService.open(ExChangeRatesModalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'new';
+    modalRef.componentInstance.displayedColumns = this.displayedColumns;
+    modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log('newBankAdmin is ' + result);
+      this.getExchangeRate()
     }, (reason) => {
-      this.getExchangeRate(this.currentPage, this.pageSize, this.sortData);
+      this.getExchangeRate();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -121,41 +151,46 @@ export class ExChangeRatesComponent implements OnInit {
       this.modalOption.backdrop = 'static';
       this.modalOption.keyboard = false;
       //this.modalOption.windowClass = 'my-class'
+      this.modalOption.size = 'lg'
       const modalRef = this.modalService.open(ExChangeRatesModalComponent, this.modalOption);
-      modalRef.componentInstance.invoiceNumber = element.invoiceNumber;
+      modalRef.componentInstance.displayedColumns = this.displayedColumns;
+      modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
       modalRef.result.then((result) => {
         console.log(result);
+        this.getExchangeRate()
       }, (reason) => {
-        this.getExchangeRate(this.currentPage, this.pageSize, this.sortData);
+        this.getExchangeRate();
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       });
     } else {
-      console.log('123'+element)
-      console.log('123'+mode)
       this.modalOption.backdrop = 'static';
       this.modalOption.keyboard = false;
       //this.modalOption.windowClass = 'my-class'
-      this.modalOption.size = 'sm';
-      const modalRef = this.modalService.open(InvoicemodalComponent, this.modalOption);
+      this.modalOption.size = 'lg';
+      const modalRef = this.modalService.open(ExChangeRatesModalComponent, this.modalOption);
       modalRef.componentInstance.mode = mode;
       modalRef.componentInstance.fromParent = element;
+      modalRef.componentInstance.displayedColumns = this.displayedColumns;
+      modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
       modalRef.result.then((result) => {
         console.log(result);
+        this.getExchangeRate()
       }, (reason) => {
-        this.getExchangeRate(this.currentPage, this.pageSize, this.sortData);
+        this.getExchangeRate();
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       });
     }
   }
 
-  openInvoiceDelete(content: any, element: any) {
+  openExchangeRateDelete(content: any, element: any) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
         this.deleteModal(element);
+        this.getExchangeRate()
       }
     }, (reason) => {
-      this.getExchangeRate(this.currentPage, this.pageSize, this.sortData);
+      this.getExchangeRate();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -177,11 +212,11 @@ export class ExChangeRatesComponent implements OnInit {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {
-        this.getExchangeRate(this.currentPage, this.pageSize, this.sortData);
+        this.getExchangeRate();
         content.clear
       }
     }, (reason) => {
-      this.getExchangeRate(this.currentPage, this.pageSize, this.sortData);
+      this.getExchangeRate();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       content.clear
     });
@@ -212,11 +247,17 @@ export class ExChangeRatesComponent implements OnInit {
               delay(1000*60)
               this.oaCommonService.uploadFileStatus('/oadata/api/v1/exchangeRates/uploadFileStatus/',event.fileId).subscribe((res: any) => {
                 console.log(res)
-                if (res !== null) {
+                if (res !== undefined) {
                   let status = res
                   Swal.fire({
                     title: 'File Status is '+res.fileStatus,
                     icon: 'success'
+                  }).then((result) => {
+                    console.log(result)
+                    if (result.value) {
+                      Swal.close();
+                      this.getExchangeRate()
+                    }
                   });
                 } else {
                   Swal.fire({
@@ -262,16 +303,14 @@ export class ExChangeRatesComponent implements OnInit {
     modalRef.result.then((result) => {
       if (result.valid && result.value.filterOption.length > 0) {
         const sb = this.oaCommonService.getFilter(result, 'filter', '/oadata/api/v1/exchangeRates').subscribe((res: any) => {
-          this.dataSource.data = res;
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
         });
         this.subscriptions.push(sb);
       } else {
         const sb = this.oaCommonService.getFilter(result, 'all', 'oadata/api/v1/exchangeRates').subscribe((res: any) => {
-          this.dataSource.data = res;
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.data = res.content;
+          this.totalRows = res.totalElements
         });
         this.subscriptions.push(sb);
       }
@@ -285,13 +324,13 @@ export class ExChangeRatesComponent implements OnInit {
     console.log({ event });
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
-    this.getExchangeRate(this.currentPage,this.pageSize,this.sortData);
+    this.getExchangeRate();
   }
 
   sortChanges(event: Sort) {
     console.log(event.direction)
     this.sortData = event.active+','+event.direction
-    this.getExchangeRate(this.currentPage,this.pageSize,event.active);
+    this.getExchangeRate();
   }
 
   private getDismissReason(reason: any): string {
@@ -301,6 +340,65 @@ export class ExChangeRatesComponent implements OnInit {
       return 'by clicking on a backdrop';
     } else {
       return `with: ${reason}`;
+    }
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
+  }
+
+  public applyFilter(event: any,label:any) {
+    console.log('apply filter')
+    this.trigger.closeMenu()
+    this.matMenuTrigger.closeMenu()
+    this.searchFilter = {
+      values: this.searchValue,
+      conditions: this.searchCondition,
+      methods: this._filterMethods,
+      label: label,
+    };
+    if(this.searchFilter.values !== null) {
+      let htp = {
+        filterId : this.searchFilter.label,
+        filterValue : this.searchFilter.values.field
+      }
+      const sb = this.oaCommonService.getFilterWithPagination(htp, 'filterByData', '/oadata/api/v1/exchangeRates', this.currentPage, this.pageSize, this.sortData).subscribe((res: any) => {
+        this.dataSource.data = res.content;
+        this.totalRows = res.totalElements
+      });
+      this.subscriptions.push(sb);
+    }
+    //this.dataSource.filter = searchFilter;
+  }
+
+  clearColumn(event:any,columnKey: string): void {
+    console.log(columnKey)
+    this.searchValue[columnKey] = null;
+    this.searchCondition[columnKey] = "none";
+    this.applyFilter(null,null);
+    this.getExchangeRate();
+  }
+
+  initializeColumnProperties() {
+    this.displayedColumns.forEach((element, index) => {
+      this.columnShowHideList.push(
+        {
+          possition: index, name: element, isActive: true
+        }
+      );
+    });
+  }
+
+  toggleColumn(column: any) {
+    if (column.isActive && column.name !== 'columnSetting') {
+      if (column.possition > this.displayedColumns.length - 1) {
+        this.displayedColumns.push(column.name);
+      } else {
+        this.displayedColumns.splice(column.possition, 0, column.name);
+      }
+    } else {
+      let i = this.displayedColumns.indexOf(column.name);
+      let opr = i > -1 ? this.displayedColumns.splice(i, 1) : undefined;
     }
   }
 

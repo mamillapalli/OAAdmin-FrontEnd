@@ -1,175 +1,253 @@
-<div class="card card-custom gutter-b">
-  <div class="card-header">
-    <div class="card-title">
-      <h3 class="card-label">Exchange Rate Dashboard</h3>
-    </div>
-    <div class="d-flex align-items-center py-1">
-      <div class="me-4">
-        <a
-          class="btn btn-sm btn-flex btn-light-warning btn-active-light fw-bolder cursor-pointer"
-          data-kt-menu-trigger="click"
-          data-kt-menu-placement="bottom-end"
-          data-kt-menu-flip="top-end" (click)="openFilter()"
-        >
-        <span
-          [inlineSVG]="'./assets/media/icons/duotune/general/gen031.svg'"
-          class="svg-icon svg-icon-5 svg-icon-gray-500 me-1"
-        ></span>
-          Filter
-        </a>
-      </div>
-      <a
-        class="btn btn-sm btn-flex btn-light-success btn-active-light fw-bolder cursor-pointer"
-        data-bs-toggle="modal"
-        data-bs-target="#kt_modal_create_app"
-        (click)="newExchangeRate()"
-        style="margin-right: 16px"
-      >
-        Create Exchange Rate
-      </a>
-
-      <a
-        class="btn btn-sm btn-flex btn-light-primary btn-active-primary fw-bolder cursor-pointer"
-        data-bs-toggle="modal"
-        data-bs-target="#kt_modal_create_app"
-        (click)="uploadExchangeRate(cUploadInvoices)"
-        style="margin-right: 16px"
-      >
-        Upload Exchange Rate
-      </a>
+<div class="card">
+  <div class="toolBar card-header">
+    <div class="toolBarTitle card-title">
+      Exchange Rate Dashboard
     </div>
   </div>
 
-  <div class="card-body py-3">
-    <ngx-spinner></ngx-spinner>
-    <div class="table-responsive">
-      <mat-table [dataSource]="dataSource" matSort  (matSortChange)="sortChanges($event)" style="width: 100%;"
-                 class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+  <div class="card">
+    <div class="d-flex align-items-sm-start py-1">
+      <div class="card-header" style="">
+        <div class="me-4">
+          <a
+            class="btn btn-sm btn-flex btn-light-warning btn-active-light fw-bolder cursor-pointer"
+            data-kt-menu-trigger="click"
+            data-kt-menu-placement="bottom-end"
+            placement="top" ngbTooltip="Filter"
+            data-kt-menu-flip="top-end" (click)="openFilter()"
+          >
+        <span
+          class="svg-icon svg-icon-5 svg-icon-gray-500 me-1"
+        ></span>
+            <i class="fas fa-filter "></i>
+          </a>
+          <a
+            class="btn btn-sm btn-flex btn-light-success btn-active-light fw-bolder cursor-pointer"
+            data-bs-toggle="modal"
+            data-bs-target="#kt_modal_create_app"
+            placement="top" ngbTooltip="Create Exchange Rate"
+            (click)="newExchangeRate()"
+            style=""
+          >
+            <i class="fas fa-plus "></i>
+          </a>
+          <a
+            class="btn btn-sm btn-flex btn-light-primary btn-active-primary fw-bolder cursor-pointer"
+            data-bs-toggle="modal"
+            data-bs-target="#kt_modal_create_app"
+            placement="top" ngbTooltip="Upload Exchange Rate"
+            (click)="uploadExchangeRate(cUploadInvoices)"
+            style=""
+          >
+            <i class="fas fa-upload "></i>
+          </a>
+          <span ngbDropdown class="dropdown">
+            <a ngbDropdownToggle class="btn btn-sm btn-flex btn-light-info btn-active-primary fw-bolder cursor-pointer"
+               type="button" id="dropdownMenuButton1" aria-expanded="false"><i class="fas fa-file-export"></i></a>
+            <ul ngbDropdownMenu aria-labelledby="dropdownMenuButton1">
+                <li><a ngbDropdownItem (click)="exporter.exportTable('csv')"><i class="fas fa-file-csv"
+                                                                                style="background-color: #ac2bac;"></i>CSV</a></li>
+                <li><a ngbDropdownItem (click)="exporter.exportTable('xls')"><i class="fas fa-file-excel"
+                                                                                style="background-color: #ac2bac;"></i>XLS</a></li>
+                <li><a ngbDropdownItem (click)="exporter.exportTable('json')"><i class="fas fa-file-signature"></i>JSON</a></li>
+                <li><a ngbDropdownItem (click)="exporter.exportTable('txt')"><i
+                  class="fas fa-file-alt "></i>Text</a></li>
+            </ul>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div>
+        <table matTableExporter  #exporter="matTableExporter" mat-table [dataSource]="dataSource" class="" cdkDropList
+               cdkDropListOrientation="horizontal"
+               (cdkDropListDropped)="drop($event)"
+               matSort (matSortChange)="sortChanges($event)"
+               style="overflow-x: scroll; overflow-y: scroll"
+        >
 
-        <ng-container matColumnDef="fromCurrency">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">From Currency
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.fromCurrency}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="toCurrency">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">To Currency
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.toCurrency}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="rateType">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Rate Type
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row" class="label label-lg label-inline">{{row.rateType}}
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="rateValue">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">Rate Value</mat-header-cell>
-          <mat-cell *matCellDef="let row" class="label label-lg label-inline"> {{row.rateValue}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="mdFlag">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline">MD Flag
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.mdFlag }} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="label label-lg label-inline"> Actions
-          </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="action-link">
-            <ng-container *ngIf="authRoles.includes('BANK_USER_MAKER')
-          || authRoles.includes('BANK_ADMIN_MAKER')">
-              <a (click)="openExchangeRateDialog(element,'edit')" title="Edit Transaction"
-                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                <span [inlineSVG]="'./assets/media/svg/icons/Communication/Write.svg'"
-                      class="svg-icon svg-icon-md svg-icon-primary">
+          <ng-container matColumnDef="columnSetting">
+            <th mat-header-cell cdkDrag *matHeaderCellDef>
+              <div>
+                <mat-icon #menuTrigger="matMenuTrigger"
+                          [matMenuTriggerFor]="mainMenuButton">view_module
+                </mat-icon>
+                <mat-menu #mainMenuButton="matMenu">
+                  <button mat-menu-item [matMenuTriggerFor]="dialogBox">
+                    <mat-icon>dialpad</mat-icon>
+                    <span>Column Setting</span>
+                  </button>
+                </mat-menu>
+                <mat-menu #dialogBox="matMenu">
+                <span style="font-family: Montserrat;font-size: 15px; color: #337ab7"
+                      *ngFor="let column of columnShowHideList;index as i">
+                                    <mat-slide-toggle class="example-margin" [color]="color"
+                                                      [(ngModel)]="column.isActive" (change)="toggleColumn(column)">
+                                    </mat-slide-toggle>
+                  {{column.name}}
+                  <br>
                 </span>
-              </a>
-            </ng-container>
-            <ng-container *ngIf="authRoles.includes('BANK_USER_MAKER')
+                </mat-menu>
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let element"></td>
+          </ng-container>
+
+          <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{column.header}}
+              <button mat-button class="btn-toggle" #MatMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="menu">
+                <mat-icon>filter_list</mat-icon>
+              </button>
+              <mat-menu #menu>
+                <div mat-menu-item mat-filter-item (click)="$event.stopPropagation()">
+                  <mat-form-field >
+                    <mat-select [panelClass]="'mat-elevation-z10'" placeholder='Conditions'
+                                [(value)]="searchCondition.field">
+                      <mat-option *ngFor="let  condition of conditionsList"
+                                  [value]="condition.value">{{condition.label}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div mat-menu-item mat-filter-item (click)="$event.stopPropagation()">
+                  <mat-form-field>
+                    <input matInput placeholder="Value" [(ngModel)]="searchValue.field">
+                  </mat-form-field>
+                </div>
+                <div mat-menu-item mat-filter-item (click)="$event.stopPropagation()">
+                  <button mat-raised-button (click)="clearColumn($event,'field')">Clear</button>
+                  <button mat-raised-button color="primary" (click)="applyFilter($event,column.columnDef)">Search
+                  </button>
+                </div>
+              </mat-menu>
+            </th>
+            <td mat-cell *matCellDef="let row"> {{row[column.columnDef]}} </td>
+          </ng-container>
+
+          <!--          <ng-container matColumnDef="userId">-->
+          <!--            <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> User Id</th>-->
+          <!--            <td mat-cell *matCellDef="let element"> {{element.userId}} </td>-->
+          <!--          </ng-container>-->
+
+          <!--          <ng-container matColumnDef="firstName">-->
+          <!--            <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> First Name</th>-->
+          <!--            <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>-->
+          <!--          </ng-container>-->
+
+          <!--          <ng-container matColumnDef="lastName">-->
+          <!--            <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> Last Name</th>-->
+          <!--            <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>-->
+          <!--          </ng-container>-->
+
+          <!--          <ng-container matColumnDef="emailAddress">-->
+          <!--            <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> Email Address</th>-->
+          <!--            <td mat-cell *matCellDef="let element"> {{element.emailAddress}} </td>-->
+          <!--          </ng-container>-->
+
+          <!--          <ng-container matColumnDef="expiryDate">-->
+          <!--            <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> Expiry Date</th>-->
+          <!--            <td mat-cell *matCellDef="let element"> {{element.expiryDate | date: 'MM/dd/YYYY'}} </td>-->
+          <!--          </ng-container>-->
+
+          <!--          <ng-container matColumnDef="status">-->
+          <!--            <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> Status</th>-->
+          <!--            <td mat-cell *matCellDef="let element"> {{element.status}} </td>-->
+          <!--          </ng-container>-->
+
+          <!--          <ng-container matColumnDef="transactionStatus">-->
+          <!--            <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> Trx Status</th>-->
+          <!--            <td mat-cell *matCellDef="let element"> {{element.transactionStatus}} </td>-->
+          <!--          </ng-container>-->
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell cdkDrag *matHeaderCellDef   mat-sort-header> Actions </th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="(authRoles.includes('SUPER_ADMIN')
+          || authRoles.includes('BANK_USER_MAKER')
+          || authRoles.includes('BANK_ADMIN_MAKER'))">
+                <a (click)="openExchangeRateDialog(element,'edit')" title="Edit Transaction"
+                   class="btn btn-icon btn-light-primary btn-active-light btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/svg/icons/Communication/Write.svg'"
+                      class="svg-icon svg-icon-md">
+                </span>
+                </a>
+              </ng-container>
+              <ng-container *ngIf="authRoles.includes('SUPER_ADMIN')
+          || authRoles.includes('BANK_USER_MAKER')
           || authRoles.includes('BANK_USER_CHECKER')
           || authRoles.includes('BANK_USER_VIEWER')
           || authRoles.includes('BANK_ADMIN_MAKER')
           || authRoles.includes('BANK_ADMIN_CHECKER')
           || authRoles.includes('BANK_ADMIN_VIEWER')">
-              <a ng-if="(this.authRoles.includes('SUPER_ADMIN')" title="View Transaction" (click)="openExchangeRateDialog(element,'view')"
-                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <a ng-if="(this.authRoles.includes('SUPER_ADMIN')" title="View Transaction"
+                   (click)="openExchangeRateDialog(element,'view')"
+                   class="btn btn-icon btn-light-success btn-active-light btn-sm me-1">
                 <span [inlineSVG]="'./assets/media/svg/icons/Code/Compiling.svg'"
-                      class="svg-icon svg-icon-md svg-icon-success"></span>
-              </a>
-            </ng-container>
-            <ng-container *ngIf="(authRoles.includes('BANK_USER_MAKER')
+                      class="svg-icon svg-icon-md"></span>
+                </a>
+              </ng-container>
+              <ng-container *ngIf="(authRoles.includes('SUPER_ADMIN')
+          || authRoles.includes('BANK_USER_MAKER')
           || authRoles.includes('BANK_USER_CHECKER')
           || authRoles.includes('BANK_USER_VIEWER')
           || authRoles.includes('BANK_ADMIN_MAKER')
           || authRoles.includes('BANK_ADMIN_CHECKER')
-          || authRoles.includes('BANK_ADMIN_VIEWER' )) ">
-              <a
-                title="Authorize Transaction" (click)="openExchangeRateDialog(element,'auth')"
-                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+          || authRoles.includes('BANK_ADMIN_VIEWER' )) && element.transactionStatus === 'PENDING' ">
+                <a
+                  title="Authorize Transaction" (click)="openExchangeRateDialog(element,'auth')"
+                  class="btn btn-icon btn-light-warning btn-active-light btn-sm me-1">
                 <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'"
-                      class="svg-icon svg-icon-md svg-icon-warning"></span>
-              </a>
-            </ng-container>
-            <ng-container *ngIf="(authRoles.includes('BANK_ADMIN_VIEWER')
+                      class="svg-icon svg-icon-md"></span>
+                </a>
+              </ng-container>
+              <ng-container *ngIf="(authRoles.includes('SUPER_ADMIN')
+          || authRoles.includes('BANK_ADMIN_VIEWER')
           || authRoles.includes('BANK_USER_VIEWER'))
           && element.transactionStatus === 'PENDING' ">
-              <a title="Delete customer" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
-                 (click)="openExchangeRateDialog(deleteContent, element)">
+                <a
+                  title="Delete customer"
+                  class="btn btn-icon btn-light-danger btn-active-light btn-sm me-1"
+                  (click)="openExchangeRateDelete(deleteContent, element)">
                 <span [inlineSVG]="'./assets/media/svg/icons/General/Trash.svg'"
-                      fill="#2DB757" class="svg-icon svg-icon-md svg-icon-danger">
+                      fill="#2DB757" class="svg-icon svg-icon-md">
                 </span>
-              </a>
-            </ng-container>
-            <ng-container *ngIf="(authRoles.includes('BANK_ADMIN_VIEWER')
-          || authRoles.includes('BANK_USER_VIEWER')) ">
-              <a title="View History" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
-                 (click)="openExchangeRateDialog(element,'viewHistory')">
-                <span [inlineSVG]="'./assets/media/svg/icons/Communication/Clipboard-list.svg'"
-                      class="svg-icon svg-icon-md svg-icon-primary">
-                </span>
-              </a>
-            </ng-container>
-          </mat-cell>
-        </ng-container>
+                </a>
+              </ng-container>
+            </td>
+          </ng-container>
 
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; let index = dataIndex; columns: displayedColumns;">
-        </mat-row>
-
-      </mat-table>
-
-      <!--      <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]" showFirstLastButtons></mat-paginator>-->
-      <mat-paginator #paginator [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize"
-                     [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)" aria-label="Select page">
-      </mat-paginator>
-
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+              [ngClass]="{hovered: row.hovered, highlighted: row.highlighted}"
+              (click)="row.highlighted = !row.highlighted" (mouseover)="row.hovered = true"
+              (mouseout)="row.hovered = false"></tr>
+        </table>
+        <mat-paginator #paginator [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize"
+                       [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)" aria-label="Select page">
+        </mat-paginator>
+      </div>
     </div>
+
+    <ng-template #deleteContent let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure to delete this?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>
+        <button type="button" class="btn btn-outline-dark" (click)="c('yes')">Yes</button>
+      </div>
+    </ng-template>
   </div>
 </div>
-<ng-template #deleteContent let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">×</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <p>Are you sure to delete this?</p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>
-    <button type="button" class="btn btn-outline-dark" (click)="c('yes')">Yes</button>
-  </div>
-</ng-template>
-<!-- begin::Body -->
 
 <ng-template #cUploadInvoices let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h2 class="modal-title">Uploaded Exchange Rates</h2>
+    <h2 class="modal-title">Uploaded Invoices</h2>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">×</span>
     </button>
@@ -178,7 +256,7 @@
     <div class="row">
       <div class="col-8">
         <label class="btn btn-default p-0">
-          <input type="file" (change)="selectFile($event)" id="file"/>
+          <input type="file" (change)="selectFile($event)"/>
         </label>
       </div>
 
@@ -208,3 +286,4 @@
   </div>
 </ng-template>
 <!-- begin::Body -->
+

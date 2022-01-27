@@ -211,7 +211,8 @@ export class HolidayModalComponent implements OnInit {
     this.modalOption.keyboard = false;
     this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(CopyAsModalComponent, this.modalOption);
-    modalRef.componentInstance.mode = 'admin';
+    modalRef.componentInstance.mode = 'copy';
+    modalRef.componentInstance.functionType = 'holiday';
     modalRef.componentInstance.url = '/oadata/api/v1/holidays';
     modalRef.componentInstance.displayedColumns = this.displayedColumns;
     modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;

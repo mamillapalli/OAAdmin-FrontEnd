@@ -55,12 +55,10 @@ import {CdkTableExporterModule, MatTableExporterModule} from "mat-table-exporter
 import {NgxCurrencyModule} from "ngx-currency";
 import {SystemMaintenanceRoutingModule} from "./system-maintenance-routing.module";
 import { BatchManagerComponent } from './batch-manager/batch-manager.component';
-import { ExChangeRateComponent } from './ex-change-rate/ex-change-rate.component';
 
 @NgModule({
   declarations: [
     BatchManagerComponent,
-    ExChangeRateComponent
   ],
   imports: [
     CommonModule,

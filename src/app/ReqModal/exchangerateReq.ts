@@ -4,4 +4,4 @@ export class ExchangeRateReq {
     rateType: string;
     rateValue: string;
     mdFlag: string;
-  }
+}
