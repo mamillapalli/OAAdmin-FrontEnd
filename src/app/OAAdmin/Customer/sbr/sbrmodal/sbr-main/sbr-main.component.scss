@@ -1,1 +1,8 @@
-//test
+.my-panel {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.my-panel button {
+  margin: 15px 25px;
+}

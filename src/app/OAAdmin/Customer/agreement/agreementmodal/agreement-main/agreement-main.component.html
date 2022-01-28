@@ -102,16 +102,10 @@
             <a class="btn btn-sm btn-primary fw-bolder" (click)="openCounterPrtyDialog()">Add Counter Party</a>
           </div>
         </div>
-
-<!--        <div class="col-3">-->
-<!--         <label class="label_OA required"></label>-->
-<!--          <div>-->
-<!--            <a class="btn btn-sm btn-primary fw-bolder" (click)="openAdvicePdf('open')">Advice pdf</a>-->
-<!--          </div>-->
-<!--        </div>-->
       </div>
     </div>
-        <div class="container mt-5">
+    <ng-container *ngIf="checkCustomerSelected">
+    <div class="container mt-5">
           <div class="form-group row">
         <ng-container>
           <table mat-table [dataSource]="dataSource" class="" cdkDropList
@@ -175,5 +169,6 @@
         </ng-container>
       </div>
     </div>
+    </ng-container>
   </div>
 </div>

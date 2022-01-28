@@ -17,14 +17,16 @@ import { CustomerDOComponent } from 'src/app/OAAdmin/common/customer-do/customer
 import { AgreementDoComponent } from 'src/app/OAAdmin/common/agreement-do/agreement-do.component';
 import { oapfcommonService } from 'src/app/OAAdmin/shared/oapfcommon.service';
 import { Agreementreq } from 'src/app/OAAdmin/Model/agreementreq';
- 
+import { MatAccordion } from '@angular/material/expansion';
+
 @Component({
   selector: 'app-sbr-main',
   templateUrl: './sbr-main.component.html',
   styleUrls: ['./sbr-main.component.scss']
 })
 export class SbrMainComponent implements OnInit {
-
+  public gfg = false;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
 
   @Input('updateParentModel') updateParentModel: (
     part: Partial<Sbr>,
@@ -102,7 +104,7 @@ export class SbrMainComponent implements OnInit {
       interestRateType: [this.defaultValues.interestRateType,[Validators.required]],
       interestRate: [this.defaultValues.interestRate,[Validators.required]],
       interestMargin: [this.defaultValues.interestMargin,[Validators.required]],
-      
+
     });
 
     const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
@@ -121,7 +123,7 @@ export class SbrMainComponent implements OnInit {
   }
   checkForm() {
     return !(
-      this.form.get('sbrId')?.hasError('required') 
+      this.form.get('sbrId')?.hasError('required')
       );
   }
 
@@ -156,7 +158,7 @@ export class SbrMainComponent implements OnInit {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
     //this.modalOption.windowClass = 'my-class'
-    this.modalOption.size='lg'; 
+    this.modalOption.size='lg';
     const modalRef = this.modalService.open(CustomerDOComponent, this.modalOption);
     modalRef.result.then((result) => {
       this.form.patchValue(result);
@@ -167,7 +169,7 @@ export class SbrMainComponent implements OnInit {
         //   this.f.anchorId.setValue(result.anchorCustomer['customerId']);
         // this.f.counterPartyId.setValue(result.counterParty['customerId']);
         // this.f.agreementId.setValue(result.agreement['contractReferenceNumber']);
-        
+
       }
     }, (reason) => {
       console.log('reason is'+reason);
@@ -178,7 +180,7 @@ export class SbrMainComponent implements OnInit {
     this.modalOption.backdrop = 'static';
     this.modalOption.keyboard = false;
     //this.modalOption.windowClass = 'my-class'
-    this.modalOption.size='xl'; 
+    this.modalOption.size='xl';
     const modalRef = this.modalService.open(AgreementDoComponent, this.modalOption);
     modalRef.result.then((result) => {
       this.form.patchValue(result);
@@ -197,7 +199,7 @@ export class SbrMainComponent implements OnInit {
         //   this.f.anchorId.setValue(result.anchorCustomer['customerId']);
         // this.f.counterPartyId.setValue(result.counterParty['customerId']);
         // this.f.agreementId.setValue(result.agreement['contractReferenceNumber']);
-        
+
       }
     }, (reason) => {
       console.log('reason is'+reason);

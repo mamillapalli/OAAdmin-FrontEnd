@@ -40,6 +40,7 @@ export class AgreementMainComponent implements OnInit {
   private unsubscribe: Subscription[] = [];
   @Input('formValue') formValue: any;
   @Input() mode: any;
+  @Input() modeCopy: any;
   @ViewChild('capture')capture:ElementRef;
   @ViewChild('myModal') myModal: any;
   modalOption: NgbModalOptions = {}; // not null!
@@ -59,6 +60,7 @@ export class AgreementMainComponent implements OnInit {
   public closeResult: string;
   private subscriptions: Subscription[] = [];
   displayedColumns: string[] = ['customerId', 'name', 'emailAddress', 'expiryDate', 'status', 'actions'];
+  checkCustomerSelected: boolean
 
 
   constructor(private http: HttpClient, private fb: FormBuilder, public modalService: NgbModal, private datePipe: DatePipe,
@@ -67,10 +69,11 @@ export class AgreementMainComponent implements OnInit {
   ngOnInit() {
     this.businessTypeReq = new BusinessTypeReq();
     this.initForm();
-    if (this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view') {
-      this.form.disable()
-    } else if (this.mode !== 'new') {
+    if (this.mode !== 'new') {
       this.updateForm();
+      if (this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view') {
+        this.form.disable()
+      }
     } else if (this.mode == 'new') {
       this.oapfcommonService.getAdminReferenceNumber('agreements').subscribe((res) => {
         this.f.contractReferenceNumber.setValue(res);
@@ -84,19 +87,18 @@ export class AgreementMainComponent implements OnInit {
     this.form = this.fb.group({
       contractReferenceNumber: ['', [Validators.required]],
       businessType: [[Validators.required]],
-      businessTypeId: [],
+      businessTypeId: [''],
       anchorCustomer: [[Validators.required]],
-      anchorCustomerId: [],
+      anchorCustomerId: [''],
       contractDocumentNumber: [this.defaultValues.contractDocumentNumber, [Validators.required]],
       transactionDate: [this.defaultValues.transactionDate, [Validators.required]],
       validDate: [this.defaultValues.validDate, [Validators.required]],
       expiryDate: [this.defaultValues.expiryDate, [Validators.required]],
-      rmId: [],
+      rmId: [''],
       rm: [[Validators.required]],
       remarks: [this.defaultValues.remarks, [Validators.required]],
       counterParties: this.counterParties
     });
-
     const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
       this.updateParentModel(val, this.checkForm());
       this.form.markAllAsTouched();
@@ -143,6 +145,7 @@ export class AgreementMainComponent implements OnInit {
       this.dataSource.data = this.formValue.counterParties;
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+      this.checkCustomerSelected = true;
     }
     // this.f.businessType.setValue(this.businessTypeReq.name);
     console.log('business Type ---->', this.businessTypeReq);
@@ -331,6 +334,7 @@ export class AgreementMainComponent implements OnInit {
         this.counterParties.push(cust)
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+        this.checkCustomerSelected = true;
       }
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;

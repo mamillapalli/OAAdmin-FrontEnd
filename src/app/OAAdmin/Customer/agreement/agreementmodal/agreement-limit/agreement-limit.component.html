@@ -42,7 +42,8 @@
           <div class="floating-label">
             <input class="floating-input_mandatory" type="text" autocomplete="off"
                    name="cashMargin" [class.is-invalid]="isControlInvalid('cashMargin')"
-                   [class.is-valid]="isControlValid('cashMargin')" formControlName="cashMargin" placeholder="Cash Margin">
+                   [class.is-valid]="isControlValid('cashMargin')" formControlName="cashMargin"
+                   placeholder="">
             <label class="label_OA">Cash Margin</label>
           </div>
         </div>
@@ -159,7 +160,7 @@
                    [class.is-invalid]="isControlInvalid('settlementServiceChargeAmount')"
                    [class.is-valid]="isControlValid('settlementServiceChargeAmount')" formControlName="settlementServiceChargeAmount" placeholder="settlementServiceChargeAmount"
                    currencyMask placeholder=" ">
-            <label class="label_OA">Settlement Amount</label>
+            <label class="label_OA">Settlement Service Charge</label>
           </div>
         </div>
       </div>
@@ -181,14 +182,15 @@
                    [class.is-invalid]="isControlInvalid('invoiceServiceChargeAmount')"
                    [class.is-valid]="isControlValid('invoiceServiceChargeAmount')" formControlName="invoiceServiceChargeAmount" placeholder="invoiceServiceChargeAmount"
                    currencyMask placeholder=" ">
-            <label class="label_OA">Invoice Amount</label>
+            <label class="label_OA">Invoice Service Charge</label>
           </div>
         </div>
         <div class="col-3">
           <div class="floating-label">
-            <input class="floating-input_mandatory" type="text" autocomplete="off"
+            <input class="floating-input" type="text" autocomplete="off"
                    name="limitAllocatedAmount" [class.is-invalid]="isControlInvalid('limitAllocatedAmount')"
-                   [class.is-valid]="isControlValid('limitAllocatedAmount')" formControlName="limitAllocatedAmount" placeholder="Limit Allcoation Margin">
+                   [class.is-valid]="isControlValid('limitAllocatedAmount')"
+                   formControlName="limitAllocatedAmount" placeholder="\">
             <label class="label_OA">Limit Allocated Amount</label>
           </div>
         </div>
@@ -196,8 +198,9 @@
           <div class="floating-label">
             <input class="floating-input_mandatory" type="text" autocomplete="off"
                    name="limitUnallocatedAmount" [class.is-invalid]="isControlInvalid('limitUnallocatedAmount')"
-                   [class.is-valid]="isControlValid('limitUnallocatedAmount')" formControlName="limitUnallocatedAmount" placeholder="limitUnallocatedAmount">
-            <label class="label_OA">Limit UnAllocated Amount</label>
+                   [class.is-valid]="isControlValid('limitUnallocatedAmount')"
+                   formControlName="limitUnallocatedAmount" placeholder="">
+            <label class="label_OA required">Limit UnAllocated Amount</label>
           </div>
         </div>
       </div>

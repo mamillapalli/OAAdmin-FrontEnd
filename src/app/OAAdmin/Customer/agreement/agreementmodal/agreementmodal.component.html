@@ -67,12 +67,13 @@
                                           [defaultValues]="account$.value"
                                           [formValue]="formValue"
                                           [mode]=mode
+                                          [modeCopy]=modeCopy
             ></app-agreement-main>
           </ng-container>
 
           <ng-container *ngIf="currentStep$.value === 2">
             <app-agreement-limit class="w-100" [updateParentModel]="updateAccount" [defaultValues]="account$.value"
-                                 [formValue]="formValue" [mode]=mode></app-agreement-limit>
+                                 [formValue]="formValue" [mode]=mode [modeCopy]=modeCopy></app-agreement-limit>
           </ng-container>
 
           <ng-container *ngIf="currentStep$.value === 3">

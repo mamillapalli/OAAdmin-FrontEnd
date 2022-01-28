@@ -15,15 +15,6 @@
           </div>
         </div>
         <div class="col-3">
-          <div class="floating-label_readonly">
-            <input class="floating-input_readonly" type="text" name="anchorCustomerId"
-                   id="anchorCustomerId"
-                   formControlName="anchorCustomerId"
-                   placeholder=" ">
-            <label class="label_OA">Anchor Customer Id</label>
-          </div>
-        </div>
-        <div class="col-3">
           <div class="floating-label_mandatory">
             <div class="input-group mb-3">
               <input class="floating-input_mandatory input-group mb-3" type="text" name="agreementId"
@@ -35,6 +26,15 @@
               <span class="input-group-text_OA" (click)="openAgreementModal()">
                 <i class="fa fa-search fa-fw"></i></span>
             </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_readonly">
+            <input class="floating-input_readonly" type="text" name="anchorCustomerId"
+                   id="anchorCustomerId"
+                   formControlName="anchorCustomerId"
+                   placeholder=" ">
+            <label class="label_OA">Anchor Customer Id</label>
           </div>
         </div>
         <div class="col-3">
@@ -55,7 +55,7 @@
             <input class="floating-input_readonly" type="text" name="counterPartyId"
                    id="counterPartyId"
                    formControlName="counterPartyId"
-                   >
+            >
             <label class="label_OA required">Counter Party ID</label>
           </div>
         </div>
@@ -74,7 +74,7 @@
             <input class="floating-input_readonly" type="text" name="goodsDescription"
                    id="goodsDescription"
                    formControlName="goodsDescription"
-                   >
+            >
             <label class="label_OA required">Goods Description</label>
           </div>
         </div>
@@ -92,7 +92,7 @@
             <input class="floating-input_mandatory" id="limitAmount" name="limitAmount"
                    [class.is-invalid]="isControlInvalid('limitAmount')"
                    [class.is-valid]="isControlValid('limitAmount')" formControlName="limitAmount"
-                   currencyMask >
+                   currencyMask>
             <label class="label_OA">Limit Amount</label>
           </div>
         </div>

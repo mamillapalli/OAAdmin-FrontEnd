@@ -15,6 +15,7 @@ import { AgreementEndComponent } from './agreement-end/agreement-end.component';
 import { CreditAdviseComponent } from 'src/app/OAAdmin/credit-advise/credit-advise.component';
 import {oapfcommonService} from "../../../shared/oapfcommon.service";
 import Swal from 'sweetalert2';
+import { AgreementLimitComponent } from './agreement-limit/agreement-limit.component';
 
 @Component({
   selector: 'app-agreementmodal',
@@ -26,10 +27,11 @@ export class AgreementmodalComponent implements OnInit {
   @Output('displayedColumns') displayedColumns: any
   @Output('fDisplayedColumns') fDisplayedColumns: any;
   @ViewChild(AgreementMainComponent) AgreementMainComponent:AgreementMainComponent;
-  @ViewChild(AgreementEndComponent) AgreementEndComponent:AgreementEndComponent;
+  @ViewChild(AgreementLimitComponent) AgreementLimitComponent:AgreementLimitComponent;
   formsCount = 3;
   closeResult: string;
   @Input() mode: any;
+  @Input() modeCopy: any;
   @Output() formValue: any
   unsubscribe: Subscription[] = [];
   account$: BehaviorSubject<any> = new BehaviorSubject<Agreement>(inits);
@@ -102,8 +104,8 @@ export class AgreementmodalComponent implements OnInit {
             }).then((result) => {
               console.log(result)
               if (result.value) {
-                //Swal.close();
-                //this.activeModal.close();
+                Swal.close();
+                this.activeModal.close();
               }
             });
           } else {
@@ -135,8 +137,8 @@ export class AgreementmodalComponent implements OnInit {
             }).then((result) => {
               console.log(result)
               if (result.value) {
-                //Swal.close();
-                //this.activeModal.close();
+                Swal.close();
+                this.activeModal.close();
               }
             });
           } else {
@@ -167,8 +169,8 @@ export class AgreementmodalComponent implements OnInit {
             }).then((result) => {
               console.log(result)
               if (result.value) {
-                //Swal.close();
-                //this.activeModal.close();
+                Swal.close();
+                this.activeModal.close();
               }
             });
           } else {
@@ -322,20 +324,34 @@ export class AgreementmodalComponent implements OnInit {
     this.modalOption.size = 'xl'
     const modalRef = this.modalService.open(CopyAsModalComponent, this.modalOption);
     modalRef.componentInstance.mode = 'copy';
-    modalRef.componentInstance.functionType = 'Agreements';
+    modalRef.componentInstance.functionType = 'admin';
+    modalRef.componentInstance.url = '/oaadmin/api/v1/agreements/';
     modalRef.componentInstance.displayedColumns = this.displayedColumns;
     modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
+      this.modeCopy = 'copy';
+      this.formValue = result
       const refNo = this.AgreementMainComponent.form.value.contractReferenceNumber;
       console.log('Result is ' + result);
-      //this.updateAccount(result, true)
       this.formValue = result
-      console.log(this.formValue)
-      //this.Invoicestep1Component.updateForm()
-      this.formValue.contractReferenceNumber = refNo
-      this.AgreementMainComponent.form.patchValue(this.formValue)
+      this.AgreementMainComponent.formValue = result
+      this.AgreementMainComponent.updateForm()
       this.AgreementMainComponent.form.value.contractReferenceNumber = refNo;
-      //this.Invoicestep1Component.updateReferenceNumber();
+      // this.AgreementMainComponent.defaultValues = result
+
+      // this.AgreementMainComponent.form.patchValue(this.formValue)
+      // this.AgreementMainComponent.f.anchorCustomerId.setValue(this.formValue.anchorCustomer.customerId);
+      // this.AgreementMainComponent.f.rmId.setValue(this.formValue.anchorCustomer.customerId);
+      // this.AgreementMainComponent.form.value.contractReferenceNumber = refNo;
+      // this.AgreementMainComponent.f.businessType.setValue(this.formValue.businessType);
+      // if (this.formValue.counterParties.length > 0) {
+      //   this.AgreementMainComponent.dataSource.data = this.formValue.counterParties;
+      //   this.AgreementMainComponent.dataSource.sort = this.AgreementMainComponent.sort;
+      //   this.AgreementMainComponent.dataSource.paginator = this.AgreementMainComponent.paginator;
+      //   this.AgreementMainComponent.checkCustomerSelected = true;
+      // }
+      // this.AgreementLimitComponent.form.patchValue(this.formValue)
+      // this.AgreementLimitComponent.defaultValues = result
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });

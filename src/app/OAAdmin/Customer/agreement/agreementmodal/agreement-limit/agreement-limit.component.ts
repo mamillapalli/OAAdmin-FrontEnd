@@ -19,11 +19,12 @@ export class AgreementLimitComponent implements OnInit {
     isFormValid: boolean
   ) => void;
   form: FormGroup;
-  @Input() defaultValues: Partial<Agreement>; 
+  @Input() defaultValues: Partial<Agreement>;
 
   private unsubscribe: Subscription[] = [];
   @Input('formValue') formValue :  any;
   @Input() mode :  any;
+  @Input() modeCopy: any;
   @ViewChild('myModal') myModal: any;
   modalOption: NgbModalOptions = {}; // not null!
   public content: any;
@@ -35,12 +36,12 @@ export class AgreementLimitComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    //    this.currencyList =  localStorage.getItem('currencyList');
-    if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view')
-    {
-      this.form.disable()
-    }
-    if(this.mode !== 'new') {
+    if (this.mode !== 'new') {
+      this.updateForm();
+      if (this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view') {
+        this.form.disable()
+      }
+    } else if (this.modeCopy == 'copy') {
       this.updateForm();
     }
     this.updateParentModel({}, this.checkForm());
@@ -70,6 +71,8 @@ export class AgreementLimitComponent implements OnInit {
       invoiceServiceChargeCurrency: [this.defaultValues.invoiceServiceChargeCurrency,[Validators.required]],
       invoiceServiceChargeAmount: [this.defaultValues.invoiceServiceChargeAmount,[Validators.required]],
     });
+
+    this.updateForm();
 
     const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
       this.updateParentModel(val, this.checkForm());
