@@ -1,44 +1,51 @@
 <div class="card-body">
   <div [formGroup]="form" id="form">
     <div class="form-group row">
-      <h3 class="fw-bolder text-dark">Anchor Customer Info</h3>
+      <h3 class="fw-bolder text-dark">Limit Info</h3>
     </div>
     <div class="container mt-5 ">
       <div class="form-group row">
-        <div class="col-3">
-          <div class="floating-label">
-            <input class="floating-input_readonly" type="text" name="anchorCustomerContactName"
-                   id="anchorCustomerContactName"
-                   formControlName="anchorCustomerContactName"
-                   >
-            <label class="label_OA required">Customer Name</label>
+        <div class="ccol1_OA">
+          <div class="floating-label_mandatory">
+            <select class="floating-select_mandatory" name="limitCurrency" id="limitCurrency"
+                    formControlName="limitCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA required">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" id="limitAmount" name="limitAmount"
+                   [class.is-invalid]="isControlInvalid('limitAmount')"
+                   [class.is-valid]="isControlValid('limitAmount')" formControlName="limitAmount"
+                   currencyMask>
+            <label class="label_OA required">Limit Amount</label>
           </div>
         </div>
         <div class="col-3">
-          <div class="floating-label">
-            <input class="floating-input_readonly" type="text" name="anchorCustomerAddressLine1"
-                   id="anchorCustomerAddressLine1"
-                   formControlName="anchorCustomerAddressLine1"
-                   placeholder=" ">
-            <label class="label_OA">Customer Address1</label>
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="date" name="expiryDate"
+                   id="expiryDate"
+                   formControlName="expiryDate"
+            >
+            <label class="label_OA required">Expiry Date</label>
           </div>
         </div>
         <div class="col-3">
-          <div class="floating-label">
-            <input class="floating-input_readonly" type="text" name="anchorCustomerAddressLine2"
-                   id="anchorCustomerAddressLine2"
-                   formControlName="anchorCustomerAddressLine2"
-                   placeholder=" ">
-            <label class="label_OA">Customer Address2</label>
+          <div class="floating-label_mandatory form-switch">
+            <input class="floating-input form-check-input" type="checkbox" id="anchorPartyApprovalRequired"
+                   name="anchorPartyApprovalRequired" value="yes" formControlName="anchorPartyApprovalRequired"
+                   checked [disabled]="ReadOnlyCheckBox">
+            <label class="label_OA_mandatory form-check-label required">Anchor Party Approval</label>
           </div>
         </div>
         <div class="col-3">
-          <div class="floating-label">
-            <input class="floating-input_readonly" type="text" name="anchorCustomerAddressLine3"
-                   id="anchorCustomerAddressLine3"
-                   formControlName="anchorCustomerAddressLine3"
-                   placeholder=" ">
-            <label class="label_OA">Customer Address3</label>
+          <div class="floating-label_mandatory form-switch">
+            <input class="floating-input form-check-input" type="checkbox" id="counterPartyApprovalRequired"
+                   name="counterPartyApprovalRequired" value="yes" formControlName="counterPartyApprovalRequired"
+                   checked [disabled]="ReadOnlyCheckBox">
+            <label class="label_OA_mandatory form-check-label required">Counter Party Approval</label>
           </div>
         </div>
       </div>
@@ -47,81 +54,34 @@
       <div class="form-group row">
         <div class="col-3">
           <div class="floating-label">
-            <input class="floating-input" type="text" name="anchorCustomerPOBox"
-                   id="anchorCustomerPOBox"
-                   formControlName="anchorCustomerPOBox"
-            >
-            <label class="label_OA required">PoBox</label>
+            <input class="floating-input" type="text" name="documentsRequired"
+                   id="documentsRequired"
+                   formControlName="documentsRequired">
+            <label class="label_OA">Documents Required</label>
           </div>
         </div>
         <div class="col-3">
           <div class="floating-label">
-            <input class="floating-input" type="text" name="anchorCustomerEmail"
-                   id="anchorCustomerEmail"
-                   formControlName="anchorCustomerEmail"
-                   placeholder=" ">
-            <label class="label_OA">Email</label>
+            <input class="floating-input" type="number" name="maxLoanPercentage"
+                   id="maxLoanPercentage"
+                   formControlName="maxLoanPercentage">
+            <label class="label_OA">Max Loan Percentage</label>
           </div>
         </div>
         <div class="col-3">
           <div class="floating-label">
-            <input class="floating-input" type="text" name="anchorCustomerFax"
-                   id="anchorCustomerFax"
-                   formControlName="anchorCustomerFax"
-                   placeholder=" ">
-            <label class="label_OA">Fax</label>
+            <input class="floating-input" type="text" name="financingInformation"
+                   id="financingInformation"
+                   formControlName="financingInformation">
+            <label class="label_OA">Financing Information</label>
           </div>
         </div>
         <div class="col-3">
           <div class="floating-label">
-            <input class="floating-input_readonly" type="text" name="anchorCustomerTelephone"
-                   id="anchorCustomerTelephone"
-                   formControlName="anchorCustomerTelephone"
-                   placeholder=" ">
-            <label class="label_OA">Phone No</label>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="form-group row">
-      <h3 class="fw-bolder text-dark">Counter Customer Info</h3>
-    </div>
-    <div class="container mt-5 ">
-      <div class="form-group row">
-        <div class="col-3">
-          <div class="floating-label">
-            <input class="floating-input" type="text" name="counterPartyContactName"
-                   id="counterPartyContactName"
-                   formControlName="counterPartyContactName"
-            >
-            <label class="label_OA required">Customer Name</label>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="floating-label">
-            <input class="floating-input" type="text" name="counterPartyAddressLine1"
-                   id="counterPartyAddressLine1"
-                   formControlName="counterPartyAddressLine1"
-            >
-            <label class="label_OA required">Customer Address1</label>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="floating-label">
-            <input class="floating-input" type="text" name="counterPartyAddressLine2"
-                   id="counterPartyAddressLine2"
-                   formControlName="counterPartyAddressLine2"
-            >
-            <label class="label_OA required">Customer Address2</label>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="floating-label">
-            <input class="floating-input" type="text" name="counterPartyAddressLine3"
-                   id="counterPartyAddressLine3"
-                   formControlName="counterPartyAddressLine3"
-            >
-            <label class="label_OA required">Customer Address3</label>
+            <input class="floating-input" type="text" name="rebateAccount"
+                   id="rebateAccount"
+                   formControlName="rebateAccount">
+            <label class="label_OA">Rebate Account</label>
           </div>
         </div>
       </div>
@@ -130,38 +90,50 @@
       <div class="form-group row">
         <div class="col-3">
           <div class="floating-label">
-            <input class="floating-input" type="text" name="counterPartyPOBox"
-                   id="counterPartyPOBox"
-                   formControlName="counterPartyPOBox"
-            >
-            <label class="label_OA required">PoBox</label>
+            <input class="floating-input" type="text" name="rebateRate"
+                   id="rebateRate"
+                   formControlName="rebateRate">
+            <label class="label_OA">Rebate Account</label>
+          </div>
+      </div>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <select class="floating-select_mandatory" name="interestRateType" id="interestRateType"
+                    formControlName="interestRateType">
+              <option value="FIXEDRATE" selected>Fixed Rate</option>
+              <option value="SIBOR" selected>SIBOR</option>
+              <option value="LIBOR" selected>LIBOR</option>
+            </select>
+            <label class="label_OA required">Interest Rate Type</label>
           </div>
         </div>
         <div class="col-3">
-          <div class="floating-label">
-            <input class="floating-input" type="text" name="counterPartyEmail"
-                   id="counterPartyEmail"
-                   formControlName="counterPartyEmail"
-            >
-            <label class="label_OA required">Email</label>
+          <div class="floating-label_mandatory">
+            <select class="floating-select_mandatory" name="interestChargeType" id="interestChargeType"
+                    formControlName="interestChargeType">
+              <option value="UPFRONT" selected>UpFront</option>
+              <option value="SETTLEMENT" selected>Payment</option>
+            </select>
+            <label class="label_OA required">Interest Charge Type</label>
           </div>
         </div>
         <div class="col-3">
-          <div class="floating-label">
-            <input class="floating-input" type="text" name="counterPartyFax"
-                   id="counterPartyFax"
-                   formControlName="counterPartyFax"
-            >
-            <label class="label_OA required">Fax</label>
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="number" name="interestRate"
+                   id="interestRate"
+                   formControlName="interestRate">
+            <label class="label_OA required">Interest Rate</label>
           </div>
         </div>
         <div class="col-3">
-          <div class="floating-label">
-            <input class="floating-input" type="text" name="counterPartyTelephone"
-                   id="counterPartyTelephone"
-                   formControlName="counterPartyTelephone"
-            >
-            <label class="label_OA required">Tel</label>
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="number" name="interestMargin"
+                   id="interestMargin"
+                   formControlName="interestMargin">
+            <label class="label_OA required">Interest Margin</label>
           </div>
         </div>
       </div>
@@ -182,11 +154,11 @@
         </div>
         <div class="acol1_OA ">
           <div class="floating-label">
-            <input class="floating-input_mandatory" id="managementFeeAmount" name="managementFeeAmount"
+            <input class="floating-input" id="managementFeeAmount" name="managementFeeAmount"
                    [class.is-invalid]="isControlInvalid('managementFeeAmount')"
                    [class.is-valid]="isControlValid('managementFeeAmount')"
                    formControlName="managementFeeAmount"
-                   currencyMask >
+                   currencyMask>
             <label class="label_OA">Management Fee</label>
           </div>
         </div>
@@ -205,7 +177,7 @@
                    [class.is-invalid]="isControlInvalid('administrativeFeeAmount')"
                    [class.is-valid]="isControlValid('administrativeFeeAmount')"
                    formControlName="administrativeFeeAmount"
-                   currencyMask >
+                   currencyMask>
             <label class="label_OA">Administrative Fee</label>
           </div>
         </div>
@@ -224,7 +196,7 @@
                    [class.is-invalid]="isControlInvalid('earlyPaymentAmount')"
                    [class.is-valid]="isControlValid('earlyPaymentAmount')"
                    formControlName="earlyPaymentAmount"
-                   currencyMask >
+                   currencyMask>
             <label class="label_OA">Early Payment Fee</label>
           </div>
         </div>
@@ -243,7 +215,7 @@
                    [class.is-invalid]="isControlInvalid('invoiceServiceChargeAmount')"
                    [class.is-valid]="isControlValid('invoiceServiceChargeAmount')"
                    formControlName="invoiceServiceChargeAmount"
-                   currencyMask >
+                   currencyMask>
             <label class="label_OA">Inv Service Fee</label>
           </div>
         </div>
@@ -262,11 +234,11 @@
         </div>
         <div class="acol1_OA ">
           <div class="floating-label">
-            <input class="floating-input_mandatory" id="financeServiceChargeAmount" name="financeServiceChargeAmount"
+            <input class="floating-input" id="financeServiceChargeAmount" name="financeServiceChargeAmount"
                    [class.is-invalid]="isControlInvalid('financeServiceChargeAmount')"
                    [class.is-valid]="isControlValid('financeServiceChargeAmount')"
                    formControlName="financeServiceChargeAmount"
-                   currencyMask >
+                   currencyMask>
             <label class="label_OA">Finance Fee</label>
           </div>
         </div>
@@ -285,7 +257,7 @@
                    [class.is-invalid]="isControlInvalid('settlementServiceChargeAmount')"
                    [class.is-valid]="isControlValid('settlementServiceChargeAmount')"
                    formControlName="settlementServiceChargeAmount"
-                   currencyMask >
+                   currencyMask>
             <label class="label_OA">Settlement Fee</label>
           </div>
         </div>
@@ -304,7 +276,7 @@
                    [class.is-invalid]="isControlInvalid('cableChargeAmount')"
                    [class.is-valid]="isControlValid('cableChargeAmount')"
                    formControlName="cableChargeAmount"
-                   currencyMask >
+                   currencyMask>
             <label class="label_OA">Cable Charge Fee</label>
           </div>
         </div>
@@ -323,7 +295,7 @@
                    [class.is-invalid]="isControlInvalid('communicationChargeAmount')"
                    [class.is-valid]="isControlValid('communicationChargeAmount')"
                    formControlName="communicationChargeAmount"
-                   currencyMask >
+                   currencyMask>
             <label class="label_OA">Communication Fee</label>
           </div>
         </div>

@@ -26,6 +26,7 @@ export class AccountcommonmodalComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
   sortData : any
+  customerData : any
 
   constructor(public activeModal: NgbActiveModal,public oaCommonService: oaCommonService) { }
 
@@ -35,10 +36,17 @@ export class AccountcommonmodalComponent implements OnInit {
 
   getAccountsList() {
     console.log(this.accountParam)
-    const sb = this.oaCommonService.getDataWithPaginationWithMaster('/oaadmin/api/v1/accounts/', this.currentPage, this.pageSize,this.sortData).subscribe((res) => {
-      this.dataSource.data = res.content;
-      this.totalRows = res.totalElements
-    });
+    if(this.accountParam === "CUSTOMER") {
+      const sb = this.oaCommonService.getDataWithPaginationWithCustomer('/oaadmin/api/v1/accounts/', this.customerData, this.currentPage, this.pageSize, this.sortData).subscribe((res) => {
+        this.dataSource.data = res.content;
+        this.totalRows = res.totalElements
+      });
+    } else {
+      const sb = this.oaCommonService.getDataWithPaginationWithMaster('/oaadmin/api/v1/accounts/', this.currentPage, this.pageSize, this.sortData).subscribe((res) => {
+        this.dataSource.data = res.content;
+        this.totalRows = res.totalElements
+      });
+    }
 
 
   }

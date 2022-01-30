@@ -396,6 +396,33 @@ export class oaCommonService {
     return throwError(errorMessage);
   }
 
+  getDataWithPaginationWithCustomer(url: string, data: string, currentPage: number, pageSize: number, sortData: any) {
+    this.spinner.show();
+    this.authToken = this.authService.getAuthFromLocalStorage();
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${this.authToken?.jwt}`,
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    });
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('page', currentPage);
+    httpParams = httpParams.append('size', pageSize);
+    console.log(sortData)
+    if(sortData !== null && sortData !== undefined)
+      httpParams = httpParams.append('sort', sortData);
+    httpParams = httpParams.append('transactionStatus', 'MASTER');
+    httpParams = httpParams.append('customerId', data);
+    return this.http.get<any>(url, {headers: httpHeaders, params:httpParams}).pipe(
+      delay(100),
+      catchError((err) => {
+        this.notifyService.showError(err.message, 'Error')
+        this.spinner.hide()
+        return of([]);
+      }),
+      finalize(() => this.spinner.hide())
+    );
+  }
+
   getDataWithPaginationWithMaster(url: string, currentPage: number, pageSize: number, sortData: any) {
     this.spinner.show();
     this.authToken = this.authService.getAuthFromLocalStorage();

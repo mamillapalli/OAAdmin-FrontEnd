@@ -42,6 +42,7 @@ export class SbrAmtInfoComponent implements OnInit {
   public closeResult: string;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
+  ReadOnlyCheckBox: boolean
 
   constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal,private datePipe: DatePipe,public sbragreementServices: sbragreementService) {}
 
@@ -59,24 +60,17 @@ export class SbrAmtInfoComponent implements OnInit {
 
   initForm() {
     this.form = this.fb.group({
-      anchorCustomerContactName: [this.defaultValues.anchorCustomerContactName,[Validators.required]],
-      anchorCustomerAddressLine1: [this.defaultValues.anchorCustomerAddressLine1,[Validators.required]],
-      anchorCustomerAddressLine2: [this.defaultValues.anchorCustomerAddressLine2,[Validators.required]],
-      anchorCustomerAddressLine3: [this.defaultValues.anchorCustomerAddressLine3,[Validators.required]],
-      anchorCustomerPOBox: [this.defaultValues.anchorCustomerPOBox,[Validators.required]],
-      anchorCustomerEmail: [this.defaultValues.anchorCustomerEmail,[Validators.required]],
-      anchorCustomerFax: [this.defaultValues.anchorCustomerFax,[Validators.required]],
-      anchorCustomerTelephone: [this.defaultValues.anchorCustomerTelephone,[Validators.required]],
-        counterPartyContactName: [this.defaultValues.counterPartyContactName,[Validators.required]],
-        counterPartyAddressLine1: [this.defaultValues.counterPartyAddressLine1,[Validators.required]],
-        counterPartyAddressLine2: [this.defaultValues.counterPartyAddressLine2,[Validators.required]],
-        counterPartyAddressLine3: [this.defaultValues.counterPartyAddressLine3,[Validators.required]],
-        counterPartyPOBox: [this.defaultValues.counterPartyPOBox,[Validators.required]],
-        counterPartyEmail: [this.defaultValues.counterPartyEmail,[Validators.required]],
-        counterPartyFax: [this.defaultValues.counterPartyFax,[Validators.required]],
-        counterPartyTelephone: [this.defaultValues.counterPartyTelephone,[Validators.required]],
-        managementFeeCurrency: [this.defaultValues.managementFeeCurrency,[Validators.required]],
-      managementFeeAmount: [this.defaultValues.managementFeeAmount,[Validators.required]],
+
+      limitCurrency: [this.defaultValues.limitCurrency,[Validators.required]],
+      limitAmount: [this.defaultValues.limitAmount,[Validators.required]],
+      expiryDate: [this.defaultValues.expiryDate,[Validators.required]],
+      //transactionDate: [this.defaultValues.transactionDate,[Validators.required]],
+      interestRateType: [this.defaultValues.interestRateType,[Validators.required]],
+      interestChargeType: [this.defaultValues.interestChargeType,[Validators.required]],
+      interestRate: [this.defaultValues.interestRate,[Validators.required]],
+      interestMargin: [this.defaultValues.interestMargin,[Validators.required]],
+      managementFeeCurrency: [this.defaultValues.managementFeeCurrency,[Validators.required]],
+      managementFeeAmount: [this.defaultValues.managementFeeAmount  ,[Validators.required]],
       administrativeFeeCurrency: [this.defaultValues.administrativeFeeCurrency,[Validators.required]],
       administrativeFeeAmount: [this.defaultValues.administrativeFeeAmount,[Validators.required]],
       earlyPaymentFeeCurrency: [this.defaultValues.earlyPaymentFeeCurrency,[Validators.required]],
@@ -91,7 +85,13 @@ export class SbrAmtInfoComponent implements OnInit {
       settlementServiceChargeAmount: [this.defaultValues.settlementServiceChargeAmount,[Validators.required]],
       communicationChargeCurrency: [this.defaultValues.communicationChargeCurrency,[Validators.required]],
       communicationChargeAmount: [this.defaultValues.communicationChargeAmount,[Validators.required]],
-      
+      anchorPartyApprovalRequired: [this.defaultValues.anchorPartyApprovalRequired,[Validators.required]],
+      counterPartyApprovalRequired: [this.defaultValues.counterPartyApprovalRequired,[Validators.required]],
+      documentsRequired: [this.defaultValues.documentsRequired,[Validators.required]],
+      maxLoanPercentage: [this.defaultValues.maxLoanPercentage,[Validators.required]],
+      financingInformation: [this.defaultValues.financingInformation,[Validators.required]],
+      rebateAccount: [this.defaultValues.rebateAccount,[Validators.required]],
+
     });
 
     const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
@@ -110,38 +110,14 @@ export class SbrAmtInfoComponent implements OnInit {
   }
   checkForm() {
     return !(
-      this.form.get('anchorCustomerAddressLine1')?.hasError('required') ||
-      this.form.get('anchorCustomerContactName')?.hasError('required') ||
-      this.form.get('anchorCustomerAddressLine2')?.hasError('required') ||
-      this.form.get('anchorCustomerAddressLine3')?.hasError('required') ||
-      this.form.get('anchorCustomerPOBox')?.hasError('required') ||
-      this.form.get('anchorCustomerEmail')?.hasError('required') ||
-      this.form.get('anchorCustomerTelephone')?.hasError('required') ||
-      this.form.get('anchorCustomerFax')?.hasError('required') ||
-      this.form.get('counterPartyAddressLine1')?.hasError('required') ||
-      this.form.get('counterPartyContactName')?.hasError('required') ||
-      this.form.get('counterPartyAddressLine2')?.hasError('required') ||
-      this.form.get('counterPartyAddressLine3')?.hasError('required') ||
-      this.form.get('counterPartyPOBox')?.hasError('required') ||
-      this.form.get('counterPartyEmail')?.hasError('required') ||
-      this.form.get('counterPartyTelephone')?.hasError('required') ||
-      this.form.get('counterPartyFax')?.hasError('required') ||
-      this.form.get('managementFeeCurrency')?.hasError('required') ||
-      this.form.get('managementFeeAmount')?.hasError('required') ||
-      this.form.get('administrativeFeeCurrency')?.hasError('required') ||
-      this.form.get('administrativeFeeAmount')?.hasError('required') ||
-      this.form.get('earlyPaymentFeeAmount')?.hasError('required') ||
-      this.form.get('earlyPaymentAmount')?.hasError('required') ||
-      this.form.get('invoiceServiceChargeCurrency')?.hasError('required') ||
-      this.form.get('invoiceServiceChargeAmount')?.hasError('required') ||
-      this.form.get('financeServiceChargeCurrency')?.hasError('required') ||
-      this.form.get('financeServiceChargeAmount')?.hasError('required') ||
-      this.form.get('settlementServiceChargeCurrency')?.hasError('required') ||
-      this.form.get('settlementServiceChargeAmount')?.hasError('required') ||
-      this.form.get('cableChargeCurrency')?.hasError('required') ||
-      this.form.get('cableChargeAmount')?.hasError('required') ||
-      this.form.get('communicationChargeCurrency')?.hasError('required') ||
-      this.form.get('communicationChargeAmount')?.hasError('required')
+      this.form.get('limitCurrency')?.hasError('required') ||
+      this.form.get('limitAmount')?.hasError('required') ||
+      this.form.get('expiryDate')?.hasError('required') ||
+      this.form.get('transactionDate')?.hasError('required') ||
+      this.form.get('interestRateType')?.hasError('required') ||
+      this.form.get('interestChargeType')?.hasError('required') ||
+      this.form.get('interestRate')?.hasError('required') ||
+      this.form.get('interestMargin')?.hasError('required')
       );
   }
 

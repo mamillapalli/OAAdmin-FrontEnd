@@ -19,10 +19,10 @@ interface Agreement {
   cableChargeAmount: string;
   communicationChargeCurrency: string;
   communicationChargeAmount: string;
-  anchorPartyApprovalRequired: string;
-  counterPartyApprovalRequired: string;
-  autoFinance: string;
-  autoSettlement: string;
+  anchorPartyApprovalRequired: boolean;
+  counterPartyApprovalRequired: boolean;
+  autoFinance: boolean;
+  autoSettlement: boolean;
   financeServiceChargeCurrency: string;
   financeServiceChargeAmount: string;
   settlementServiceChargeCurrency: string;
@@ -53,10 +53,10 @@ cableChargeCurrency: '',
 cableChargeAmount: '',
 communicationChargeCurrency: '',
 communicationChargeAmount: '',
-anchorPartyApprovalRequired: '',
-counterPartyApprovalRequired: '',
-autoFinance: '',
-autoSettlement: '',
+anchorPartyApprovalRequired: false,
+counterPartyApprovalRequired: false,
+autoFinance: false,
+autoSettlement: false,
 financeServiceChargeCurrency: '',
 financeServiceChargeAmount: '',
 settlementServiceChargeCurrency: '',

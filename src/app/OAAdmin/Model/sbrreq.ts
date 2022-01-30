@@ -19,7 +19,8 @@ export class Sbrreq {
   "paymentTermsCondition": string;
   "commercialContractDetails": string;
   "autoFinanceAvailability": string;
-  "autoFinancing": string;
+  "autoFinancing": boolean;
+  "autoSettlement": boolean;
   "anchorCustomerContactName": string;
   "realBeneficiary": string;
   "anchorCustomerAddressLine1": string;

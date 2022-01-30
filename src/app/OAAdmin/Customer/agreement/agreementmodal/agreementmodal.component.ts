@@ -333,7 +333,10 @@ export class AgreementmodalComponent implements OnInit {
       this.formValue = result
       const refNo = this.AgreementMainComponent.form.value.contractReferenceNumber;
       console.log('Result is ' + result);
+      console.log('refNo is ' + refNo);
       this.formValue = result
+      this.formValue['contractReferenceNumber'] = refNo
+      this.formValue['contractDocumentNumber'] = refNo
       this.AgreementMainComponent.formValue = result
       this.AgreementMainComponent.updateForm()
       this.AgreementMainComponent.form.value.contractReferenceNumber = refNo;

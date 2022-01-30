@@ -31,6 +31,7 @@ export class AgreementLimitComponent implements OnInit {
   customerList: any;
   authToken: any;
   public currencyList:any = currencyList;
+  ReadOnlyCheckBox: boolean;
 
   constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal,private datePipe: DatePipe) {}
 
@@ -88,22 +89,11 @@ export class AgreementLimitComponent implements OnInit {
       this.form.get('limitCurrency')?.hasError('required') ||
       this.form.get('limitAmount')?.hasError('required') ||
       this.form.get('cashMargin')?.hasError('required') ||
-      this.form.get('limitAllocatedAmount')?.hasError('required') ||
       this.form.get('limitUnallocatedAmount')?.hasError('required') ||
-      this.form.get('cableChargeCurrency')?.hasError('required') ||
-      this.form.get('cableChargeAmount')?.hasError('required')||
-      this.form.get('communicationChargeCurrency')?.hasError('required') ||
-      this.form.get('communicationChargeAmount')?.hasError('required') ||
       this.form.get('anchorPartyApprovalRequired')?.hasError('required') ||
       this.form.get('counterPartyApprovalRequired')?.hasError('required')||
       this.form.get('autoFinance')?.hasError('required') ||
-      this.form.get('autoSettlement')?.hasError('required') ||
-      this.form.get('financeServiceChargeCurrency')?.hasError('required')||
-      this.form.get('financeServiceChargeAmount')?.hasError('required') ||
-      this.form.get('settlementServiceChargeCurrency')?.hasError('required') ||
-      this.form.get('settlementServiceChargeAmount')?.hasError('required') ||
-      this.form.get('invoiceServiceChargeCurrency')?.hasError('required') ||
-      this.form.get('invoiceServiceChargeAmount')?.hasError('required')
+      this.form.get('autoSettlement')?.hasError('required')
     );
   }
 

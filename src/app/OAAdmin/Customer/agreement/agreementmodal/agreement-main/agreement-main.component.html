@@ -8,7 +8,7 @@
         <div class="col-3">
           <div class="floating-label_readonly">
             <input class="floating-input_readonly" type="text" name="contractReferenceNumber" id="contractReferenceNumber"
-                   formControlName="contractReferenceNumber" placeholder=" " readonly>
+                   formControlName="contractReferenceNumber"  readonly>
             <label class="label_OA required">Contract Reference No</label>
           </div>
         </div>
@@ -16,7 +16,7 @@
           <div class="floating-label_readonly">
             <input class="floating-input_readonly" type="text" name="contractDocumentNumber" id="contractDocumentNumber"
                    formControlName="contractDocumentNumber"
-                   placeholder=" ">
+                   >
             <label class="label_OA">Contract Document Number</label>
           </div>
         </div>
@@ -64,7 +64,7 @@
           <div class="floating-label">
             <input class="floating-input" type="text" id="remarks" name="remarks"
                    [class.is-invalid]="isControlInvalid('remarks')"
-                   [class.is-valid]="isControlValid('remarks')" formControlName="remarks" placeholder=" ">
+                   [class.is-valid]="isControlValid('remarks')" formControlName="remarks" >
             <label class="label_OA">Remarks</label>
           </div>
         </div>
@@ -72,7 +72,7 @@
           <div class="floating-label">
             <input class="floating-input_mandatory" type="date" autocomplete="off"
                    name="validDate" [class.is-invalid]="isControlInvalid('validDate')"
-                   [class.is-valid]="isControlValid('validDate')" formControlName="validDate" placeholder=" ">
+                   [class.is-valid]="isControlValid('validDate')" formControlName="validDate" >
             <label class="label_OA">Valid Date</label>
           </div>
         </div>
@@ -80,7 +80,7 @@
           <div class="floating-label">
             <input class="floating-input_mandatory" type="date" autocomplete="off"
                    name="transactionDate" [class.is-invalid]="isControlInvalid('transactionDate')"
-                   [class.is-valid]="isControlValid('transactionDate')" formControlName="transactionDate" placeholder=" ">
+                   [class.is-valid]="isControlValid('transactionDate')" formControlName="transactionDate" >
             <label class="label_OA">Transaction Date</label>
           </div>
         </div>
@@ -92,7 +92,7 @@
           <div class="floating-label">
             <input class="floating-input_mandatory" type="date" autocomplete="off"
                    name="expiryDate" [class.is-invalid]="isControlInvalid('expiryDate')"
-                   [class.is-valid]="isControlValid('expiryDate')" formControlName="expiryDate" placeholder=" ">
+                   [class.is-valid]="isControlValid('expiryDate')" formControlName="expiryDate" >
             <label class="label_OA">Expiry Date</label>
           </div>
         </div>

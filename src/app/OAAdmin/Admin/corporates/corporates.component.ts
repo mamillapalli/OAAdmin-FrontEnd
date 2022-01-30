@@ -124,7 +124,7 @@ export class CorporatesComponent implements OnInit {
     });
   }
 
-  openBankUserDelete(content: any, element: any) {
+  openDeleteCustomer(content: any, element: any) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {

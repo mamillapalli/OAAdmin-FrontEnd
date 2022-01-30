@@ -19,7 +19,8 @@ interface Sbr {
   "paymentTermsCondition": string;
   "commercialContractDetails": string;
   "autoFinanceAvailability": string;
-  "autoFinancing": string;
+  "autoFinancing": boolean;
+  "autoSettlement": boolean;
   "anchorCustomerContactName": string;
   "realBeneficiary": string;
   "anchorCustomerAddressLine1": string;
@@ -72,9 +73,17 @@ interface Sbr {
   "communicationChargeCurrency": string;
   "communicationChargeAmount": number;
   "agreement":[Agreement];
+  "agreementId": string
   "anchorCustomer":[Customer];
+  "anchorCustomerId":string;
   "counterParty":[Customer];
+  "counterPartyId":string;
   "rm":[rm];
+  "rmId":string;
+  "checkCustomer":boolean;
+  "counterPartyApprovalRequired":boolean;
+  "anchorPartyApprovalRequired":boolean;
+
 }
 const inits: Sbr = {
   "sbrId": '',
@@ -93,7 +102,8 @@ const inits: Sbr = {
   "paymentTermsCondition": '',
   "commercialContractDetails": '',
   "autoFinanceAvailability": '',
-  "autoFinancing": '',
+  "autoFinancing": false,
+  "autoSettlement": false,
   "anchorCustomerContactName": '',
   "realBeneficiary": '',
   "anchorCustomerAddressLine1": '',
@@ -145,10 +155,17 @@ const inits: Sbr = {
   "cableChargeAmount": 0.00,
   "communicationChargeCurrency": '',
   "communicationChargeAmount": 0.00,
-   "agreement":[{} as Agreement],
+  "agreement":[{} as Agreement],
+  "agreementId":'',
   "anchorCustomer":[{} as Customer],
+  "anchorCustomerId": '',
   "counterParty":[{} as Customer],
+  "counterPartyId":'',
   "rm":[{} as rm],
+  "rmId":'',
+  checkCustomer: false,
+  anchorPartyApprovalRequired: false,
+  counterPartyApprovalRequired: false,
 }
 
 export { Sbr, inits };

@@ -65,8 +65,6 @@ export class SbrmodalComponent implements OnInit {
   };
 
   nextStep() {
-
-
     const nextStep = this.currentStep$.value + 1;
     if (nextStep > this.formsCount) {
       return;

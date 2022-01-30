@@ -63,6 +63,7 @@ export class AgreementMainComponent implements OnInit {
   checkCustomerSelected: boolean
 
 
+
   constructor(private http: HttpClient, private fb: FormBuilder, public modalService: NgbModal, private datePipe: DatePipe,
     private customerService: CustomerService, private oapfcommonService: oapfcommonService) { }
 

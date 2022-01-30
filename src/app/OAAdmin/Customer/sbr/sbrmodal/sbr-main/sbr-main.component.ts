@@ -18,6 +18,7 @@ import { AgreementDoComponent } from 'src/app/OAAdmin/common/agreement-do/agreem
 import { oapfcommonService } from 'src/app/OAAdmin/shared/oapfcommon.service';
 import { Agreementreq } from 'src/app/OAAdmin/Model/agreementreq';
 import { MatAccordion } from '@angular/material/expansion';
+import { AccountcommonmodalComponent } from 'src/app/OAAdmin/OAPF/common/accountcommonmodal/accountcommonmodal.component';
 
 @Component({
   selector: 'app-sbr-main',
@@ -28,10 +29,7 @@ export class SbrMainComponent implements OnInit {
   public gfg = false;
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
-  @Input('updateParentModel') updateParentModel: (
-    part: Partial<Sbr>,
-    isFormValid: boolean
-  ) => void;
+  @Input('updateParentModel') updateParentModel: (part: Partial<Sbr>,isFormValid: boolean) => void;
   form: FormGroup;
   @Input() defaultValues: Partial<Sbr>;
   agreementReq: Agreementreq;
@@ -51,6 +49,8 @@ export class SbrMainComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
   ReadOnlyCheckBox: boolean;
+  counterParties: any;
+  checkCustomer: any
 
   constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal,
     private datePipe: DatePipe,public sbragreementServices: sbragreementService,
@@ -74,37 +74,37 @@ export class SbrMainComponent implements OnInit {
   }
 
   initForm() {
+    this.checkCustomer =  this.defaultValues.checkCustomer
     this.form = this.fb.group({
       sbrId: [this.defaultValues.sbrId,[Validators.required]],
-      anchorCustomer: ['',[Validators.required]],
-      anchorCustomerId :['',[Validators.required]],
-      rm:['',[Validators.required]],
-      rmId:['',[Validators.required]],
-      counterParty:['',[Validators.required]],
-      counterPartyId:['',[Validators.required]],
-      agreement:['',[Validators.required]],
-      agreementId : ['',[Validators.required]],
-      expiryDate: [this.defaultValues.expiryDate, [Validators.required]],
-      directContactFlag: [this.defaultValues.directContactFlag,[Validators.required]],
-      recourseFlag: [this.defaultValues.recourseFlag,[Validators.required]],
+      agreement:[this.defaultValues.agreement,[Validators.required]],
+      agreementId : [this.defaultValues.agreementId,[Validators.required]],
+      rm:[this.defaultValues.rm,[Validators.required]],
+      rmId:[this.defaultValues.rmId,[Validators.required]],
       limitTypeFlag: [this.defaultValues.limitTypeFlag,[Validators.required]],
+      paymentTermsDays: [this.defaultValues.paymentTermsDays,[Validators.required]],
+      paymentTermsCondition: [this.defaultValues.paymentTermsCondition,[Validators.required]],
+      autoSettlement: [this.defaultValues.autoSettlement,[Validators.required]],
+      autoFinancing: [this.defaultValues.autoFinancing,[Validators.required]],
+      recourseFlag: [this.defaultValues.recourseFlag,[Validators.required]],
+      commercialContractDetails: [this.defaultValues.commercialContractDetails,[Validators.required]],
       natureOfBusiness: [this.defaultValues.natureOfBusiness,[Validators.required]],
       goodsDescription: [this.defaultValues.goodsDescription,[Validators.required]],
+      directContactFlag: [this.defaultValues.directContactFlag,[Validators.required]],
+      anchorCustomer: [this.defaultValues.anchorCustomer,[Validators.required]],
+      anchorCustomerId :[this.defaultValues.anchorCustomerId,[Validators.required]],
+      anchorCustomerContactName: [this.defaultValues.anchorCustomerContactName,[Validators.required]],
+      anchorCustomerEmail: [this.defaultValues.anchorCustomerEmail,[Validators.required]],
+      //anchorCustomerTelephone: [this.defaultValues.anchorCustomerTelephone,[Validators.required]],
+      anchorPartyAccountId: [this.defaultValues.anchorPartyAccountId,[Validators.required]],
+      counterParty:[this.defaultValues.counterParty,[Validators.required]],
+      counterPartyId:[this.defaultValues.counterPartyId,[Validators.required]],
+      counterPartyContactName: [this.defaultValues.counterPartyContactName,[Validators.required]],
+      counterPartyEmail: [this.defaultValues.counterPartyEmail,[Validators.required]],
+      //counterPartyTelephone: [this.defaultValues.counterPartyTelephone,[Validators.required]],
+      counterPartyAccountId: [this.defaultValues.counterPartyAccountId,[Validators.required]],
       limitCurrency: [this.defaultValues.limitCurrency,[Validators.required]],
       limitAmount: [this.defaultValues.limitAmount,[Validators.required]],
-      transactionDate: [this.defaultValues.transactionDate,[Validators.required]],
-      paymentTermsDays: [this.defaultValues.paymentTermsDays,[Validators.required]],
-      autoFinanceAvailability: [this.defaultValues.autoFinanceAvailability,[Validators.required]],
-      autoFinancing: [this.defaultValues.autoFinancing,[Validators.required]],
-      anchorPartyAccountId: [this.defaultValues.anchorPartyAccountId,[Validators.required]],
-      counterPartyAccountId: [this.defaultValues.counterPartyAccountId,[Validators.required]],
-      paymentTermsCondition: [this.defaultValues.paymentTermsCondition,[Validators.required]],
-      commercialContractDetails: [this.defaultValues.commercialContractDetails,[Validators.required]],
-      interestChargeType: [this.defaultValues.interestChargeType,[Validators.required]],
-      interestRateType: [this.defaultValues.interestRateType,[Validators.required]],
-      interestRate: [this.defaultValues.interestRate,[Validators.required]],
-      interestMargin: [this.defaultValues.interestMargin,[Validators.required]],
-
     });
 
     const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
@@ -123,7 +123,22 @@ export class SbrMainComponent implements OnInit {
   }
   checkForm() {
     return !(
-      this.form.get('sbrId')?.hasError('required')
+      this.form.get('sbrId')?.hasError('required') ||
+      this.form.get('agreementId')?.hasError('required') ||
+      this.form.get('limitTypeFlag')?.hasError('required') ||
+      this.form.get('paymentTermsDays')?.hasError('required') ||
+      this.form.get('paymentTermsDays')?.hasError('required') ||
+      this.form.get('paymentTermsCondition')?.hasError('required') ||
+      this.form.get('autoSettlement')?.hasError('required') ||
+      this.form.get('autoFinancing')?.hasError('required') ||
+      this.form.get('recourseFlag')?.hasError('required') ||
+      this.form.get('natureOfBusiness')?.hasError('required') ||
+      this.form.get('commercialContractDetails')?.hasError('required') ||
+      this.form.get('anchorCustomerId')?.hasError('required') ||
+      this.form.get('anchorPartyAccountId')?.hasError('required') ||
+      this.form.get('counterPartyId')?.hasError('required') ||
+      this.form.get('counterPartyAccountId')?.hasError('required')
+
       );
   }
 
@@ -186,14 +201,26 @@ export class SbrMainComponent implements OnInit {
       this.form.patchValue(result);
       if (result) {
         console.log("row result is "+result)
+        this.checkCustomer = true;
         this.f.anchorCustomerId.setValue(result.anchorCustomer['customerId']);
+        this.f.anchorCustomerContactName.setValue(result.anchorCustomer['name']);
+        this.f.anchorCustomerEmail.setValue(result.anchorCustomer['emailAddress']);
         this.f.anchorCustomer.setValue(result.anchorCustomer)
         this.f.agreementId.setValue(result.contractReferenceNumber);
         this.agreementReq.contractReferenceNumber = result.contractReferenceNumber;
         this.f.agreement.setValue(this.agreementReq);
         this.f.rmId.setValue(result.rm['rmId']);
         this.f.rm.setValue(result.rm);
+        this.f.autoFinancing.setValue(result.autoFinance);
+        this.f.autoSettlement.setValue(result.autoSettlement);
+        this.f.limitCurrency.setValue(result.limitCurrency);
+        this.f.limitAmount.setValue(result.limitAmount);
+        this.defaultValues.limitCurrency = result.limitCurrency
+        this.defaultValues.limitAmount = result.limitAmount
+        this.counterParties = result.counterParties
         this.f.counterPartyId.setValue(result.counterParties[0]['customerId']);
+        this.f.counterPartyContactName.setValue(result.counterParties[0]['name']);
+        this.f.counterPartyEmail.setValue(result.counterParties[0]['emailAddress']);
         this.f.counterParty.setValue(result.counterParties[0]);
         //     this.f.sbrReferenceId.setValue(result.sbrId);
         //   this.f.anchorId.setValue(result.anchorCustomer['customerId']);
@@ -241,6 +268,27 @@ export class SbrMainComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  openAccountNumber(dataRecord:string) {
+    this.modalOption.backdrop = 'static';
+    this.modalOption.keyboard = false;
+    this.modalOption.size = 'xl'
+    const modalRef = this.modalService.open(AccountcommonmodalComponent, this.modalOption);
+    modalRef.componentInstance.accountParam = 'CUSTOMER';
+    modalRef.componentInstance.customerData = this.f.counterPartyId.value;
+    modalRef.result.then((result) => {
+      console.log('result is ' + result);
+      if(result != null) {
+        if(dataRecord === 'anchorCustomerId') {
+          this.f.anchorPartyAccountId.setValue(result.accountId)
+        } else {
+          this.f.counterPartyAccountId.setValue(result.accountId)
+        }
+      }
+    }, (reason) => {
+      console.log('reason is ' + reason);
+    });
   }
 
 }

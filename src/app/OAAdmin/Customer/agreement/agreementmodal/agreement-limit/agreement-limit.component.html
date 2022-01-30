@@ -8,7 +8,7 @@
         <div class="col-3">
           <div class="floating-label_readonly">
             <input class="floating-input_readonly" type="text" name="limitReference" id="limitReference"
-                   formControlName="limitReference" placeholder="">
+                   formControlName="limitReference" >
             <label class="label_OA required">Limit Reference No</label>
           </div>
         </div>
@@ -16,11 +16,11 @@
           <div class="floating-label">
             <input class="floating-input_mandatory" type="date" autocomplete="off"
                    name="limitExpiry" [class.is-invalid]="isControlInvalid('limitExpiry')"
-                   [class.is-valid]="isControlValid('limitExpiry')" formControlName="limitExpiry" placeholder=" ">
+                   [class.is-valid]="isControlValid('limitExpiry')" formControlName="limitExpiry" >
             <label class="label_OA">Limit Expiry Date</label>
           </div>
         </div>
-        <div class="col-1 ">
+        <div class="ccol1_OA">
           <div class="floating-label">
             <select class="floating-select_mandatory" name="limitCurrency" id="limitCurrency"
                     formControlName="limitCurrency">
@@ -29,12 +29,12 @@
             <label class="label_OA">Currency</label>
           </div>
         </div>
-        <div class="col-2 ">
+        <div class="acol1_OA">
           <div class="floating-label">
             <input class="floating-input_mandatory" type="text" id="limitAmount" name="limitAmount"
                    [class.is-invalid]="isControlInvalid('limitAmount')"
                    [class.is-valid]="isControlValid('limitAmount')" formControlName="limitAmount" placeholder="limitAmount"
-                   currencyMask placeholder=" ">
+                   currencyMask >
             <label class="label_OA">Limit Amount</label>
           </div>
         </div>
@@ -43,7 +43,7 @@
             <input class="floating-input_mandatory" type="text" autocomplete="off"
                    name="cashMargin" [class.is-invalid]="isControlInvalid('cashMargin')"
                    [class.is-valid]="isControlValid('cashMargin')" formControlName="cashMargin"
-                   placeholder="">
+                   >
             <label class="label_OA">Cash Margin</label>
           </div>
         </div>
@@ -51,65 +51,102 @@
     </div>
     <div class="container  mt-5">
       <div class="form-group row">
+<!--        <div class="col-3">-->
+<!--          <div class="floating-label_readonly">-->
+<!--          <select class="floating-select" name="anchorPartyApprovalRequired" formControlName="anchorPartyApprovalRequired">-->
+<!--            <option value="true">True</option>-->
+<!--            <option value="false">False</option>-->
+<!--          </select>-->
+<!--            <label class="label_OA required">Anchor Party <b>Approval Required</b></label>-->
+<!--          </div>-->
+<!--        </div>-->
+
         <div class="col-3">
-          <div class="floating-label_readonly">
-          <select class="floating-select" name="anchorPartyApprovalRequired" formControlName="anchorPartyApprovalRequired">
-            <option value="true">True</option>
-            <option value="false">False</option>
-          </select>
-            <label class="label_OA required">Anchor Party <b>Approval Required</b></label>
+          <div class="floating-label_mandatory form-switch">
+            <input class="floating-input form-check-input" type="checkbox" id="anchorPartyApprovalRequired"
+                   name="anchorPartyApprovalRequired" formControlName="anchorPartyApprovalRequired" [disabled]="ReadOnlyCheckBox">
+            <label class="label_OA_mandatory required">Anchor Party Approval</label>
           </div>
         </div>
+
         <div class="col-3">
-          <div class="floating-label_readonly">
-          <select class="floating-select" name="counterPartyApprovalRequired" formControlName="counterPartyApprovalRequired">
-            <option value="true">True</option>
-            <option value="false">False</option>
-          </select>
-            <label class="label_OA required">Counter Party <b>Approval Required</b></label>
+          <div class="floating-label_mandatory form-switch">
+            <input class="floating-input form-check-input" type="checkbox" id="counterPartyApprovalRequired"
+                   name="counterPartyApprovalRequired" formControlName="counterPartyApprovalRequired" [disabled]="ReadOnlyCheckBox">
+            <label class="label_OA_mandatory required">Counter Party Approval</label>
           </div>
         </div>
+
+
+<!--        <div class="col-3">-->
+<!--          <div class="floating-label_readonly">-->
+<!--          <select class="floating-select" name="counterPartyApprovalRequired" formControlName="counterPartyApprovalRequired">-->
+<!--            <option value="true">True</option>-->
+<!--            <option value="false">False</option>-->
+<!--          </select>-->
+<!--            <label class="label_OA required">Counter Party <b>Approval Required</b></label>-->
+<!--          </div>-->
+<!--        </div>-->
+
         <div class="col-3">
-          <div class="floating-label_readonly">
-          <select class="floating-select" name="autoFinance" formControlName="autoFinance">
-            <option value="true">True</option>
-            <option value="false">False</option>
-          </select>
-            <label class="label_OA required">Auto Finance</label>
+          <div class="floating-label_mandatory form-switch">
+            <input class="floating-input_mandatory form-check-input" type="checkbox" id="autoFinance"
+                   name="autoFinance" formControlName="autoFinance" [disabled]="ReadOnlyCheckBox">
+            <label class="label_OA_mandatory">Auto Finance</label>
           </div>
         </div>
+
+
+<!--        <div class="col-3">-->
+<!--          <div class="floating-label_readonly">-->
+<!--          <select class="floating-select" name="autoFinance" formControlName="autoFinance">-->
+<!--            <option value="true">True</option>-->
+<!--            <option value="false">False</option>-->
+<!--          </select>-->
+<!--            <label class="label_OA required">Auto Finance</label>-->
+<!--          </div>-->
+<!--        </div>-->
+
         <div class="col-3">
-          <div class="floating-label_readonly">
-          <select class="floating-select" name="autoSettlement" formControlName="autoSettlement">
-            <option value="true">True</option>
-            <option value="false">False</option>
-          </select>
-            <label class="label_OA required">Auto Settlement</label>
+          <div class="floating-label_mandatory form-switch">
+            <input class="floating-input_mandatory form-check-input" type="checkbox" id="autoSettlement"
+                   name="autoSettlement" formControlName="autoSettlement" [disabled]="ReadOnlyCheckBox">
+            <label class="label_OA_mandatory">Auto Settlement</label>
           </div>
         </div>
+
+
+<!--        <div class="col-3">-->
+<!--          <div class="floating-label_readonly">-->
+<!--          <select class="floating-select" name="autoSettlement" formControlName="autoSettlement">-->
+<!--            <option value="true">True</option>-->
+<!--            <option value="false">False</option>-->
+<!--          </select>-->
+<!--            <label class="label_OA required">Auto Settlement</label>-->
+<!--          </div>-->
+<!--        </div>-->
       </div>
     </div>
     <div class="container  mt-5">
       <div class="form-group row">
-        <div class="col-1 ">
+        <div class="ccol1_OA ">
           <div class="floating-label">
-            <select class="floating-select_mandatory" name="cableChargeCurrency" id="cableChargeCurrency"
+            <select class="floating-select" name="cableChargeCurrency" id="cableChargeCurrency"
                     formControlName="cableChargeCurrency">
               <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
             </select>
             <label class="label_OA">Currency</label>
           </div>
         </div>
-        <div class="col-2 ">
+        <div class="acol1_OA ">
           <div class="floating-label">
-            <input class="floating-input_mandatory" type="text" id="cableChargeAmount" name="cableChargeAmount"
-                   [class.is-invalid]="isControlInvalid('cableChargeAmount')"
-                   [class.is-valid]="isControlValid('cableChargeAmount')" formControlName="cableChargeAmount" placeholder="cableChargeAmount"
-                   currencyMask placeholder=" ">
+            <input class="floating-input" type="text" id="cableChargeAmount" name="cableChargeAmount"
+                   formControlName="cableChargeAmount" placeholder="cableChargeAmount"
+                   currencyMask >
             <label class="label_OA">Cable Amount</label>
           </div>
         </div>
-        <div class="col-1 ">
+        <div class="ccol1_OA ">
           <div class="floating-label">
             <select class="floating-select_mandatory" name="communicationChargeCurrency" id="communicationChargeCurrency"
                     formControlName="communicationChargeCurrency">
@@ -118,48 +155,45 @@
             <label class="label_OA">Currency</label>
           </div>
         </div>
-        <div class="col-2 ">
+        <div class="acol1_OA ">
           <div class="floating-label">
             <input class="floating-input_mandatory" type="text" id="communicationChargeAmount" name="communicationChargeAmount"
-                   [class.is-invalid]="isControlInvalid('communicationChargeAmount')"
-                   [class.is-valid]="isControlValid('communicationChargeAmount')" formControlName="communicationChargeAmount" placeholder="communicationChargeAmount"
-                   currencyMask placeholder=" ">
+                   formControlName="communicationChargeAmount" placeholder="communicationChargeAmount"
+                   currencyMask >
             <label class="label_OA">Communication Amount</label>
           </div>
         </div>
-        <div class="col-1 ">
+        <div class="ccol1_OA ">
           <div class="floating-label">
-            <select class="floating-select_mandatory" name="financeServiceChargeCurrency" id="financeServiceChargeCurrency"
+            <select class="floating-select" name="financeServiceChargeCurrency" id="financeServiceChargeCurrency"
                     formControlName="financeServiceChargeCurrency">
               <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
             </select>
             <label class="label_OA">Currency</label>
           </div>
         </div>
-        <div class="col-2 ">
+        <div class="acol1_OA ">
           <div class="floating-label">
-            <input class="floating-input_mandatory" type="text" id="financeServiceChargeAmount" name="financeServiceChargeAmount"
-                   [class.is-invalid]="isControlInvalid('financeServiceChargeAmount')"
-                   [class.is-valid]="isControlValid('financeServiceChargeAmount')" formControlName="financeServiceChargeAmount" placeholder="financeServiceChargeAmount"
-                   currencyMask placeholder=" ">
+            <input class="floating-input" type="text" id="financeServiceChargeAmount" name="financeServiceChargeAmount"
+                   formControlName="financeServiceChargeAmount" placeholder="financeServiceChargeAmount"
+                   currencyMask >
             <label class="label_OA">Finance Amount</label>
           </div>
         </div>
-        <div class="col-1 ">
+        <div class="ccol1_OA ">
           <div class="floating-label">
-            <select class="floating-select_mandatory" name="settlementServiceChargeCurrency" id="settlementServiceChargeCurrency"
+            <select class="floating-select" name="settlementServiceChargeCurrency" id="settlementServiceChargeCurrency"
                     formControlName="settlementServiceChargeCurrency">
               <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
             </select>
             <label class="label_OA">Currency</label>
           </div>
         </div>
-        <div class="col-2 ">
+        <div class="acol1_OA ">
           <div class="floating-label">
-            <input class="floating-input_mandatory" type="text" id="settlementServiceChargeAmount" name="settlementServiceChargeAmount"
-                   [class.is-invalid]="isControlInvalid('settlementServiceChargeAmount')"
-                   [class.is-valid]="isControlValid('settlementServiceChargeAmount')" formControlName="settlementServiceChargeAmount" placeholder="settlementServiceChargeAmount"
-                   currencyMask placeholder=" ">
+            <input class="floating-input" type="text" id="settlementServiceChargeAmount" name="settlementServiceChargeAmount"
+                   formControlName="settlementServiceChargeAmount" placeholder="settlementServiceChargeAmount"
+                   currencyMask >
             <label class="label_OA">Settlement Service Charge</label>
           </div>
         </div>
@@ -167,21 +201,21 @@
     </div>
         <div class="container  mt-5">
       <div class="form-group row">
-        <div class="col-1 ">
+        <div class="ccol1_OA ">
           <div class="floating-label">
-            <select class="floating-select_mandatory" name="invoiceServiceChargeCurrency" id="invoiceServiceChargeCurrency"
+            <select class="floating-select" name="invoiceServiceChargeCurrency" id="invoiceServiceChargeCurrency"
                     formControlName="invoiceServiceChargeCurrency">
               <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
             </select>
             <label class="label_OA">Currency</label>
           </div>
         </div>
-        <div class="col-2 ">
+        <div class="acol1_OA ">
           <div class="floating-label">
-            <input class="floating-input_mandatory" type="text" id="invoiceServiceChargeAmount" name="invoiceServiceChargeAmount"
-                   [class.is-invalid]="isControlInvalid('invoiceServiceChargeAmount')"
-                   [class.is-valid]="isControlValid('invoiceServiceChargeAmount')" formControlName="invoiceServiceChargeAmount" placeholder="invoiceServiceChargeAmount"
-                   currencyMask placeholder=" ">
+            <input class="floating-input" type="text" id="invoiceServiceChargeAmount"
+                   name="invoiceServiceChargeAmount"
+                   formControlName="invoiceServiceChargeAmount" placeholder="invoiceServiceChargeAmount"
+                   currencyMask >
             <label class="label_OA">Invoice Service Charge</label>
           </div>
         </div>
@@ -190,7 +224,7 @@
             <input class="floating-input" type="text" autocomplete="off"
                    name="limitAllocatedAmount" [class.is-invalid]="isControlInvalid('limitAllocatedAmount')"
                    [class.is-valid]="isControlValid('limitAllocatedAmount')"
-                   formControlName="limitAllocatedAmount" placeholder="\">
+                   formControlName="limitAllocatedAmount" >
             <label class="label_OA">Limit Allocated Amount</label>
           </div>
         </div>
@@ -199,7 +233,7 @@
             <input class="floating-input_mandatory" type="text" autocomplete="off"
                    name="limitUnallocatedAmount" [class.is-invalid]="isControlInvalid('limitUnallocatedAmount')"
                    [class.is-valid]="isControlValid('limitUnallocatedAmount')"
-                   formControlName="limitUnallocatedAmount" placeholder="">
+                   formControlName="limitUnallocatedAmount" >
             <label class="label_OA required">Limit UnAllocated Amount</label>
           </div>
         </div>
