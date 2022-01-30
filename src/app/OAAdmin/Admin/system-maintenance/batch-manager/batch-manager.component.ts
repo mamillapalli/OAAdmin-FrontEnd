@@ -26,6 +26,7 @@ export class BatchManagerComponent implements OnInit {
       paymentTask: [],
       invValidationTask: [],
       recUploadInvoiceTask: [],
+      exchangeRateTask: [],
     })
     this.checkTaskStatus()
   }
@@ -153,7 +154,7 @@ export class BatchManagerComponent implements OnInit {
           if (res !== undefined) {
             Swal.fire({
               title: 'Portal Task has been Stopped',
-              icon: 'success'
+              icon: 'error'
             });
           }
         })
@@ -176,7 +177,7 @@ export class BatchManagerComponent implements OnInit {
           if (res !== undefined) {
             Swal.fire({
               title: 'Notification Task has been Stopped',
-              icon: 'success'
+              icon: 'error'
             });
           }
         })
@@ -198,7 +199,7 @@ export class BatchManagerComponent implements OnInit {
           if (res !== undefined) {
             Swal.fire({
               title: 'Email Task has been Stopped',
-              icon: 'success'
+              icon: 'error'
             });
           }
         })
@@ -220,7 +221,7 @@ export class BatchManagerComponent implements OnInit {
           if (res !== undefined) {
             Swal.fire({
               title: 'Auto Finance Task has been Stopped',
-              icon: 'success'
+              icon: 'error'
             });
           }
         })
@@ -242,7 +243,7 @@ export class BatchManagerComponent implements OnInit {
           if (res !== undefined) {
             Swal.fire({
               title: 'Auto Payment Task has been Stopped',
-              icon: 'success'
+              icon: 'error'
             });
           }
         })
@@ -263,7 +264,7 @@ export class BatchManagerComponent implements OnInit {
           if (res !== undefined) {
             Swal.fire({
               title: 'Invoice Validation Task has been Stopped',
-              icon: 'success'
+              icon: 'error'
             });
           }
         })
@@ -284,7 +285,7 @@ export class BatchManagerComponent implements OnInit {
           if (res !== undefined) {
             Swal.fire({
               title: 'Record Upload Invoices Task has been Stopped',
-              icon: 'success'
+              icon: 'error'
             });
           }
         })
@@ -295,7 +296,7 @@ export class BatchManagerComponent implements OnInit {
         this.oaCommonService.taskManagerStatus('/oadata/api/v1/tasks/exchangeRateUpload/start').subscribe((res) => {
           if (res !== undefined) {
             Swal.fire({
-              title: 'Record Upload Invoices Task has been Started',
+              title: 'Exchange Rate Task has been Started',
               icon: 'success'
             });
           }
@@ -304,8 +305,8 @@ export class BatchManagerComponent implements OnInit {
         this.oaCommonService.taskManagerStatus('/oadata/api/v1/tasks/exchangeRateUpload/stop').subscribe((res) => {
           if (res !== undefined) {
             Swal.fire({
-              title: 'Record Upload Invoices Task has been Stopped',
-              icon: 'success'
+              title: 'Exchange Rate Task has been Stopped',
+              icon: 'error'
             });
           }
         })
