@@ -291,5 +291,14 @@ export class SbrMainComponent implements OnInit {
     });
   }
 
+  counterPartiesChange(event:any) {
+    console.log('event is '+event);
+    let index:number = event.target["selectedIndex"];
+    console.log("index" +index)
+    this.f.counterPartyId.setValue(this.counterParties[index]['customerId']);
+    this.f.counterPartyContactName.setValue(this.counterParties[index]['name']);
+    this.f.counterPartyEmail.setValue(this.counterParties[index]['emailAddress']);
+    this.f.counterParty.setValue(this.counterParties[index]);
+  }
 }
 

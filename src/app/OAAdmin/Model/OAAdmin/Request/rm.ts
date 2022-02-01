@@ -9,6 +9,7 @@ interface rm {
   effectiveDate: Date
   expiryDate: Date;
   customers: [corporates]
+  status: Boolean
 }
 
 const inits: rm = {
@@ -19,7 +20,8 @@ const inits: rm = {
   joiningDate: new Date(),
   effectiveDate: new Date(),
   expiryDate: new Date(),
-  customers: {} as [corporates]
+  customers: {} as [corporates],
+  status: true
 };
 
 export { rm, inits };

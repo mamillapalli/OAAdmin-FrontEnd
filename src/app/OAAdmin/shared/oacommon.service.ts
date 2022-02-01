@@ -448,4 +448,26 @@ export class oaCommonService {
       finalize(() => this.spinner.hide())
     );
   }
+
+  getProfilePic(url: string) {
+    this.spinner.show();
+    this.authToken = this.authService.getAuthFromLocalStorage();
+    let tex:any = "blob' as 'json"
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${this.authToken?.jwt}`,
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'responseType' : 'blob'
+    });
+    return this.http.get<any>(url, {headers: httpHeaders, responseType:tex  }).pipe(
+      delay(100),
+      catchError((err) => {
+        this.notifyService.showError(err.message, 'Error')
+        this.spinner.hide()
+        return of([]);
+      }),
+      finalize(() => this.spinner.hide())
+    );
+  }
+
 }

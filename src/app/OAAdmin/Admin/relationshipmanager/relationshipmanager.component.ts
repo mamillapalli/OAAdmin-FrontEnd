@@ -124,7 +124,7 @@ export class RelationshipmanagerComponent implements OnInit {
     });
   }
 
-  openRM(content: any, element: any) {
+  openDeleteRM(content: any, element: any) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
       if (result === 'yes') {

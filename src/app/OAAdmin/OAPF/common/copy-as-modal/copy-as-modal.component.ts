@@ -3,7 +3,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {corporateUser} from "../../../Model/OAAdmin/Request/corporateUser";
 import {Subscription} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
+import {MatSort, Sort} from "@angular/material/sort";
 import {invoiceService} from "../../../shared/OAPF/invoice.service";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 
@@ -108,4 +108,17 @@ export class CopyAsModalComponent implements OnInit {
     this.activeModal.dismiss();
   }
 
+  pageChanged(event: any) {
+    console.log(this.sort)
+    console.log({event});
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.getInvoices();
+  }
+
+  sortChanges(event: Sort) {
+    console.log(event.direction)
+    this.sortData = event.active + ',' + event.direction
+    this.getInvoices();
+  }
 }

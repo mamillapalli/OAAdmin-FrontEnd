@@ -187,7 +187,7 @@
           <div class="col-3">
             <div class="floating-label_readonly">
               <select class="floating-select" name="counterPartyId" id="counterPartyId"
-                      counterPartyId="counterPartyId">
+                      counterPartyId="counterPartyId" (change)="counterPartiesChange($event)">
                 <option *ngFor="let counterParties of counterParties"
                         [value]="counterParties.customerId">{{counterParties.customerId}}</option>
               </select>

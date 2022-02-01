@@ -20,7 +20,8 @@
              [style.background-color]="row.transactionStatus === 'PENDING' ? '#ceebfc' : 'white'" (click)="passRow(row)">
     </mat-row>
   </mat-table>
-  <mat-paginator [pageSize]="5" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+  <mat-paginator #paginator [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize"
+                 [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)" aria-label="Select page">
   </mat-paginator>
   <!-- end::Table -->
 </div>

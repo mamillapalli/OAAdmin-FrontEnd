@@ -9,6 +9,7 @@ export class crm {
   effectiveDate: Date
   expiryDate: Date;
   customers: corporates
+  status: boolean
 
   constructor(d:any) {
     this.rmId =  d.rmId;
@@ -19,6 +20,7 @@ export class crm {
     this.effectiveDate=  new Date(d.effectiveDate);
     this.expiryDate=  new Date(d.expiryDate);
     this.customers=  d.customers
+    this.status = true
   }
 
 }
