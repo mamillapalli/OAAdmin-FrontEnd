@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InlineSVGModule } from 'ng-inline-svg';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AccountRoutingModule } from './account-routing.module';
 import { AccountComponent } from '../account/account.component';
@@ -32,6 +33,8 @@ import { DropdownMenusModule, WidgetsModule } from '../../_metronic/partials';
     InlineSVGModule,
     DropdownMenusModule,
     WidgetsModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class AccountModule {}

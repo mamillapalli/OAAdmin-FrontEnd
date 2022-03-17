@@ -175,7 +175,7 @@ export class oapfcommonService {
       return this.http.get<any>(url,  { params:httpParams , headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -192,7 +192,7 @@ export class oapfcommonService {
       return this.http.get<any>(url,  { params:httpParams , headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -207,7 +207,7 @@ export class oapfcommonService {
       return this.http.get<any>(url, {headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -230,7 +230,7 @@ export class oapfcommonService {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -241,7 +241,7 @@ export class oapfcommonService {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -252,7 +252,7 @@ export class oapfcommonService {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -263,7 +263,7 @@ export class oapfcommonService {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -274,7 +274,8 @@ export class oapfcommonService {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          console.log(err)
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -302,7 +303,7 @@ export class oapfcommonService {
     return this.http.get<any>(url, {headers: httpHeaders, params:httpParams}).pipe(
       delay(100),
       catchError((err) => {
-        this.notifyService.showError(err.message, 'Error')
+        this.notifyService.showError(err.error.message, 'Error')
         this.spinner.hide()
         return of([]);
       }),
@@ -330,7 +331,7 @@ export class oapfcommonService {
     return this.http.get<any>(url, {headers: httpHeaders, params:httpParams}).pipe(
       delay(100),
       catchError((err) => {
-        this.notifyService.showError(err.message, 'Error')
+        this.notifyService.showError(err.error.message, 'Error')
         this.spinner.hide()
         return of([]);
       }),
@@ -357,7 +358,7 @@ export class oapfcommonService {
     return this.http.get<any>(url, {headers: httpHeaders, params:httpParams}).pipe(
       delay(100),
       catchError((err) => {
-        this.notifyService.showError(err.message, 'Error')
+        this.notifyService.showError(err.error.message, 'Error')
         this.spinner.hide()
         return of([]);
       }),

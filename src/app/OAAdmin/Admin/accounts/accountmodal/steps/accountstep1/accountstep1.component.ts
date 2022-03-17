@@ -114,8 +114,8 @@ export class Accountstep1Component implements OnInit {
   updateForm()
   {
     this.accountsForm.patchValue(this.formValue)
-    const customerList = this.formValue.customers
-    this.f.customerId.setValue(customerList[0].customerId)
+    const customerList = this.formValue.customer
+    this.f.customerId.setValue(customerList['customerId'])
   }
 
   get f() {

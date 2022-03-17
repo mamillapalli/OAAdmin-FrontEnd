@@ -22,5 +22,35 @@
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"
+  }, "/oapf": {
+  "target": "http://localhost:8765",
+  "secure": true,
+  "changeOrigin": true,
+  "logLevel": "debug"
+},
+  "http://ilyashussain:4200/oaadmin": {
+    "target": "http://localhost:8765",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "http://ilyashussain:4200/oanotification": {
+    "target": "http://localhost:8765",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "http://ilyashussain:4200/oadata": {
+    "target": "http://localhost:8765",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "http://ilyashussain:4200/oadata": {
+    "target": "http://localhost:8765",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
+
 }

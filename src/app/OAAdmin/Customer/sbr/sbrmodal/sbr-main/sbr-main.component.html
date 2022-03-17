@@ -79,9 +79,9 @@
         </div>
         <div class="col-3">
           <div class="floating-label_mandatory form-switch">
-            <input class="floating-input form-check-input" type="checkbox" id="autoFinancing" name="autoFinancing"
+            <input class="floating-input form-check-input" type="checkbox" id="autoFinance" name="autoFinance"
                    value="yes"
-                   checked [disabled]="ReadOnlyCheckBox" formControlName="autoFinancing">
+                   checked [disabled]="ReadOnlyCheckBox" formControlName="autoFinance">
             <label class="label_OA_mandatory form-check-label required">Auto Finance</label>
           </div>
         </div>
@@ -188,8 +188,13 @@
             <div class="floating-label_readonly">
               <select class="floating-select" name="counterPartyId" id="counterPartyId"
                       counterPartyId="counterPartyId" (change)="counterPartiesChange($event)">
-                <option *ngFor="let counterParties of counterParties"
-                        [value]="counterParties.customerId">{{counterParties.customerId}}</option>
+                <ng-container ngIf="checkCounter">
+                <option *ngFor="let counterParties of counterParties | async"
+                        [value]="counterParties['customerId']">{{counterParties['customerId']}}</option>
+                </ng-container>
+                <ng-container ngIf="!checkCounter">
+                  <option [value]="counterParties['customerId']">{{counterParties['customerId']}}</option>
+                </ng-container>
               </select>
               <label class="label_OA required">Counter Party ID</label>
             </div>

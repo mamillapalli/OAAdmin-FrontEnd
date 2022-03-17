@@ -19,7 +19,7 @@ interface Sbr {
   "paymentTermsCondition": string;
   "commercialContractDetails": string;
   "autoFinanceAvailability": string;
-  "autoFinancing": boolean;
+  "autoFinance": boolean;
   "autoSettlement": boolean;
   "anchorCustomerContactName": string;
   "realBeneficiary": string;
@@ -83,6 +83,7 @@ interface Sbr {
   "checkCustomer":boolean;
   "counterPartyApprovalRequired":boolean;
   "anchorPartyApprovalRequired":boolean;
+  "counterParties": [];
 
 }
 const inits: Sbr = {
@@ -102,7 +103,7 @@ const inits: Sbr = {
   "paymentTermsCondition": '',
   "commercialContractDetails": '',
   "autoFinanceAvailability": '',
-  "autoFinancing": false,
+  "autoFinance": false,
   "autoSettlement": false,
   "anchorCustomerContactName": '',
   "realBeneficiary": '',
@@ -166,6 +167,7 @@ const inits: Sbr = {
   checkCustomer: false,
   anchorPartyApprovalRequired: false,
   counterPartyApprovalRequired: false,
+  counterParties: [],
 }
 
 export { Sbr, inits };

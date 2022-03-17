@@ -10,6 +10,7 @@ interface Accounts {
   debitCreditFlag: string
   businessType: string
   customer: corporates
+  status: Boolean
 }
 const inits: Accounts = {
   "accountId": "",
@@ -19,7 +20,8 @@ const inits: Accounts = {
   "currency": "",
   "debitCreditFlag": "",
   "businessType": "Payable Finance",
-  customer: {} as corporates
+  customer: {} as corporates,
+  status: true
 }
 
 export { Accounts, inits };

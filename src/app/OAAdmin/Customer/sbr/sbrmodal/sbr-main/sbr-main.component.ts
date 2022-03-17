@@ -49,8 +49,10 @@ export class SbrMainComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | any;
   @ViewChild(MatSort) sort: MatSort | any;
   ReadOnlyCheckBox: boolean;
+  ReadOnlyAutoFinancing: boolean;
   counterParties: any;
   checkCustomer: any
+  checkCounter: boolean
 
   constructor(private http: HttpClient,private fb: FormBuilder,public modalService: NgbModal,
     private datePipe: DatePipe,public sbragreementServices: sbragreementService,
@@ -62,6 +64,8 @@ export class SbrMainComponent implements OnInit {
     if(this.mode === 'auth' || this.mode === 'delete' || this.mode === 'view')
     {
       this.form.disable()
+      this.ReadOnlyCheckBox = true
+      this.ReadOnlyAutoFinancing = true
     }
     if(this.mode !== 'new') {
       this.updateForm();
@@ -85,7 +89,7 @@ export class SbrMainComponent implements OnInit {
       paymentTermsDays: [this.defaultValues.paymentTermsDays,[Validators.required]],
       paymentTermsCondition: [this.defaultValues.paymentTermsCondition,[Validators.required]],
       autoSettlement: [this.defaultValues.autoSettlement,[Validators.required]],
-      autoFinancing: [this.defaultValues.autoFinancing,[Validators.required]],
+      autoFinance: [this.defaultValues.autoFinance,[Validators.required]],
       recourseFlag: [this.defaultValues.recourseFlag,[Validators.required]],
       commercialContractDetails: [this.defaultValues.commercialContractDetails,[Validators.required]],
       natureOfBusiness: [this.defaultValues.natureOfBusiness,[Validators.required]],
@@ -105,6 +109,7 @@ export class SbrMainComponent implements OnInit {
       counterPartyAccountId: [this.defaultValues.counterPartyAccountId,[Validators.required]],
       limitCurrency: [this.defaultValues.limitCurrency,[Validators.required]],
       limitAmount: [this.defaultValues.limitAmount,[Validators.required]],
+      counterParties: [this.defaultValues.counterParties,[Validators.required]],
     });
 
     const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
@@ -130,7 +135,7 @@ export class SbrMainComponent implements OnInit {
       this.form.get('paymentTermsDays')?.hasError('required') ||
       this.form.get('paymentTermsCondition')?.hasError('required') ||
       this.form.get('autoSettlement')?.hasError('required') ||
-      this.form.get('autoFinancing')?.hasError('required') ||
+      this.form.get('autoFinance')?.hasError('required') ||
       this.form.get('recourseFlag')?.hasError('required') ||
       this.form.get('natureOfBusiness')?.hasError('required') ||
       this.form.get('commercialContractDetails')?.hasError('required') ||
@@ -144,6 +149,7 @@ export class SbrMainComponent implements OnInit {
 
   updateForm()
   {
+    console.log('update form')
     this.form.patchValue(this.formValue)
     this.f.anchorCustomerId.setValue(this.formValue.anchorCustomer['customerId']);
     this.f.anchorCustomer.setValue(this.formValue.anchorCustomer);
@@ -153,6 +159,9 @@ export class SbrMainComponent implements OnInit {
     this.f.rm.setValue(this.formValue.rm);
     this.f.counterPartyId.setValue(this.formValue.counterParty['customerId']);
     this.f.counterParty.setValue(this.formValue.counterParty);
+    this.counterParties = this.formValue.counterParty
+    console.log(this.counterParties)
+    this.checkCounter = true;
   }
 
   public getCustomerList() {
@@ -211,7 +220,7 @@ export class SbrMainComponent implements OnInit {
         this.f.agreement.setValue(this.agreementReq);
         this.f.rmId.setValue(result.rm['rmId']);
         this.f.rm.setValue(result.rm);
-        this.f.autoFinancing.setValue(result.autoFinance);
+        this.f.autoFinance.setValue(result.autoFinance);
         this.f.autoSettlement.setValue(result.autoSettlement);
         this.f.limitCurrency.setValue(result.limitCurrency);
         this.f.limitAmount.setValue(result.limitAmount);

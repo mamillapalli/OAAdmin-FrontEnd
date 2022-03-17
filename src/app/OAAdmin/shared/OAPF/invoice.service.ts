@@ -117,7 +117,7 @@ export class invoiceService {
       return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([]);
         }),
@@ -129,7 +129,7 @@ export class invoiceService {
       return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([]);
         }),
@@ -171,7 +171,7 @@ export class invoiceService {
       return this.http.get<any>('/oapf/api/v1/invoiceHistory', {params: httpParams, headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([]);
         }),
@@ -182,7 +182,7 @@ export class invoiceService {
       return this.http.get<any>('/oapf/api/v1/invoices', {headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([]);
         }),

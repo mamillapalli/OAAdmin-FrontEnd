@@ -42,7 +42,7 @@ export class OODataServce {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+                  this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([undefined]);
         }),
@@ -54,7 +54,7 @@ export class OODataServce {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+                  this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([undefined]);
         }),
@@ -66,7 +66,7 @@ export class OODataServce {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+                  this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([undefined]);
         }),
@@ -78,7 +78,7 @@ export class OODataServce {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+                  this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([undefined]);
         }),
@@ -90,7 +90,7 @@ export class OODataServce {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+                  this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([undefined]);
         }),

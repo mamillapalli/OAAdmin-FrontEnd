@@ -34,7 +34,7 @@ export class oaCommonService {
     });
     return this.http.get<any>('/oaadmin/api/v1/'+refType+'/getNewReference', {headers: httpHeaders , responseType:this.responseType}).pipe(
       catchError((err) => {
-        this.notifyService.showError(err.message, 'Error')
+                this.notifyService.showError(err.error.message, 'Error')
         return of(undefined);
       }),
       finalize(() => this.spinner.hide())
@@ -57,7 +57,7 @@ export class oaCommonService {
       return this.http.get<any>(url, {headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([]);
         }),
@@ -67,7 +67,7 @@ export class oaCommonService {
     return this.http.get<any>(url, {headers: httpHeaders}).pipe(
       delay(100),
       catchError((err) => {
-        this.notifyService.showError(err.message, 'Error')
+        this.notifyService.showError(err.error.message, 'Error')
         this.spinner.hide()
         return of([]);
       }),
@@ -95,7 +95,7 @@ export class oaCommonService {
       return this.http.get<any>(url, {headers: httpHeaders,params:httpParams}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([]);
         }),
@@ -110,7 +110,7 @@ export class oaCommonService {
       return this.http.get<any>(url, {headers: httpHeaders,params:httpParams}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([]);
         }),
@@ -134,7 +134,7 @@ export class oaCommonService {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -145,7 +145,7 @@ export class oaCommonService {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -156,7 +156,7 @@ export class oaCommonService {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -167,7 +167,7 @@ export class oaCommonService {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -178,7 +178,7 @@ export class oaCommonService {
       }).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -205,7 +205,7 @@ export class oaCommonService {
       return this.http.get<any>(url,  { params:httpParams , headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -215,7 +215,7 @@ export class oaCommonService {
       return this.http.get<any>(url, {headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -247,7 +247,7 @@ export class oaCommonService {
       return this.http.get<any>(url,  { params:httpParams , headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -262,7 +262,7 @@ export class oaCommonService {
       return this.http.get<any>(url,  { params:httpParams , headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -277,7 +277,7 @@ export class oaCommonService {
       return this.http.get<any>(url, {headers: httpHeaders}).pipe(
         delay(100),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           return of(undefined);
         }),
         finalize(() => this.spinner.hide())
@@ -311,7 +311,7 @@ export class oaCommonService {
     });
     return this.http.get<any>(url, {headers: httpHeaders , responseType:this.responseType}).pipe(
       catchError((err) => {
-        this.notifyService.showError(err.message, 'Error')
+        this.notifyService.showError(err.error.message, 'Error')
         return of(undefined);
       }),
       finalize(() => this.spinner.hide())
@@ -336,7 +336,7 @@ export class oaCommonService {
     return this.http.get<any>(url, {headers: httpHeaders, params:httpParams}).pipe(
       delay(100),
       catchError((err) => {
-        this.notifyService.showError(err.message, 'Error')
+        this.notifyService.showError(err.error.message, 'Error')
         this.spinner.hide()
         return of([]);
       }),
@@ -357,7 +357,7 @@ export class oaCommonService {
       .pipe(
         delay(1000*10),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([]);
         }),
@@ -376,7 +376,7 @@ export class oaCommonService {
       .pipe(
         delay(1000),
         catchError((err) => {
-          this.notifyService.showError(err.message, 'Error')
+          this.notifyService.showError(err.error.message, 'Error')
           this.spinner.hide()
           return of([undefined]);
         }),
@@ -415,7 +415,7 @@ export class oaCommonService {
     return this.http.get<any>(url, {headers: httpHeaders, params:httpParams}).pipe(
       delay(100),
       catchError((err) => {
-        this.notifyService.showError(err.message, 'Error')
+        this.notifyService.showError(err.error.message, 'Error')
         this.spinner.hide()
         return of([]);
       }),
@@ -441,7 +441,7 @@ export class oaCommonService {
     return this.http.get<any>(url, {headers: httpHeaders, params:httpParams}).pipe(
       delay(100),
       catchError((err) => {
-        this.notifyService.showError(err.message, 'Error')
+        this.notifyService.showError(err.error.message, 'Error')
         this.spinner.hide()
         return of([]);
       }),
@@ -452,17 +452,16 @@ export class oaCommonService {
   getProfilePic(url: string) {
     this.spinner.show();
     this.authToken = this.authService.getAuthFromLocalStorage();
-    let tex:any = "blob' as 'json"
+    let tex:any = "blob"
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${this.authToken?.jwt}`,
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'responseType' : 'blob'
+      'Access-Control-Allow-Origin': '*'
     });
     return this.http.get<any>(url, {headers: httpHeaders, responseType:tex  }).pipe(
       delay(100),
       catchError((err) => {
-        this.notifyService.showError(err.message, 'Error')
+        this.notifyService.showError(err.error.message, 'Error')
         this.spinner.hide()
         return of([]);
       }),
