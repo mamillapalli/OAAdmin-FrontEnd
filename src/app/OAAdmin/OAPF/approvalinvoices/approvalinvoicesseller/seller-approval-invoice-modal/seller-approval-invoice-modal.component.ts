@@ -16,7 +16,7 @@ import {cInvoice} from "../../../../Model/OAPF/CRequest/cinvoice";
 })
 export class SellerApprovalInvoiceModalComponent implements OnInit {
 
-  formsCount = 2;
+  formsCount = 1;
   account$: BehaviorSubject<Invoice> =
     new BehaviorSubject<Invoice>(inits);
   currentStep$: BehaviorSubject<number> = new BehaviorSubject(1);
@@ -56,12 +56,12 @@ export class SellerApprovalInvoiceModalComponent implements OnInit {
   nextStep() {
 
 
-    const nextStep = this.currentStep$.value + 1;
+    const nextStep = this.currentStep$.value ;
     if (nextStep > this.formsCount) {
       return;
     }
-    console.log('this is form next step elemet is ' + this.formElement)
-    if (this.currentStep$.value === this.formsCount - 1) {
+    console.log('this is form next step element is ' + this.formElement)
+    if (this.currentStep$.value === this.formsCount) {
 
 
 
@@ -103,7 +103,7 @@ export class SellerApprovalInvoiceModalComponent implements OnInit {
       this.cInvoice = new cInvoice(this.account$.value);
       const rmNewRequest = this.cInvoice;
       console.log(rmNewRequest);
-      if (this.mode === 'authBuyer') {
+      if (this.mode === 'authSeller') {
         this.checkNextStage = false;
         this.invoiceServices.dataItem(rmNewRequest, this.mode).subscribe(res => {
           if (res !== null && res !== '') {

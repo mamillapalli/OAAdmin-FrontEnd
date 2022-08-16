@@ -20,7 +20,7 @@ import {Bankadminstep2Component} from "./OAAdmin/Admin/bankadmin-maintenance/ban
 import {Bankadminstep3Component} from "./OAAdmin/Admin/bankadmin-maintenance/bankadminmodal/bankadminstep/bankadminstep3/bankadminstep3.component";
 import {BankadminmodalComponent} from "./OAAdmin/Admin/bankadmin-maintenance/bankadminmodal/bankadminmodal.component";
 import {NgSelectModule} from "@ng-select/ng-select";
-
+import { Attributes, IntersectionObserverHooks, LazyLoadImageModule, LAZYLOAD_IMAGE_HOOKS } from 'ng-lazyload-image';
 import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
 // #fake-end#
 import {MatIconModule} from "@angular/material/icon";
@@ -127,7 +127,6 @@ import { AgreementEndComponent } from './OAAdmin/Customer/agreement/agreementmod
 import { AgreementmodalComponent } from './OAAdmin/Customer/agreement/agreementmodal/agreementmodal.component';
 import { SBRComponent} from "./OAAdmin/Customer/sbr/sbr.component";
 import {SbrmodalComponent} from "./OAAdmin/Customer/sbr/sbrmodal/sbrmodal.component";
-import { SbrMainComponent } from './OAAdmin/Customer/sbr/sbrmodal/sbr-main/sbr-main.component';
 import { SbrCustomerComponent } from './OAAdmin/Customer/sbr/sbrmodal/sbr-customer/sbr-customer.component';
 import { SbrAmtInfoComponent } from './OAAdmin/Customer/sbr/sbrmodal/sbr-amt-info/sbr-amt-info.component';
 import { SbrEndComponent } from './OAAdmin/Customer/sbr/sbrmodal/sbr-end/sbr-end.component';
@@ -163,6 +162,12 @@ import { AgreementDoComponent } from './OAAdmin/common/agreement-do/agreement-do
 import {HolidayInfoComponent} from "./OAData/StanData/holiday/holiday-modal/holiday-info/holiday-info.component";
 import {AngularMultiSelectModule} from "angular2-multiselect-dropdown";
 import { TriDataTablesComponent } from './OAAdmin/OAPF/common/tri-data-tables/tri-data-tables.component';
+import { SbrMainComponent } from './OAAdmin/Customer/sbr/sbrmodal/sbr-main/sbr-main.component';
+import { NewsbrComponent } from './OAAdmin/Customer/newsbr/newsbr.component';
+import { NewsbrmodalComponent } from './OAAdmin/Customer/newsbr/newsbrmodal/newsbrmodal.component';
+import { NewsbrmainComponent } from './OAAdmin/Customer/newsbr/newsbrmodal/newsbrmain/newsbrmain.component';
+import { NewsbramtinfoComponent } from './OAAdmin/Customer/newsbr/newsbrmodal/newsbramtinfo/newsbramtinfo.component';
+import { NewsbrendComponent } from './OAAdmin/Customer/newsbr/newsbrmodal/newsbrend/newsbrend.component';
 
 function appInitializer(authService: AuthService) {
   return () => {
@@ -170,6 +175,12 @@ function appInitializer(authService: AuthService) {
       authService.getUserByToken().subscribe().add(resolve);
     });
   };
+}
+
+export class LazyLoadImageHooks extends IntersectionObserverHooks {
+  onAttributeChange(newAttributes: Attributes) {
+    console.log(`New attributes: ${newAttributes}`);
+  }
 }
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -289,7 +300,12 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     AgreementDoComponent,
     SbrdatamodalComponent,
     HolidayInfoComponent,
-    TriDataTablesComponent
+    TriDataTablesComponent,
+    NewsbrComponent,
+    NewsbrmodalComponent,
+    NewsbrmainComponent,
+    NewsbramtinfoComponent,
+    NewsbrendComponent
     //ApprovalinvoicesComponent
   ],
   imports: [
@@ -359,7 +375,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     NgChartsModule,
     CRUDTableModule,
     NgxMatSelectSearchModule,
-    AngularMultiSelectModule
+    AngularMultiSelectModule,
+    LazyLoadImageModule
   ],
   providers: [
     {
@@ -370,6 +387,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     },
     DatePipe,
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
+    { provide: LAZYLOAD_IMAGE_HOOKS, useClass: LazyLoadImageHooks }
     // {
     //   provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true
     // }

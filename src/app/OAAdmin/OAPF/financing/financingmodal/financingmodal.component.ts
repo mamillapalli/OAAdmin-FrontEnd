@@ -85,6 +85,7 @@ export class FinancingmodalComponent implements OnInit {
       this.cFinancing = new cFinancing();
       this.cFinancing = this.account$.value;
       const rmNewRequest = this.cFinancing;
+      console.log('rmNewRq is ::'+rmNewRequest)
       if (this.mode === 'new') {
         this.checkNextStage = false;
         this.financingService.dataItem(rmNewRequest, this.mode).subscribe(res => {

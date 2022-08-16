@@ -55,6 +55,8 @@ export class Financingstep2Component implements OnInit {
     this.financingForm = this.fb.group({
       financeCurrency: [this.defaultValues.financeCurrency,[Validators.required]],
       financeAmount: [this.defaultValues.financeAmount,[Validators.required]],
+      totalInvoiceCurrency: [this.defaultValues.totalInvoiceCurrency,[Validators.required]],
+      totalInvoiceAmount: [this.defaultValues.totalInvoiceAmount,[Validators.required]],
       maxFinancePercentage: [this.defaultValues.maxFinancePercentage,[Validators.required]],
       interestChargeType: [this.defaultValues.interestChargeType,[Validators.required]],
       interestRateType: [this.defaultValues.interestRateType,[Validators.required]],
@@ -70,7 +72,17 @@ export class Financingstep2Component implements OnInit {
       toSellerAmount: [this.defaultValues.toSellerAmount,[Validators.required]],
       debitAccount: [this.defaultValues.debitAccount,[Validators.required]],
       creditAccount: [this.defaultValues.creditAccount,[Validators.required]],
-      financeDueDate: ['',[Validators.required]]
+      diaryId: [this.defaultValues.diaryId,[Validators.required]],
+      diaryDueDate: [this.defaultValues.diaryDueDate,[Validators.required]],
+      diaryNarrative: [this.defaultValues.diaryNarrative,[Validators.required]],
+      financeDueDate: [this.defaultValues.financeDueDate,[Validators.required]],
+      financeTotalDueCurrency: [this.defaultValues.financeTotalDueCurrency,[Validators.required]],
+      financeTotalDueAmount: [this.defaultValues.financeTotalDueAmount,[Validators.required]],
+      deleteFlag: [this.defaultValues.deleteFlag,[Validators.required]],
+      financeServiceChargeCurrency: [this.defaultValues.financeServiceChargeCurrency,[Validators.required]],
+      financeServiceChargeAmount: [this.defaultValues.financeServiceChargeAmount,[Validators.required]],
+      interestCurrency: [this.defaultValues.interestCurrency,[Validators.required]],
+      interestAmount: [this.defaultValues.interestAmount,[Validators.required]]
     });
 
     const formChangesSubscr = this.financingForm.valueChanges.subscribe((val) => {

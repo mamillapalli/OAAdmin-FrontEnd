@@ -4,7 +4,7 @@ import { cbusinessType } from "./cbusinessType";
 export class sendingfinacing {
   customerId: string
   constructor(d:any) {
-    this.customerId = d[0].customerId
+    this.customerId = d.customerId
   }
 }
 
@@ -31,6 +31,5 @@ export class caccounts {
     this.businessType = new cbusinessType(d.businessType)
     this.customer = new sendingfinacing(d.customer)
     this.status = true;
-
   }
 }

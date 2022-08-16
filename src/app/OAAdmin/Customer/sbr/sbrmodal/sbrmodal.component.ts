@@ -134,11 +134,17 @@ export class SbrmodalComponent implements OnInit {
       if (this.mode === 'new') {
         this.checkNextStage = false;
         this.sbragreementServices.dataItem(this.Sbrreq, this.mode).subscribe(res => {
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Add Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -146,7 +152,7 @@ export class SbrmodalComponent implements OnInit {
               icon: 'error'
             });
           }
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
@@ -160,11 +166,17 @@ export class SbrmodalComponent implements OnInit {
         this.checkNextStage = false;
         this.sbragreementServices.dataItem(this.Sbrreq, this.mode).subscribe(res => {
           console.log('Response is : ' + res)
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Edit Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -172,7 +184,7 @@ export class SbrmodalComponent implements OnInit {
               icon: 'error'
             });
           }
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }
@@ -185,11 +197,17 @@ export class SbrmodalComponent implements OnInit {
       } else if (this.mode === 'auth') {
         this.checkNextStage = false;
         this.sbragreementServices.dataItem(Sbrreq, this.mode).subscribe(res => {
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             this.checkNextStage = true;
             Swal.fire({
               title: 'Authorize Record Successfully',
               icon: 'success'
+            }).then((result) => {
+              console.log(result)
+              if (result.value) {
+                Swal.close();
+                this.activeModal.close();
+              }
             });
           } else {
             Swal.fire({
@@ -197,7 +215,7 @@ export class SbrmodalComponent implements OnInit {
               icon: 'error'
             });
           }
-          if (res !== null && res !== '') {
+          if (res !== undefined) {
             if (this.checkNextStage) {
               this.currentStep$.next(nextStep);
             }

@@ -10,14 +10,14 @@ export class cFinancing{
   sellerName: string
   financingType: string
   businessType: string
-  transactionDate: Date
+  transactionDate :  Date = new Date()
   invoiceList: [Invoice]
   totalInvoiceCurrency: string
   totalInvoiceAmount: number
   financeCurrency: string
   financeAmount: number
-  financeTotalCurrency: string
-  financeTotalAmount: number
+  financeTotalDueCurrency: string
+  financeTotalDueAmount: number
   maxFinancePercentage: number
   interestChargeType: string
   interestRateType: string
@@ -37,8 +37,12 @@ export class cFinancing{
   diaryDueDate: Date
   diaryNarrative: string
   financeDueDate: Date
+  deleteFlag: boolean
   financeServiceChargeCurrency: string
   financeServiceChargeAmount: number
   interestCurrency: string
   interestAmount: number
+  //transactionStatus: string
+  //status : string
+
 }

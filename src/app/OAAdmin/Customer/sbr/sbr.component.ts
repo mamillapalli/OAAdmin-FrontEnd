@@ -104,6 +104,7 @@ export class SBRComponent implements OnInit {
     modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log('newBankAdmin is ' + result);
+      this.getSBR();
     }, (reason) => {
       this.getSBR();
       this.closeResult = `Dismissed ${SBRComponent.getDismissReason(reason)}`;
@@ -123,6 +124,7 @@ export class SBRComponent implements OnInit {
     modalRef.componentInstance.fDsplayedColumns = this.fDisplayedColumns;
     modalRef.result.then((result) => {
       console.log('Anil result', result);
+      this.getSBR();
     }, (reason) => {
       this.getSBR();
       this.closeResult = `Dismissed ${SBRComponent.getDismissReason(reason)}`;

@@ -127,8 +127,8 @@
           <div class="floating-label">
             <input type="number" class="floating-input_readonly" autocomplete="off"
                    name="totalAvailableAmount" formControlName="totalAvailableAmount"
-                   (focusout)="calculateFinanceDetails()" currencyMask readonly>
-            <label class="label_OA">UpFront Interest Amount</label>
+                   (focusout)="calculateFinanceDetails()" readonly>
+            <label class="label_OA">Total Available Amount</label>
           </div>
         </div>
         <div class="col-1">
@@ -146,7 +146,7 @@
           <div class="floating-label">
             <input type="number" class="floating-input_readonly" autocomplete="off"
                    name="toSellerAmount" formControlName="toSellerAmount"
-                   (focusout)="calculateFinanceDetails()" currencyMask readonly>
+                   (focusout)="calculateFinanceDetails()" readonly>
             <label class="label_OA">To Seller Amount</label>
           </div>
         </div>
@@ -181,8 +181,88 @@
             </div>
           </div>
         </div>
+        <div class="col-1">
+          <div class="floating-label">
+            <select
+              class="floating-select_readonly"
+              name="financeTotalDueCurrency"
+              formControlName="financeTotalDueCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="floating-label">
+            <input type="number" class="floating-input_readonly" autocomplete="off"
+                   name="financeTotalDueAmount" formControlName="financeTotalDueAmount"
+                   readonly>
+            <label class="label_OA">Finance Total Due</label>
+          </div>
+        </div>
+        <div class="col-1">
+          <div class="floating-label">
+            <select
+              class="floating-select_readonly"
+              name="interestCurrency"
+              formControlName="interestCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="floating-label">
+            <input type="number" class="floating-input_readonly" autocomplete="off"
+                   name="interestAmount" formControlName="interestAmount"
+                   readonly>
+            <label class="label_OA">Interest Amount</label>
+          </div>
+        </div>
+
       </div>
     </div>
-
+    <div class="container">
+      <div class="form-group row">
+        <div class="col-1">
+          <div class="floating-label">
+            <select
+              class="floating-select_readonly"
+              name="financeServiceChargeCurrency"
+              formControlName="financeServiceChargeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="floating-label">
+            <input type="number" class="floating-input_readonly" autocomplete="off"
+                   name="financeServiceChargeAmount" formControlName="financeServiceChargeAmount"
+                   >
+            <label class="label_OA">Service Charge</label>
+          </div>
+        </div>
+        <div class="col-1">
+          <div class="floating-label">
+            <select
+              class="floating-select_readonly"
+              name="totalInvoiceCurrency"
+              formControlName="totalInvoiceCurrency" [disabled]="true">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="floating-label">
+            <input type="number" class="floating-input_readonly" autocomplete="off"
+                   name="totalInvoiceAmount" formControlName="totalInvoiceAmount" readonly
+            >
+            <label class="label_OA">Total Invoice Amount</label>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

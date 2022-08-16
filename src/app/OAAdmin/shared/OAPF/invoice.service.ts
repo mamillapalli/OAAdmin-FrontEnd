@@ -250,6 +250,17 @@ export class invoiceService {
         }),
         finalize(() => this._isLoading$.next(false))
       );
+    } else if (mode === 'authSeller') {
+      return this.http.put<any>('/oapf/api/v1/invoices/registerCounterPartyApproval', dataPost, {
+        headers: httpHeaders
+      }).pipe(
+        catchError(err => {
+          this._errorMessage.next(err);
+          console.log(err)
+          return of(null);
+        }),
+        finalize(() => this._isLoading$.next(false))
+      );
     } else if (mode === 'delete') {
       return this.http.delete<any>('/oapf/api/v1/invoices/' + id, {
         headers: httpHeaders

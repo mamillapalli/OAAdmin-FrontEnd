@@ -15,10 +15,14 @@ import {AuthModel} from "../../../modules/auth/models/auth.model";
 import {AuthService} from "../../../modules/auth";
 const API_USERS_URL = `${environment.apiUrl}`;
 
+
+export class authDataPost{
+  financeId: string
+}
+
 @Injectable({
   providedIn: 'root'
 })
-
 export class financingService {
   private authToken: AuthModel | undefined;
   protected _isLoading$ = new BehaviorSubject<boolean>(false);
@@ -39,9 +43,9 @@ export class financingService {
       'Access-Control-Allow-Origin': '*'
 
     });
-    const id = data.invoiceNumber;
+    const id = data.financeId;
     const dataPost = JSON.stringify(data);
-    console.log(dataPost)
+    console.log("data post is :::::::"+dataPost)
     if (mode === 'new') {
       return this.http.post<any>('/oapf/api/v1/finances', dataPost, {
         headers: httpHeaders
@@ -65,7 +69,12 @@ export class financingService {
         finalize(() => this._isLoading$.next(false))
       );
     } else if (mode === 'auth') {
-      return this.http.put<any>('/oapf/api/v1/invoices/finances', dataPost, {
+      let authDataPost1 = new authDataPost();
+      authDataPost1.financeId = id
+      console.log(authDataPost1)
+      const dataPost = JSON.stringify(authDataPost1);
+      console.log(dataPost)
+      return this.http.put<any>('/oapf/api/v1/finances/authorise', dataPost, {
         headers: httpHeaders
       }).pipe(
         catchError(err => {

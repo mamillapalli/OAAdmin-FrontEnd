@@ -22,35 +22,59 @@
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"
-  }, "/oapf": {
-  "target": "http://localhost:8765",
-  "secure": true,
-  "changeOrigin": true,
-  "logLevel": "debug"
-},
-  "http://ilyashussain:4200/oaadmin": {
+  },
+  "/oassist": {
+    "target": "http://localhost:8001",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "http://192.168.1.16:4200/oaadmin": {
     "target": "http://localhost:8765",
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"
   },
-  "http://ilyashussain:4200/oanotification": {
+  "http://192.168.1.16:4200/oanotification": {
     "target": "http://localhost:8765",
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"
   },
-  "http://ilyashussain:4200/oadata": {
+  "http://192.168.1.16:4200/oadata": {
     "target": "http://localhost:8765",
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"
   },
-  "http://ilyashussain:4200/oadata": {
+  "http://192.168.1.16:4200/oapf": {
+    "target": "http://localhost:8765",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "http://10.3.84.34:4200/oaadmin": {
+    "target": "http://localhost:8765",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "http://10.3.84.34:4200/oanotification": {
+    "target": "http://localhost:8765",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "http://10.3.84.34:4200/oadata": {
+    "target": "http://localhost:8765",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "http://10.3.84.34:4200/oapf": {
     "target": "http://localhost:8765",
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"
   }
-
 }

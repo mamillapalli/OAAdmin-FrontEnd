@@ -19,6 +19,7 @@ import { CurrencyComponent } from '../OAData/StanData/currency/currency.componen
 import { InterestRateComponent } from '../OAData/StanData/interest-rate/interest-rate.component';
 import { ExchangeRateComponent } from '../OAData/StanData/exchange-rate/exchange-rate.component';
 import { HolidayComponent } from '../OAData/StanData/holiday/holiday.component';
+import { NewsbrComponent } from '../OAAdmin/Customer/newsbr/newsbr.component';
 
 const Routing: Routes = [
   {
@@ -148,7 +149,7 @@ const Routing: Routes = [
   },
   {
     path: 'Customer/sbr', // <= Page URL
-    component: SBRComponent // <= Page component registration
+    component: NewsbrComponent // <= Page component registration
   },
 
 

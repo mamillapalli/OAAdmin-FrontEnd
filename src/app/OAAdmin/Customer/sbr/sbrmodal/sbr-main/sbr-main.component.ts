@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+  import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Sbr} from "../../../../Model/sbr";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";

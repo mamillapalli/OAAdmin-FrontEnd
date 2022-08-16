@@ -118,12 +118,10 @@
     data-kt-menu-flip="bottom"
   >
     <img [src]="imageToShow"
-         alt="Place image title"
          *ngIf="!isImageLoading; else noImageFound">
     <ng-template #noImageFound>
-      <img src="fallbackImage.png" alt="Fallbackimage">
+      <img src="./assets/media/avatars/150-1.jpg" alt="metronic" />
     </ng-template>
-<!--    <img [src]='thumbnail' />-->
   </div>
   <!-- end::Toggle  -->
   <app-user-inner></app-user-inner>

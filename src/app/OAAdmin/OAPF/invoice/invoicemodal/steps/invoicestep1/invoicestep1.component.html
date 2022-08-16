@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="col-3">
-          <div class="floating-label_mandatory">
+          <div class="floating-label_mandatory required">
             <div class="input-group mb-3">
 <!--              <mat-form-field>-->
 <!--                <mat-select formControlName="sbrReferenceId" (focusout)="getSBRChange()">-->
@@ -28,7 +28,7 @@
 <!--              </mat-form-field>-->
 
 <!--              -->
-              <input class="floating-input_mandatory input-group mb-3" type="text" name="sbrReferenceId"
+              <input class="floating-input_mandatory input-group mb-3 " type="text" name="sbrReferenceId"
                      id="sbrReferenceId"
                      formControlName="sbrReferenceId" placeholder=""
                      [class.is-invalid]="isControlInvalid('sbrReferenceId')"
@@ -86,11 +86,11 @@
         </div>
         <div class="ccol1_OA">
           <div class="floating-label">
-            <select class="floating-select" name="currency" id="currency"
+            <select class="floating-select_mandatory" name="currency" id="currency"
                     formControlName="currency">
               <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
             </select>
-            <label class="label_OA">Currency</label>
+            <label class="label_OA_mandatory">ccy</label>
           </div>
         </div>
         <div class="acol1_OA ">
@@ -99,7 +99,7 @@
                    [class.is-invalid]="isControlInvalid('amount')"
                    [class.is-valid]="isControlValid('amount')" formControlName="amount" placeholder="Amount"
                    currencyMask placeholder=" ">
-            <label class="label_OA">Amount</label>
+            <label class="label_OA">Amt</label>
           </div>
         </div>
       </div>

@@ -22,35 +22,26 @@ export class TopbarComponent implements OnInit {
   ngOnInit(): void {
     this.headerLeft = this.layout.getProp('header.left') as string;
     console.log('profile pic')
-    const sb = this.oaCommonService.getProfilePic('/oaadmin/api/v1/getProfilePic').subscribe((res) => {
-      // console.log(res)
-      // this.createImageFromBlob(res);
-      // let objectURL = 'data:image/jpeg;base64,' + res;
-      // this.thumbnail = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-      // var file = new Blob([ res ], {
-      //   type : 'image/jpeg'
-      // });
-      // var fileURL = URL.createObjectURL(file);
-      // this.thumbnail = this.sanitizer.bypassSecurityTrustUrl(fileURL);
-      //this.createImageFromBlob(file)
-      //var fileURL = URL.createObjectURL(file);
-      //this.thumbnail = this.sanitizer.bypassSecurityTrustUrl(fileURL);
-      //console.log(this.thumbnail)
-
-      this.isImageLoading = true;
-      this.createImageFromBlob(res);
-      this.isImageLoading = false;
-
-
-    });
+    this.loadImageFile();
+    console.log('loading pic')
   }
 
   imageToShow: any;
   isImageLoading: boolean;
 
+  loadImageFile() {
+    const sb = this.oaCommonService.getProfilePic('/oaadmin/api/v1/getProfilePic').subscribe((res) => {
+      this.isImageLoading = true;
+      const unsafeImageUrl = URL.createObjectURL(res);
+      this.imageToShow = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+      //this.createImageFromBlob(res);
+      this.isImageLoading = false;
+    });
+  }
+
   createImageFromBlob(image: Blob) {
     let reader = new FileReader();
-    reader.addEventListener("load", () => {
+    reader.addEventListener("loadend", () => {
       this.imageToShow = reader.result;
     }, false);
 
@@ -58,5 +49,4 @@ export class TopbarComponent implements OnInit {
       reader.readAsDataURL(image);
     }
   }
-
 }

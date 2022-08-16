@@ -135,4 +135,12 @@ export class AgreementLimitComponent implements OnInit {
     const control = this.form.controls[controlName];
     return control.dirty || control.touched;
   }
+
+  limitAmountChange(newValue: any){
+    console.log('new value is :'+newValue)
+    this.f.limitUnallocatedAmount.patchValue(newValue)
+    this.f.limitAllocatedAmount.patchValue('0')
+  }
+
+
 }

@@ -85,21 +85,36 @@ export class AgreementMainComponent implements OnInit {
   }
 
   initForm() {
+    console.log('initForm form is ')
     this.form = this.fb.group({
-      contractReferenceNumber: ['', [Validators.required]],
-      businessType: [[Validators.required]],
-      businessTypeId: [''],
-      anchorCustomer: [[Validators.required]],
-      anchorCustomerId: [''],
+      contractReferenceNumber: [this.defaultValues.contractReferenceNumber, [Validators.required]],
+      businessType: [this.defaultValues.businessType,[Validators.required]],
+      businessTypeId: [this.defaultValues.businessTypeId,[]],
+      anchorCustomer: [this.defaultValues.anchorCustomer, [Validators.required]],
+      anchorCustomerId: [this.defaultValues.anchorCustomerId,[]],
       contractDocumentNumber: [this.defaultValues.contractDocumentNumber, [Validators.required]],
       transactionDate: [this.defaultValues.transactionDate, [Validators.required]],
       validDate: [this.defaultValues.validDate, [Validators.required]],
       expiryDate: [this.defaultValues.expiryDate, [Validators.required]],
-      rmId: [''],
-      rm: [[Validators.required]],
+      rmId: [this.defaultValues.rmId,''],
+      rm: [this.defaultValues.rm,[Validators.required]],
       remarks: [this.defaultValues.remarks, [Validators.required]],
-      counterParties: this.counterParties
+      counterParties: [this.defaultValues.counterParties,[]],
+      checkCustomerSelected : [this.defaultValues.checkCustomerSelected,[]]
     });
+
+    console.log(this.defaultValues.checkCustomerSelected)
+    console.log(this.defaultValues.counterParties)
+    if(this.defaultValues.checkCustomerSelected) {
+      let c:any = this.defaultValues.counterParties
+      if(c.length > 0 ) {
+        this.dataSource.data = this.defaultValues.counterParties;
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.checkCustomerSelected = true;
+      }
+    }
+
     const formChangesSubscr = this.form.valueChanges.subscribe((val) => {
       this.updateParentModel(val, this.checkForm());
       this.form.markAllAsTouched();
@@ -125,6 +140,7 @@ export class AgreementMainComponent implements OnInit {
   }
 
   updateForm() {
+    console.log('update form is ')
     //this.form.patchValue(this.formValue)
     this.f.contractReferenceNumber.setValue(this.formValue.contractReferenceNumber);
     this.f.businessType.setValue(this.formValue.businessType);
@@ -147,6 +163,7 @@ export class AgreementMainComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.checkCustomerSelected = true;
+      this.f.checkCustomerSelected.patchValue(true)
     }
     // this.f.businessType.setValue(this.businessTypeReq.name);
     console.log('business Type ---->', this.businessTypeReq);
@@ -329,6 +346,7 @@ export class AgreementMainComponent implements OnInit {
       console.log('idx----------------->' + idx)
       if (idx === -1) {
         this.dataSource.data.push(result);
+        this.f.counterParties.patchValue(this.dataSource.data)
         const cust = this.fb.group({
           customerId: [result.customerId, '']
         });
@@ -336,6 +354,8 @@ export class AgreementMainComponent implements OnInit {
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.checkCustomerSelected = true;
+        this.f.checkCustomerSelected.patchValue(true)
+
       }
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;

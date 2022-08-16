@@ -188,7 +188,7 @@
           || authRoles.includes('BANK_USER_VIEWER')
           || authRoles.includes('BANK_ADMIN_MAKER')
           || authRoles.includes('BANK_ADMIN_CHECKER')
-          || authRoles.includes('BANK_ADMIN_VIEWER' )) && element.transactionStatus === 'PENDING' ">
+          || authRoles.includes('BANK_ADMIN_VIEWER' )) ">
                 <a
                   title="Authorize Transaction" (click)="openFinanceDialog(element,'auth')"
                   class="btn btn-icon btn-light-warning btn-active-light btn-sm me-1">

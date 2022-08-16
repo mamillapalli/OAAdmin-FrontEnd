@@ -15,12 +15,12 @@
           <h3 class="stepper-title">Invoice Info</h3>
         </div>
 
-        <div
-          class="stepper-item"
-          [ngClass]="{ current: currentStep$.value === 2 }"
-        >
-          <h3 class="stepper-title">Completed</h3>
-        </div>
+        <!--        <div-->
+        <!--          class="stepper-item"-->
+        <!--          [ngClass]="{ current: currentStep$.value === 2 }"-->
+        <!--        >-->
+        <!--          <h3 class="stepper-title">Completed</h3>-->
+        <!--        </div>-->
       </div>
 
       <form
@@ -30,18 +30,18 @@
       >
         <div class="current">
           <ng-container *ngIf="currentStep$.value === 1">
-            <app-buyerapprovalstep1 class=""
-                                    [updateParentModel]="updateAccount"
-                                    [defaultValues]="account$.value"
-                                    [formValue]="formValue"
-                                    [formElement]="formElement"
-                                    [mode]=mode
-            ></app-buyerapprovalstep1>
+            <app-seller-approval-invoice-step1 class=""
+                              [updateParentModel]="updateAccount"
+                              [defaultValues]="account$.value"
+                              [formValue]="formValue"
+                              [formElement]="formElement"
+                              [mode]=mode
+            ></app-seller-approval-invoice-step1>
           </ng-container>
 
-          <ng-container *ngIf="currentStep$.value === 2">
-            <app-buyerapprovalstep2 class="w-100"></app-buyerapprovalstep2>
-          </ng-container>
+          <!--          <ng-container *ngIf="currentStep$.value === 2">-->
+          <!--            <app-invoicestep2 class="w-100"></app-invoicestep2>-->
+          <!--          </ng-container>-->
 
           <!--          <ng-container *ngIf="currentStep$.value === 3">-->
           <!--            <app-invoicestep3-->
@@ -97,16 +97,30 @@
                 (click)="nextStep()"
               >
                 <span class="indicator-label">
-                  <ng-container *ngIf="currentStep$.value < formsCount - 1">
-                    Continue {{ " " }}
-                    <span
-                      [inlineSVG]="
-                        './assets/media/icons/duotune/arrows/arr064.svg'
-                      "
-                      class="svg-icon svg-icon-3 ms-2 me-0"
-                    ></span>
-                  </ng-container>
-                  <ng-container *ngIf="currentStep$.value === formsCount - 1">
+              <ng-container *ngIf="currentStep$.value < formsCount - 1">
+                Continue {{ " " }}
+                <span
+                  [inlineSVG]="
+                      './assets/media/icons/duotune/arrows/arr064.svg'
+                    "
+                  class="svg-icon svg-icon-3 ms-2 me-0"
+                ></span>
+              </ng-container>
+                </span>
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="this.mode !== 'view'">
+            <div>
+              <button
+                type="button"
+                class="btn btn-sm btn-light-success btn-primary me-2"
+                [disabled]="!isCurrentFormValid$.value"
+                (click)="nextStep()"
+              >
+                <span class="indicator-label">
+                  <ng-container *ngIf="this.mode !== 'view'">
                     Submit
                   </ng-container>
                 </span>
@@ -114,6 +128,7 @@
             </div>
           </ng-container>
         </div>
+
       </form>
     </div>
   </div>

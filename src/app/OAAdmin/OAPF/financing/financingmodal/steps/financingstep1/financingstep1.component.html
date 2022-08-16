@@ -92,6 +92,10 @@
                    name="date" [class.is-invalid]="isControlInvalid('financeDueDate')"
                    [class.is-valid]="isControlValid('financeDueDate')" formControlName="financeDueDate"
                    (ngModelChange)="getInvoicesDate();invoiceSelected = true;"/>
+            <input type="hidden"
+                   name="invoiceList" formControlName="invoiceList">
+            <input type="hidden"
+                   name="invoiceSelected" formControlName="invoiceSelected">
             <label class="label_OA_mandatory required">Financing Due Date</label>
           </div>
         </div>

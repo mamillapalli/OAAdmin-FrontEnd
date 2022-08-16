@@ -247,7 +247,7 @@ export class oapfcommonService {
         finalize(() => this.spinner.hide())
       );
     } else if (mode === 'auth') {
-      return this.http.put<any>(url+'/authorise/',dataPost, {
+      return this.http.put<any>(url+'/authorise',dataPost, {
         headers: httpHeaders
       }).pipe(
         delay(100),
@@ -296,7 +296,7 @@ export class oapfcommonService {
     let httpParams = new HttpParams();
     httpParams = httpParams.append('page', currentPage);
     httpParams = httpParams.append('size', pageSize);
-    console.log(sortData)
+    //console.log(sortData)
     if(sortData !== null && sortData !== undefined)
       httpParams = httpParams.append('sort', sortData);
     //httpParams = httpParams.append('direction', sortData);
@@ -349,6 +349,33 @@ export class oapfcommonService {
     });
     let httpParams = new HttpParams();
     httpParams = httpParams.append('dueDate', loanDueDate);
+    httpParams = httpParams.append('page', currentPage);
+    httpParams = httpParams.append('size', pageSize);
+    httpParams = httpParams.append('transactionStatus', 'MASTER');
+    httpParams = httpParams.append('status', 'FINANCE_READY');
+    if(sortData !== null && sortData !== undefined)
+      httpParams = httpParams.append('sort', sortData);
+    return this.http.get<any>(url, {headers: httpHeaders, params:httpParams}).pipe(
+      delay(100),
+      catchError((err) => {
+        this.notifyService.showError(err.error.message, 'Error')
+        this.spinner.hide()
+        return of([]);
+      }),
+      finalize(() => this.spinner.hide())
+    );
+  }
+  getDataWithPaginationLoanMultiple(url:any ,currentPage: any, pageSize: any, sortData:any,loanDueDate: any,sbrId: any): Observable<any> {
+    this.spinner.show();
+    this.authToken = this.authService.getAuthFromLocalStorage();
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${this.authToken?.jwt}`,
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    });
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('dueDate', loanDueDate);
+    httpParams = httpParams.append('sbrReferenceId', sbrId);
     httpParams = httpParams.append('page', currentPage);
     httpParams = httpParams.append('size', pageSize);
     httpParams = httpParams.append('transactionStatus', 'MASTER');

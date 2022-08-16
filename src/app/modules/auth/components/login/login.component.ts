@@ -14,7 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class LoginComponent implements OnInit, OnDestroy {
   // KeenThemes mock, change it to:
   defaultAuth: any = {
-    email: 'antony@gmail.com',
+    email: 'ravi@chinasystems-me.com',
     password: '12345',
   };
   loginForm: FormGroup;
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
 
   // private fields
-  private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
+  private unsubscribe: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,

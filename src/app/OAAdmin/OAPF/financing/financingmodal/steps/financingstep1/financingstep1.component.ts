@@ -95,9 +95,21 @@ export class Financingstep1Component implements OnInit {
       sellerName: [this.defaultValues.sellerName,[Validators.required]],
       financingType: [this.defaultValues.financingType,[Validators.required]],
       businessType: [this.defaultValues.businessType,[Validators.required]],
-      financeDueDate: ['',[Validators.required]],
-      invoiceList: this.invoiceList
+      financeDueDate: [this.defaultValues.financeDueDate,[Validators.required]],
+      invoiceList: [this.defaultValues.invoiceList,[]],
+      invoiceSelected : [this.defaultValues.invoiceSelected,[]],
+      isDataSource: [this.defaultValues.isDataSource,[]]
     });
+
+    if(this.defaultValues.invoiceSelected) {
+      let c:any = this.defaultValues.invoiceList;
+      if(c.length > 0 ) {
+        this.dataSource.data = this.defaultValues.invoiceList;
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.invoiceSelected = true;
+      }
+    }
 
     const formChangesSubscr = this.financingForm.valueChanges.subscribe((val) => {
       let formE = document.getElementById('financingForm');
@@ -178,7 +190,7 @@ export class Financingstep1Component implements OnInit {
     console.log('Get Invoices')
     this.spinner.show();
     //const sb = this.invoiceServices.getInvoice(this.financingForm.value.financeDueDate, '', 'loanDueDate').subscribe((res) => {
-    const sb = this.oapfcommonService.getDataWithPaginationLoan('/oapf/api/v1/invoices/',this.currentPage,this.pageSize,this.sortData,this.financingForm.value.financeDueDate).subscribe((res) => {
+    const sb = this.oapfcommonService.getDataWithPaginationLoanMultiple('/oapf/api/v1/invoices/',this.currentPage,this.pageSize,this.sortData,this.financingForm.value.financeDueDate,this.financingForm.value.sbrReferenceId).subscribe((res) => {
       console.log(res.content)
       if(res.content.length > 0) {
         for (let i = 0; i < res.content.length; i++) {
@@ -188,13 +200,19 @@ export class Financingstep1Component implements OnInit {
           });
           this.invoiceList.push(inv)
         }
+
         this.dataSource.data = res.content;
+        this.f.invoiceList.patchValue(this.dataSource.data)
         this.totalRows = res.totalElements;
         this.invoiceSelected = true
         this.isDataSource = false
+        this.f.invoiceSelected.setValue(true)
+        this.f.isDataSource.setValue(false)
       } else {
         this.isDataSource = true
         this.invoiceSelected = false
+        this.f.invoiceSelected.setValue(false)
+        this.f.isDataSource.setValue(true)
       }
     });
     console.log("Form is "+this.financingForm)
@@ -237,6 +255,7 @@ export class Financingstep1Component implements OnInit {
       });
       this.invoiceList.push(inv)
     }
+    this.f.invoiceList.patchValue(this.dataSource.data)
     console.log(this.financingForm)
   }
 

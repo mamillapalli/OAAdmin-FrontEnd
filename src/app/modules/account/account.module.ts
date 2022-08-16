@@ -14,6 +14,7 @@ import { EmailPreferencesComponent } from './settings/forms/email-preferences/em
 import { NotificationsComponent } from './settings/forms/notifications/notifications.component';
 import { SignInMethodComponent } from './settings/forms/sign-in-method/sign-in-method.component';
 import { DropdownMenusModule, WidgetsModule } from '../../_metronic/partials';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { DropdownMenusModule, WidgetsModule } from '../../_metronic/partials';
     WidgetsModule,
     FormsModule,
     ReactiveFormsModule,
+    LazyLoadImageModule
   ],
 })
 export class AccountModule {}

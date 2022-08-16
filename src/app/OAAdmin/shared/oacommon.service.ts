@@ -14,6 +14,8 @@ import {NotificationService} from "./notification.service";
 })
 
 export class oaCommonService {
+
+
   private authToken: AuthModel | undefined;
   protected _isLoading$ = new BehaviorSubject<boolean>(false);
   protected _errorMessage = new BehaviorSubject<string>('');
@@ -459,7 +461,6 @@ export class oaCommonService {
       'Access-Control-Allow-Origin': '*'
     });
     return this.http.get<any>(url, {headers: httpHeaders, responseType:tex  }).pipe(
-      delay(100),
       catchError((err) => {
         this.notifyService.showError(err.error.message, 'Error')
         this.spinner.hide()
@@ -467,6 +468,29 @@ export class oaCommonService {
       }),
       finalize(() => this.spinner.hide())
     );
+  }
+
+  uploadImage(file: any, id: any) {
+    this.spinner.show();
+    this.authToken = this.authService.getAuthFromLocalStorage();
+    let tex:any = "blob"
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${this.authToken?.jwt}`,
+      'Access-Control-Allow-Origin': '*'
+    });
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    formData.append('userId', id);
+    console.log(formData)
+    return this.http.post<any>('/oaadmin/api/v1/uploadFile', formData, {headers: httpHeaders})
+      .pipe(
+        catchError((err) => {
+          this.notifyService.showError(err.error.message, 'Error')
+          this.spinner.hide()
+          return of([]);
+        }),
+        finalize(() => this.spinner.hide())
+      );
   }
 
 }

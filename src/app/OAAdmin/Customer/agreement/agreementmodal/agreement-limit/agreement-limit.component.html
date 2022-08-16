@@ -17,7 +17,7 @@
             <input class="floating-input_mandatory" type="date" autocomplete="off"
                    name="limitExpiry" [class.is-invalid]="isControlInvalid('limitExpiry')"
                    [class.is-valid]="isControlValid('limitExpiry')" formControlName="limitExpiry" >
-            <label class="label_OA">Limit Expiry Date</label>
+            <label class="label_OA required">Limit Expiry Date</label>
           </div>
         </div>
         <div class="ccol1_OA">
@@ -26,25 +26,26 @@
                     formControlName="limitCurrency">
               <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
             </select>
-            <label class="label_OA">Currency</label>
+            <label class="label_OA required">Currency</label>
           </div>
         </div>
         <div class="acol1_OA">
           <div class="floating-label">
             <input class="floating-input_mandatory" type="text" id="limitAmount" name="limitAmount"
                    [class.is-invalid]="isControlInvalid('limitAmount')"
-                   [class.is-valid]="isControlValid('limitAmount')" formControlName="limitAmount" placeholder="limitAmount"
+                   [class.is-valid]="isControlValid('limitAmount')" formControlName="limitAmount"
+                   (ngModelChange)="limitAmountChange($event)"
                    currencyMask >
-            <label class="label_OA">Limit Amount</label>
+            <label class="label_OA required">Limit Amount</label>
           </div>
         </div>
         <div class="col-3">
           <div class="floating-label">
-            <input class="floating-input_mandatory" type="text" autocomplete="off"
+            <input class="floating-input_mandatory" type="number" autocomplete="off"
                    name="cashMargin" [class.is-invalid]="isControlInvalid('cashMargin')"
                    [class.is-valid]="isControlValid('cashMargin')" formControlName="cashMargin"
                    >
-            <label class="label_OA">Cash Margin</label>
+            <label class="label_OA required">Cash Margin</label>
           </div>
         </div>
       </div>
@@ -92,7 +93,7 @@
           <div class="floating-label_mandatory form-switch">
             <input class="floating-input_mandatory form-check-input" type="checkbox" id="autoFinance"
                    name="autoFinance" formControlName="autoFinance" [disabled]="ReadOnlyCheckBox">
-            <label class="label_OA_mandatory">Auto Finance</label>
+            <label class="label_OA_mandatory required">Auto Finance</label>
           </div>
         </div>
 
@@ -111,7 +112,7 @@
           <div class="floating-label_mandatory form-switch">
             <input class="floating-input_mandatory form-check-input" type="checkbox" id="autoSettlement"
                    name="autoSettlement" formControlName="autoSettlement" [disabled]="ReadOnlyCheckBox">
-            <label class="label_OA_mandatory">Auto Settlement</label>
+            <label class="label_OA_mandatory required">Auto Settlement</label>
           </div>
         </div>
 
@@ -141,7 +142,7 @@
         <div class="acol1_OA ">
           <div class="floating-label">
             <input class="floating-input" type="text" id="cableChargeAmount" name="cableChargeAmount"
-                   formControlName="cableChargeAmount" placeholder="cableChargeAmount"
+                   formControlName="cableChargeAmount"
                    currencyMask >
             <label class="label_OA">Cable Amount</label>
           </div>
@@ -152,15 +153,15 @@
                     formControlName="communicationChargeCurrency">
               <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
             </select>
-            <label class="label_OA">Currency</label>
+            <label class="label_OA required">Currency</label>
           </div>
         </div>
         <div class="acol1_OA ">
           <div class="floating-label">
             <input class="floating-input_mandatory" type="text" id="communicationChargeAmount" name="communicationChargeAmount"
-                   formControlName="communicationChargeAmount" placeholder="communicationChargeAmount"
+                   formControlName="communicationChargeAmount"
                    currencyMask >
-            <label class="label_OA">Communication Amount</label>
+            <label class="label_OA required">Communication Amount</label>
           </div>
         </div>
         <div class="ccol1_OA ">
@@ -175,7 +176,7 @@
         <div class="acol1_OA ">
           <div class="floating-label">
             <input class="floating-input" type="text" id="financeServiceChargeAmount" name="financeServiceChargeAmount"
-                   formControlName="financeServiceChargeAmount" placeholder="financeServiceChargeAmount"
+                   formControlName="financeServiceChargeAmount"
                    currencyMask >
             <label class="label_OA">Finance Amount</label>
           </div>
@@ -192,7 +193,7 @@
         <div class="acol1_OA ">
           <div class="floating-label">
             <input class="floating-input" type="text" id="settlementServiceChargeAmount" name="settlementServiceChargeAmount"
-                   formControlName="settlementServiceChargeAmount" placeholder="settlementServiceChargeAmount"
+                   formControlName="settlementServiceChargeAmount"
                    currencyMask >
             <label class="label_OA">Settlement Service Charge</label>
           </div>
@@ -214,7 +215,7 @@
           <div class="floating-label">
             <input class="floating-input" type="text" id="invoiceServiceChargeAmount"
                    name="invoiceServiceChargeAmount"
-                   formControlName="invoiceServiceChargeAmount" placeholder="invoiceServiceChargeAmount"
+                   formControlName="invoiceServiceChargeAmount"
                    currencyMask >
             <label class="label_OA">Invoice Service Charge</label>
           </div>
@@ -224,7 +225,7 @@
             <input class="floating-input" type="text" autocomplete="off"
                    name="limitAllocatedAmount" [class.is-invalid]="isControlInvalid('limitAllocatedAmount')"
                    [class.is-valid]="isControlValid('limitAllocatedAmount')"
-                   formControlName="limitAllocatedAmount" >
+                   formControlName="limitAllocatedAmount" readonly>
             <label class="label_OA">Limit Allocated Amount</label>
           </div>
         </div>
@@ -233,7 +234,7 @@
             <input class="floating-input_mandatory" type="text" autocomplete="off"
                    name="limitUnallocatedAmount" [class.is-invalid]="isControlInvalid('limitUnallocatedAmount')"
                    [class.is-valid]="isControlValid('limitUnallocatedAmount')"
-                   formControlName="limitUnallocatedAmount" >
+                   formControlName="limitUnallocatedAmount" readonly>
             <label class="label_OA required">Limit UnAllocated Amount</label>
           </div>
         </div>

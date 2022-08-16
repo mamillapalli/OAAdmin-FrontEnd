@@ -119,9 +119,9 @@
           || authRoles.includes('BANK_USER_VIEWER')
           || authRoles.includes('BANK_ADMIN_MAKER')
           || authRoles.includes('BANK_ADMIN_CHECKER')
-          || authRoles.includes('BANK_ADMIN_VIEWER' )) && element.transactionStatus === 'PENDING' ">
+          || authRoles.includes('BANK_ADMIN_VIEWER' ))">
                 <a
-                  title="Authorize Transaction" (click)="openInvoiceDialog(element,'auth')"
+                  title="Authorize Transaction" (click)="openInvoiceDialog(element,'authBuyer')"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                 <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'"
                       class="svg-icon svg-icon-md svg-icon-warning"></span>

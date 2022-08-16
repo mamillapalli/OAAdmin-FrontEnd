@@ -33,6 +33,10 @@ interface Agreement {
   anchorCustomer: [Customer];
   rm: [rm];
   counterParties: [Customer];
+  anchorCustomerId: string;
+  businessTypeId: string;
+  rmId: string;
+  checkCustomerSelected : boolean
 }
 
 const inits: Agreement = {
@@ -66,7 +70,11 @@ invoiceServiceChargeAmount: '',
   businessType: [{} as string],
   anchorCustomer: [{} as Customer],
   rm: [{} as rm],
-  counterParties:[{} as Customer]
+  counterParties:[{} as Customer],
+  anchorCustomerId: '',
+  businessTypeId: '',
+  rmId: '',
+  checkCustomerSelected : false
 };
 
 export { Agreement, inits };

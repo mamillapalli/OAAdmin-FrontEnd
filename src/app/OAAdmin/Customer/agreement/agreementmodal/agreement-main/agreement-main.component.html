@@ -28,7 +28,7 @@
                      formControlName="anchorCustomerId" placeholder=""
                      [class.is-invalid]="isControlInvalid('anchorCustomerId')"
                      [class.is-valid]="isControlValid('anchorCustomerId')">
-              <label class="label_OA_mandatory">Anchor Customer Id</label>
+              <label class="label_OA_mandatory required">Anchor Customer Id</label>
               <span class="input-group-text_OA" (click)="openCustomerDialog()"><i class="fa fa-search fa-fw"></i></span>
             </div>
           </div>
@@ -41,7 +41,12 @@
                      formControlName="rmId" placeholder=""
                      [class.is-invalid]="isControlInvalid('rmId')"
                      [class.is-valid]="isControlValid('rmId')">
-              <label class="label_OA_mandatory">RM Id</label>
+              <input class="" type="hidden" name="rm"
+                     id="rm"
+                     formControlName="rm" placeholder=""
+                     [class.is-invalid]="isControlInvalid('rm')"
+                     [class.is-valid]="isControlValid('rm')">
+              <label class="label_OA_mandatory required">RM Id</label>
               <span class="input-group-text_OA" (click)="openRMDialog()"><i class="fa fa-search fa-fw"></i></span>
             </div>
           </div>
@@ -52,7 +57,7 @@
       <div class="form-group row">
         <div class="col-3">
           <div class="floating-label_readonly">
-          <select class="floating-select" name="businessTypeId" formControlName="businessTypeId"
+          <select class="floating-select_mandatory" name="businessTypeId" formControlName="businessTypeId"
             (change)="onBusinessTypeChange($event)">
             <option value="Receivable Finance">Receivable Finance</option>
             <option value="Payable Finance">Payable Finance</option>
@@ -61,11 +66,11 @@
           </div>
         </div>
         <div class="col-3">
-          <div class="floating-label">
-            <input class="floating-input" type="text" id="remarks" name="remarks"
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="text" id="remarks" name="remarks"
                    [class.is-invalid]="isControlInvalid('remarks')"
-                   [class.is-valid]="isControlValid('remarks')" formControlName="remarks" >
-            <label class="label_OA">Remarks</label>
+                   [class.is-valid]="isControlValid('remarks')" formControlName="remarks"  >
+            <label class="label_OA required">Remarks</label>
           </div>
         </div>
         <div class="col-3">
@@ -93,13 +98,19 @@
             <input class="floating-input_mandatory" type="date" autocomplete="off"
                    name="expiryDate" [class.is-invalid]="isControlInvalid('expiryDate')"
                    [class.is-valid]="isControlValid('expiryDate')" formControlName="expiryDate" >
-            <label class="label_OA">Expiry Date</label>
+            <input class="" type="hidden"
+                   name="counterParties" [class.is-invalid]="isControlInvalid('counterParties')"
+                   [class.is-valid]="isControlValid('counterParties')" formControlName="counterParties" >
+            <input class="" type="hidden"
+                   name="checkCustomerSelected" formControlName="checkCustomerSelected" >
+            <label class="label_OA required">Expiry Date</label>
           </div>
         </div>
         <div class="col-3">
          <label class="label_OA required"></label>
           <div>
             <a class="btn btn-sm btn-primary fw-bolder" (click)="openCounterPrtyDialog()">Add Counter Party</a>
+
           </div>
         </div>
       </div>

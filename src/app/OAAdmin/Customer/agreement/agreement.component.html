@@ -134,7 +134,7 @@
             <td mat-cell *matCellDef="let element">
               <ng-container *ngIf="(authRoles.includes('SUPER_ADMIN')
       || authRoles.includes('BANK_USER_MAKER')
-      || authRoles.includes('BANK_ADMIN_MAKER')) && element.transactionStatus != 'MASTER'">
+      || authRoles.includes('BANK_ADMIN_MAKER'))">
                 <a (click)="openAgreementDialog(element,'edit')" title="Edit Transaction"
                   class="btn btn-icon btn-light-primary btn-active-light btn-sm me-1">
                   <span [inlineSVG]="'./assets/media/svg/icons/Communication/Write.svg'" class="svg-icon svg-icon-md ">

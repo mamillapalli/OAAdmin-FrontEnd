@@ -1,47 +1,51 @@
 import {Invoice} from "./invoice";
 
 interface financing {
-  financeId: string,
-  sbrReferenceId: string,
-  agreementId: string,
-  buyerId: string,
-  sellerId: string,
-  buyerName: string,
-  sellerName: string,
-  financingType: string,
-  businessType: string,
-  transactionDate: Date,
+  financeId: string
+  sbrReferenceId: string
+  agreementId: string
+  buyerId: string
+  sellerId: string
+  buyerName: string
+  sellerName: string
+  financingType: string
+  businessType: string
+  transactionDate: Date
   invoiceList: [Invoice]
   totalInvoiceCurrency: string
   totalInvoiceAmount: number
-  financeCurrency: string,
+  financeCurrency: string
   financeAmount: number
-  financeTotalCurrency: string,
-  financeTotalAmount: number
+  financeTotalDueCurrency: string
+  financeTotalDueAmount: number
   maxFinancePercentage: number
-  interestChargeType: string,
-  interestRateType: string,
+  interestChargeType: string
+  interestRateType: string
   interestRate: number
   interestMargin: number
-  valueDate: Date,
+  valueDate: Date
   graceDays: number
   financingInterestRate: number
   upfrontInterestAmount: number
-  totalAvailableCurrency: string,
+  totalAvailableCurrency: string
   totalAvailableAmount: number
-  toSellerCurrency: string,
+  toSellerCurrency: string
   toSellerAmount: number
-  debitAccount: string,
-  creditAccount: string,
-  diaryId: string,
+  debitAccount: string
+  creditAccount: string
+  diaryId: string
   diaryDueDate: Date
-  diaryNarrative: string,
-  financeDueDate: Date,
+  diaryNarrative: string
+  financeDueDate: Date
   deleteFlag: boolean
-  financeServiceChargeCurrency: string,
+  financeServiceChargeCurrency: string
   financeServiceChargeAmount: number
-  interestCurrency: string,
-  interestAmount: number
+  interestCurrency: string
+  interestAmount: number,
+  invoiceSelected: boolean
+  isDataSource: boolean,
+  //transactionStatus: any,
+  //status: any
 }
 
 const inits: financing = {
@@ -60,8 +64,8 @@ const inits: financing = {
   totalInvoiceAmount: 0,
   financeCurrency: '',
   financeAmount: 0,
-  financeTotalCurrency: '',
-  financeTotalAmount: 0,
+  financeTotalDueCurrency: '',
+  financeTotalDueAmount: 0,
   maxFinancePercentage: 0,
   interestChargeType: '',
   interestRateType: '',
@@ -86,6 +90,10 @@ const inits: financing = {
   financeServiceChargeAmount: 0,
   interestCurrency: '',
   interestAmount: 0,
+  invoiceSelected: false,
+  isDataSource: false
+  //transactionStatus: null,
+  //status: null
 
 }
 export {financing, inits};
