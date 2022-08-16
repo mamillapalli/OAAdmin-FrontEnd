@@ -11,17 +11,17 @@
     justify-content: center;
     margin: 0 auto;
     position: fixed;
-    z-index: get($feedback, popup, z-index);
-    box-shadow: get($feedback, popup, box-shadow);
-    background-color: get($feedback, popup, background-color);
-    border-radius: get($feedback, popup, border-radius);
-    padding: get($feedback, popup, padding);
+    z-index: $feedback-popup-z-index;
+    box-shadow: var(--kt-feedback-popup-box-shadow);
+    background-color: var(--kt-feedback-popup-background-color);
+    border-radius: $feedback-popup-border-radius;
+    padding: $feedback-popup-padding;
 }
 
 // Placement
 .feedback-top-center {
     display: flex;
-    transition: top get($feedback, popup, transition-speed) ease;
+    transition: top $feedback-popup-transition-speed ease;
     left: 50%;
     transform: translateX(-50%);
     @include border-top-start-radius(0);
@@ -29,6 +29,6 @@
     
     &.feedback-shown {
         top: 0px;
-        transition: top get($feedback, popup, transition-speed) ease;
+        transition: top $feedback-popup-transition-speed ease;
     }
 }

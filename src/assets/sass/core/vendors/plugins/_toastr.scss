@@ -4,20 +4,13 @@
 
 // Base
 .toastr {
-    transition: $transition-base;
     background-position: 1.5rem center #{'/*rtl:calc(100% - 1.5rem) center*/'} !important;
-    box-shadow: $dropdown-box-shadow !important;
+    box-shadow: var(--kt-dropdown-box-shadow) !important;
 	border-radius: $dropdown-border-radius !important;
 	border: 0 !important;
-    background-color: $gray-100;
-    color: $gray-700;
-    opacity: 0.75 !important;
+    background-color: var(--kt-gray-100);
+    color: var(--kt-gray-700);
     padding: 1.25rem 1.25rem 1.25rem 4.5rem !important;
-
-    &:hover {
-        transition: $transition-base;
-        opacity: 1 !important;
-    }
 
 	.toastr-close-button {
    		outline: none !important;
@@ -29,7 +22,7 @@
 	// Title
 	.toastr-title {
 		font-size: 1.15rem;
-		font-weight: $font-weight-bold;
+		font-weight: $font-weight-semibold;
         
         & + .toastr-message {
             margin-top: 0.25rem;
@@ -44,38 +37,38 @@
 
     // States
     &.toastr-success {
-        background-color: $success;
-        color: $success-inverse;
+        background-color: var(--kt-success);
+        color: var(--kt-success-inverse);
 
         .toastr-close-button {
-            @include svg-bg-icon(close, $success-inverse);
+            @include svg-bg-icon(close, var(--kt-success-inverse));
         }    
     }
 
     &.toastr-info {
-        background-color: $info;
-        color: $info-inverse;
+        background-color: var(--kt-info);
+        color: var(--kt-info-inverse);
 
         .toastr-close-button {
-            @include svg-bg-icon(close, $info-inverse);
+            @include svg-bg-icon(close, var(--kt-info-inverse));
         } 
     }
 
     &.toastr-warning {
-        background-color: $warning;
-        color: $warning-inverse;
+        background-color: var(--kt-warning);
+        color: var(--kt-warning-inverse);
 
         .toastr-close-button {
-            @include svg-bg-icon(close, $warning-inverse);
+            @include svg-bg-icon(close, var(--kt-warning-inverse));
         } 
     }
 
     &.toastr-error {
-        background-color: $danger;
-        color: $danger-inverse;
+        background-color: var(--kt-danger);
+        color: var(--kt-danger-inverse);
 
         .toastr-close-button {
-            @include svg-bg-icon(close, $danger-inverse);
+            @include svg-bg-icon(close, var(--kt-danger-inverse));
         } 
     }
 }

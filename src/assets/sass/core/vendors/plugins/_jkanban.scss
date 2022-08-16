@@ -16,7 +16,7 @@ $kanban-spacer-x: 1.25rem;
 		flex-shrink: 0;
 		margin-bottom: $kanban-spacer-y;
 		margin-right: $kanban-spacer-x !important;
-		background-color: $gray-100;
+		background-color: var(--kt-gray-100);
 		@include border-radius($border-radius);
 
 		&:last-child {
@@ -30,25 +30,25 @@ $kanban-spacer-x: 1.25rem;
 			.kanban-title-board {
 				font-size: 1.2rem;
 				font-weight: 500;
-				color: $dark;
+				color: var(--kt-gray-900);
 			}
 
 			@each $name, $color in $theme-colors {
 				&.#{$name} {
-					background-color: $color;
+					background-color: var(--kt-#{$name});
 					box-shadow: none;
 
 					.kanban-title-board {
-						color: theme-inverse-color($name);
+						color: var(--kt-#{$name}-inverse);
 					}
 				}
 
 				&.light-#{$name} {
-					background-color: rgba($color, 0.1);
+					color: rgba(var(--kt-#{$name}), 0.1);
 					box-shadow: none;
 
 					.kanban-title-board {
-						color: $color;
+						color: var(--kt-#{$name});
 					}
 				}
 			}
@@ -58,26 +58,37 @@ $kanban-spacer-x: 1.25rem;
 			.kanban-item {
 				@include border-radius($border-radius);
 				box-shadow: 0px 0px 13px 0px rgba(0, 0, 0, 0.05);
-				background: $body-bg;
+				background: var(--kt-body-bg);
 
 				@each $name, $color in $theme-colors {
-					&[data-class="#{$name}"]{
-						background-color: $color; 	
-						color: theme-inverse-color($name);
+					&[data-class="#{$name}"] {
+						background-color: var(--kt-#{$name});
+						color: var(--kt-#{$name}-inverse);
 						box-shadow: none;
-			        }
+					}
 
-					&[data-class="light-#{$name}"]{
-						background-color: rgba($color, 0.1);
-						color: $color;
+					&[data-class="light-#{$name}"] {
+						background-color: var(--kt-#{$name}-light);
+						color: var(--kt-#{$name});
 						box-shadow: none;
-			        }
-			    }
+					}
+				}
 			}
 		}
 
 		footer {
+		}
+	}
+}
 
+// Fixed height
+.kanban-fixed-height {
+	.kanban-container {
+		.kanban-board {
+			.kanban-drag {
+				position: relative;
+				overflow-y: auto;
+			}
 		}
 	}
 }

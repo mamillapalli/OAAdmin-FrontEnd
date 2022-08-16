@@ -5,6 +5,7 @@
 $select2-dropdown-padding: 1rem 0;
 $select2-dropdown-option-padding: 0.75rem 1.25rem;
 $select2-dropdown-option-margin: 0 0;
+$select2-dropdown-option-check-padding: 1.25rem;
 
 $select2-dropdown-group-padding: 0 1.25rem 0 1.25rem;
 $select2-dropdown-group-margin: 0 0 0.25rem 0;
@@ -13,15 +14,13 @@ $select2-search-padding: 0.5rem 1.25rem;
 $select2-search-margin: 0 0 0.5rem 0;
 
 $select2-clear-size: 0.7rem;
-$select2-clear-color: $gray-700;
-$select2-clear-color-hover: $primary;
-$select2-clear-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$select2-clear-color}'><path d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/></svg>") !default;
-$select2-clear-bg-hover: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$select2-clear-color-hover}'><path d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/></svg>") !default;
+$select2-clear-color: var(--kt-gray-700);
+$select2-clear-color-dark: var(--kt-gray-700);
+$select2-clear-color-hover: var(--kt-primary);
 $select2-clear-right: $form-select-indicator-padding;  //$form-select-padding-x +
 
 // Bootstrapa 5 Theme
 .select2-container--bootstrap5 {
-
 	// Selection 
 	.select2-selection {
 		box-shadow: none !important;
@@ -33,18 +32,18 @@ $select2-clear-right: $form-select-indicator-padding;  //$form-select-padding-x 
 	&.select2-container--focus,
 	&.select2-container--open {
 		.form-select-solid {
-			background-color: $input-solid-bg-focus;
+			background-color: var(--kt-input-solid-bg-focus);
 		}
 
-		.form-select:not(.form-select-solid):not(.form-select-white) {
-			border-color: $input-focus-border-color;
+		.form-select:not(.form-select-solid):not(.form-select-transparent) {
+			border-color: var(--kt-input-focus-border-color);
 		}
 	}
 
 	// Search
 	.select2-search.select2-search--inline {
 		.select2-search__field {
-			color: $input-color;	
+			color: var(--kt-input-color);	
 			@include placeholder($input-placeholder-color);
 			font-weight: $input-font-weight;
 			background-color: transparent;
@@ -58,8 +57,8 @@ $select2-clear-right: $form-select-indicator-padding;  //$form-select-padding-x 
 
 	.form-select-solid .select2-search.select2-search--inline {
 		.select2-search__field {
-			color: $input-solid-color;
-			@include placeholder($input-solid-placeholder-color);
+			color: var(--kt-input-solid-color);
+			@include placeholder(var(--kt-input-solid-placeholder-color));
 		}
 	}
 
@@ -76,7 +75,7 @@ $select2-clear-right: $form-select-indicator-padding;  //$form-select-padding-x 
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
-			color: $input-placeholder-color;
+			color: var(--kt-input-color);
 		}
 
 		// Placeholder
@@ -88,12 +87,33 @@ $select2-clear-right: $form-select-indicator-padding;  //$form-select-padding-x 
 		&.form-select-solid {
 			// Selected
 			.select2-selection__rendered {
-				color: $input-solid-color;
+				color: var(--kt-input-solid-color);
 			}
 
 			// Placeholder
 			.select2-selection__placeholder {
-				color: $input-solid-placeholder-color;
+				color: var(--kt-input-solid-placeholder-color);
+			}
+		}
+
+		// Form select transparent
+		&.form-select-transparent {
+			// Selected
+			.select2-selection__rendered {
+				color: var(--kt-gray-800);
+			}
+
+			// Placeholder
+			.select2-selection__placeholder {
+				color: var(--kt-gray-800);
+			}
+		}
+
+		// Form select dark color
+		&.form-select-dark {
+			// Selected
+			.select2-selection__rendered {
+				color: var(--kt-gray-900);
 			}
 		}
 	}
@@ -115,16 +135,13 @@ $select2-clear-right: $form-select-indicator-padding;  //$form-select-padding-x 
 				display: inline-flex;
 				align-items: center;
 				position: relative;
-				background-color: $gray-300;
+				background-color: var(--kt-gray-300);
 
 				.select2-selection__choice__remove {
+					@include svg-bg-icon(close, var(--kt-gray-700));
 					display: block;
 					position: absolute;
-					transform: translateY(-50%);
-					background-image: escape-svg($select2-clear-bg);
-					background-repeat: no-repeat;
-					background-position: center;
-					background-color: transparent;
+					transform: translateY(-50%);					
 					opacity: 0.5;
 					border: 0;
 					transition: $transition-link;
@@ -136,13 +153,13 @@ $select2-clear-right: $form-select-indicator-padding;  //$form-select-padding-x 
 
 					&:hover {
 						opacity: 1;
-						background-image: escape-svg($select2-clear-bg-hover);
+						@include svg-bg-icon(close, var(--kt-primary));
 						transition: $transition-link;
 					}
 				}
 
 				.select2-selection__choice__display {
-					font-weight: $font-weight-bold;
+					font-weight: $font-weight-semibold;
 				}
 			}
 		}
@@ -165,10 +182,10 @@ $select2-clear-right: $form-select-indicator-padding;  //$form-select-padding-x 
 	// Dropdown
 	.select2-dropdown {
 		border: 0;
-		box-shadow: $dropdown-box-shadow;
+		box-shadow: var(--kt-dropdown-box-shadow);
 		border-radius: $dropdown-border-radius;
 		padding: $select2-dropdown-padding;
-		background-color: $body-bg;
+		background-color: var(--kt-dropdown-bg);
 
 		// In modal
 		.modal-open & {
@@ -181,52 +198,67 @@ $select2-clear-right: $form-select-indicator-padding;  //$form-select-padding-x 
 			margin: $select2-search-margin;
 
 			.select2-search__field {
-				background-color: $body-bg;
+				background-color: var(--kt-body-bg);
 				padding: $input-padding-y-sm $input-padding-x-sm;
-				color: $input-color;
+				color: var(--kt-input-color);
 				font-size: $input-font-size-sm;
-				border: 1px solid $input-border-color;
+				border: 1px solid var(--kt-input-border-color);
 				border-radius: $input-border-radius-sm;
 				outline: 0 !important;
 
 				&:focus,
 				&:active {
-					border-color: 1px solid $input-focus-color;
+					border: 1px solid var(--kt-input-focus-border-color);
 				}
 			}
 		}
 
 		// Options
 		.select2-results__options {
-			max-height: 200px;
+			max-height: 250px;
 			overflow-y: auto;
 		}
 
 		// Option
 		.select2-results__option {
-			color: $gray-700;
+			color: var(--kt-gray-700);
 			transition: $transition-link;
 			padding: $select2-dropdown-option-padding;
 			margin: $select2-dropdown-option-margin;
 
 			&.select2-results__option--highlighted {
-				background-color: $component-hover-bg;
-				color: $component-hover-color;
+				background-color: var(--kt-component-hover-bg);
+				color: var(--kt-component-hover-color);
 				transition: $transition-link;
 			}
 
 			&.select2-results__option--selected {
-				background-color: $component-active-bg;
-				color: $component-active-color;
+				background-color: var(--kt-component-active-bg);
+				color: var(--kt-component-active-color);
 				transition: $transition-link;
+				position: relative;
+
+				&:after {
+					top: 50%;
+					display: block;
+					position: absolute;
+					transform: translateY(-50%);
+					height: 0.75rem;
+					width: 0.75rem;
+            		content: "";
+					@include svg-bg-icon(check, var(--kt-component-active-color));
+					mask-position: center;	
+					-webkit-mask-position: center;					
+					right: $select2-dropdown-option-check-padding;
+				}
 			}
 
 			&.select2-results__option--disabled {
-				color: $gray-400;
+				color: var(--kt-gray-400);
 			}
 
 			&.select2-results__message {
-				color: $gray-600;
+				color: var(--kt-gray-600);
 			}
 
 			&.select2-results__option--group {
@@ -235,8 +267,8 @@ $select2-clear-right: $form-select-indicator-padding;  //$form-select-padding-x 
 
 				.select2-results__group {
 					display: block;
-					color: $gray-800;
-					font-weight: $font-weight-bold;
+					color: var(--kt-gray-800);
+					font-weight: $font-weight-semibold;
 					font-size: $h5-font-size;
 					padding: $select2-dropdown-group-padding;
 					margin: $select2-dropdown-group-margin;
@@ -259,16 +291,22 @@ $select2-clear-right: $form-select-indicator-padding;  //$form-select-padding-x 
 		right: $select2-clear-right;
 		position: absolute;
 		transform: translateY(-50%);
-		background-image: escape-svg($select2-clear-bg);
-		background-repeat: no-repeat;
-		background-position: center;
+		background-color: var(--kt-gray-700) !important;
+		@include svg-bg-icon(close);
 
 		span  {
 			display: none;
 		}
 
 		&:hover {
-			background-image: escape-svg($select2-clear-bg-hover);
+			background-color: var(--kt-primary) !important;
 		}
 	}
+}
+
+// Floating label integration
+.form-floating {
+	.form-select {
+		padding-top: $form-floating-input-padding-t;
+	}	
 }

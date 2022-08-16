@@ -99,7 +99,7 @@ export class ProfileDetailsComponent implements OnInit {
           Swal.fire({
             title: 'Edit Record Successfully',
             icon: 'success'
-          }).then((result) => {
+          }).then((result: any) => {
             console.log(result)
             if (result.value) {
               Swal.close();
@@ -122,7 +122,7 @@ export class ProfileDetailsComponent implements OnInit {
           Swal.fire({
             title: 'Edit Record Successfully',
             icon: 'success'
-          }).then((result) => {
+          }).then((result:any) => {
             console.log(result)
             if (result.value) {
               Swal.close();

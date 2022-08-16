@@ -5,6 +5,7 @@
 
 // Customize native scrollbars only for desktop mode
 @include media-breakpoint-up(lg) {
+    main,
     span,
     ol,
     ul,
@@ -15,12 +16,12 @@
 
         // Webkit
         &::-webkit-scrollbar {
-            width: get($scrollbar, width);
-            height: get($scrollbar, height);
+            width: var(--kt-scrollbar-width);
+            height: var(--kt-scrollbar-height);
         }
 
         // Default color
-        @include scrollbar-color(get($scrollbar, color), get($scrollbar, hover-color));
+        @include scrollbar-color(var(--kt-scrollbar-color), var(--kt-scrollbar-hover-color));
     }
 }
 
@@ -63,10 +64,10 @@
     @include media-breakpoint-up(lg) {
         overflow: hidden;
 
-        border-right: get($scrollbar, width) solid transparent;
-        border-bottom: get($scrollbar, height) solid transparent;
-        margin-right: -#{get($scrollbar, width)};
-        margin-bottom: -#{get($scrollbar, height)};
+        border-right: var(--kt-scrollbar-width) solid transparent;
+        border-bottom: var(--kt-scrollbar-height) transparent;
+        margin-right: calc( -1 * var(--kt-scrollbar-width));
+        margin-bottom: calc( -1 * var(--kt-scrollbar-height));
 
         &:hover {
             overflow: scroll;
@@ -96,8 +97,8 @@
     // Desktop mode
     @include media-breakpoint-up(lg) {
         overflow-y: hidden;
-        border-right: get($scrollbar, width) solid transparent;
-        margin-right: -#{get($scrollbar, width)};
+        border-right: var(--kt-scrollbar-width) solid transparent;
+        margin-right: calc( -1 * var(--kt-scrollbar-width));
 
         &:hover {
             overflow-y: scroll;
@@ -125,7 +126,7 @@
     // Desktop mode
     @include media-breakpoint-up(lg) {
         overflow-x: hidden;
-        border-bottom: get($scrollbar, height) solid transparent;
+        border-bottom: var(--kt-scrollbar-height) solid transparent;
 
         &:hover {
             overflow-x: scroll;
@@ -151,16 +152,14 @@
     overflow-y: hidden;
     position: relative;
 
-    --scrollbar-space: #{get($scrollbar, space)};
-
     // Webkit
     &::-webkit-scrollbar {
-        width: calc(#{get($scrollbar, width)} + var(--scrollbar-space));
+        width: calc( var(--kt-scrollbar-width) + var(--kt-scrollbar-space) );
     }
 
     &::-webkit-scrollbar-thumb {
         background-clip: content-box;
-        border-right: var(--scrollbar-space) solid transparent;
+        border-right: var(--kt-scrollbar-space) solid transparent;
     }
 
     &:hover {
@@ -174,29 +173,33 @@
     }
 }
 
-// Utility classes
+// Utility classes  
 .scroll-ps {
-    padding-left: get($scrollbar, width) !important;
+    padding-left: var(--kt-scrollbar-width) !important;
 }
 
 .scroll-ms {
-    margin-left: get($scrollbar, width) !important;
+    margin-left: var(--kt-scrollbar-width) !important;
+}
+
+.scroll-mb {
+    margin-bottom: var(--kt-scrollbar-height) !important;
 }
 
 .scroll-pe {
-    padding-right: get($scrollbar, width) !important;
+    padding-right: var(--kt-scrollbar-width) !important;
 }
 
 .scroll-me {
-    margin-right: get($scrollbar, width) !important;
+    margin-right: var(--kt-scrollbar-width) !important;
 }
 
 .scroll-px {
-    padding-left: get($scrollbar, width) !important;
-    padding-right: get($scrollbar, width) !important;
+    padding-left: var(--kt-scrollbar-width) !important;
+    padding-right: var(--kt-scrollbar-width) !important;
 }
 
 .scroll-mx {
-    margin-left: get($scrollbar, width) !important;
-    margin-right: get($scrollbar, width) !important;
+    margin-left: var(--kt-scrollbar-width) !important;
+    margin-right: var(--kt-scrollbar-width) !important;
 }

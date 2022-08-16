@@ -20,7 +20,6 @@ import {Bankadminstep2Component} from "./OAAdmin/Admin/bankadmin-maintenance/ban
 import {Bankadminstep3Component} from "./OAAdmin/Admin/bankadmin-maintenance/bankadminmodal/bankadminstep/bankadminstep3/bankadminstep3.component";
 import {BankadminmodalComponent} from "./OAAdmin/Admin/bankadmin-maintenance/bankadminmodal/bankadminmodal.component";
 import {NgSelectModule} from "@ng-select/ng-select";
-import { Attributes, IntersectionObserverHooks, LazyLoadImageModule, LAZYLOAD_IMAGE_HOOKS } from 'ng-lazyload-image';
 import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
 // #fake-end#
 import {MatIconModule} from "@angular/material/icon";
@@ -168,6 +167,8 @@ import { NewsbrmodalComponent } from './OAAdmin/Customer/newsbr/newsbrmodal/news
 import { NewsbrmainComponent } from './OAAdmin/Customer/newsbr/newsbrmodal/newsbrmain/newsbrmain.component';
 import { NewsbramtinfoComponent } from './OAAdmin/Customer/newsbr/newsbrmodal/newsbramtinfo/newsbramtinfo.component';
 import { NewsbrendComponent } from './OAAdmin/Customer/newsbr/newsbrmodal/newsbrend/newsbrend.component';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import Swal from 'sweetalert2'
 
 function appInitializer(authService: AuthService) {
   return () => {
@@ -177,11 +178,6 @@ function appInitializer(authService: AuthService) {
   };
 }
 
-export class LazyLoadImageHooks extends IntersectionObserverHooks {
-  onAttributeChange(newAttributes: Attributes) {
-    console.log(`New attributes: ${newAttributes}`);
-  }
-}
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   allowZero: false,
@@ -376,7 +372,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     CRUDTableModule,
     NgxMatSelectSearchModule,
     AngularMultiSelectModule,
-    LazyLoadImageModule
+    SweetAlert2Module
   ],
   providers: [
     {
@@ -386,8 +382,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
       deps: [AuthService],
     },
     DatePipe,
-    { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
-    { provide: LAZYLOAD_IMAGE_HOOKS, useClass: LazyLoadImageHooks }
+    { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
     // {
     //   provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true
     // }

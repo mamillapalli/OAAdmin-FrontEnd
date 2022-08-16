@@ -3,14 +3,15 @@
 //
 
 // Base
-.card {    
+.card {
     @if ($card-border-enabled)  {
-        border: $card-border-width $card-border-style $card-border-color;
+        border: $card-border-width $card-border-style var(--kt-card-border-color);
     } @else {
         border: 0;
-    }  
-    
-    box-shadow: $card-box-shadow;  
+    }
+
+    box-shadow: var(--kt-card-box-shadow);
+    background-color: var(--kt-card-bg);
 
     // Header
     .card-header {
@@ -20,8 +21,9 @@
         flex-wrap: wrap;
         min-height: $card-header-height;
         padding: 0 $card-px;
-        background-color: transparent;
-        border-bottom: $card-border-width $card-border-style $card-border-color;
+        color: var(--kt-card-cap-color);
+        background-color: var(--kt-card-cap-bg);
+        border-bottom: $card-border-width $card-border-style var(--kt-card-border-color);
 
         // Title
         .card-title {
@@ -41,7 +43,7 @@
 
                 i {
                     font-size: 1.25rem;
-                    color: $gray-600;
+                    color: var(--kt-gray-600);
                     line-height: 0;
 
                     &:after,
@@ -51,8 +53,8 @@
                 }
 
                 .svg-icon {
+                    color: var(--kt-gray-600);
                     @include svg-icon-size(24px);
-                    @include svg-icon-color($gray-600);
                 }
             }
 
@@ -60,7 +62,7 @@
             .card-label {
                 font-weight: 500;
                 font-size: 1.275rem;
-                color: $dark;
+                color: var(--kt-text-dark);
             }
 
             .card-label {
@@ -70,7 +72,7 @@
 
             // Description
             small {
-                color: $text-muted;
+                color: var(--kt-text-muted);
                 font-size: 1rem;
             }
 
@@ -92,13 +94,15 @@
     // Body
     .card-body {
         padding: $card-py $card-px;
+        color: var(--kt-card-color);
     }
 
     // Footer
     .card-footer {
         padding: $card-py $card-px;
-        background-color: transparent;
-        border-top: $card-border-width $card-border-style $card-border-color;
+        color: var(--kt-card-cap-color);
+        background-color: var(--kt-card-cap-bg);
+        border-top: $card-border-width $card-border-style var(--kt-card-border-color);
     }
 
     // Scroll
@@ -137,37 +141,53 @@
     // Dashed style
     &.card-dashed {
         box-shadow: none;
-        border: $card-border-width dashed $card-border-dashed-color;
+        border: $card-border-width dashed var(--kt-card-border-dashed-color);
 
         > .card-header {
-            border-bottom: 1px dashed $card-border-dashed-color;
+            border-bottom: 1px dashed var(--kt-card-border-dashed-color);
         }
 
         > .card-footer {
-            border-top: 1px dashed $card-border-dashed-color;
+            border-top: 1px dashed var(--kt-card-border-dashed-color);
         }
     }
 
     // Bordered style
     &.card-bordered {
         box-shadow: none;
-        border: $card-border-width $card-border-style $card-border-color;
+        border: $card-border-width $card-border-style var(--kt-card-border-color);
     }
 
     // Flush header and footer borders
     &.card-flush {
         > .card-header {
-            border-bottom: 0;
+            border-bottom: 0 !important;
         }
 
         > .card-footer {
-            border-top: 0;
+            border-top: 0 !important;
         }
     }
-    
+
+    // Enable shadow
     &.card-shadow {
-        box-shadow: $card-box-shadow;
+        box-shadow: var(--kt-card-box-shadow);
         border: 0;
+    }
+
+    // Reset styles
+    &.card-reset {
+        border: 0 !important;
+        box-shadow: none !important;
+        background-color: transparent !important;
+
+        > .card-header {
+            border-bottom: 0 !important;
+        }
+
+        > .card-footer {
+            border-top: 0 !important;
+        }
     }
 }
 
@@ -179,27 +199,27 @@
 
             // Stretch
             &.card#{$infix}-stretch {
-                height: calc(100% - var(--bs-gutter-y));
+                height: calc(100% - var(--kt-gutter-y));
             }
 
             // Stretch 75
             &.card#{$infix}-stretch-75 {
-                height: calc(75% - var(--bs-gutter-y));
+                height: calc(75% - var(--kt-gutter-y));
             }
 
             // Stretch 50
             &.card#{$infix}-stretch-50 {
-                height: calc(50% - var(--bs-gutter-y));
+                height: calc(50% - var(--kt-gutter-y));
             }
 
              // Stretch 33
             &.card#{$infix}-stretch-33 {
-                height: calc(33.333% - var(--bs-gutter-y));
+                height: calc(33.333% - var(--kt-gutter-y));
             }
 
             // Stretch 25
             &.card#{$infix}-stretch-25 {
-                height: calc(25% - var(--bs-gutter-y));
+                height: calc(25% - var(--kt-gutter-y));
             }
 
             // Header stretch
@@ -207,7 +227,7 @@
                 padding-top: 0 !important;
                 padding-bottom: 0 !important;
                 align-items: stretch;
-    
+
                 .card-toolbar {
                     margin: 0;
                     align-items: stretch;
@@ -228,7 +248,7 @@
 }
 
 .card-shadow {
-    box-shadow: $card-box-shadow;
+    box-shadow: var(--kt-card-box-shadow);
 }
 
 .card-py {

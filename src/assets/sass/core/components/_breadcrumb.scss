@@ -4,6 +4,10 @@
 
 // Breadcrumb
 .breadcrumb {
+    --#{$prefix}breadcrumb-bg: var(--kt-breadcrumb-bg);
+    --#{$prefix}breadcrumb-divider-color: var(--kt-breadcrumb-divider-color);
+    --#{$prefix}breadcrumb-item-active-color: var(--kt-breadcrumb-item-active-color);
+
     display: flex;
     align-items: center;
     background-color: transparent;
@@ -23,7 +27,7 @@
 
         &:after {
             content: "/";
-            padding-left: $breadcrumb-item-padding-x;
+            //padding-left: $breadcrumb-item-padding-x;
         }
 
         &:before {

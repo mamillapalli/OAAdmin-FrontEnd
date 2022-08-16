@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { InlineSVGModule } from 'ng-inline-svg';
+import { InlineSVGModule } from 'ng-inline-svg-2';
 import { NotificationsInnerComponent } from './dropdown-inner/notifications-inner/notifications-inner.component';
 import { QuickLinksInnerComponent } from './dropdown-inner/quick-links-inner/quick-links-inner.component';
 import { UserInnerComponent } from './dropdown-inner/user-inner/user-inner.component';

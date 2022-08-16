@@ -8,7 +8,8 @@ $root-font-size-lg:                             	13px; // Root font size for tab
 $root-font-size-md:                             	12px; // Root font size for mobile mode
 
 // Page bg
-$page-bg: 											if(isDarkMode(), #151521, $gray-100) !default;
+$page-bg: 											$gray-100 !default;
+$page-bg-dark:										#151521 !default;
 
 // Content border radius
 $content-border-radius:								1.5rem !default;
@@ -27,7 +28,8 @@ $header-config: (
 			desktop: 65px,
 			tablet-and-mobile: 55px
 		),
-		bg-color: if(isDarkMode(),#1E1E2D, $white),
+		bg-color: $white,
+		bg-color-dark: #1E1E2D,
 	),
 
 	// Fixed Mode
@@ -37,8 +39,10 @@ $header-config: (
 			tablet-and-mobile: 55px
 		),
 		z-index: 100,
-		bg-color: if(isDarkMode(), #1E1E2D, $white),
-		box-shadow: if(isDarkMode(), none, 0px 10px 30px 0px rgba(82,63,105,0.05))
+		bg-color: $white,
+		bg-color-dark: #1E1E2D,
+		box-shadow: 0px 10px 30px 0px rgba(82,63,105,0.05),
+		box-shadow-dark: none
 	)
 ) !default;
 
@@ -49,10 +53,13 @@ $toolbar-config: (
 		desktop: 75px,
 		tablet-and-mobile: 60px
 	),
-	padding: 0.5rem,
-	bg-color: if(isDarkMode(), darken(#1e1e2d, 2%), $white),
-	box-shadow: if(isDarkMode(), none, 0px 10px 30px 0px rgba(82,63,105,0.05)),
-	border-top: if(isDarkMode(), 0, 1px solid $border-color)
+	padding: 0.5rem 0,
+	bg-color: $white,
+	bg-color-dark: darken(#1e1e2d, 2%),
+	box-shadow: 0px 10px 30px 0px rgba(82,63,105,0.05),
+	box-shadow-dark: none,
+	border-top: 1px solid $border-color,
+	border-top-dark: 0
 ) !default;
 
 // Aside
@@ -61,17 +68,23 @@ $aside-config: (
 	transition-speed: 0.3s, // transition speed
 	padding-x: 25px,
 	menu-indention: 0.75rem,
-	bg-color: #1e1e2d,
+	bg-color: $white,
+	bg-color-dark: #1e1e2d,
 	logo-bg-color: darken(#1e1e2d, 2%),
-	scrollbar-color: if(isDarkMode(), $gray-200, #3b3b64),
-	scrollbar-hover-color: if(isDarkMode(), $gray-300, lighten(#3b3b64, 3%)),
+	scrollbar-color: #3b3b64,
+	scrollbar-color-dark: $gray-200-dark,
+	scrollbar-hover-color: lighten(#3b3b64, 3%),
+	scrollbar-hover-color-dark: $gray-300-dark,
 	width: 265px, // Aside width for desktop mode
 	minimized-width: 75px,  // Aside minimized width for desktop mode
-	box-shadow: if(isDarkMode(), none, 0 0 28px 0 rgba(82,63,105,.05)), // Aside box shadow
-	minimized-hover-box-shadow: if(isDarkMode(), none, 5px 0px 10px rgba(70, 78, 95, 0.075)) // Monimized hover box shadow
+	box-shadow: 0 0 28px 0 rgba(82,63,105,.05),
+	box-shadow-dark: none,
+	minimized-hover-box-shadow: 5px 0px 10px rgba(70, 78, 95, 0.075),
+	minimized-hover-box-shadow-dark: none
 ) !default;
 
 // Footer
 $footer-config: (	
-	bg-color: if(isDarkMode(), #1B1B28, $white),
+	bg-color: $white,
+	bg-color-dark: #1B1B28,
 ) !default;

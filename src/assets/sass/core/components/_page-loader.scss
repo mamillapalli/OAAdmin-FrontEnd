@@ -9,7 +9,7 @@
 
 // Base
 .page-loader {
-	background: $body-bg;
+	background: var(--kt-body-bg);
 	position: fixed;
 	top: 0;
 	bottom: 0;

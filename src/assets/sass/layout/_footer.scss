@@ -3,5 +3,5 @@
 // 
 
 .footer {
-    background-color: get($footer-config, bg-color);
+    background-color: var(--kt-footer-bg-color);
 }

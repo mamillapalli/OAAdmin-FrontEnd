@@ -22,7 +22,7 @@
         > img {
             width: $size;
             height: $size;
-            max-width: auto;
+            max-width: none;
         }
     }
 
@@ -36,7 +36,7 @@
         > img {
             height: $size;
             width:  $size * divide(3, 2);
-            max-width: auto;
+            max-width: none;
         }
     }
 }

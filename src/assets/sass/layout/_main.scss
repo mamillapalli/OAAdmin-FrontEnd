@@ -5,7 +5,7 @@
 
 // Body
 body {
-	background-color: $page-bg;
+	background-color: var(--kt-page-bg);
 }
 
 // Font color from Content background color
