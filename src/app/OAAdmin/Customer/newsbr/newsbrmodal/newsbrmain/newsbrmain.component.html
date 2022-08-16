@@ -1,0 +1,236 @@
+<div class="card-body">
+  <div [formGroup]="form" id="form">
+    <div class="form-group row">
+      <h3 class="fw-bolder text-dark">SBR Info</h3>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label_readonly">
+            <input class="floating-input_readonly" type="text" autocomplete="off" name="sbrId"
+                   id="sbrId"
+                   formControlName="sbrId"
+                   readonly>
+            <label class="label_OA required">Sbr Reference Number</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <div class="input-group mb-3">
+              <input class="floating-input_mandatory input-group mb-3" type="text" autocomplete="off" name="agreementId"
+                     id="agreementId"
+                     formControlName="agreementId"
+                     [class.is-invalid]="isControlInvalid('agreementId')"
+                     [class.is-valid]="isControlValid('agreementId')">
+              <label class="label_OA_mandatory">Agreement No</label>
+              <span class="input-group-text_OA" (click)="openAgreementModal()">
+                <i class="fa fa-search fa-fw"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_readonly">
+            <input class="floating-input_readonly" type="text" autocomplete="off" name="rmId"
+                   id="rmId"
+                   formControlName="rmId"
+                   readonly>
+            <label class="label_OA">RM Id</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <select class="floating-select" name="limitTypeFlag" id="limitTypeFlag"
+                    formControlName="limitTypeFlag">
+              <option value="REVOLVING" selected>Revolving</option>
+              <option value="NONREVOLVING" selected>Non-Revouling</option>
+            </select>
+            <label class="label_OA">Limit Type Flag</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="ccol1_OA">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="number" autocomplete="off" name="paymentTermsDays"
+                   id="paymentTermsDays"
+                   formControlName="paymentTermsDays"
+            >
+            <label class="label_OA required">Days</label>
+          </div>
+        </div>
+        <div class="acol1_OA">
+          <div class="floating-label">
+            <select class="floating-select_mandatory" name="documentType" id="paymentTermsCondition"
+                    formControlName="paymentTermsCondition">
+              <option value="FROMINVOICEISSUEDATE" selected>From Inv Date</option>
+            </select>
+            <label class="label_OA required">Payment Term Condition</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory form-switch">
+            <input class="floating-input form-check-input" type="checkbox" id="autoSettlement"
+                   name="autoSettlement" value="yes" formControlName="autoSettlement"
+                   checked [disabled]="ReadOnlyCheckBox">
+            <label class="label_OA_mandatory form-check-label required">Auto Settlement</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory form-switch">
+            <input class="floating-input form-check-input" type="checkbox" id="autoFinance" name="autoFinance"
+                   value="yes"
+                   checked [disabled]="ReadOnlyCheckBox" formControlName="autoFinance">
+            <label class="label_OA_mandatory form-check-label required">Auto Finance</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <select class="floating-select_mandatory" name="recourseFlag" id="recourseFlag"
+                    formControlName="recourseFlag">
+              <option value="RECOURSE" selected>Recourse</option>
+              <option value="NONRECOURSE" selected>Non Recourse</option>
+              <option value="COLLECTIONONLY" selected>Collection Only</option>
+            </select>
+            <label class="label_OA required">Recourse Flag</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" type="text" autocomplete="off" name="commercialContractDetails"
+                   id="commercialContractDetails"
+                   formControlName="commercialContractDetails">
+            <label class="label_OA_mandatory required">Commercial Contract Details</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input_mandatory" type="text" autocomplete="off" name="natureOfBusiness"
+                   id="natureOfBusiness"
+                   formControlName="natureOfBusiness">
+            <label class="label_OA required">Nature of Business</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" autocomplete="off" name="goodsDescription"
+                   id="goodsDescription"
+                   formControlName="goodsDescription">
+            <label class="label_OA">Goods Description</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <select class="floating-select_mandatory" name="directContactFlag" id="directContactFlag"
+                    formControlName="directContactFlag">
+              <option value="ALLOWED" selected>Allowed</option>
+              <option value="NOTALLOWED" selected>Not Allowed</option>
+            </select>
+            <label class="label_OA required">Direct Contact Flag</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-container>
+      <div class="form-group row">
+        <h3 class="fw-bolder text-dark">Customer Info</h3>
+      </div>
+      <div class="container mt-5 ">
+        <div class="form-group row">
+          <div class="col-3">
+            <div class="floating-label_readonly">
+              <input class="floating-input_readonly" type="text" autocomplete="off" name="anchorCustomerId"
+                     id="anchorCustomerId" formControlName="anchorCustomerId">
+              <label class="label_OA">Anchor Id</label>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="floating-label">
+              <input class="floating-input_readonly" type="text" name="anchorCustomerContactName"
+                     id="anchorCustomerContactName"
+                     formControlName="anchorCustomerContactName" readonly
+              >
+              <label class="label_OA_readonly">Anchor Name</label>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="floating-label">
+              <input class="floating-input_readonly" type="text" name="anchorCustomerEmail"
+                     id="anchorCustomerEmail"
+                     formControlName="anchorCustomerEmail"
+                     readonly>
+              <label class="label_OA_readonly">Anchor Email</label>
+            </div>
+          </div>
+          <div class="col-3 ">
+            <div class="floating-label_mandatory">
+              <div class="input-group mb-3">
+                <input class="floating-input_mandatory input-group mb-3" type="text" name="anchorPartyAccountId"
+                       id="anchorPartyAccountId"
+                       formControlName="anchorPartyAccountId"
+                >
+                <label class="label_OA_mandatory">Credit Account</label>
+                <span class="input-group-text_OA" (click)="openAccountNumber('anchorCustomerId')">
+              <i class="fa fa-search fa-fw"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container mt-5 ">
+        <div class="form-group row">
+          <div class="col-3">
+            <div class="floating-label_readonly">
+              <select class="floating-select" name="counterPartyId" id="counterPartyId"
+                      counterPartyId="counterPartyId" (change)="counterPartiesChange($event)" formControlName="counterPartyId">
+                <ng-container *ngIf="!checkCounter">
+                  <option *ngFor="let counterParties of counterParties"
+                          [ngValue]="counterParties.customerId">{{counterParties.customerId}}</option>
+                </ng-container>
+               <ng-container *ngIf="checkCounter" && counterParties !== null >
+                  <option [ngValue]="counterParties['customerId']">{{counterParties['customerId']}}</option>
+                </ng-container>
+              </select>
+              <label class="label_OA required">Counter Party ID</label>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="floating-label">
+              <input class="floating-input_readonly" type="text" name="counterPartyContactName"
+                     id="counterPartyContactName"
+                     formControlName="counterPartyContactName">
+              <label class="label_OA_readonly">Counter Party Name</label>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="floating-label">
+              <input class="floating-input_readonly" type="text" name="counterPartyEmail"
+                     id="counterPartyEmail"
+                     formControlName="counterPartyEmail"
+              >
+              <label class="label_OA_readonly">Counter Party Email</label>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="floating-label_mandatory">
+              <div class="input-group mb-3">
+                <input class="floating-input_mandatory input-group mb-3" type="text" name="counterPartyAccountId"
+                       id="counterPartyAccountId"
+                       formControlName="counterPartyAccountId"
+                >
+                <label class="label_OA_mandatory">Credit Account</label>
+                <span class="input-group-text_OA" (click)="openAccountNumber('counterPartyAccountId')">
+              <i class="fa fa-search fa-fw"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

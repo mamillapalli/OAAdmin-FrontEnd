@@ -1,0 +1,306 @@
+<div class="card-body">
+  <div [formGroup]="form" id="form">
+    <div class="form-group row">
+      <h3 class="fw-bolder text-dark">Limit Info</h3>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="ccol1_OA">
+          <div class="floating-label_mandatory">
+            <select class="floating-select_mandatory" name="limitCurrency" id="limitCurrency"
+                    formControlName="limitCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA required">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" id="limitAmount" name="limitAmount"
+                   [class.is-invalid]="isControlInvalid('limitAmount')"
+                   [class.is-valid]="isControlValid('limitAmount')" formControlName="limitAmount"
+                   currencyMask>
+            <label class="label_OA required">Limit Amount</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="date" name="expiryDate"
+                   id="expiryDate"
+                   formControlName="expiryDate"
+            >
+            <label class="label_OA required">Expiry Date</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory form-switch">
+            <input class="floating-input form-check-input" type="checkbox" id="anchorPartyApprovalRequired"
+                   name="anchorPartyApprovalRequired" value="yes" formControlName="anchorPartyApprovalRequired"
+                   checked [disabled]="ReadOnlyCheckBox">
+            <label class="label_OA_mandatory form-check-label required">Anchor Party Approval</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory form-switch">
+            <input class="floating-input form-check-input" type="checkbox" id="counterPartyApprovalRequired"
+                   name="counterPartyApprovalRequired" value="yes" formControlName="counterPartyApprovalRequired"
+                   checked [disabled]="ReadOnlyCheckBox">
+            <label class="label_OA_mandatory form-check-label required">Counter Party Approval</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="documentsRequired"
+                   id="documentsRequired"
+                   formControlName="documentsRequired">
+            <label class="label_OA">Documents Required</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="number" name="maxLoanPercentage"
+                   id="maxLoanPercentage"
+                   formControlName="maxLoanPercentage">
+            <label class="label_OA required">Max Loan Percentage</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="financingInformation"
+                   id="financingInformation"
+                   formControlName="financingInformation">
+            <label class="label_OA">Financing Information</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="rebateAccount"
+                   id="rebateAccount"
+                   formControlName="rebateAccount">
+            <label class="label_OA">Rebate Account</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label">
+            <input class="floating-input" type="text" name="rebateRate"
+                   id="rebateRate"
+                   formControlName="rebateRate">
+            <label class="label_OA">Rebate Rate</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <select class="floating-select_mandatory" name="interestChargeType" id="interestChargeType"
+                    formControlName="interestChargeType">
+              <option value="UPFRONT" selected>UpFront</option>
+              <option value="SETTLEMENT" selected>Payment</option>
+            </select>
+            <label class="label_OA required">Interest Charge Type</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="number" name="interestRate"
+                   id="interestRate"
+                   formControlName="interestRate">
+            <label class="label_OA required">Interest Rate</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <input class="floating-input_mandatory" type="number" name="interestMargin"
+                   id="interestMargin"
+                   formControlName="interestMargin">
+            <label class="label_OA required">Interest Margin</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="col-3">
+          <div class="floating-label_mandatory">
+            <select class="floating-select_mandatory" name="interestRateType" id="interestRateType"
+                    formControlName="interestRateType">
+              <option value="FIXEDRATE" selected>Fixed Rate</option>
+              <option value="SIBOR" selected>SIBOR</option>
+              <option value="LIBOR" selected>LIBOR</option>
+            </select>
+            <label class="label_OA required">Interest Rate Type</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <h3 class="fw-bolder text-dark">Financial Info</h3>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="managementFeeCurrency" id="managementFeeCurrency"
+                    formControlName="managementFeeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="managementFeeAmount" name="managementFeeAmount"
+                   [class.is-invalid]="isControlInvalid('managementFeeAmount')"
+                   [class.is-valid]="isControlValid('managementFeeAmount')"
+                   formControlName="managementFeeAmount"
+                   currencyMask>
+            <label class="label_OA">Management Fee</label>
+          </div>
+        </div>
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="administrativeFeeCurrency" id="administrativeFeeCurrency"
+                    formControlName="administrativeFeeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="administrativeFeeAmount" name="administrativeFeeAmount"
+                   [class.is-invalid]="isControlInvalid('administrativeFeeAmount')"
+                   [class.is-valid]="isControlValid('administrativeFeeAmount')"
+                   formControlName="administrativeFeeAmount"
+                   currencyMask>
+            <label class="label_OA">Administrative Fee</label>
+          </div>
+        </div>
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="earlyPaymentFeeCurrency" id="earlyPaymentFeeCurrency"
+                    formControlName="earlyPaymentFeeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="earlyPaymentAmount" name="earlyPaymentAmount"
+                   [class.is-invalid]="isControlInvalid('earlyPaymentAmount')"
+                   [class.is-valid]="isControlValid('earlyPaymentAmount')"
+                   formControlName="earlyPaymentAmount"
+                   currencyMask>
+            <label class="label_OA">Early Payment Fee</label>
+          </div>
+        </div>
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="invoiceServiceChargeCurrency" id="invoiceServiceChargeCurrency"
+                    formControlName="invoiceServiceChargeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="invoiceServiceChargeAmount" name="invoiceServiceChargeAmount"
+                   [class.is-invalid]="isControlInvalid('invoiceServiceChargeAmount')"
+                   [class.is-valid]="isControlValid('invoiceServiceChargeAmount')"
+                   formControlName="invoiceServiceChargeAmount"
+                   currencyMask>
+            <label class="label_OA">Inv Service Fee</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container mt-5 ">
+      <div class="form-group row">
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="financeServiceChargeCurrency" id="financeServiceChargeCurrency"
+                    formControlName="financeServiceChargeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="financeServiceChargeAmount" name="financeServiceChargeAmount"
+                   [class.is-invalid]="isControlInvalid('financeServiceChargeAmount')"
+                   [class.is-valid]="isControlValid('financeServiceChargeAmount')"
+                   formControlName="financeServiceChargeAmount"
+                   currencyMask>
+            <label class="label_OA">Finance Fee</label>
+          </div>
+        </div>
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="settlementServiceChargeCurrency" id="settlementServiceChargeCurrency"
+                    formControlName="settlementServiceChargeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="settlementServiceChargeAmount" name="settlementServiceChargeAmount"
+                   [class.is-invalid]="isControlInvalid('settlementServiceChargeAmount')"
+                   [class.is-valid]="isControlValid('settlementServiceChargeAmount')"
+                   formControlName="settlementServiceChargeAmount"
+                   currencyMask>
+            <label class="label_OA">Settlement Fee</label>
+          </div>
+        </div>
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="cableChargeCurrency" id="cableChargeCurrency"
+                    formControlName="cableChargeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="cableChargeAmount" name="cableChargeAmount"
+                   [class.is-invalid]="isControlInvalid('cableChargeAmount')"
+                   [class.is-valid]="isControlValid('cableChargeAmount')"
+                   formControlName="cableChargeAmount"
+                   currencyMask>
+            <label class="label_OA">Cable Charge Fee</label>
+          </div>
+        </div>
+        <div class="ccol1_OA">
+          <div class="floating-label">
+            <select class="floating-select" name="communicationChargeCurrency" id="communicationChargeCurrency"
+                    formControlName="communicationChargeCurrency">
+              <option value="{{currencyl.code}}" *ngFor="let currencyl of currencyList">{{currencyl.code}}</option>
+            </select>
+            <label class="label_OA">Currency</label>
+          </div>
+        </div>
+        <div class="acol1_OA ">
+          <div class="floating-label">
+            <input class="floating-input" id="communicationChargeAmount" name="communicationChargeAmount"
+                   [class.is-invalid]="isControlInvalid('communicationChargeAmount')"
+                   [class.is-valid]="isControlValid('communicationChargeAmount')"
+                   formControlName="communicationChargeAmount"
+                   currencyMask>
+            <label class="label_OA">Communication Fee</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
