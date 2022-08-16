@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TranslateModule } from '@ngx-translate/core';
-import { InlineSVGModule } from 'ng-inline-svg';
+import { InlineSVGModule } from 'ng-inline-svg-2';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DataTablesModule } from 'angular-datatables';
@@ -171,7 +171,7 @@ import { NewsbrendComponent } from './OAAdmin/Customer/newsbr/newsbrmodal/newsbr
 
 function appInitializer(authService: AuthService) {
   return () => {
-    return new Promise((resolve) => {
+    return new Promise((resolve:any) => {
       authService.getUserByToken().subscribe().add(resolve);
     });
   };
