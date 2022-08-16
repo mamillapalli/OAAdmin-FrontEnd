@@ -12,7 +12,7 @@ COPY ./ /usr/local/app/
 # Install all the dependencies
 RUN npm install
 
-RUN npm update --force
+RUN npm update
 
 # Generate the build of the application
 RUN npm run build
